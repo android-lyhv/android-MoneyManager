@@ -21,4 +21,8 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="select.button" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#e1e1e1</item>
+    </style>
 </resources>

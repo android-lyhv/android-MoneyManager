@@ -18,11 +18,20 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/img_log" />
 
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgLogo"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="MoneyTracker" />
+
         <LinearLayout
             android:id="@+id/llButtonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imgLogo"
+            android:layout_below="@+id/tvTitle"
             android:layout_marginTop="50dp"
             android:orientation="vertical">
 
@@ -31,7 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bodler_login"
+                android:background="@drawable/bolder_login_google"
+                android:text="@string/activity_login.button.text.google"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />
 
@@ -40,17 +50,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bodler_login"
+                android:background="@drawable/bolder_login_facebook"
+                android:text="@string/activity_login.button.text.facebook"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />
 
             <Button
-                android:id="@+id/btnloginWithEmail"
+                android:id="@+id/btnLoginWithEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bodler_login"
-                android:text="@string/activity_login.textview.loginbutton_email.text"
+                android:background="@drawable/bolder_login_email"
+                android:text="@string/activity_login.button.text.email"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />
         </LinearLayout>
