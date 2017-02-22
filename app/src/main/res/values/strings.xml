@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MoneyTracker</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="activity_login.textview.text.title_account">Create your Account</string>
+    <string name="facebook_app_id">1847584948813828</string>
+    <string name="activity_login.textview.loginbutton_email.text">Đăng nhập bằng Email</string>
+    <string name="activity_login.texview.text.create_account">No account yet? Create one!</string>
+</resources>
