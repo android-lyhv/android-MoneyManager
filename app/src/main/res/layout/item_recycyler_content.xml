@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_house_service" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitleExchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Khoan No"
+            android:textColor="@android:color/black"
+            android:textSize="25dp" />
+
+        <LinearLayout
+            android:id="@+id/llNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitleExchange"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/imgNote"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_note" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/imgNote"
+                android:text="cho mua ca" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_below="@id/llNote"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/imgTypeMoney"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_money" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Tien Mat" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/llAccount"
+            android:layout_marginTop="10dp"
+            android:text="Cash" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="5dp"
+            android:text="Ho Nay"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tvMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/tvDate"
+            android:layout_marginTop="10dp"
+            android:text="10000000"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="25dp" />
+    </RelativeLayout>
+</LinearLayout>

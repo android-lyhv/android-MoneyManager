@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvTitleDebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ho Van ly -> aaa" />
+
+            <TextView
+                android:id="@+id/tvDescriptionDebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvTitleDebit"
+                android:text="Vay tien mua nha" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Da Thanh Toan" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/customChart"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_toStartOf="@+id/imgViewDebit" />
+
+            <ImageView
+                android:id="@+id/imgViewDebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/imgAddDebit"
+                android:src="@drawable/ic_remove_red_eye_black" />
+
+            <ImageView
+                android:id="@+id/imgAddDebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_rotate_left_black" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvStartDebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hom Nay" />
+
+            <TextView
+                android:id="@+id/tvEndDebit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Ngay het han: 12/2/2018" />
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

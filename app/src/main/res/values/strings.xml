@@ -5,11 +5,164 @@
     <string name="facebook_app_id">1847584948813828</string>
     <string name="fb_login_protocol_scheme">fb1847584948813828</string>
     <string name="activity_login.button.text.email">Đăng nhập bằng Email</string>
-    <string name="activity_login.texview.text.create_account">Tạo tài khoản!</string>
+    <string name="activity_login.textview.text.create_account">Tạo tài khoản!</string>
     <string name="activity_login.button.text.google">Đăng nhập bằng google</string>
     <string name="activity_login.button.text.facebook">Kết nối với facebook</string>
     <string name="activity_login_mail.button.text">Đăng nhập</string>
     <string name="activity_register.button.text">Đăng Kí</string>
     <string name="LoginMailActivity.label.text">Đăng Nhập</string>
     <string name="register_activity.label.text">Đăng Kí</string>
+    <string name="title_activity_main_navigation">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="activity_main_navigation.textview.text.chart">Biểu đồ</string>
+    <string name="activity_add_exchange.textview.text.income">THU NHẬP</string>
+    <string name="activity_add_exchange.textview.text.spend">CHI TIÊU</string>
+    <string name="activity_add_exchange.textview.text.tranfer">CHUYỂN TIỀN</string>
+    <string name="activity_add.textview.text.category">Thể Loại</string>
+    <string name="toast.text.connection_internet">Vui lòng kết nối internet!</string>
+    // GROUP
+    <string-array name="group_name">
+        <item>Thu Nhập</item>
+        <item>Ăn Uống</item>
+        <item>Di Chuyển</item>
+        <item>Giải Trí</item>
+        <item>Sức khỏe</item>
+        <item>Gia Đình</item>
+        <item>Mua Sắm</item>
+        <item>Giáo Dục</item>
+        <item>Người Yêu</item>
+        <item>Khác</item>
+    </string-array>
+    <string-array name="group_path">
+        <item>ic_salary</item>
+        <item>ic_food_drinks_other</item>
+        <item>ic_transport</item>
+        <item>ic_entertainment</item>
+        <item>ic_health</item>
+        <item>ic_family</item>
+        <item>ic_shopping</item>
+        <item>ic_education</item>
+        <item>ic_inlove</item>
+        <item>ic_other</item>
+    </string-array>
+    // Category
+    <!--InCome-->
+    <string-array name="income_name">
+        <item>Lương</item>
+        <item>Thưởng - Quà</item>
+        <item>Buôn bán</item>
+        <item>Thu nhập khác</item>
+    </string-array>
+    <string-array name="income_path">
+        <item>ic_salary</item>
+        <item>ic_gift</item>
+        <item>ic_sale</item>
+        <item>ic_income_other</item>
+    </string-array>
+    <!--Food and Drinks-->
+    <string-array name="food_drink_name">
+        <item>Nhà hàng</item>
+        <item>Cà phê</item>
+        <item>Ăn uống khác</item>
+    </string-array>
+    <string-array name="food_drink_path">
+        <item>ic_restautrant_food</item>
+        <item>ic_Bar_cafe</item>
+        <item>ic_groceries</item>
+    </string-array>
+    <!--Transportation-->
+    <string-array name="transportation_name">
+        <item>Taxi</item>
+        <item>Bảo dưỡng xe</item>
+        <item>Xăng dầu</item>
+        <item>Máy bay</item>
+    </string-array>
+    <string-array name="transportation_path">
+        <item>ic_taxi</item>
+        <item>ic_repair</item>
+        <item>ic_petrol</item>
+        <item>ic_airplane</item>
+    </string-array>
+    <!-- Entertainment-->
+    <string-array name="entertainment_name">
+        <item>Phim ảnh</item>
+        <item>Buổi tiệc</item>
+        <item>Trò chơi điện tử</item>
+        <item>Giải trí khác</item>
+    </string-array>
+    <string-array name="entertainment_path">
+        <item>ic_film</item>
+        <item>ic_party</item>
+        <item>ic_game</item>
+        <item>ic_entertainment</item>
+    </string-array>
+    <!-- Health and Fitness-->
+    <string-array name="health_name">
+        <item>Thể thao</item>
+        <item>Khám chữa bệnh</item>
+        <item>Thuốc</item>
+        <item>Bảo Hiểm</item>
+        <item>Chăm sóc sức khỏe khác</item>
+    </string-array>
+    <string-array name="health_path">
+        <item>ic_fitness</item>
+        <item>ic_medical_examination</item>
+        <item>ic_medical</item>
+        <item>ic_security</item>
+        <item>ic_health</item>
+    </string-array>
+    <!-- Family-->
+    <string-array name="family_name">
+        <item>Kinh doanh</item>
+        <item>Con cái</item>
+        <item>Sửa chữa nhà cửa</item>
+        <item>Hóa đơn</item>
+        <item>Vật nuôi</item>
+    </string-array>
+    <string-array name="family_path">
+        <item>ic_business</item>
+        <item>ic_children</item>
+        <item>ic_repair_house</item>
+        <item>ic_bill</item>
+        <item>ic_pet</item>
+    </string-array>
+    <!--Shopping-->
+    <string-array name="shopping_name">
+        <item>Quần áo</item>
+        <item>Giày dép</item>
+        <item>Thiết bị điện tử</item>
+        <item>Mua sắm khác</item>
+    </string-array>
+    <string-array name="shopping_path">
+        <item>ic_colthes</item>
+        <item>ic_shose</item>
+        <item>ic_eletric</item>
+        <item>ic_shopping</item>
+    </string-array>
+    <!-- Education-->
+    <string-array name="education_name">
+        <item>Học Phí</item>
+        <item>Tư Liệu</item>
+        <item>Giáo dục - Khác</item>
+    </string-array>
+    <string-array name="education_path">
+        <item>ic_cost</item>
+        <item>ic_document</item>
+        <item>ic_education</item>
+    </string-array>
+    <!-- Love and friends-->
+    <string-array name="love_name">
+        <item>Người yêu</item>
+    </string-array>
+    <string-array name="love_path">
+        <item>ic_inlove</item>
+    </string-array>
+    <string-array name="other_name">
+        <item>Chi tiêu khác</item>
+    </string-array>
+    <string-array name="other_path">
+        <item>ic_other</item>
+    </string-array>
 </resources>

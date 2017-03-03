@@ -8,8 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.google.GoogleUtils;
+import com.dut.moneytracker.utils.DialogUtils;
+import com.dut.moneytracker.utils.NetworkUtils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -80,6 +84,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+        if (!NetworkUtils.getInstance().isNetworkAvalibale(this)) {
+            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
+            return;
+        }
         switch (v.getId()) {
             case R.id.btnLoginWithEmail:
                 startActivity(new Intent(this, LoginMailActivity.class));
@@ -142,14 +150,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
+                GoogleUtils.getInstance().setGoogleApiClient(mGoogleApiClient);
                 fireBaseAuthWithGoogle(account);
-            } else {
-                // Google Sign In failed, update UI appropriately
             }
         }
     }
 
     private void fireBaseAuthWithGoogle(GoogleSignInAccount account) {
+        DialogUtils.getInstance().showProgressDialog(this, "Đang kết nối..");
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mFireBaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -161,6 +169,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void fireBaseAuthWthFacebook(AccessToken accessToken) {
+        DialogUtils.getInstance().showProgressDialog(this, "Đang kết nối..");
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mFireBaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -179,18 +188,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
         if (mFireBaseAuth != null) {
             mFireBaseAuth.removeAuthStateListener(this);
         }
     }
-
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-            FirebaseAuth.getInstance().signOut();
+            DialogUtils.getInstance().dismissProgressDialog();
+            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+            }
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         } else {
             Log.d(TAG, "onAuthStateChanged:signed_out");
         }

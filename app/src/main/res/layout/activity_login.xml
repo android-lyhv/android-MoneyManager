@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
         android:paddingEnd="10dp"
         android:paddingStart="10dp">
 
@@ -72,6 +71,6 @@
             android:layout_below="@id/llButtonLogin"
             android:layout_marginTop="50dp"
             android:gravity="center_horizontal"
-            android:text="@string/activity_login.texview.text.create_account" />
+            android:text="@string/activity_login.textview.text.create_account" />
     </RelativeLayout>
 </ScrollView>
