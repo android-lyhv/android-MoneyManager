@@ -8,4 +8,5 @@ package com.dut.moneytracker.constant;
 public class ResultCode {
     public static final int ADD_EXCHANGE = 0;
     public static final int PROFILE = 1;
+    public static final int EDIT_ACCOUNT = 2;
 }

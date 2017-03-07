@@ -30,9 +30,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.ActivityEditAccount"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".activities.UserInformationActivity"
             android:label="User"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ActivityLoadData"
+            android:theme="@style/AppTheme.FullScreen" />
+
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main_navigation"

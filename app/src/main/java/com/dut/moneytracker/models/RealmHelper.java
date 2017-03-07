@@ -14,6 +14,7 @@ abstract class RealmHelper {
     RealmHelper() {
         realm = Realm.getDefaultInstance();
     }
+
     public void insertOrUpdate(RealmObject object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);

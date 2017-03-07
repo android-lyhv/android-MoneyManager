@@ -70,13 +70,45 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/llDashBoard"
-                    android:clickable="true"
-                    android:background="@drawable/background_select"
+                    android:id="@+id/llAddAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/background_select"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/img_log" />
+
+                    <TextView
+                        android:id="@+id/tvAddAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        android:text="Thêm tài khoản"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#b4b3b3" />
+
+                <LinearLayout
+                    android:id="@+id/llDashBoard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/background_select"
+                    android:clickable="true"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -164,6 +196,7 @@
                         android:text="Ngân sách"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/llLocation"
                     android:layout_width="wrap_content"

@@ -193,8 +193,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
+            android:id="@+id/tvOk"
             android:background="@color/colorPrimary"
-            android:text="CHEN"
+            android:text="Ok"
             android:textColor="@android:color/white"
             android:textSize="20dp" />
     </LinearLayout>

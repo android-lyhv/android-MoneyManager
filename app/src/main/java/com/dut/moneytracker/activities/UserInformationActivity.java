@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,8 +14,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ResultCode;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -22,13 +26,12 @@ import com.google.firebase.auth.FirebaseAuth;
  * Created by ly.ho on 03/03/2017.
  */
 
-public class UserInformationActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks {
+public class UserInformationActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView imgUser;
     private TextView tvUser;
     private TextView tvEmail;
     private Button btnLogout;
     private FirebaseAuth mFireBaseAuth;
-    GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         setContentView(R.layout.activity_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         loadDataUser();
     }
@@ -54,13 +58,20 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             case R.id.btnLogout:
                 if (mFireBaseAuth.getCurrentUser() != null) {
                     mFireBaseAuth.signOut();
-                    logoutGoogle();
+                    logOutFacebook();
                     setResult(ResultCode.PROFILE);
                     finish();
                 }
                 break;
         }
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
     private void loadDataUser() {
@@ -73,24 +84,15 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                 .into(imgUser);
     }
 
-    private void logoutGoogle() {
-        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();*/
-    }
+    private void logOutFacebook() {
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-    }
+                LoginManager.getInstance().logOut();
 
-    @Override
-    public void onConnectionSuspended(int i) {
-
+            }
+        }).executeAsync();
     }
 }

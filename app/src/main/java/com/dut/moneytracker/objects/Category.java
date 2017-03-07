@@ -1,5 +1,7 @@
 package com.dut.moneytracker.objects;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -7,13 +9,21 @@ import io.realm.annotations.PrimaryKey;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 28/02/2017.
  */
-
+@IgnoreExtraProperties
 public class Category extends RealmObject {
     @PrimaryKey
     private String id;
     private String idGroup;
     private String name;
-    private String urlImage;
+    private byte[] byteImage;
+
+    public byte[] getByteImage() {
+        return byteImage;
+    }
+
+    public void setByteImage(byte[] byteImage) {
+        this.byteImage = byteImage;
+    }
 
     public String getId() {
         return id;
@@ -29,14 +39,6 @@ public class Category extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUrlImage() {
-        return urlImage;
-    }
-
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
     }
 
     public String getIdGroup() {

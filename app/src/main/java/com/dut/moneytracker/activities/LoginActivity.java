@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.google.GoogleUtils;
+import com.dut.moneytracker.models.AppPreferences;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.utils.NetworkUtils;
 import com.facebook.AccessToken;
@@ -84,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (!NetworkUtils.getInstance().isNetworkAvalibale(this)) {
+        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
             Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -150,32 +151,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
-                GoogleUtils.getInstance().setGoogleApiClient(mGoogleApiClient);
                 fireBaseAuthWithGoogle(account);
             }
         }
     }
 
     private void fireBaseAuthWithGoogle(GoogleSignInAccount account) {
-        DialogUtils.getInstance().showProgressDialog(this, "Đang kết nối..");
+        DialogUtils.getInstance().showProgressDialog(this, getString(R.string.dialog_messenger_connect));
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mFireBaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        //TODO
+                        DialogUtils.getInstance().dismissProgressDialog();
                     }
                 });
     }
 
     private void fireBaseAuthWthFacebook(AccessToken accessToken) {
-        DialogUtils.getInstance().showProgressDialog(this, "Đang kết nối..");
+        DialogUtils.getInstance().showProgressDialog(this, getString(R.string.dialog_messenger_connect));
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mFireBaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        //TODO
+                        DialogUtils.getInstance().dismissProgressDialog();
                     }
                 });
     }
@@ -192,19 +192,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mFireBaseAuth.removeAuthStateListener(this);
         }
     }
+
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-            DialogUtils.getInstance().dismissProgressDialog();
-            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-            }
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            logOutGoogle();
+            syncDataFromServer(user);
         } else {
             Log.d(TAG, "onAuthStateChanged:signed_out");
+        }
+    }
+
+    private void syncDataFromServer(FirebaseUser firebaseUser) {
+        String currentUserId = AppPreferences.getInstance().getCurrentUserId(this);
+        Log.d(TAG, "syncDataFromServer: " + currentUserId + "   " + firebaseUser.getUid());
+        if (!TextUtils.equals(currentUserId, firebaseUser.getUid())) {
+            startActivity(new Intent(this, ActivityLoadData.class));
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+        finish();
+    }
+
+    private void logOutGoogle() {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }
     }
 }

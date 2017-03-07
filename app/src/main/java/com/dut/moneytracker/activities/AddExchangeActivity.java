@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.dut.moneytracker.R;
 
@@ -18,21 +20,31 @@ public class AddExchangeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.item_recycler_debit);
+        setContentView(R.layout.activity_add_exchange);
         initView();
-        showView();
     }
 
     private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_close_white);
+        setTitle("");
         setSupportActionBar(mToolbar);
+
     }
 
-    private void showView() {
-        /*RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewCardAccount);
-        CardAccountAdapter cardAccountAdapter = new CardAccountAdapter(this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setAdapter(cardAccountAdapter);*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_exchange, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

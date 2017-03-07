@@ -18,7 +18,7 @@ public class NetworkUtils {
     private NetworkUtils() {
     }
 
-    public boolean isNetworkAvalibale(Context context) {
+    public boolean isConnectNetwork(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();

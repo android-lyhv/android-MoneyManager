@@ -5,4 +5,5 @@
     <color name="colorAccent">#03a879</color>
     <color name="colorBackgroundLine">#c4c4c4</color>
     <color name="colorBackgroundMain">#ededed</color>
+    <color name="defaultAccountColor">#FF028761</color>
 </resources>

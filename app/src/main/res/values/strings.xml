@@ -22,7 +22,33 @@
     <string name="activity_add_exchange.textview.text.tranfer">CHUYỂN TIỀN</string>
     <string name="activity_add.textview.text.category">Thể Loại</string>
     <string name="toast.text.connection_internet">Vui lòng kết nối internet!</string>
-    // GROUP
+    <string name="name_default_account">Tiền Mặt</string>
+    <string name="id_default_account">moneytracker</string>
+    <!--Currency-->
+    <string name="current_api_id">bd8e8fc3b2bd4af58a7617bc9ce3651f</string>
+    <!--FIREBASE-->
+    <string name="base_url_firebase">https://moneytracker-159307.firebaseio.com/</string>
+    <string name="group_category">group_category</string>
+    <string name="dialog.messenger.connect">Kết nối server…</string>
+    <string name="fragment_account.textview.list_account">Tài khoản</string>
+    <string name="fragment_account.textview.amount">Giá trị</string>
+    <string name="fragment_account.textview.chart">Biểu đồ</string>
+    <string name="fragment_account.textview.chartlist">30 ngày gần nhất</string>
+    <string name="fragment_account.textview.exchange">Giao dịch gần đây</string>
+    <string name="fragment_account.textview.showmore">Hiển thị thêm</string>
+    <string name="tablyout.text.all_account">Tài khoản của tôi</string>
+    <string name="extra.account">Account</string>
+    <string name="dialoag.title.currency">Chọn tiền tệ</string>
+    <!--PaymentType-->
+    <string-array name="payment_type">
+        <item>Tiền Mặt</item>
+        <item>Thẻ ghi nợ</item>
+        <item>Thẻ tín dụng</item>
+        <item>Chuyển khoán ngân hàng</item>
+        <item>Thanh toán bằng điện thoại di động</item>
+        <item>Thanh toán web</item>
+    </string-array>
+    <!--GROUP-->
     <string-array name="group_name">
         <item>Thu Nhập</item>
         <item>Ăn Uống</item>
@@ -32,7 +58,7 @@
         <item>Gia Đình</item>
         <item>Mua Sắm</item>
         <item>Giáo Dục</item>
-        <item>Người Yêu</item>
+        <item>Tình yêu - Tình bạn</item>
         <item>Khác</item>
     </string-array>
     <string-array name="group_path">
@@ -69,7 +95,7 @@
     </string-array>
     <string-array name="food_drink_path">
         <item>ic_restautrant_food</item>
-        <item>ic_Bar_cafe</item>
+        <item>ic_bar_cafe</item>
         <item>ic_groceries</item>
     </string-array>
     <!--Transportation-->

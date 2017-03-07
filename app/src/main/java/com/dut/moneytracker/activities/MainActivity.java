@@ -3,7 +3,9 @@ package com.dut.moneytracker.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,11 +21,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.adapter.BaseViewPagerAdapter;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.fragment.FragmentAccount;
+import com.dut.moneytracker.fragment.FragmentAllAccount;
+import com.dut.moneytracker.models.AccountManager;
+import com.dut.moneytracker.objects.Account;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
     private FloatingActionButton mFab;
@@ -30,6 +40,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView imgUserLogo;
     private TextView tvUserName;
     private TextView tvEmail;
+    private ViewPager mViewPagerAccount;
+    private TabLayout mTabLayout;
+    private FrameLayout mFrameLayout;
+    private int positionTabSelect = 0;
+    private List<Account> accounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initView();
         loadProfile();
+        loadViewAccount();
     }
 
     private void initView() {
@@ -54,6 +70,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imgUserLogo = (ImageView) findViewById(R.id.imgUserLogo);
         tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvEmail = (TextView) findViewById(R.id.tvEmail);
+        mViewPagerAccount = (ViewPager) findViewById(R.id.viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.tablayout);
+        mFrameLayout = (FrameLayout) findViewById(R.id.flContent);
+    }
+
+    private void loadViewAccount() {
+        BaseViewPagerAdapter baseViewPagerAdapter = new BaseViewPagerAdapter(getSupportFragmentManager());
+        accounts = AccountManager.getInstance().getListAccount();
+        int size = accounts.size();
+        if (size > 1) {
+            FragmentAllAccount fragmentAllAccount = new FragmentAllAccount();
+            fragmentAllAccount.registerCardAccountListener(new FragmentAllAccount.CardAccountListener() {
+                @Override
+                public void onClickCardAccount(int position) {
+                    mViewPagerAccount.setCurrentItem(position);
+                }
+            });
+            fragmentAllAccount.setAccounts(accounts);
+            baseViewPagerAdapter.addFragment(fragmentAllAccount, getString(R.string.tablyout_text_all_account));
+        }
+        for (int i = 0; i < size; i++) {
+            FragmentAccount mFragmentAccount = new FragmentAccount();
+            mFragmentAccount.setAccount(accounts.get(i));
+            baseViewPagerAdapter.addFragment(mFragmentAccount, accounts.get(i).getName());
+        }
+        mViewPagerAccount.setAdapter(baseViewPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPagerAccount);
     }
 
     private void loadProfile() {
@@ -77,14 +120,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       /* getMenuInflater().inflate(R.menu.main_activity_navigation, menu);*/
+        getMenuInflater().inflate(R.menu.menu_account_item, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.actionEditAccount:
+                onEditAccount();
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -97,7 +144,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(new Intent(this, UserInformationActivity.class), RequestCode.PROFILE);
                 break;
         }
-
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
     }
 
     @Override
@@ -108,5 +157,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
         }
+    }
+
+    private void onEditAccount() {
+        Intent intent = new Intent(this, ActivityEditAccount.class);
+        intent.putExtra(getString(R.string.extra_account), accounts.get(positionTabSelect));
+        startActivityForResult(intent, ResultCode.EDIT_ACCOUNT);
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        positionTabSelect = tab.getPosition() - 1;
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }
