@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -9,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:text="100000000"
+        android:id="@+id/tvAmount"
+        tools:text="1000000.00"
         android:textSize="30dp" />
 
     <View
@@ -28,147 +30,119 @@
         <TableRow android:layout_weight="1">
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal7"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="7"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="7" />
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal8"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="8"
-
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="8" />
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal9"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="9"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="9" />
         </TableRow>
 
         <TableRow android:layout_weight="1">
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal4"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="4"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="4" />
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal5"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="5"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="5" />
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal6"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="6"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="6" />
         </TableRow>
 
         <TableRow android:layout_weight="1">
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal1"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="1"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="1" />
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
 
+                android:id="@+id/tvCal2"
+                style="@style/calculator_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="2"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="2" />
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal3"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="3"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="3" />
         </TableRow>
 
         <TableRow android:layout_weight="1">
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCalDot"
+                style="@style/calculator_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text=","
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="." />
 
             <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/tvCal0"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@android:color/black"
-                android:textSize="30dp"
-                android:textStyle="bold" />
+                android:text="0" />
 
-            <TextView
-                style="@style/Widget.AppCompat.Button.Borderless"
+            <ImageView
+                android:id="@+id/imgCalBack"
+                style="@style/calculator_item"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="Back"
-                android:textColor="@android:color/black"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:src="@drawable/ic_keyboard_backspace" />
         </TableRow>
     </TableLayout>
 
@@ -177,27 +151,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            style="@style/Widget.AppCompat.Button.Borderless"
+        <Button
+            android:id="@+id/tvCalClean"
+            style="@style/calculator_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:text="C"
-            android:textColor="@android:color/black"
-            android:textSize="20dp" />
+            android:text="C" />
 
         <TextView
-            style="@style/Widget.AppCompat.Button.Borderless"
+            android:id="@+id/tvOk"
+            style="@style/calculator_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:id="@+id/tvOk"
-            android:background="@color/colorPrimary"
-            android:text="Ok"
-            android:textColor="@android:color/white"
-            android:textSize="20dp" />
+            android:text="=" />
     </LinearLayout>
 
 </LinearLayout>

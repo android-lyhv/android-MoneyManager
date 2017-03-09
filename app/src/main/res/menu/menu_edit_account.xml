@@ -8,7 +8,7 @@
         android:title="User"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/actionSaveEdit"
+        android:id="@+id/actionSave"
         android:icon="@drawable/ic_check_white"
         android:orderInCategory="300"
         android:title="User"

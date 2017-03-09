@@ -10,8 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
-import com.dut.moneytracker.utils.StringUtils;
+import com.dut.moneytracker.currency.CurrencyUtils;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
 
     @Override
     public CardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_card_account_recycler, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_card_account, parent, false);
         return new CardHolder(view);
     }
 
@@ -58,8 +59,9 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
         }
 
         public void setView(Account account) {
+            String value = AccountManager.getInstance().getAmountAvailable(account.getId());
             llCard.setBackgroundColor(Color.parseColor(account.getColorCode()));
-            String money = StringUtils.getInstance().getStringMoneyType(account.getAmountAvailable(), account.getCurrencyCode());
+            String money = CurrencyUtils.getInstance().getStringMoneyType(value, account.getCurrencyCode());
             tvAmount.setText(money);
             tvAccountName.setText(account.getName());
         }

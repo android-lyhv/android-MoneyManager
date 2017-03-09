@@ -1,6 +1,6 @@
-package com.dut.moneytracker.fragment;
+package com.dut.moneytracker.models.presenter;
 
-import com.dut.moneytracker.models.AccountManager;
+import com.dut.moneytracker.models.realms.AccountManager;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -18,16 +18,11 @@ public class AccountPresenter {
     private AccountPresenter() {
     }
 
-
-    public void loadRecyclerCardAccount() {
-
-    }
-
-    public float getTotalAmountAvailable(String idAccount) {
+    public String getTotalAmountAvailable(String idAccount) {
         return accountManager.getAmountAvailable(idAccount);
     }
 
-    public float getTotalAmountAvailable() {
+    public String getTotalAmountAvailable() {
         return accountManager.getAllAmountAvailable();
     }
 }

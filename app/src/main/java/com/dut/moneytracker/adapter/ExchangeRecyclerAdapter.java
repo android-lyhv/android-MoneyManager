@@ -15,8 +15,8 @@ import java.util.List;
 
 public class ExchangeRecyclerAdapter extends BaseRecyclerAdapter {
 
-    public ExchangeRecyclerAdapter(List objects, Context context) {
-        super(objects, context);
+    public ExchangeRecyclerAdapter(Context context, List objects) {
+        super(context, objects);
     }
 
     @Override

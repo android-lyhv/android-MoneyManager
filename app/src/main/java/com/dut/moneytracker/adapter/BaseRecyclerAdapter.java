@@ -9,12 +9,12 @@ import java.util.List;
 
 public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
-    Context mContext;
+    private Context context;
     private List<T> mObjects;
 
-    BaseRecyclerAdapter(final List<T> objects, Context context) {
+    public BaseRecyclerAdapter(Context context, final List<T> objects) {
         mObjects = objects;
-        mContext = context;
+        this.context = context;
     }
 
     /**
@@ -97,5 +97,9 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     public void sort(Comparator<? super T> comparator) {
         Collections.sort(mObjects, comparator);
         notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

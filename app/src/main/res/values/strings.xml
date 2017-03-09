@@ -39,6 +39,8 @@
     <string name="tablyout.text.all_account">Tài khoản của tôi</string>
     <string name="extra.account">Account</string>
     <string name="dialoag.title.currency">Chọn tiền tệ</string>
+    <string name="dialog.title.account">Danh sách tài khoản</string>
+    <string name="extra.category">extra_category</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>

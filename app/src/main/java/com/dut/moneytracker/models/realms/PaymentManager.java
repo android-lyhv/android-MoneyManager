@@ -1,4 +1,4 @@
-package com.dut.moneytracker.models;
+package com.dut.moneytracker.models.realms;
 
 import com.dut.moneytracker.objects.PaymentType;
 

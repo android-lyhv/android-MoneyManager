@@ -45,8 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@id/inputPass"
         android:layout_below="@id/inputPass"
-        android:text="@string/activity_login_mail.button.text"
-        android:theme="@style/select.button" />
+        android:text="@string/activity_login_mail.button.text" />
 
     <TextView
         android:id="@+id/tvForgotPass"
@@ -54,5 +53,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:theme="@style/select.button" />
+        />
 </RelativeLayout>

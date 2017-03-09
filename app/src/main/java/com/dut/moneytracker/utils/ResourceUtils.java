@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,8 +21,17 @@ public class ResourceUtils {
         return ourInstance;
     }
 
-    private ResourceUtils() {
+    private BitmapFactory.Options options;
 
+    private ResourceUtils() {
+        options = getOptions();
+    }
+
+    private BitmapFactory.Options getOptions() {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.inSampleSize = 1;
+        return options;
     }
 
     public int getIdResStageBitmap(Resources resources, Context context, String path) {
@@ -32,14 +40,13 @@ public class ResourceUtils {
 
     public byte[] convertBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, SIZE_IMAGE_CATEGORY, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, SIZE_IMAGE_CATEGORY, stream);
         return stream.toByteArray();
     }
 
     public byte[] convertBitmap(Resources resources, Context context, String path) {
         int id = resources.getIdentifier(path, "drawable", context.getPackageName());
-        Log.d("convertBitmap ", path + "   " + String.valueOf(id));
-        Bitmap bitmap = BitmapFactory.decodeResource(resources, id);
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, id, options);
         return convertBitmap(bitmap);
     }
 

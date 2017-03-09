@@ -19,8 +19,7 @@ public class Account extends RealmObject implements Parcelable {
     private String id;
     private String currencyCode;
     private String name;
-    private float initAmount;
-    private float amountAvailable;
+    private String initAmount;
     private Date created;
     private String colorCode;
     private boolean saveLocation;
@@ -51,11 +50,11 @@ public class Account extends RealmObject implements Parcelable {
         this.name = name;
     }
 
-    public float getInitAmount() {
+    public String getInitAmount() {
         return initAmount;
     }
 
-    public void setInitAmount(float initAmount) {
+    public void setInitAmount(String initAmount) {
         this.initAmount = initAmount;
     }
 
@@ -73,14 +72,6 @@ public class Account extends RealmObject implements Parcelable {
 
     public void setColorCode(String colorCode) {
         this.colorCode = colorCode;
-    }
-
-    public float getAmountAvailable() {
-        return amountAvailable;
-    }
-
-    public void setAmountAvailable(float amountAvailable) {
-        this.amountAvailable = amountAvailable;
     }
 
     public boolean isDefault() {
@@ -117,8 +108,7 @@ public class Account extends RealmObject implements Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.currencyCode);
         dest.writeString(this.name);
-        dest.writeFloat(this.initAmount);
-        dest.writeFloat(this.amountAvailable);
+        dest.writeString(this.initAmount);
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
         dest.writeString(this.colorCode);
         dest.writeByte(this.saveLocation ? (byte) 1 : (byte) 0);
@@ -133,8 +123,7 @@ public class Account extends RealmObject implements Parcelable {
         this.id = in.readString();
         this.currencyCode = in.readString();
         this.name = in.readString();
-        this.initAmount = in.readFloat();
-        this.amountAvailable = in.readFloat();
+        this.initAmount = in.readString();
         long tmpCreated = in.readLong();
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
         this.colorCode = in.readString();

@@ -131,7 +131,7 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvMoney"
+                        android:id="@+id/tvDateCreated"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@id/tvTitleMoney"
@@ -146,7 +146,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_below="@id/tvMoney"
+                        android:layout_below="@id/tvDateCreated"
                         android:layout_marginTop="5dp"
                         android:background="#c4c4c4" />
                 </RelativeLayout>
@@ -283,7 +283,7 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvDate"
+                        android:id="@+id/tvAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@id/tvTitleDate"
@@ -298,7 +298,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_below="@id/tvDate"
+                        android:layout_below="@id/tvAmount"
                         android:layout_marginTop="5dp"
                         android:background="#c4c4c4" />
                 </RelativeLayout>

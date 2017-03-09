@@ -7,8 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.models.realms.CurrencyManager;
-import com.dut.moneytracker.objects.Currency;
+import com.dut.moneytracker.models.realms.AccountManager;
+import com.dut.moneytracker.objects.Account;
 
 import java.util.List;
 
@@ -17,26 +17,26 @@ import java.util.List;
  * Created by ly.ho on 07/03/2017.
  */
 
-public class DialogPickCurrency extends DialogFragment {
-    private List<Currency> currencies = CurrencyManager.getInstance().getCurrencyCodes();
-    private ResultListener resultListener;
+public class DialogPickAccount extends DialogFragment {
+    private List<Account> accounts = AccountManager.getInstance().getListAccount();
+    private AccountListener accountListener;
 
-    public interface ResultListener {
-        void onResultCurrencyCode(String code);
+    public interface AccountListener {
+        void onResultAccount(Account account);
     }
 
-    public void registerResultListener(ResultListener resultListener) {
-        this.resultListener = resultListener;
+    public void registerPickAccount(AccountListener accountListener) {
+        this.accountListener = accountListener;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final String[] list = getListCode();
+        final String[] names = getListAccountName();
         final int[] selected = {0};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the dialog title
-        builder.setTitle(R.string.dialoag_title_currency)
-                .setSingleChoiceItems(list, -1, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.dialog_title_account)
+                .setSingleChoiceItems(names, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         selected[0] = which;
@@ -45,7 +45,7 @@ public class DialogPickCurrency extends DialogFragment {
                 }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                resultListener.onResultCurrencyCode(list[selected[0]]);
+                accountListener.onResultAccount(accounts.get(selected[0]));
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -56,12 +56,12 @@ public class DialogPickCurrency extends DialogFragment {
         return builder.create();
     }
 
-    private String[] getListCode() {
-        int size = currencies.size();
-        String[] listCurrencyCode = new String[size];
+    private String[] getListAccountName() {
+        int size = accounts.size();
+        String[] names = new String[size];
         for (int i = 0; i < size; i++) {
-            listCurrencyCode[i] = currencies.get(i).getCurrencyCode();
+            names[i] = accounts.get(i).getName();
         }
-        return listCurrencyCode;
+        return names;
     }
 }

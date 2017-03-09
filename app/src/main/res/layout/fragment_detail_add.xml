@@ -119,7 +119,7 @@
                     android:text="Ngay" />
 
                 <TextView
-                    android:id="@+id/tvDate"
+                    android:id="@+id/tvAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleDate"
@@ -135,10 +135,10 @@
                     android:id="@+id/tvTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tvDate"
-                    android:layout_alignTop="@id/tvDate"
+                    android:layout_alignBottom="@id/tvAmount"
+                    android:layout_alignTop="@id/tvAmount"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/tvDate"
+                    android:layout_toEndOf="@id/tvAmount"
                     android:background="@android:color/transparent"
                     android:text="8:32"
                     android:textColor="@android:color/black"
@@ -147,7 +147,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@id/tvDate"
+                    android:layout_below="@id/tvAmount"
                     android:layout_marginTop="5dp"
                     android:background="#c4c4c4" />
             </RelativeLayout>

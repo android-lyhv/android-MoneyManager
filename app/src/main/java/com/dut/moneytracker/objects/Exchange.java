@@ -20,8 +20,9 @@ public class Exchange extends RealmObject implements Parcelable {
     private String idAccount;
     private String idCategory;
     private String idPaymentType;
+    private String currencyCode;
     private int type;
-    private float amount;
+    private String amount;
     private String note;
     private Place place;
     private Date created;
@@ -67,11 +68,11 @@ public class Exchange extends RealmObject implements Parcelable {
         this.type = type;
     }
 
-    public float getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
@@ -107,6 +108,14 @@ public class Exchange extends RealmObject implements Parcelable {
         this.attachments = attachments;
     }
 
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -118,10 +127,11 @@ public class Exchange extends RealmObject implements Parcelable {
         dest.writeString(this.idAccount);
         dest.writeString(this.idCategory);
         dest.writeString(this.idPaymentType);
+        dest.writeString(this.currencyCode);
         dest.writeInt(this.type);
-        dest.writeFloat(this.amount);
+        dest.writeString(this.amount);
         dest.writeString(this.note);
-        dest.writeParcelable(this.place, flags);
+        dest.writeParcelable(this.place,flags);
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
         dest.writeList(this.attachments);
     }
@@ -134,10 +144,11 @@ public class Exchange extends RealmObject implements Parcelable {
         this.idAccount = in.readString();
         this.idCategory = in.readString();
         this.idPaymentType = in.readString();
+        this.currencyCode = in.readString();
         this.type = in.readInt();
-        this.amount = in.readFloat();
+        this.amount = in.readString();
         this.note = in.readString();
-        this.place = in.readParcelable(Place.class.getClassLoader());
+        this.place = (Place) in.readSerializable();
         long tmpCreated = in.readLong();
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
         this.attachments = new RealmList<>();

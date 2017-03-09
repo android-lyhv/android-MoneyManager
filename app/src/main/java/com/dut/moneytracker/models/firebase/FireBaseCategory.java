@@ -1,8 +1,8 @@
-package com.dut.moneytracker.firebase;
+package com.dut.moneytracker.models.firebase;
 
 import android.content.Context;
 
-import com.dut.moneytracker.models.CategoryManager;
+import com.dut.moneytracker.models.realms.CategoryManager;
 import com.google.firebase.database.DatabaseReference;
 
 /**
@@ -16,7 +16,7 @@ public class FireBaseCategory {
     private CategoryManager categoryManager;
 
     public FireBaseCategory() {
-        categoryManager = new CategoryManager();
+
     }
 
     public void loadDataCategory(final Context context) {

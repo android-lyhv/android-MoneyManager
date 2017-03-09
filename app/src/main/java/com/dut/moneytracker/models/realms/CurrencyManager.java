@@ -1,4 +1,4 @@
-package com.dut.moneytracker.models;
+package com.dut.moneytracker.models.realms;
 
 
 import android.content.Context;

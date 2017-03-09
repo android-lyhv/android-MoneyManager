@@ -1,4 +1,4 @@
-package com.dut.moneytracker.models;
+package com.dut.moneytracker.models.interfaces;
 
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
@@ -13,9 +13,9 @@ import java.util.List;
 public interface AccountListener {
     List<Account> getListAccount();
 
-    float getAmountAvailable(String id);
+    String getAmountAvailable(String id);
 
-    float getAllAmountAvailable();
+    String getAllAmountAvailable();
 
     void addExchange(Account account, Exchange exchange);
 }

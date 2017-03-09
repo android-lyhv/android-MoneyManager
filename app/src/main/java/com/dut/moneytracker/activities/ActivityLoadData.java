@@ -10,11 +10,11 @@ import android.widget.ProgressBar;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.GroupTag;
-import com.dut.moneytracker.models.AccountManager;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.AppPreferences;
-import com.dut.moneytracker.models.CategoryManager;
-import com.dut.moneytracker.models.CurrencyManager;
-import com.dut.moneytracker.models.PaymentManager;
+import com.dut.moneytracker.models.realms.CategoryManager;
+import com.dut.moneytracker.models.realms.CurrencyManager;
+import com.dut.moneytracker.models.realms.PaymentManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
@@ -86,7 +86,7 @@ public class ActivityLoadData extends AppCompatActivity {
     }
 
     private void createGroupCategory() {
-        CategoryManager mCategoryManager = new CategoryManager();
+        CategoryManager mCategoryManager = CategoryManager.getInstance();
         String[] nameGroups = getResources().getStringArray(R.array.group_name);
         String[] pathGroups = getResources().getStringArray(R.array.group_path);
         int size = nameGroups.length;

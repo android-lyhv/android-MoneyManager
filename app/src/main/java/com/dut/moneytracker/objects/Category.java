@@ -1,6 +1,7 @@
 package com.dut.moneytracker.objects;
 
-import com.google.firebase.database.IgnoreExtraProperties;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -9,8 +10,7 @@ import io.realm.annotations.PrimaryKey;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 28/02/2017.
  */
-@IgnoreExtraProperties
-public class Category extends RealmObject {
+public class Category extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
     private String idGroup;
@@ -48,4 +48,39 @@ public class Category extends RealmObject {
     public void setIdGroup(String idGroup) {
         this.idGroup = idGroup;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.idGroup);
+        dest.writeString(this.name);
+        dest.writeByteArray(this.byteImage);
+    }
+
+    public Category() {
+    }
+
+    protected Category(Parcel in) {
+        this.id = in.readString();
+        this.idGroup = in.readString();
+        this.name = in.readString();
+        this.byteImage = in.createByteArray();
+    }
+
+    public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
+        @Override
+        public Category createFromParcel(Parcel source) {
+            return new Category(source);
+        }
+
+        @Override
+        public Category[] newArray(int size) {
+            return new Category[size];
+        }
+    };
 }

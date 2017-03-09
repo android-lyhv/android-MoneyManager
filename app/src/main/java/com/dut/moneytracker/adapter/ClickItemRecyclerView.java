@@ -11,10 +11,10 @@ import android.view.View;
  */
 public class ClickItemRecyclerView implements RecyclerView.OnItemTouchListener {
     private GestureDetector gestureDetector;
-    private ClickItemListener clickItemListener;
+    private ClickItemRecyclerListener clickItemRecyclerListener;
 
-    public ClickItemRecyclerView(final Context context, final RecyclerView recyclerView, final ClickItemListener clickItemListener) {
-        this.clickItemListener = clickItemListener;
+    public ClickItemRecyclerView(final Context context, final RecyclerView recyclerView, final ClickItemRecyclerListener clickItemRecyclerListener) {
+        this.clickItemRecyclerListener = clickItemRecyclerListener;
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
@@ -24,8 +24,8 @@ public class ClickItemRecyclerView implements RecyclerView.OnItemTouchListener {
             @Override
             public void onLongPress(MotionEvent e) {
                 View viewChild = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                if (viewChild != null && clickItemListener != null) {
-                    clickItemListener.onLongClick(viewChild, recyclerView.getChildAdapterPosition(viewChild));
+                if (viewChild != null && clickItemRecyclerListener != null) {
+                    clickItemRecyclerListener.onLongClick(viewChild, recyclerView.getChildAdapterPosition(viewChild));
                 }
             }
         });
@@ -35,8 +35,8 @@ public class ClickItemRecyclerView implements RecyclerView.OnItemTouchListener {
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
         View viewChild = rv.findChildViewUnder(e.getX(), e.getY());
-        if (viewChild != null && clickItemListener != null && gestureDetector.onTouchEvent(e)) {
-            clickItemListener.onClick(viewChild, rv.getChildAdapterPosition(viewChild));
+        if (viewChild != null && clickItemRecyclerListener != null && gestureDetector.onTouchEvent(e)) {
+            clickItemRecyclerListener.onClick(viewChild, rv.getChildAdapterPosition(viewChild));
         }
         return false;
     }

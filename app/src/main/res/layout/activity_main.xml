@@ -8,17 +8,16 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_main_activity_navigation"
+        layout="@layout/app_bar_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#ffff"
-        android:fitsSystemWindows="true">
+        android:background="#ffff">
 
         <RelativeLayout
             android:id="@+id/nav_view"
