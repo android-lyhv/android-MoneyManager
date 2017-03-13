@@ -44,12 +44,11 @@ import java.util.Arrays;
  */
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
-    private static final String[] PERMISSION_FB = {"email", "public_profile", "user_posts", "user_location"};
+    private static final String[] PERMISSION_FB = {"email", "public_profile", "user_posts"};
     private static final int RC_SIGN_IN = 1;
     private static final String TAG = LoginActivity.class.getSimpleName();
     private Button btnLoginWithGoogle;
     private Button btnLoginWithFacebook;
-    private Button btnLoginWithEmail;
     private CallbackManager mCallbackManager;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFireBaseAuth;
@@ -68,8 +67,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
-        btnLoginWithEmail = (Button) findViewById(R.id.btnLoginWithEmail);
-        btnLoginWithEmail.setOnClickListener(this);
         btnLoginWithGoogle = (Button) findViewById(R.id.btnLoginWithGoogle);
         btnLoginWithGoogle.setOnClickListener(this);
         btnLoginWithFacebook = (Button) findViewById(R.id.btnLoginWithFacebook);
@@ -90,9 +87,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
         switch (v.getId()) {
-            case R.id.btnLoginWithEmail:
-                startActivity(new Intent(this, LoginMailActivity.class));
-                break;
             case R.id.btnLoginWithFacebook:
                 requestLoginFacebook();
                 break;

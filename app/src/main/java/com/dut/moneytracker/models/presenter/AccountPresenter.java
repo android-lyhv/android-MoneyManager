@@ -19,7 +19,7 @@ public class AccountPresenter {
     }
 
     public String getTotalAmountAvailable(String idAccount) {
-        return accountManager.getAmountAvailable(idAccount);
+        return accountManager.getAmountAvailableByAccount(idAccount);
     }
 
     public String getTotalAmountAvailable() {

@@ -46,18 +46,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TabLayout mTabLayout;
     private FrameLayout mFrameLayout;
     private Toolbar toolbar;
-    private int positionTabSelect;
+    private int positionAccountSelected;
     private List<Account> mAccounts;
-    private BaseViewPagerAdapter mBaseViewPagerAdapter;
-    private FragmentAllAccount fragmentAllAccount;
+    private BaseViewPagerAdapter mViewPagerTabAccountAdapter;
+    private FragmentAllAccount mFragmentAllAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAccounts = AccountManager.getInstance().getListAccount();
         initView();
         onLoadProfile();
-        onLoadDataAccount();
+        setUpViewpager();
     }
 
     private void initView() {
@@ -82,32 +83,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFrameLayout = (FrameLayout) findViewById(R.id.flContent);
     }
 
-    private void onLoadDataAccount() {
-        mBaseViewPagerAdapter = new BaseViewPagerAdapter(getSupportFragmentManager());
-        mAccounts = AccountManager.getInstance().getListAccount();
+    private void onLoadFragmentAccount() {
+        mViewPagerTabAccountAdapter.clearFragment();
         int size = mAccounts.size();
         if (size > 1) {
-            ArgbEvaluatorColor.getInstance().addColorCode(Color.parseColor("#FF028761"));
-            fragmentAllAccount = new FragmentAllAccount();
-            fragmentAllAccount.registerCardAccountListener(new FragmentAllAccount.CardAccountListener() {
+            ArgbEvaluatorColor.getInstance().addColorCode(getResources().getColor(R.color.colorPrimaryDark));
+            mFragmentAllAccount = new FragmentAllAccount();
+            mFragmentAllAccount.registerCardAccountListener(new FragmentAllAccount.CardAccountListener() {
                 @Override
                 public void onClickCardAccount(int position) {
                     mViewPagerAccount.setCurrentItem(position);
                 }
             });
-            fragmentAllAccount.setAccounts(mAccounts);
-            mBaseViewPagerAdapter.addFragment(fragmentAllAccount, getString(R.string.tablyout_text_all_account));
+            mFragmentAllAccount.setAccounts(mAccounts);
+            mViewPagerTabAccountAdapter.addFragment(mFragmentAllAccount, getString(R.string.tablyout_text_all_account));
         }
         for (int i = 0; i < size; i++) {
             ArgbEvaluatorColor.getInstance().addColorCode(Color.parseColor(mAccounts.get(i).getColorCode()));
             FragmentAccount mFragmentAccount = new FragmentAccount();
-            mFragmentAccount.setAccount(mAccounts.get(i));
-            mBaseViewPagerAdapter.addFragment(mFragmentAccount, mAccounts.get(i).getName());
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(getString(R.string.extra_account), mAccounts.get(i));
+            mFragmentAccount.setArguments(bundle);
+            mViewPagerTabAccountAdapter.addFragment(mFragmentAccount, mAccounts.get(i).getName());
         }
-        mViewPagerAccount.setAdapter(mBaseViewPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPagerAccount);
-        mViewPagerAccount.setCurrentItem(positionTabSelect);
+        mViewPagerTabAccountAdapter.notifyDataSetChanged();
     }
+
+    private void setUpViewpager() {
+        mViewPagerTabAccountAdapter = new BaseViewPagerAdapter(getSupportFragmentManager());
+        mViewPagerAccount.setAdapter(mViewPagerTabAccountAdapter);
+        mTabLayout.setupWithViewPager(mViewPagerAccount);
+        mTabLayout.addOnTabSelectedListener(this);
+        onLoadFragmentAccount();
+    }
+
 
     private void onLoadProfile() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -138,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionEditAccount:
-                onEditAccount();
+                startActivityEditAccount();
                 break;
         }
         return true;
@@ -167,30 +176,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onResultLogout();
                 break;
             case ResultCode.EDIT_ACCOUNT:
-                onResultEditAccount(data);
+                mViewPagerTabAccountAdapter.notifyDataSetChanged();
                 break;
             case ResultCode.ADD_EXCHANGE:
-                onLoadDataAccount();
+                mViewPagerTabAccountAdapter.notifyDataSetChanged();
                 break;
         }
     }
 
-    private void onEditAccount() {
+
+    private void startActivityEditAccount() {
         Intent intent = new Intent(this, ActivityEditAccount.class);
-        intent.putExtra(getString(R.string.extra_account), mAccounts.get(positionTabSelect));
+        intent.putExtra(getString(R.string.extra_account), mAccounts.get(positionAccountSelected));
         startActivityForResult(intent, RequestCode.EDIT_ACCOUNT);
     }
 
     private void startActivityAddExchange() {
         Intent intent = new Intent(this, ActivityAddExchange.class);
-        intent.putExtra(getString(R.string.extra_account), mAccounts.get(positionTabSelect));
+        intent.putExtra(getString(R.string.extra_account), mAccounts.get(positionAccountSelected));
         startActivityForResult(intent, RequestCode.ADD_EXCHANGE);
-    }
-
-    private void onResultEditAccount(Intent data) {
-        Account account = data.getParcelableExtra(getString(R.string.extra_account));
-        AccountManager.getInstance().insertOrUpdate(account);
-        onLoadDataAccount();
     }
 
     private void onResultLogout() {
@@ -200,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        positionTabSelect = tab.getPosition() == 0 ? 0 : tab.getPosition() - 1;
+        positionAccountSelected = tab.getPosition() == 0 ? 0 : tab.getPosition() - 1;
     }
 
     @Override

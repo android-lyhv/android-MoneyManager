@@ -38,14 +38,14 @@ public class CategoryManager extends RealmHelper {
     public byte[] getImageByte(String id) {
         byte[] bytes;
         realm.beginTransaction();
-        Category category = realm.where(Category.class).like("id", id).findFirst();
+        Category category = realm.where(Category.class).equalTo("id", id).findFirst();
         bytes = category.getByteImage();
         realm.commitTransaction();
         return bytes;
     }
     public Category getCategoryById(String id) {
         realm.beginTransaction();
-        Category category = realm.where(Category.class).like("id", id).findFirst();
+        Category category = realm.where(Category.class).equalTo("id", id).findFirst();
         realm.commitTransaction();
         return category;
     }

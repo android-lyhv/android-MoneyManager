@@ -17,14 +17,23 @@ import io.realm.annotations.PrimaryKey;
 public class Account extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
-    private String currencyCode;
     private String name;
+    private String currencyCode;
     private String initAmount;
     private Date created;
     private String colorCode;
     private boolean saveLocation;
     private boolean isDefault;
     private RealmList<Exchange> exchanges;
+    private RealmList<Debit> debits;
+
+    public RealmList<Debit> getDebits() {
+        return debits;
+    }
+
+    public void setDebits(RealmList<Debit> debits) {
+        this.debits = debits;
+    }
 
     public String getId() {
         return id;
@@ -114,6 +123,7 @@ public class Account extends RealmObject implements Parcelable {
         dest.writeByte(this.saveLocation ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isDefault ? (byte) 1 : (byte) 0);
         dest.writeList(this.exchanges);
+        dest.writeList(this.debits);
     }
 
     public Account() {
@@ -130,6 +140,8 @@ public class Account extends RealmObject implements Parcelable {
         this.saveLocation = in.readByte() != 0;
         this.isDefault = in.readByte() != 0;
         this.exchanges = new RealmList<>();
+        this.debits = new RealmList<>();
+        in.readList(this.debits, Debit.class.getClassLoader());
         in.readList(this.exchanges, Exchange.class.getClassLoader());
     }
 

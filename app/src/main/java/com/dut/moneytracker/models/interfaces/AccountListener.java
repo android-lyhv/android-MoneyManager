@@ -13,7 +13,7 @@ import java.util.List;
 public interface AccountListener {
     List<Account> getListAccount();
 
-    String getAmountAvailable(String id);
+    String getAmountAvailableByAccount(String id);
 
     String getAllAmountAvailable();
 

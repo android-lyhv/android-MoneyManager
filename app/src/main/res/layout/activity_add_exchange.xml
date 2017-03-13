@@ -86,8 +86,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
-                        android:layout_toStartOf="@+id/tvTypeMoney"
                         android:layout_toEndOf="@+id/tvStatus"
+                        android:layout_toStartOf="@+id/tvCurrency"
                         android:gravity="end"
                         android:maxLines="2"
                         android:textColor="@android:color/white"
@@ -108,7 +108,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvTypeMoney"
+                        android:id="@+id/tvCurrency"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -135,6 +135,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvTitleFromAccount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.5"
@@ -161,6 +162,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvTitleToAccount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.5"
@@ -186,7 +188,8 @@
                     android:alpha="0.5"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Chi Tiết"
+                    android:text="Thêm"
+                    android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textSize="20dp"
                     android:textStyle="bold" />

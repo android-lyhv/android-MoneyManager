@@ -18,12 +18,17 @@ public class Debit extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
     private String amount;
+    private String idAccount;
+    private int typeDebit;
     private boolean isClose;
     private Date create;
     private Date expires;
     private String name;
-    private String note;
-    private RealmList<ExchangeDebit> exchangeDebits;
+    private String description;
+    private RealmList<Exchange> exchanges;
+
+    public Debit() {
+    }
 
     @Override
     public int describeContents() {
@@ -34,32 +39,33 @@ public class Debit extends RealmObject implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.amount);
+        dest.writeString(this.idAccount);
+        dest.writeInt(this.typeDebit);
         dest.writeByte(this.isClose ? (byte) 1 : (byte) 0);
         dest.writeLong(this.create != null ? this.create.getTime() : -1);
         dest.writeLong(this.expires != null ? this.expires.getTime() : -1);
         dest.writeString(this.name);
-        dest.writeString(this.note);
-        dest.writeList(this.exchangeDebits);
-    }
-
-    public Debit() {
+        dest.writeString(this.description);
+        dest.writeList(this.exchanges);
     }
 
     protected Debit(Parcel in) {
         this.id = in.readString();
         this.amount = in.readString();
+        this.idAccount = in.readString();
+        this.typeDebit = in.readInt();
         this.isClose = in.readByte() != 0;
         long tmpCreate = in.readLong();
         this.create = tmpCreate == -1 ? null : new Date(tmpCreate);
         long tmpExpires = in.readLong();
         this.expires = tmpExpires == -1 ? null : new Date(tmpExpires);
         this.name = in.readString();
-        this.note = in.readString();
-        this.exchangeDebits = new RealmList<>();
-        in.readList(this.exchangeDebits, ExchangeDebit.class.getClassLoader());
+        this.description = in.readString();
+        this.exchanges = new RealmList<>();
+        in.readList(this.exchanges, Exchange.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Debit> CREATOR = new Parcelable.Creator<Debit>() {
+    public static final Creator<Debit> CREATOR = new Creator<Debit>() {
         @Override
         public Debit createFromParcel(Parcel source) {
             return new Debit(source);

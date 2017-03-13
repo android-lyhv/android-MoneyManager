@@ -3,6 +3,7 @@ package com.dut.moneytracker.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,5 +39,13 @@ public class BaseViewPagerAdapter extends FragmentPagerAdapter {
     public void addFragment(Fragment fragment, String title) {
         fragmentList.add(fragment);
         mStringTitleList.add(title);
+    }
+    public void clearFragment(){
+        fragmentList.clear();
+        mStringTitleList.clear();
+    }
+    @Override
+    public int getItemPosition(Object object){
+        return PagerAdapter.POSITION_NONE;
     }
 }

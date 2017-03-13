@@ -38,4 +38,9 @@ public class CurrencyUtils {
         BigDecimal bigDecimal = new BigDecimal(amount);
         return bigDecimal.toString();
     }
+
+    public float getFloatMoney(String amount) {
+        BigDecimal bigDecimal = new BigDecimal(amount);
+        return bigDecimal.floatValue();
+    }
 }

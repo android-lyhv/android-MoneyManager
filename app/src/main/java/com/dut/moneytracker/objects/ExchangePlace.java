@@ -11,12 +11,21 @@ import io.realm.annotations.PrimaryKey;
  * Created by ly.ho on 01/03/2017.
  */
 
-public class Place extends RealmObject implements Parcelable {
+public class ExchangePlace extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
     private String name;
+    private String address;
     private double latitude;
     private double longitude;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public double getLongitude() {
         return longitude;
@@ -50,6 +59,9 @@ public class Place extends RealmObject implements Parcelable {
         this.id = id;
     }
 
+    public ExchangePlace() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -59,29 +71,28 @@ public class Place extends RealmObject implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.name);
+        dest.writeString(this.address);
         dest.writeDouble(this.latitude);
         dest.writeDouble(this.longitude);
     }
 
-    public Place() {
-    }
-
-    protected Place(Parcel in) {
+    protected ExchangePlace(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
+        this.address = in.readString();
         this.latitude = in.readDouble();
         this.longitude = in.readDouble();
     }
 
-    public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>() {
+    public static final Creator<ExchangePlace> CREATOR = new Creator<ExchangePlace>() {
         @Override
-        public Place createFromParcel(Parcel source) {
-            return new Place(source);
+        public ExchangePlace createFromParcel(Parcel source) {
+            return new ExchangePlace(source);
         }
 
         @Override
-        public Place[] newArray(int size) {
-            return new Place[size];
+        public ExchangePlace[] newArray(int size) {
+            return new ExchangePlace[size];
         }
     };
 }

@@ -53,4 +53,10 @@
         <item name="android:textSize">40dp</item>
         <item name="background">@color/colorPrimaryDark</item>
     </style>
+
+    <style name="navigation_item">
+        <item name="android:background">@drawable/background_selected</item>
+        <item name="android:clickable">true</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
 </resources>

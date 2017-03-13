@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -27,14 +28,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+                android:layout_marginBottom="10dp">
 
                 <TextView
+                    android:id="@+id/tvTabIncome"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -42,10 +45,11 @@
                     android:layout_weight="1"
                     android:background="@color/colorBackgroundLine"
                     android:gravity="center"
-                    android:text="THU NHAP"
+                    android:text="Thu Nhập"
                     android:textColor="@color/colorPrimary" />
 
                 <TextView
+                    android:id="@+id/tvTabExpense"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -53,10 +57,11 @@
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
-                    android:text="THU NHAP"
+                    android:text="Chi Tiêu"
                     android:textColor="@android:color/white" />
 
                 <TextView
+                    android:id="@+id/tvTabTransfer"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -64,27 +69,30 @@
                     android:layout_weight="1"
                     android:background="@color/colorBackgroundLine"
                     android:gravity="center"
-                    android:text="THU NHAP"
+                    android:text="Chuyển Tiền"
                     android:textColor="@color/colorPrimary" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="10dp">
 
 
                 <RelativeLayout
+                    android:id="@+id/rlCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/background_selected"
+                    android:clickable="true">
 
                     <TextView
                         android:id="@+id/tvTitleSpinnerCurrency"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="The Loai" />
+                        android:text="Thể loại" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -93,7 +101,7 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvType"
+                        android:id="@+id/tvCategoryName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@id/tvTitleSpinnerCurrency"
@@ -108,21 +116,24 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_below="@id/tvType"
+                        android:layout_below="@id/tvCategoryName"
                         android:layout_marginTop="5dp"
                         android:background="#c4c4c4" />
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+                    android:clickable="true"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTitleMoney"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="So luong" />
+                        android:text="Giá trị" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -131,7 +142,7 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvDateCreated"
+                        android:id="@+id/tvAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@id/tvTitleMoney"
@@ -146,21 +157,25 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_below="@id/tvDateCreated"
+                        android:layout_below="@id/tvAmount"
                         android:layout_marginTop="5dp"
                         android:background="#c4c4c4" />
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+
+                    android:clickable="true"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTitleDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Luu y" />
+                        android:text="Chú thích" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -176,7 +191,6 @@
                         android:layout_below="@+id/tvTitleDescription"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
                         android:text="abc"
                         android:textColor="@android:color/black"
                         android:textSize="17dp" />
@@ -190,15 +204,18 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlCurrency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:id="@+id/tvTitleTypeMoney"
+                        android:id="@+id/tvTitleCurrency"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Tien Te" />
+                        android:text="Tiền tệ" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -207,11 +224,11 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvTypeMoney"
+                        android:id="@+id/tvCurrency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@id/tvTitleTypeMoney"
-                        android:layout_below="@+id/tvTitleTypeMoney"
+                        android:layout_alignStart="@id/tvTitleCurrency"
+                        android:layout_below="@+id/tvTitleCurrency"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@android:color/transparent"
@@ -222,21 +239,25 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_below="@id/tvTypeMoney"
+                        android:layout_below="@id/tvCurrency"
                         android:layout_marginTop="5dp"
                         android:background="#c4c4c4" />
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+
+                    android:clickable="true"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTitleWallet"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Tai khoan" />
+                        android:text="Tài khoản" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -245,14 +266,13 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvWallet"
+                        android:id="@+id/tvAccount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@id/tvTitleWallet"
                         android:layout_below="@+id/tvTitleWallet"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
                         android:text="Cash"
                         android:textColor="@android:color/black"
                         android:textSize="17dp" />
@@ -260,21 +280,25 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_below="@id/tvWallet"
+                        android:layout_below="@id/tvAccount"
                         android:layout_marginTop="5dp"
                         android:background="#c4c4c4" />
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+
+                    android:clickable="true"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTitleDate"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Date" />
+                        android:text="Ngày" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -283,7 +307,7 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvAmount"
+                        android:id="@+id/tvDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@id/tvTitleDate"
@@ -291,28 +315,31 @@
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@android:color/transparent"
-                        android:text="An uong"
                         android:textColor="@android:color/black"
-                        android:textSize="17dp" />
+                        android:textSize="17dp"
+                        tools:text="17/02/2013" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_below="@id/tvAmount"
+                        android:layout_below="@id/tvDate"
                         android:layout_marginTop="5dp"
                         android:background="#c4c4c4" />
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTitleTime"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Time" />
+                        android:text="Giờ" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -329,9 +356,9 @@
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@android:color/transparent"
-                        android:text="An uong"
                         android:textColor="@android:color/black"
-                        android:textSize="17dp" />
+                        android:textSize="17dp"
+                        tools:text="15:24" />
 
                     <View
                         android:layout_width="match_parent"
@@ -344,13 +371,16 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+
+                    android:clickable="true"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTitleTypeExchange"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Loai thanh toan" />
+                        android:text="Loại thanh toán" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
@@ -367,7 +397,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@android:color/transparent"
-                        android:text="An uong"
+                        android:text="tiền mặt"
                         android:textColor="@android:color/black"
                         android:textSize="17dp" />
 
@@ -380,89 +410,39 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rlLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:background="@drawable/background_selected"
+                    android:clickable="true"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/tvTitlePosition"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Vi tri" />
+                        android:text="Vị trí" />
 
 
                     <ImageView
-                        android:id="@+id/imgPosition"
+                        android:id="@+id/imgLocaiton"
                         android:layout_width="@dimen/activity_detail_exchange.image.with"
                         android:layout_height="@dimen/activity_detail_exchange.image.height"
                         android:layout_alignParentEnd="true"
                         android:layout_alignTop="@id/tvTitlePosition"
                         android:src="@drawable/ic_maker" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@id/tvTitlePosition"
-                        android:layout_below="@id/imgPosition"
-                        android:text="Chon dia diem chi tieu cua ..." />
-
-                    <FrameLayout
-                        android:id="@+id/frContentMap"
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/mapView"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_alignStart="@id/tvTitlePosition"
-                        android:layout_below="@id/tvTitlePosition"
-                        android:layout_marginTop="10dp"
-                        android:visibility="gone" />
+                        android:layout_below="@id/imgLocaiton"
+                        android:layout_marginTop="10dp" />
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:id="@+id/tvTitleImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="Hinh anh" />
-
-
-                    <ImageView
-                        android:id="@+id/imgImageExchange"
-                        android:layout_width="@dimen/activity_detail_exchange.image.with"
-                        android:layout_height="@dimen/activity_detail_exchange.image.height"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignTop="@id/tvTitleImage"
-                        android:src="@drawable/ic_camera" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@id/tvTitleImage"
-                        android:layout_below="@id/imgImageExchange"
-                        android:text="Chon anh cua ban" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerViewImage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@id/tvTitleImage"
-                        android:layout_below="@id/imgImageExchange"
-                        android:layout_marginTop="10dp"
-                        android:visibility="invisible" />
-                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>
-
-
     </ScrollView>
 
 

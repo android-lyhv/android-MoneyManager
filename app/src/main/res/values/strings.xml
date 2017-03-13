@@ -38,9 +38,16 @@
     <string name="fragment_account.textview.showmore">Hiển thị thêm</string>
     <string name="tablyout.text.all_account">Tài khoản của tôi</string>
     <string name="extra.account">Account</string>
+    <string name="extra.account_list">Accounts</string>
     <string name="dialoag.title.currency">Chọn tiền tệ</string>
     <string name="dialog.title.account">Danh sách tài khoản</string>
     <string name="extra.category">extra_category</string>
+    <string name="activity_add_exchange.title">Giao Dịch Mới</string>
+    <string name="transfer">Chuyển Tiền</string>
+    <string name="debit">Vay mượn</string>
+    <string name="date.text">Hôm nay</string>
+    <string name="chart.title">30 ngày gần đây</string>
+    <string name="toolbar.detail_exchange">Thông tin chi tiết</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>
@@ -56,7 +63,7 @@
         <item>Ăn Uống</item>
         <item>Di Chuyển</item>
         <item>Giải Trí</item>
-        <item>Sức khỏe</item>
+        <item>Sức Khỏe</item>
         <item>Gia Đình</item>
         <item>Mua Sắm</item>
         <item>Giáo Dục</item>
@@ -173,7 +180,6 @@
     <string-array name="education_name">
         <item>Học Phí</item>
         <item>Tư Liệu</item>
-        <item>Giáo dục - Khác</item>
     </string-array>
     <string-array name="education_path">
         <item>ic_cost</item>
@@ -182,7 +188,7 @@
     </string-array>
     <!-- Love and friends-->
     <string-array name="love_name">
-        <item>Người yêu</item>
+        <item>Tình phí</item>
     </string-array>
     <string-array name="love_path">
         <item>ic_inlove</item>

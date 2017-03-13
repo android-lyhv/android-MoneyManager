@@ -34,7 +34,7 @@ public class ExchangeAccountAdapter extends BaseRecyclerAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_exchange_main, parent, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_exchange_account, parent, false);
         return new ExchangeHolder(view);
     }
 
@@ -56,19 +56,31 @@ public class ExchangeAccountAdapter extends BaseRecyclerAdapter {
             imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
             tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
             tvAccountName = (TextView) itemView.findViewById(R.id.tvAccountName);
-            tvDateCreated = (TextView) itemView.findViewById(R.id.tvDateCreated);
+            tvDateCreated = (TextView) itemView.findViewById(R.id.tvAmount);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
         }
 
         public void onBind(Exchange exchange) {
-            Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
-            imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
-            tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
-            tvCategoryName.setText(category.getName());
-            tvDateCreated.setText(DateTimeUtils.getInstance().getStringDate(exchange.getCreated()));
-            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
-            if (exchange.getType() == ExchangeType.INCOME) {
-                tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+            if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
+                Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
+                imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
+                tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
+                tvCategoryName.setText(category.getName());
+                tvDateCreated.setText(DateTimeUtils.getInstance().getStringDate(exchange.getCreated()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+                if (exchange.getTypeExchange() == ExchangeType.INCOME) {
+                    tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+                }
+            }
+            if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
+                imgCategory.setImageResource(R.drawable.ic_transfer);
+                tvCategoryName.setText(getContext().getResources().getString(R.string.transfer));
+                tvDateCreated.setText(DateTimeUtils.getInstance().getStringDate(exchange.getCreated()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+                tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
+                if (CurrencyUtils.getInstance().getFloatMoney(exchange.getAmount()) > 0) {
+                    tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+                }
             }
         }
     }

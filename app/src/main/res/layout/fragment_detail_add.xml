@@ -165,7 +165,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imgPosition"
+                    android:id="@+id/imgLocaiton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -176,11 +176,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitlePosition"
-                    android:layout_below="@id/imgPosition"
+                    android:layout_below="@id/imgLocaiton"
                     android:text="Chon dia diem chi tieu cua ..." />
 
                 <FrameLayout
-                    android:id="@+id/frContentMap"
+                    android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_alignStart="@id/tvTitlePosition"

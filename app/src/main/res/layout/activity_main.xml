@@ -14,10 +14,11 @@
         android:fitsSystemWindows="true" />
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#ffff">
+        android:background="@android:color/white"
+        android:paddingBottom="10dp">
 
         <RelativeLayout
             android:id="@+id/nav_view"
@@ -28,7 +29,8 @@
                 android:id="@+id/rlProfile"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                android:clickable="true">
 
                 <ImageView
                     android:id="@+id/imgUserLogo"
@@ -70,17 +72,17 @@
 
                 <LinearLayout
                     android:id="@+id/llAddAccount"
+                    style="@style/navigation_item"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/background_select"
-                    android:clickable="true"
-                    android:orientation="horizontal">
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -100,19 +102,25 @@
                     android:layout_marginTop="10dp"
                     android:background="#b4b3b3" />
 
-                <LinearLayout
-                    android:id="@+id/llDashBoard"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/background_select"
-                    android:clickable="true"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="10dp"
+                    android:text="Giao dịch" />
+
+                <LinearLayout
+                    android:id="@+id/llDashBoard"
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -122,23 +130,23 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
-                        android:text="Giao dịch"
+                        android:text="Home"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/llRecode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
-
                         android:src="@drawable/img_log" />
 
                     <TextView
@@ -151,16 +159,17 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/llDebit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:id="@+id/llDefaultExchange"
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -169,53 +178,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
-                        android:text="Sổ nợ"
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llBubget"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/img_log" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:text="Ngân sách"
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/img_log" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:text="Vị trí"
+                        android:text="Giao dịch mặc định"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
@@ -234,15 +197,16 @@
 
                 <LinearLayout
                     android:id="@+id/llChartIncome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -257,15 +221,16 @@
 
                 <LinearLayout
                     android:id="@+id/llChartExpense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -280,15 +245,16 @@
 
                 <LinearLayout
                     android:id="@+id/llChartCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -312,19 +278,105 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Báo cáo" />
+                    android:text="Khác" />
 
                 <LinearLayout
-                    android:id="@+id/llMoneyFlow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:id="@+id/llDebit"
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/img_log" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        android:text="Sổ nợ"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llBubget"
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/img_log" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        android:text="Ngân sách"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llLocation"
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/img_log" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="20dp"
+                        android:text="Vị trí"
+                        android:textColor="@android:color/black" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#b4b3b3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Báo cáo" />
+
+                <LinearLayout
+                    android:id="@+id/llMoneyFlow"
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -337,40 +389,19 @@
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/llAnalyze"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/img_log" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:text="Phân Tích"
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/llExport"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -391,16 +422,16 @@
 
                 <LinearLayout
                     android:id="@+id/llSetting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    style="@style/navigation_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="10dp">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/img_log" />
 
@@ -413,29 +444,6 @@
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/llHelp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/img_log" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:text="Giúp đỡ"
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

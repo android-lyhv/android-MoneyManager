@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.activities.interfaces.AddListener;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
@@ -30,6 +31,7 @@ import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -37,7 +39,7 @@ import java.util.UUID;
  * Created by ly.ho on 23/02/2017.
  */
 
-public class ActivityAddExchange extends AppCompatActivity implements View.OnClickListener {
+public class ActivityAddExchange extends AppCompatActivity implements View.OnClickListener, AddListener {
     private static final String TAG = ActivityAddExchange.class.getSimpleName();
     private Toolbar mToolbar;
     private TextView tvCal0;
@@ -65,12 +67,16 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
     private LinearLayout llInformation;
     private TextView tvStatus;
     private StringBuilder stringBuilder;
+    private TextView tvTitleFromAccount;
+    private TextView tvTitleToAccount;
 
 
     //Model
     private Account mAccount;
-    private Exchange mExchange;
-    private String idCategory = "";
+    private Exchange mExchange = new Exchange();
+    private String idCategory;
+    private String nameCategory = "Chưa biết";
+    private String nameAccountTransfer = "Chưa biết";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,22 +84,12 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_add_exchange);
         initView();
         onGetAccountExtra();
-        initExchange();
-    }
-
-    private void initExchange() {
-        mExchange = new Exchange();
-        mExchange.setId(UUID.randomUUID().toString());
-        mExchange.setType(ExchangeType.EXPENSES);
-        mExchange.setIdAccount(mAccount.getId());
-        mExchange.setCurrencyCode(mAccount.getCurrencyCode());
-        mExchange.setCreated(new Date());
     }
 
     private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_close_white);
-        setTitle("");
+        setTitle(getString(R.string.activity_add_exchange_title));
         setSupportActionBar(mToolbar);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
         tvCal0 = (TextView) findViewById(R.id.tvCal0);
@@ -136,19 +132,33 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         llCategory.setOnClickListener(this);
         tvDetail = (TextView) findViewById(R.id.tvDetail);
         tvDetail.setOnClickListener(this);
-        tvCurrency = (TextView) findViewById(R.id.tvTypeMoney);
+        tvCurrency = (TextView) findViewById(R.id.tvCurrency);
         tvCurrency.setOnClickListener(this);
+        tvTitleFromAccount = (TextView) findViewById(R.id.tvTitleFromAccount);
+        tvTitleToAccount = (TextView) findViewById(R.id.tvTitleToAccount);
+        btnExpenses.setAlpha(1f);
+        btnIncome.setAlpha(0.5f);
+        btnTransfer.setAlpha(0.5f);
     }
 
     private void onGetAccountExtra() {
         mAccount = getIntent().getParcelableExtra(getString(R.string.extra_account));
+        if (mAccount == null) {
+            return;
+        }
         tvAccountName.setText(mAccount.getName());
         tvCurrency.setText(mAccount.getCurrencyCode());
         mToolbar.setBackgroundColor(Color.parseColor(mAccount.getColorCode()));
         llInformation.setBackgroundColor(Color.parseColor(mAccount.getColorCode()));
-        btnExpenses.setAlpha(1f);
-        btnIncome.setAlpha(0.5f);
-        btnTransfer.setAlpha(0.5f);
+        initExchange();
+    }
+
+    private void initExchange() {
+        mExchange.setId(UUID.randomUUID().toString());
+        mExchange.setTypeExchange(ExchangeType.EXPENSES);
+        mExchange.setIdAccount(mAccount.getId());
+        mExchange.setCreated(new Date());
+        mExchange.setCurrencyCode(mAccount.getCurrencyCode());
     }
 
     @Override
@@ -164,67 +174,57 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.actionAdd:
-                onAddNewExchange();
+                switch (mExchange.getTypeExchange()) {
+                    case ExchangeType.INCOME:
+                        onAddIncome();
+                        break;
+                    case ExchangeType.EXPENSES:
+                        onAddExpenses();
+                        break;
+                    case ExchangeType.TRANSFER:
+                        onAddTransfer();
+                        break;
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void onAddNewExchange() {
-        String textAmount = tvAmount.getText().toString().trim();
-        if (TextUtils.isEmpty(textAmount)) {
-            Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(idCategory)) {
-            Toast.makeText(this, "Please pick category", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (mExchange.getType() == ExchangeType.EXPENSES) {
-            textAmount = "-" + textAmount;
-        }
-        mExchange.setAmount(textAmount);
-        mExchange.setIdCategory(idCategory);
-        AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
-        setResult(ResultCode.ADD_EXCHANGE, new Intent());
-        finish();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvCal0:
-                setValue("0");
+                onSetValueAmount("0");
                 break;
             case R.id.tvCal1:
-                setValue("1");
+                onSetValueAmount("1");
                 break;
             case R.id.tvCal2:
-                setValue("2");
+                onSetValueAmount("2");
                 break;
             case R.id.tvCal3:
-                setValue("3");
+                onSetValueAmount("3");
                 break;
             case R.id.tvCal4:
-                setValue("4");
+                onSetValueAmount("4");
                 break;
             case R.id.tvCal5:
-                setValue("5");
+                onSetValueAmount("5");
                 break;
             case R.id.tvCal6:
-                setValue("6");
+                onSetValueAmount("6");
                 break;
             case R.id.tvCal7:
-                setValue("7");
+                onSetValueAmount("7");
                 break;
             case R.id.tvCal8:
-                setValue("8");
+                onSetValueAmount("8");
                 break;
             case R.id.tvCal9:
-                setValue("9");
+                onSetValueAmount("9");
                 break;
             case R.id.tvCalDot:
-                setValue(".");
+                onSetValueAmount(".");
                 break;
             case R.id.imgCalBack:
                 String current = tvAmount.getText().toString();
@@ -236,15 +236,26 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
                 showDialogPickAccount();
                 break;
             case R.id.llCategory:
-                showActivityPickCategory();
+                if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+                    showDialogPickAccountReceive();
+                } else {
+                    showActivityPickCategory();
+                }
                 break;
             case R.id.tvDetail:
                 break;
-            case R.id.tvTypeMoney:
+            case R.id.tvCurrency:
                 showDialogPickCurrency();
                 break;
             case R.id.btnIncome:
-                mExchange.setType(ExchangeType.INCOME);
+                if (mExchange.getTypeExchange() == ExchangeType.INCOME) {
+                    return;
+                }
+                mExchange.setTypeExchange(ExchangeType.INCOME);
+                //Change view
+                tvTitleFromAccount.setText("Tài khoản");
+                tvTitleToAccount.setText("Thể lọai");
+                tvCategoryName.setText(nameCategory);
                 tvStatus.setVisibility(View.VISIBLE);
                 tvStatus.setText("+");
                 btnExpenses.setAlpha(0.5f);
@@ -252,21 +263,115 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
                 btnTransfer.setAlpha(0.5f);
                 break;
             case R.id.btnExpenses:
-                tvStatus.setVisibility(View.VISIBLE);
-                mExchange.setType(ExchangeType.EXPENSES);
+                if (mExchange.getTypeExchange() == ExchangeType.EXPENSES) {
+                    return;
+                }
+                mExchange.setTypeExchange(ExchangeType.EXPENSES);
+                //Change view
+                tvCategoryName.setText(nameCategory);
+                tvTitleFromAccount.setText("Tài khoản");
+                tvTitleToAccount.setText("Thể lọai");
                 tvStatus.setText("-");
                 btnExpenses.setAlpha(1f);
                 btnIncome.setAlpha(0.5f);
                 btnTransfer.setAlpha(0.5f);
                 break;
             case R.id.btnTransfer:
-                tvStatus.setVisibility(View.INVISIBLE);
-                mExchange.setType(ExchangeType.TRANSFER);
+                if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+                    return;
+                }
+                mExchange.setTypeExchange(ExchangeType.TRANSFER);
+                //ChangeView
+                tvStatus.setVisibility(View.GONE);
+                tvTitleFromAccount.setText("Tài khoản gửi");
+                tvTitleToAccount.setText("Tài khoản nhận");
+                tvCategoryName.setText(nameAccountTransfer);
                 btnExpenses.setAlpha(0.5f);
                 btnIncome.setAlpha(0.5f);
                 btnTransfer.setAlpha(1f);
                 break;
         }
+    }
+
+    @Override
+    public void onAddIncome() {
+        if (!onCheckFieldAvailable()) {
+            return;
+        }
+        String textAmount = tvAmount.getText().toString().trim();
+        mExchange.setAmount(textAmount);
+        mExchange.setIdCategory(idCategory);
+        onSaveDataBase();
+    }
+
+    @Override
+    public void onAddExpenses() {
+        if (!onCheckFieldAvailable()) {
+            return;
+        }
+        String textAmount = tvAmount.getText().toString().trim();
+        mExchange.setAmount(String.format(Locale.US, "-%s", textAmount));
+        mExchange.setIdCategory(idCategory);
+        onSaveDataBase();
+    }
+
+    @Override
+    public void onAddTransfer() {
+        if (TextUtils.isEmpty(mExchange.getIdAccountTransfer())) {
+            Toast.makeText(this, "Chọn tài khoản nhận", Toast.LENGTH_SHORT).show();
+        }
+        if (TextUtils.isEmpty(tvAmount.getText().toString())) {
+            Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
+        }
+        Log.d(TAG, "onAddTransfer: " + mExchange.getTypeExchange());
+        Log.d(TAG, "onAddTransfer: " + mExchange.getAmount());
+        Log.d(TAG, "onAddTransfer: " + mExchange.getId());
+        Log.d(TAG, "onAddTransfer: " + mExchange.getIdAccount());
+        Log.d(TAG, "onAddTransfer: " + mExchange.getIdAccountTransfer());
+        onSaveDataBase();
+    }
+
+
+    @Override
+    public boolean onCheckFieldAvailable() {
+        String textAmount = tvAmount.getText().toString().trim();
+        if (TextUtils.isEmpty(textAmount)) {
+            Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(idCategory)) {
+            Toast.makeText(this, "Please pick category", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onSaveDataBase() {
+        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            // Them giao dich account gui
+            String amount = String.format(Locale.US, "-%s", tvAmount.getText().toString());
+            mExchange.setAmount(amount);
+            AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
+            // Them giao dich account nhan
+            String idTransfer = mExchange.getIdAccountTransfer();
+            String idAccount = mExchange.getIdAccount();
+            mExchange.setId(UUID.randomUUID().toString());
+            mExchange.setAmount(tvAmount.getText().toString());
+            mExchange.setIdAccount(idTransfer);
+            mExchange.setIdAccountTransfer(idAccount);
+            AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
+
+        } else {
+            AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
+        }
+        setResult(ResultCode.ADD_EXCHANGE, new Intent());
+        finish();
+    }
+
+    @Override
+    public void onUpToServer() {
+
     }
 
     private void showDialogPickAccount() {
@@ -275,9 +380,25 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
-                Log.d(TAG, "onResultAccount: " + String.valueOf(account));
                 mExchange.setIdAccount(account.getId());
                 tvAccountName.setText(account.getName());
+            }
+        });
+    }
+
+    private void showDialogPickAccountReceive() {
+        DialogPickAccount dialogPickAccount = new DialogPickAccount();
+        dialogPickAccount.show(getFragmentManager(), TAG);
+        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+            @Override
+            public void onResultAccount(Account account) {
+                if (TextUtils.equals(mExchange.getIdAccount(), account.getId())) {
+                    Toast.makeText(ActivityAddExchange.this, "Vui lòng chọn một tài khoản khác", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mExchange.setIdAccountTransfer(account.getId());
+                nameAccountTransfer = account.getName();
+                tvCategoryName.setText(nameAccountTransfer);
             }
         });
     }
@@ -305,12 +426,13 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             case ResultCode.PICK_CATEGORY:
                 Category category = data.getParcelableExtra(getString(R.string.extra_category));
                 idCategory = category.getId();
-                tvCategoryName.setText(category.getName());
+                nameCategory = category.getName();
+                tvCategoryName.setText(nameCategory);
                 break;
         }
     }
 
-    private void setValue(String chart) {
+    private void onSetValueAmount(String chart) {
         stringBuilder = new StringBuilder();
         stringBuilder.append(tvAmount.getText().toString());
         stringBuilder.append(chart);

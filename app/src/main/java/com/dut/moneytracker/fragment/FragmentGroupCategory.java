@@ -47,7 +47,7 @@ public class FragmentGroupCategory extends Fragment implements ClickItemRecycler
         mRecyclerCategory = (RecyclerView) view.findViewById(R.id.recyclerCategory);
         mRecyclerCategory.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerCategory.setAdapter(childCategoryRecyclerAdapter);
-        mRecyclerCategory.addOnItemTouchListener(new ClickItemRecyclerView(getActivity(), mRecyclerCategory, this));
+        mRecyclerCategory.addOnItemTouchListener(new ClickItemRecyclerView(getActivity(), this));
     }
 
     @Override
@@ -55,8 +55,4 @@ public class FragmentGroupCategory extends Fragment implements ClickItemRecycler
         mLoadCategoryListener.onLoadChildCategory(mGroupCategories.get(position).getCategories());
     }
 
-    @Override
-    public void onLongClick(View view, int position) {
-
-    }
 }

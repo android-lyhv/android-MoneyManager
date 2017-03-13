@@ -38,7 +38,7 @@
             android:layout_height="wrap_content">
 
             <View
-                android:id="@+id/customChart"
+                android:id="@+id/chartAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_toStartOf="@+id/imgViewDebit" />
