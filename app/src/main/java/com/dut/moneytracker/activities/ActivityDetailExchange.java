@@ -198,7 +198,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case RequestCode.PERMISSON_LOACTION: {
+            case RequestCode.PERMISSION_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     showDialogPickPlace();
                 }
@@ -221,14 +221,14 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
                                 ActivityCompat.requestPermissions(ActivityDetailExchange.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
-                                        RequestCode.PERMISSON_LOACTION);
+                                        RequestCode.PERMISSION_LOCATION);
                             }
                         }).show();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        RequestCode.PERMISSON_LOACTION);
+                        RequestCode.PERMISSION_LOCATION);
             }
         } else {
             showDialogPickPlace();

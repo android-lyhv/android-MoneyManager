@@ -1,6 +1,7 @@
 package com.dut.moneytracker.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,7 +27,6 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
 /**
@@ -70,7 +70,6 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
         mEdtNameAccount.setText(mAccount.getName());
         mTvCurrencyCode.setText(mAccount.getCurrencyCode());
         mSwitchLocation.setChecked(mAccount.isSaveLocation());
-
     }
 
     @Override
@@ -123,8 +122,9 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
             return;
         }
         mAccount.setName(accountName);
-        AccountManager.getInstance().insertOrUpdate(mAccount);
-        setResult(ResultCode.EDIT_ACCOUNT);
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.extra_account), mAccount);
+        setResult(ResultCode.EDIT_ACCOUNT, intent);
         finish();
     }
 
@@ -141,7 +141,7 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case RequestCode.PERMISSON_LOACTION: {
+            case RequestCode.PERMISSION_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mAccount.setSaveLocation(true);
                 }
@@ -164,14 +164,14 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
                                 ActivityCompat.requestPermissions(ActivityEditAccount.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
-                                        RequestCode.PERMISSON_LOACTION);
+                                        RequestCode.PERMISSION_LOCATION);
                             }
                         }).show();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        RequestCode.PERMISSON_LOACTION);
+                        RequestCode.PERMISSION_LOCATION);
             }
         } else {
             mAccount.setSaveLocation(true);

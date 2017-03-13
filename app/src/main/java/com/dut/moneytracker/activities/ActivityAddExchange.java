@@ -29,6 +29,7 @@ import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
+import com.dut.moneytracker.objects.ExchangePlace;
 
 import java.util.Date;
 import java.util.Locale;
@@ -365,7 +366,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         } else {
             AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
         }
-        setResult(ResultCode.ADD_EXCHANGE, new Intent());
+        setResult(ResultCode.ADD_EXCHANGE);
         finish();
     }
 
@@ -439,5 +440,12 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         if (CurrencyExpression.getInstance().isValidateTypeMoney(stringBuilder.toString())) {
             tvAmount.setText(stringBuilder.toString());
         }
+    }
+    private ExchangePlace getCurrentExchangePlace(){
+        ExchangePlace exchangePlace = new ExchangePlace();
+        if (!mAccount.isSaveLocation()) {
+           //TODO
+        }
+        return exchangePlace;
     }
 }

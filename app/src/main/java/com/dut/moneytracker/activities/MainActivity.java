@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -176,7 +177,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 onResultLogout();
                 break;
             case ResultCode.EDIT_ACCOUNT:
-                mViewPagerTabAccountAdapter.notifyDataSetChanged();
+                Log.d(TAG, "onActivityResult: EditAccount");
+                onResultEditAccount(data);
                 break;
             case ResultCode.ADD_EXCHANGE:
                 mViewPagerTabAccountAdapter.notifyDataSetChanged();
@@ -195,6 +197,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, ActivityAddExchange.class);
         intent.putExtra(getString(R.string.extra_account), mAccounts.get(positionAccountSelected));
         startActivityForResult(intent, RequestCode.ADD_EXCHANGE);
+    }
+
+    private void onResultEditAccount(Intent data) {
+        Account account = data.getParcelableExtra(getString(R.string.extra_account));
+        AccountManager.getInstance().insertOrUpdate(account);
+        onLoadFragmentAccount();
     }
 
     private void onResultLogout() {
