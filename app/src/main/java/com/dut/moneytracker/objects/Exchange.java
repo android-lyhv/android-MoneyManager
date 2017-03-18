@@ -24,6 +24,8 @@ public class Exchange extends RealmObject implements Parcelable {
     private String amount;
     private String description;
     private Date created;
+    private boolean isLoop;
+    private int typeLoop;
     private ExchangePlace exchangePlace;
 
     public String getIdAccountTransfer() {
@@ -107,6 +109,25 @@ public class Exchange extends RealmObject implements Parcelable {
         this.currencyCode = currencyCode;
     }
 
+    public boolean isLoop() {
+        return isLoop;
+    }
+
+    public void setLoop(boolean loop) {
+        isLoop = loop;
+    }
+
+    public int getTypeLoop() {
+        return typeLoop;
+    }
+
+    public void setTypeLoop(int typeLoop) {
+        this.typeLoop = typeLoop;
+    }
+
+    public Exchange() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -115,35 +136,36 @@ public class Exchange extends RealmObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
+        dest.writeInt(this.typeExchange);
         dest.writeString(this.idAccount);
         dest.writeString(this.idCategory);
+        dest.writeString(this.idAccountTransfer);
         dest.writeString(this.currencyCode);
-        dest.writeInt(this.typeExchange);
         dest.writeString(this.amount);
         dest.writeString(this.description);
-        dest.writeParcelable(this.exchangePlace, flags);
-        dest.writeString(this.idAccountTransfer);
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
-    }
-
-    public Exchange() {
+        dest.writeByte(this.isLoop ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.typeLoop);
+        dest.writeParcelable(this.exchangePlace, flags);
     }
 
     protected Exchange(Parcel in) {
         this.id = in.readString();
+        this.typeExchange = in.readInt();
         this.idAccount = in.readString();
         this.idCategory = in.readString();
+        this.idAccountTransfer = in.readString();
         this.currencyCode = in.readString();
-        this.typeExchange = in.readInt();
         this.amount = in.readString();
         this.description = in.readString();
-        this.exchangePlace = in.readParcelable(ExchangePlace.class.getClassLoader());
-        this.idAccountTransfer = in.readString();
         long tmpCreated = in.readLong();
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
+        this.isLoop = in.readByte() != 0;
+        this.typeLoop = in.readInt();
+        this.exchangePlace = in.readParcelable(ExchangePlace.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Exchange> CREATOR = new Parcelable.Creator<Exchange>() {
+    public static final Creator<Exchange> CREATOR = new Creator<Exchange>() {
         @Override
         public Exchange createFromParcel(Parcel source) {
             return new Exchange(source);

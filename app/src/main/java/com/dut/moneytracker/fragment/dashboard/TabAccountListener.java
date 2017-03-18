@@ -1,4 +1,4 @@
-package com.dut.moneytracker.fragment;
+package com.dut.moneytracker.fragment.dashboard;
 
 import com.dut.moneytracker.objects.Exchange;
 

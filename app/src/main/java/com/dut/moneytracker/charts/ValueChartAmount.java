@@ -46,6 +46,6 @@ public class ValueChartAmount {
 
     @Override
     public String toString() {
-        return DateTimeUtils.getInstance().getStringDate(date) + ":  " + amount;
+        return DateTimeUtils.getInstance().getStringFullDate(date) + ":  " + amount;
     }
 }

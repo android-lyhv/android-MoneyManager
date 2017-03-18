@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_selected"
+    android:background="@drawable/selector_bg_white"
     android:clickable="true">
 
     <ImageView
@@ -53,7 +53,7 @@
             android:text="-10000"
             android:textColor="@android:color/holo_red_light" />
         <TextView
-            android:id="@+id/tvDate"
+            android:id="@+id/tvCreated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

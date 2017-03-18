@@ -6,7 +6,6 @@ import android.util.Log;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -122,11 +121,8 @@ public class LineChartAmount {
         lineDataSet.setDrawValues(false);
         lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
-
-        lineChart.getAxisLeft().setDrawGridLines(false);
-        Description description = new Description();
-        description.setText("");
-        lineChart.setDescription(description);
+        lineChart.getAxisLeft().setDrawGridLines(true);
+        lineChart.getAxisRight().setEnabled(false);
         lineChart.setDragEnabled(false);
         lineChart.setTouchEnabled(false);
         lineChart.getXAxis().setDrawGridLines(false);

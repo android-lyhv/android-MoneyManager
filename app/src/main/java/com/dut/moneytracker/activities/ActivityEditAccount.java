@@ -110,7 +110,7 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
                     }
                 });
                 break;
-            case R.id.tvType:
+            case R.id.spinnerTypeLoop:
                 break;
         }
     }

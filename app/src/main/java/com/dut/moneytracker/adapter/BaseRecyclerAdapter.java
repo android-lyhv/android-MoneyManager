@@ -3,6 +3,7 @@ package com.dut.moneytracker.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private Context context;
-    private List<T> mObjects;
+    private List<T> mObjects = new ArrayList<>();
 
     public BaseRecyclerAdapter(Context context, final List<T> objects) {
         mObjects = objects;
@@ -72,7 +73,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         notifyItemInserted(index);
     }
 
-    public void addAllItem(final List<T> objects) {
+    public void addItems(final List<T> objects) {
         mObjects.clear();
         mObjects.addAll(objects);
         notifyDataSetChanged();

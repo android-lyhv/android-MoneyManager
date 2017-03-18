@@ -1,8 +1,10 @@
-/*
+
 package com.dut.moneytracker.maps;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,32 +12,48 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.dut.moneytracker.objects.ExchangePlace;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-*/
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+
 /**
  * Copyright AsianTech@ Inc
  * Created by Sumiu on 11/14/2016.
- *//*
+ */
 
 
-public class GoogleServiceLocation implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
-    private static final String TAG = GoogleServiceLocation.class.getName();
+public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    private static final String TAG = GoogleLocation.class.getName();
     private static final long UPDATE_INTERVAL = 10000;
-    private static final long FATEST_INTERVAL = 5000;
+    private static final long FASTEST_INTERVAL = 5000;
     private static final float DISPLACEMENT = 10;
-    private Context mContext;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private CurrentPlaceListener currentPlaceListener;
+    private Context mContext;
+    private Geocoder geocoder;
 
-    public GoogleServiceLocation(Context mContext) {
-        this.mContext = mContext;
+    public interface CurrentPlaceListener {
+        void onResultPlace(ExchangePlace place);
+    }
+
+    public void registerCurrentPlaceListener(GoogleLocation.CurrentPlaceListener currentPlaceListener) {
+        this.currentPlaceListener = currentPlaceListener;
+    }
+
+    public GoogleLocation(Context context) {
+        mContext = context;
         initApiClient();
         configLocationUpdate();
+        geocoder = new Geocoder(mContext, Locale.getDefault());
     }
 
     private void initApiClient() {
@@ -46,7 +64,6 @@ public class GoogleServiceLocation implements GoogleApiClient.ConnectionCallback
                     .addApi(LocationServices.API)
                     .build();
         }
-
     }
 
     public void connectApiGoogle() {
@@ -63,7 +80,7 @@ public class GoogleServiceLocation implements GoogleApiClient.ConnectionCallback
     private void configLocationUpdate() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FATEST_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
     }
@@ -89,7 +106,8 @@ public class GoogleServiceLocation implements GoogleApiClient.ConnectionCallback
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        Log.d(TAG, "onConnected: aaaa");
+        startLocationUpdate();
     }
 
     @Override
@@ -99,13 +117,34 @@ public class GoogleServiceLocation implements GoogleApiClient.ConnectionCallback
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.d(TAG, "onConnectionFailed: aaaaa");
+        if (currentPlaceListener != null) {
+            currentPlaceListener.onResultPlace(new ExchangePlace());
+        }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, location.getLatitude() + " " + location.getLongitude());
+        Log.d(TAG, "onLocationChanged: aaaa");
+        if (currentPlaceListener != null) {
+            responseExchangePlace(location);
+        }
     }
 
+    private void responseExchangePlace(Location location) {
+        try {
+            List<Address> addresses;
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            String address = addresses.get(0).getAddressLine(0);
+            // set up
+            ExchangePlace exchangePlace = new ExchangePlace();
+            exchangePlace.setAddress(address);
+            exchangePlace.setLatitude(location.getLatitude());
+            exchangePlace.setLongitude(location.getLongitude());
+            currentPlaceListener.onResultPlace(exchangePlace);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-*/
+

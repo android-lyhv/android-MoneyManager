@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
                     android:clickable="true">
 
                     <TextView
@@ -125,7 +125,7 @@
                     android:id="@+id/rlAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
                     android:clickable="true"
                     android:paddingTop="10dp">
 
@@ -166,8 +166,7 @@
                     android:id="@+id/rlDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
-
+                    android:background="@drawable/selector_bg_white"
                     android:clickable="true"
                     android:paddingTop="10dp">
 
@@ -207,7 +206,7 @@
                     android:id="@+id/rlCurrency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
 
                     android:paddingTop="10dp">
 
@@ -248,7 +247,7 @@
                     android:id="@+id/rlAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
 
                     android:clickable="true"
                     android:paddingTop="10dp">
@@ -289,7 +288,7 @@
                     android:id="@+id/rlDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
 
                     android:clickable="true"
                     android:paddingTop="10dp">
@@ -331,7 +330,7 @@
                     android:id="@+id/rlTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
 
                     android:paddingTop="10dp">
 
@@ -371,7 +370,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
 
                     android:clickable="true"
                     android:paddingTop="10dp">
@@ -413,7 +412,7 @@
                     android:id="@+id/rlLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_selected"
+                    android:background="@drawable/selector_bg_white"
                     android:clickable="true"
                     android:paddingTop="10dp">
 

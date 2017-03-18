@@ -1,4 +1,4 @@
-package com.dut.moneytracker.fragment;
+package com.dut.moneytracker.fragment.categroy;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ChildCategoryAdapter;
-import com.dut.moneytracker.adapter.ClickItemRecyclerListener;
+import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.objects.Category;
 
@@ -22,7 +22,7 @@ import java.util.List;
  * Created by ly.ho on 09/03/2017.
  */
 
-public class FragmentChildCategory extends Fragment implements ClickItemRecyclerListener {
+public class FragmentChildCategory extends Fragment implements ClickItemListener {
     private RecyclerView mRecyclerCategory;
     private ChildCategoryAdapter childCategoryRecyclerAdapter;
     private List<Category> categories;

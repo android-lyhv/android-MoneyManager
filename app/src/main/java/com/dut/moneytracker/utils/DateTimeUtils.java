@@ -2,6 +2,8 @@ package com.dut.moneytracker.utils;
 
 import android.text.TextUtils;
 
+import com.dut.moneytracker.constant.TypeView;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,8 +21,10 @@ public class DateTimeUtils {
     private static final String TAG = DateTimeUtils.class.getSimpleName();
     private static DateTimeUtils ourInstance = new DateTimeUtils();
     private static final String DEFAULT_DATE = "Hôm nay";
-    DateFormat formatLongDate = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-    DateFormat formatSortDate = new SimpleDateFormat("dd/MM", Locale.US);
+    DateFormat formatFullDate = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+    DateFormat formatDayMonth = new SimpleDateFormat("dd/MM", Locale.US);
+    DateFormat formatMonthYear = new SimpleDateFormat("MM/yyyy", Locale.US);
+    DateFormat formatYear = new SimpleDateFormat("yyyy", Locale.US);
     DateFormat formatSortTime = new SimpleDateFormat("HH:mm", Locale.US);
 
     public static DateTimeUtils getInstance() {
@@ -30,19 +34,36 @@ public class DateTimeUtils {
     private DateTimeUtils() {
     }
 
-    public String getStringDate(Date date) {
-        return formatLongDate.format(date);
+    public String getStringFullDate(Date date) {
+        return formatFullDate.format(date);
     }
-    public String getSortStringTime(Date date) {
+
+    public String getStringTime(Date date) {
         return formatSortTime.format(date);
     }
 
-    public String getSortStringDate(Date date) {
-        return formatSortDate.format(date);
+    public String getStringDayMonth(Date date) {
+        return formatDayMonth.format(date);
+    }
+
+    public String getStringMonthYear(Date date) {
+        return formatMonthYear.format(date);
+    }
+
+    public String getStringYear(Date date) {
+        return formatYear.format(date);
     }
 
     public boolean isSameDate(Date date1, Date date2) {
-        return TextUtils.equals(getStringDate(date1), getStringDate(date2));
+        return TextUtils.equals(getStringFullDate(date1), getStringFullDate(date2));
+    }
+
+    public boolean isSameMonth(Date date1, Date date2) {
+        return TextUtils.equals(getStringMonthYear(date1), getStringMonthYear(date2));
+    }
+
+    public boolean isSameYear(Date date1, Date date2) {
+        return TextUtils.equals(getStringYear(date1), getStringYear(date2));
     }
 
     public List<Date> getListLastDay(int numberDate) {
@@ -55,6 +76,39 @@ public class DateTimeUtils {
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             dates.add(calendar.getTime());
         }
+        //Collections.reverse(dates);
         return dates;
+    }
+
+    public static String formatEnglishTime(long times, String format) {
+        Locale locale = new Locale("VN");
+        DateFormat df1 = new SimpleDateFormat(format, locale);
+        return df1.format(new Date(times));
+    }
+
+    /**
+     * @param date
+     * @param type Date, Month, year
+     * @param step
+     * @return
+     */
+    public Date changeStepMonth(Date date, int type, int step) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        switch (type) {
+            case TypeView.DAY:
+                calendar.add(Calendar.DAY_OF_MONTH, step);
+                break;
+            case TypeView.MONTH:
+                calendar.add(Calendar.MONTH, step);
+                break;
+            case TypeView.YEAR:
+                calendar.add(Calendar.YEAR, step);
+                break;
+            case TypeView.WEAK:
+                break;
+
+        }
+        return calendar.getTime();
     }
 }

@@ -25,16 +25,16 @@ import java.util.List;
  * Created by ly.ho on 09/03/2017.
  */
 
-public class ExchangeAccountAdapter extends BaseRecyclerAdapter {
-    private static final String TAG = ExchangeAccountAdapter.class.getSimpleName();
+public class ExchangeRecyclerAccountAdapter extends BaseRecyclerAdapter {
+    private static final String TAG = ExchangeRecyclerAccountAdapter.class.getSimpleName();
 
-    public ExchangeAccountAdapter(Context context, List objects) {
+    public ExchangeRecyclerAccountAdapter(Context context, List objects) {
         super(context, objects);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_exchange_account, parent, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_exchange_dashboard, parent, false);
         return new ExchangeHolder(view);
     }
 
@@ -56,7 +56,7 @@ public class ExchangeAccountAdapter extends BaseRecyclerAdapter {
             imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
             tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
             tvAccountName = (TextView) itemView.findViewById(R.id.tvAccountName);
-            tvDateCreated = (TextView) itemView.findViewById(R.id.tvAmount);
+            tvDateCreated = (TextView) itemView.findViewById(R.id.tvCreated);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
         }
 
@@ -66,7 +66,7 @@ public class ExchangeAccountAdapter extends BaseRecyclerAdapter {
                 imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
                 tvCategoryName.setText(category.getName());
-                tvDateCreated.setText(DateTimeUtils.getInstance().getStringDate(exchange.getCreated()));
+                tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
                 tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
                 if (exchange.getTypeExchange() == ExchangeType.INCOME) {
                     tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
@@ -75,7 +75,7 @@ public class ExchangeAccountAdapter extends BaseRecyclerAdapter {
             if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
                 imgCategory.setImageResource(R.drawable.ic_transfer);
                 tvCategoryName.setText(getContext().getResources().getString(R.string.transfer));
-                tvDateCreated.setText(DateTimeUtils.getInstance().getStringDate(exchange.getCreated()));
+                tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
                 tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
                 if (CurrencyUtils.getInstance().getFloatMoney(exchange.getAmount()) > 0) {

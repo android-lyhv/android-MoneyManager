@@ -25,6 +25,7 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
+import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
@@ -141,10 +142,25 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
                 finish();
                 break;
             case R.id.actionDelete:
-                //TODO
+                onShowDialogConfirmDelete();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onShowDialogConfirmDelete() {
+        DialogConfirm dialogConfirm = new DialogConfirm();
+        dialogConfirm.setMessage(getString(R.string.dialog_confirm_delete_title));
+        dialogConfirm.show(getSupportFragmentManager(), TAG);
+        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+            @Override
+            public void onClickResult(boolean value) {
+                if (value) {
+                    ExchangeManger.getInstance().deleteExchangeById(mExchange.getId());
+                    finish();
+                }
+            }
+        });
     }
 
     @Override
@@ -266,8 +282,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
         tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
         String nameAccount = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
         tvAccount.setText(String.valueOf(nameAccount));
-        tvDate.setText(DateTimeUtils.getInstance().getStringDate(mExchange.getCreated()));
-        tvTime.setText(DateTimeUtils.getInstance().getSortStringTime(mExchange.getCreated()));
+        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+        tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
     }
 
     private void onLoadMap() {

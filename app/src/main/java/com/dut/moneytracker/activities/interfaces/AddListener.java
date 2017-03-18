@@ -7,7 +7,7 @@ public interface AddListener {
 
     void onAddTransfer();
 
-    boolean onCheckFieldAvailable();
+    boolean isAvailableIncomeAndExpense();
 
     void onSaveDataBase();
 

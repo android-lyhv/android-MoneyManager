@@ -25,11 +25,14 @@ import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.dialogs.DialogPickCurrency;
+import com.dut.moneytracker.maps.GoogleLocation;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.ExchangePlace;
+import com.dut.moneytracker.utils.DialogUtils;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.Date;
 import java.util.Locale;
@@ -40,7 +43,7 @@ import java.util.UUID;
  * Created by ly.ho on 23/02/2017.
  */
 
-public class ActivityAddExchange extends AppCompatActivity implements View.OnClickListener, AddListener {
+public class ActivityAddExchange extends AppCompatActivity implements View.OnClickListener, AddListener, GoogleApiClient.ConnectionCallbacks {
     private static final String TAG = ActivityAddExchange.class.getSimpleName();
     private Toolbar mToolbar;
     private TextView tvCal0;
@@ -64,7 +67,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
     private LinearLayout llCategory;
     private TextView tvAccountName;
     private TextView tvCategoryName;
-    private TextView tvDetail;
+    private TextView tvMoreAdd;
     private LinearLayout llInformation;
     private TextView tvStatus;
     private StringBuilder stringBuilder;
@@ -131,8 +134,8 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         llAccount.setOnClickListener(this);
         llCategory = (LinearLayout) findViewById(R.id.llCategory);
         llCategory.setOnClickListener(this);
-        tvDetail = (TextView) findViewById(R.id.tvDetail);
-        tvDetail.setOnClickListener(this);
+        tvMoreAdd = (TextView) findViewById(R.id.tvMoreAdd);
+        tvMoreAdd.setOnClickListener(this);
         tvCurrency = (TextView) findViewById(R.id.tvCurrency);
         tvCurrency.setOnClickListener(this);
         tvTitleFromAccount = (TextView) findViewById(R.id.tvTitleFromAccount);
@@ -243,7 +246,8 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
                     showActivityPickCategory();
                 }
                 break;
-            case R.id.tvDetail:
+            case R.id.tvMoreAdd:
+                startAddDetail();
                 break;
             case R.id.tvCurrency:
                 showDialogPickCurrency();
@@ -294,47 +298,69 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         }
     }
 
+    private void startAddDetail() {
+        Intent intent = new Intent(this, ActivityAddMoreExchange.class);
+        configAmount();
+        intent.putExtra(getString(R.string.extra_more_add), mExchange);
+        startActivityForResult(intent, RequestCode.MORE_ADD);
+    }
+
+    private void configAmount() {
+        String textAmount = tvAmount.getText().toString().trim();
+        if (TextUtils.isEmpty(textAmount)) {
+            textAmount = "0";
+        }
+        if (mExchange.getTypeExchange() == ExchangeType.EXPENSES) {
+            mExchange.setAmount(String.format(Locale.US, "-%s", textAmount));
+        } else {
+            mExchange.setAmount(textAmount);
+        }
+    }
+
     @Override
     public void onAddIncome() {
-        if (!onCheckFieldAvailable()) {
+        if (!isAvailableIncomeAndExpense()) {
             return;
         }
         String textAmount = tvAmount.getText().toString().trim();
         mExchange.setAmount(textAmount);
         mExchange.setIdCategory(idCategory);
-        onSaveDataBase();
+        onRequestExchangePlace();
     }
 
     @Override
     public void onAddExpenses() {
-        if (!onCheckFieldAvailable()) {
+        if (!isAvailableIncomeAndExpense()) {
             return;
         }
         String textAmount = tvAmount.getText().toString().trim();
         mExchange.setAmount(String.format(Locale.US, "-%s", textAmount));
         mExchange.setIdCategory(idCategory);
-        onSaveDataBase();
+        onRequestExchangePlace();
     }
 
     @Override
     public void onAddTransfer() {
+        if (!isAvailableTransfer()) {
+            return;
+        }
+        onRequestExchangePlace();
+    }
+
+    public boolean isAvailableTransfer() {
         if (TextUtils.isEmpty(mExchange.getIdAccountTransfer())) {
             Toast.makeText(this, "Chọn tài khoản nhận", Toast.LENGTH_SHORT).show();
+            return false;
         }
         if (TextUtils.isEmpty(tvAmount.getText().toString())) {
             Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
+            return false;
         }
-        Log.d(TAG, "onAddTransfer: " + mExchange.getTypeExchange());
-        Log.d(TAG, "onAddTransfer: " + mExchange.getAmount());
-        Log.d(TAG, "onAddTransfer: " + mExchange.getId());
-        Log.d(TAG, "onAddTransfer: " + mExchange.getIdAccount());
-        Log.d(TAG, "onAddTransfer: " + mExchange.getIdAccountTransfer());
-        onSaveDataBase();
+        return true;
     }
 
-
     @Override
-    public boolean onCheckFieldAvailable() {
+    public boolean isAvailableIncomeAndExpense() {
         String textAmount = tvAmount.getText().toString().trim();
         if (TextUtils.isEmpty(textAmount)) {
             Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
@@ -430,6 +456,9 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
                 nameCategory = category.getName();
                 tvCategoryName.setText(nameCategory);
                 break;
+            case ResultCode.MORE_ADD:
+                mExchange = data.getParcelableExtra(getString(R.string.extra_more_add));
+                break;
         }
     }
 
@@ -441,11 +470,36 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             tvAmount.setText(stringBuilder.toString());
         }
     }
-    private ExchangePlace getCurrentExchangePlace(){
-        ExchangePlace exchangePlace = new ExchangePlace();
+
+    private void onRequestExchangePlace() {
+        Log.d(TAG, "onRequestExchangePlace: ");
         if (!mAccount.isSaveLocation()) {
-           //TODO
+            onSaveDataBase();
+            return;
         }
-        return exchangePlace;
+        final GoogleLocation googleLocation = new GoogleLocation(getApplicationContext());
+        googleLocation.registerCurrentPlaceListener(new GoogleLocation.CurrentPlaceListener() {
+            @Override
+            public void onResultPlace(ExchangePlace place) {
+                Log.d(TAG, "onResultPlace: " + place.getLatitude());
+                mExchange.setExchangePlace(place);
+                onSaveDataBase();
+                googleLocation.stopLocationUpDate();
+                googleLocation.disConnectApiGoogle();
+                DialogUtils.getInstance().dismissProgressDialog();
+            }
+        });
+        googleLocation.connectApiGoogle();
+        DialogUtils.getInstance().showProgressDialog(this, "Loading");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }

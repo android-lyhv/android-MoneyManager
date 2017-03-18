@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <com.dut.moneytracker.view.CircleImageView
                 android:id="@+id/imgUser"
                 android:layout_width="150dp"
                 android:layout_height="150dp"

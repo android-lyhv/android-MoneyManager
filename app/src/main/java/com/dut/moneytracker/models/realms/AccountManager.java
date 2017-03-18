@@ -137,8 +137,17 @@ public class AccountManager extends RealmHelper implements AccountListener {
         }
         return bigDecimal.toString();
     }
+
+    public String getTotalAmountByListExchange(List<Exchange> exchanges) {
+        BigDecimal bigDecimal = new BigDecimal("0");
+        for (Exchange exchange : exchanges) {
+            bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
+        }
+        return bigDecimal.toString();
+    }
+
     public String getInitAmountByAccount(String idAccount) {
-        Account resultsAccount = realm.where(Account.class).like("id",idAccount).findFirst();
+        Account resultsAccount = realm.where(Account.class).like("id", idAccount).findFirst();
         BigDecimal bigDecimal = new BigDecimal(resultsAccount.getInitAmount());
         return bigDecimal.toString();
     }

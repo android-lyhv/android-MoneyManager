@@ -13,4 +13,5 @@ public class ResultCode {
     public static final int DETAIL_EXCHANGE = 4;
     public static final int PICK_PLACE = 5;
     public static final int PERMISSON_LOACTION = 6;
+    public static final int MORE_ADD = 7;
 }

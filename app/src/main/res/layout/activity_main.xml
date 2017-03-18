@@ -32,7 +32,7 @@
                 android:background="@color/colorPrimary"
                 android:clickable="true">
 
-                <ImageView
+                <com.dut.moneytracker.view.CircleImageView
                     android:id="@+id/imgUserLogo"
                     android:layout_width="50dp"
                     android:layout_height="50dp"

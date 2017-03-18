@@ -48,6 +48,8 @@
     <string name="date.text">Hôm nay</string>
     <string name="chart.title">30 ngày gần đây</string>
     <string name="toolbar.detail_exchange">Thông tin chi tiết</string>
+    <string name="dialog.confirm.delete.title">Xóa giao dịch này?</string>
+    <string name="extra_more_add">extra_more_add</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>

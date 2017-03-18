@@ -6,4 +6,10 @@
     <color name="colorBackgroundLine">#c4c4c4</color>
     <color name="colorBackgroundMain">#ededed</color>
     <color name="defaultAccountColor">#FF028761</color>
+    <color name="white">#fff</color>
+    <color name="white_select">#05000000</color>
+    <color name="grey_500">#cacaca</color>
+    <color name="color_main_select">#c4baa8</color>
+    <color name="color_main">#BFAC8A</color>
+    <color name="color_normal">#B9B9B9</color>
 </resources>

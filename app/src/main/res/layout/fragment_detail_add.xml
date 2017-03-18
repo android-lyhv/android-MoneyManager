@@ -1,42 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:padding="3dp"
-            android:src="@drawable/ic_arrow_back_white" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="10000000 usd"
-            android:textColor="@android:color/white"
-            android:textSize="20dp" />
+            <TextView
+                android:id="@+id/tvAmount"
+                android:text="10000d"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="15dp" />
+        </android.support.v7.widget.Toolbar>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_check_white" />
-    </RelativeLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:fillViewport="true">
 
         <LinearLayout
@@ -53,7 +48,9 @@
                     android:id="@+id/tvTitleDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Luu y" />
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:text="Chú thích" />
 
                 <EditText
                     android:id="@+id/tvDescription"
@@ -61,85 +58,100 @@
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleDescription"
                     android:layout_below="@+id/tvTitleDescription"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
                     android:background="@android:color/transparent"
-                    android:textSize="17dp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@id/tvDescription"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/tvTitleSpinnerCurrency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Hinh Thuc thanh toan" />
-
-                <TextView
-                    android:id="@+id/tvType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/tvTitleSpinnerCurrency"
-                    android:layout_below="@+id/tvTitleSpinnerCurrency"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/transparent"
-                    android:text="Tien mat"
-                    android:textColor="@android:color/black"
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
                     android:textSize="17dp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@id/tvType"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
+                    android:layout_below="@id/tvDescription"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorBackgroundLine" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:paddingTop="10dp">
 
                 <TextView
-                    android:id="@+id/tvTitleDate"
+                    android:id="@+id/tvTitleLoop"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Ngay" />
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:text="Lặp lại" />
+
+                <RelativeLayout
+                    android:id="@+id/loop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTitleLoop"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/spinnerTypeLoop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/switchLoop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@+id/loop"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorBackgroundLine" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp">
 
                 <TextView
-                    android:id="@+id/tvAmount"
+                    android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleDate"
                     android:layout_below="@+id/tvTitleDate"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/transparent"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/selector_bg_white"
+                    android:clickable="true"
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="5dp"
                     android:text="20/02/2017"
                     android:textColor="@android:color/black"
                     android:textSize="17dp" />
 
                 <TextView
                     android:id="@+id/tvTime"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/tvAmount"
-                    android:layout_alignTop="@id/tvAmount"
+                    android:layout_alignBottom="@id/tvDate"
+                    android:layout_alignTop="@id/tvDate"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/tvAmount"
-                    android:background="@android:color/transparent"
+                    android:layout_toEndOf="@id/tvDate"
+                    android:background="@drawable/selector_bg_white"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
                     android:text="8:32"
                     android:textColor="@android:color/black"
                     android:textSize="17dp" />
@@ -147,89 +159,52 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@id/tvAmount"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
+                    android:layout_below="@id/tvDate"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorBackgroundLine" />
+
+                <TextView
+                    android:id="@+id/tvTitleDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:text="Thời gian" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rlLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:background="@drawable/selector_bg_white"
+                android:clickable="true"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp">
 
                 <TextView
                     android:id="@+id/tvTitlePosition"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Vi tri" />
-
+                    android:text="Vị trí" />
 
                 <ImageView
-                    android:id="@+id/imgLocaiton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/imgLocation"
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
                     android:layout_alignParentEnd="true"
                     android:layout_alignTop="@id/tvTitlePosition"
                     android:src="@drawable/ic_maker" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/tvTitlePosition"
-                    android:layout_below="@id/imgLocaiton"
-                    android:text="Chon dia diem chi tieu cua ..." />
-
-                <FrameLayout
+                <com.google.android.gms.maps.MapView
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_alignStart="@id/tvTitlePosition"
-                    android:layout_below="@id/tvTitlePosition"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:background="#c4c4c4" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/tvTitleImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Hinh anh" />
-
-
-                <ImageView
-                    android:id="@+id/imgImageExchange"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignTop="@id/tvTitleImage"
-                    android:src="@drawable/ic_camera" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/tvTitleImage"
-                    android:layout_below="@id/imgImageExchange"
-                    android:text="Chon anh cua ban" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerViewImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/tvTitleImage"
-                    android:layout_below="@id/imgImageExchange"
-                    android:layout_marginTop="10dp"
-                    android:visibility="invisible" />
+                    android:layout_below="@id/imgLocation"
+                    android:layout_marginTop="10dp" />
             </RelativeLayout>
         </LinearLayout>
 

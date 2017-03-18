@@ -13,4 +13,5 @@ public class RequestCode {
     public static final int DETAIL_EXCHANGE = 4;
     public static final int PICK_PLACE = 5;
     public static final int PERMISSION_LOCATION = 6;
+    public static final int MORE_ADD = 7;
 }

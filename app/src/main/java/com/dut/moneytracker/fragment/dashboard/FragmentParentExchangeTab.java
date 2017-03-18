@@ -1,4 +1,4 @@
-package com.dut.moneytracker.fragment;
+package com.dut.moneytracker.fragment.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,17 @@ import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.ActivityDetailExchange;
+import com.dut.moneytracker.activities.MainActivity;
 import com.dut.moneytracker.adapter.CardAccountAdapter;
-import com.dut.moneytracker.adapter.ClickItemRecyclerListener;
+import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
-import com.dut.moneytracker.adapter.ExchangeAccountAdapter;
+import com.dut.moneytracker.adapter.ExchangeRecyclerAccountAdapter;
 import com.dut.moneytracker.charts.LineChartAmount;
 import com.dut.moneytracker.charts.ValueChartAmount;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
+import com.dut.moneytracker.fragment.BaseFragment;
 import com.dut.moneytracker.models.AppPreferences;
 import com.dut.moneytracker.models.presenter.AccountPresenter;
 import com.dut.moneytracker.models.realms.CurrencyManager;
@@ -42,8 +43,8 @@ import static com.dut.moneytracker.R.id.lineChart;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 06/03/2017.
  */
-public class FragmentAllAccount extends BaseFragment implements TabAccountListener, View.OnClickListener {
-    private static final String TAG = FragmentAllAccount.class.getSimpleName();
+public class FragmentParentExchangeTab extends BaseFragment implements TabAccountListener, View.OnClickListener {
+    private static final String TAG = FragmentParentExchangeTab.class.getSimpleName();
 
     public interface CardAccountListener {
         void onClickCardAccount(int position);
@@ -62,7 +63,7 @@ public class FragmentAllAccount extends BaseFragment implements TabAccountListen
     private TextView mTvAmount;
     private TextView tvMoreExchange;
     private CardAccountAdapter mCardAccountAdapter;
-    private ExchangeAccountAdapter mExchangeAccountAdapter;
+    private ExchangeRecyclerAccountAdapter mExchangeRecyclerAccountAdapter;
     private LineChart mLineChart;
     //Model
     private List<Account> accounts;
@@ -113,7 +114,7 @@ public class FragmentAllAccount extends BaseFragment implements TabAccountListen
         mRecyclerViewCardAccount.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mRecyclerViewCardAccount.setNestedScrollingEnabled(false);
         mRecyclerViewCardAccount.setAdapter(mCardAccountAdapter);
-        mRecyclerViewCardAccount.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemRecyclerListener() {
+        mRecyclerViewCardAccount.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
             @Override
             public void onClick(View view, int position) {
                 cardAccountListener.onClickCardAccount(position + 1);
@@ -134,16 +135,15 @@ public class FragmentAllAccount extends BaseFragment implements TabAccountListen
     @Override
     public void onLoadExchanges() {
         int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
-        final List<Exchange> exchanges = ExchangeManger.getInstance().getExchanges(limit);
-        mExchangeAccountAdapter = new ExchangeAccountAdapter(getContext(), exchanges);
+        final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimit(limit);
+        mExchangeRecyclerAccountAdapter = new ExchangeRecyclerAccountAdapter(getContext(), exchanges);
         mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerExchange.setNestedScrollingEnabled(false);
-        mRecyclerExchange.setAdapter(mExchangeAccountAdapter);
-        mRecyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemRecyclerListener() {
+        mRecyclerExchange.setAdapter(mExchangeRecyclerAccountAdapter);
+        mRecyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
             @Override
             public void onClick(View view, int position) {
                 onShowDetailExchange(exchanges.get(position));
-                Log.d(TAG, "onClick: " + exchanges.get(position).getAmount());
             }
         }));
     }
@@ -169,7 +169,7 @@ public class FragmentAllAccount extends BaseFragment implements TabAccountListen
         switch (resultCode) {
             case ResultCode.DETAIL_EXCHANGE:
                 mCardAccountAdapter.notifyDataSetChanged();
-                mExchangeAccountAdapter.notifyDataSetChanged();
+                mExchangeRecyclerAccountAdapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -182,6 +182,9 @@ public class FragmentAllAccount extends BaseFragment implements TabAccountListen
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.tvMoreExchange:
+                ((MainActivity) getActivity()).onLoadFragmentDefaultExchange();
+        }
     }
 }

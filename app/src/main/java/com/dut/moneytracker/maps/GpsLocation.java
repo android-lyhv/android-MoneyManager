@@ -20,7 +20,7 @@ import android.widget.Toast;
  * Created by Sumiu on 11/11/2016.
  */
 
-public class GpsServiceLocation extends Service implements LocationListener {
+public class GpsLocation extends Service implements LocationListener {
     LocationManager locationManager;
     @Nullable
     @Override
