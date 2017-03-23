@@ -110,6 +110,6 @@ public class FragmentExchanges extends BaseFragment implements View.OnClickListe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ((MainActivity) getActivity()).checkStatus();
+        ((MainActivity) getActivity()).checkFragmentDashboard();
     }
 }

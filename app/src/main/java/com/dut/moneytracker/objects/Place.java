@@ -11,7 +11,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by ly.ho on 01/03/2017.
  */
 
-public class ExchangePlace extends RealmObject implements Parcelable {
+public class Place extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
     private String name;
@@ -59,7 +59,7 @@ public class ExchangePlace extends RealmObject implements Parcelable {
         this.id = id;
     }
 
-    public ExchangePlace() {
+    public Place() {
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ExchangePlace extends RealmObject implements Parcelable {
         dest.writeDouble(this.longitude);
     }
 
-    protected ExchangePlace(Parcel in) {
+    protected Place(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
         this.address = in.readString();
@@ -84,15 +84,15 @@ public class ExchangePlace extends RealmObject implements Parcelable {
         this.longitude = in.readDouble();
     }
 
-    public static final Creator<ExchangePlace> CREATOR = new Creator<ExchangePlace>() {
+    public static final Creator<Place> CREATOR = new Creator<Place>() {
         @Override
-        public ExchangePlace createFromParcel(Parcel source) {
-            return new ExchangePlace(source);
+        public Place createFromParcel(Parcel source) {
+            return new Place(source);
         }
 
         @Override
-        public ExchangePlace[] newArray(int size) {
-            return new ExchangePlace[size];
+        public Place[] newArray(int size) {
+            return new Place[size];
         }
     };
 }

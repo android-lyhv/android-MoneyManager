@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
+def AAVersion = '4.0.0'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -43,5 +44,9 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     // Chart
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+    // Annotation
+    annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+
 }
 apply plugin: 'com.google.gms.google-services'

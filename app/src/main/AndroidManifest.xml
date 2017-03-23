@@ -43,6 +43,9 @@
             android:label="User"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.ActivityAddLoopExchange"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.ActivityLoadData"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen" />

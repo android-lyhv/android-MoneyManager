@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +30,7 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
 import com.dut.moneytracker.fragment.FragmentExchanges;
+import com.dut.moneytracker.fragment.FragmentLoopExchange;
 import com.dut.moneytracker.fragment.dashboard.FragmentDashboard;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
     private static final String EXCHANGES = "EXCHANGES";
+    private static final String DEFAULT_EXCHANGE = "DEFAULT_EXCHANGE";
     private DrawerLayout mDrawerLayout;
     private FloatingActionButton mFabAddExchange;
     private RelativeLayout mRlProfile;
@@ -60,10 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Navigation
     private LinearLayout llDashboard;
     private LinearLayout llRecode;
+    private LinearLayout llDefaultExchange;
     //model
     private FragmentManager mFragmentManager;
     private FragmentDashboard mFragmentDashboard;
     private FragmentExchanges mFragmentExchanges;
+    private FragmentLoopExchange mFragmentLoopExchange;
     private Account mAccount;
     private Filter mFilter;
     private SpinnerAccountManger mSpinnerAccount;
@@ -107,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         llDashboard.setOnClickListener(this);
         llRecode = (LinearLayout) findViewById(R.id.llRecode);
         llRecode.setOnClickListener(this);
+        llDefaultExchange = (LinearLayout) findViewById(R.id.llDefaultExchange);
+        llDefaultExchange.setOnClickListener(this);
         requestChangeToolbarStatus(mTargetFragment);
         initSpinner();
     }
@@ -173,9 +178,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
         switch (v.getId()) {
             case R.id.fab:
-                startActivityAddExchange();
+                if (isFragmentLoopExchange()) {
+                    startActivityAddLoopExchange();
+                } else {
+                    startActivityAddExchange();
+                }
                 break;
             case R.id.rlProfile:
                 startActivityForResult(new Intent(this, UserInformationActivity.class), RequestCode.PROFILE);
@@ -189,10 +201,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.llRecode:
                 onLoadFragmentDefaultExchange();
                 break;
+            case R.id.llDefaultExchange:
+                onLoadFragmentLoopExchange();
         }
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
+    }
+
+    private void startActivityAddLoopExchange() {
+        Intent intent = new Intent(this, ActivityAddLoopExchange.class);
+        startActivity(intent);
     }
 
     private void onShowDialogPickFilterDate() {
@@ -266,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onLoadFragmentDefaultExchange(String idAccount) {
         mFilter = FilterManager.getInstance().getFilterDefaultAccount(idAccount);
-        Log.d(TAG, "mIdAccountSelected: " + idAccount);
         mSpinnerAccount.setSelectItem(idAccount);
         loadFragmentExchange(mFilter);
     }
@@ -286,6 +301,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestChangeToolbarStatus(ActivityStatus.ON_FRAGMENT_DASHBOARD);
     }
 
+    public void onLoadFragmentLoopExchange() {
+        mFragmentLoopExchange = new FragmentLoopExchange();
+        requestReplaceFragment(mFragmentLoopExchange, DEFAULT_EXCHANGE, true);
+    }
+
     private void requestReplaceFragment(Fragment fragment, String TAG, boolean isStack) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameContent, fragment, TAG);
@@ -295,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.commit();
     }
 
-    public void checkStatus() {
+    public void checkFragmentDashboard() {
         Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
         if (fragment instanceof FragmentDashboard) {
             mFabAddExchange.setVisibility(View.VISIBLE);
@@ -305,6 +325,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportActionBar().setDisplayShowTitleEnabled(true);
             }
         }
+    }
+
+    public boolean isFragmentLoopExchange() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(DEFAULT_EXCHANGE);
+        return fragment instanceof FragmentLoopExchange;
     }
 
     public void requestChangeToolbarStatus(int status) {

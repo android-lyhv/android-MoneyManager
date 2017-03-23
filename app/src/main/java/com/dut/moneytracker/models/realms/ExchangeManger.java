@@ -29,6 +29,7 @@ public class ExchangeManger extends RealmHelper {
     private ExchangeManger() {
     }
 
+
     public void deleteExchangeById(String id) {
         realm.beginTransaction();
         Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();

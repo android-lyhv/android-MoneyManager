@@ -54,7 +54,7 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
         CardHolder(View itemView) {
             super(itemView);
             llCard = (LinearLayout) itemView.findViewById(R.id.llCard);
-            tvAccountName = (TextView) itemView.findViewById(R.id.tvAccountName);
+            tvAccountName = (TextView) itemView.findViewById(R.id.tvDescription);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
         }
 

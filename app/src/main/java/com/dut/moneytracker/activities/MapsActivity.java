@@ -2,7 +2,6 @@ package com.dut.moneytracker.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.dut.moneytracker.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,9 +29,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG, "onMapReady: ");
         mMap = googleMap;
-        Log.d(TAG, "onMapReady: " + String.valueOf(mMap));
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));

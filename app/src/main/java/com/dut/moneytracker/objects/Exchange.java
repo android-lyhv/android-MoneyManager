@@ -16,17 +16,18 @@ import io.realm.annotations.PrimaryKey;
 public class Exchange extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
-    private int typeExchange;// thu nhap, chuyen tien, chi tieu, di vay, cho vay
+    private int typeExchange;
     private String idAccount;
     private String idCategory;
-    private String idAccountTransfer;// truong hop chuyen tien
+    private String idAccountTransfer;
     private String currencyCode;
     private String amount;
     private String description;
     private Date created;
     private boolean isLoop;
     private int typeLoop;
-    private ExchangePlace exchangePlace;
+    private Place place;
+
 
     public String getIdAccountTransfer() {
         return idAccountTransfer;
@@ -84,12 +85,12 @@ public class Exchange extends RealmObject implements Parcelable {
         this.description = description;
     }
 
-    public ExchangePlace getExchangePlace() {
-        return exchangePlace;
+    public Place getPlace() {
+        return place;
     }
 
-    public void setExchangePlace(ExchangePlace exchangePlace) {
-        this.exchangePlace = exchangePlace;
+    public void setPlace(Place place) {
+        this.place = place;
     }
 
     public Date getCreated() {
@@ -146,7 +147,7 @@ public class Exchange extends RealmObject implements Parcelable {
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
         dest.writeByte(this.isLoop ? (byte) 1 : (byte) 0);
         dest.writeInt(this.typeLoop);
-        dest.writeParcelable(this.exchangePlace, flags);
+        dest.writeParcelable(this.place, flags);
     }
 
     protected Exchange(Parcel in) {
@@ -162,13 +163,13 @@ public class Exchange extends RealmObject implements Parcelable {
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
         this.isLoop = in.readByte() != 0;
         this.typeLoop = in.readInt();
-        this.exchangePlace = in.readParcelable(ExchangePlace.class.getClassLoader());
+        this.place = in.readParcelable(Place.class.getClassLoader());
     }
 
     public static final Creator<Exchange> CREATOR = new Creator<Exchange>() {
         @Override
-        public Exchange createFromParcel(Parcel source) {
-            return new Exchange(source);
+        public Exchange createFromParcel(Parcel in) {
+            return new Exchange(in);
         }
 
         @Override
@@ -176,4 +177,21 @@ public class Exchange extends RealmObject implements Parcelable {
             return new Exchange[size];
         }
     };
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("id:").append(id).append("\n")
+                .append("typeExchange: ").append(typeExchange).append("\n")
+                .append("idAccount: ").append(idAccount).append("\n")
+                .append("idCategory: ").append(idCategory).append("\n")
+                .append("amount: ").append(amount).append("\n")
+                .append("idAccountTransfer: ").append(idAccountTransfer).append("\n")
+                .append("created: ").append(created).append("\n")
+                .append("isLoop: ").append(isLoop).append("\n")
+                .append("typeLoop: ").append(typeLoop).append("\n")
+                .append("currencyCode: ").append(currencyCode).append("\n")
+                .append("place: ").append(place).append("\n");
+        return stringBuilder.toString();
+    }
 }

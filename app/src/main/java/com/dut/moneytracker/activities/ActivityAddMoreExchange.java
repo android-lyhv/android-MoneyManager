@@ -9,10 +9,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,19 +25,17 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.objects.ExchangePlace;
+import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.view.DayPicker;
 import com.dut.moneytracker.view.TimePicker;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -61,9 +58,11 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
     private TimePicker mTimePicker;
     private SwitchCompat mSwitchCompat;
     private Exchange mExchange;
-    private ExchangePlace mExchangePlace = new ExchangePlace();
+    private Place mPlace;
     private Calendar mCalendar;
     private MapView mapView;
+    private AppCompatSpinner mAppCompatSpinner;
+    private SpinnerTypeLoopManger spinnerTypeLoopManger;
     //Google Map
     GoogleMap mGoogleMap;
 
@@ -72,25 +71,25 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.fragment_detail_add);
+        setInData();
         initView();
-        setInView();
         //Init Map
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        MapsInitializer.initialize(this);
         mapView.getMapAsync(this);
     }
 
-    private void setInView() {
+    private void setInData() {
         mExchange = getIntent().getParcelableExtra(getString(R.string.extra_more_add));
         mCalendar = Calendar.getInstance();
         if (null != mExchange.getCreated()) {
             mCalendar.setTime(mExchange.getCreated());
         }
-        mExchangePlace = mExchange.getExchangePlace();
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), "VND"));
-        mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mCalendar.getTime()));
-        mTvTime.setText(DateTimeUtils.getInstance().getStringTime(mCalendar.getTime()));
+        if (null != mExchange.getPlace()) {
+            mPlace = mExchange.getPlace();
+        } else {
+            mPlace = new Place();
+        }
     }
 
     @Override
@@ -103,7 +102,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.actionAdd:
-                onAddMoreExchange();
+                onSaveAddMoreExchange();
                 break;
             case android.R.id.home:
                 finish();
@@ -111,13 +110,15 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         return super.onOptionsItemSelected(item);
     }
 
-    private void onAddMoreExchange() {
+    private void onSaveAddMoreExchange() {
         String description = mEditDescription.getText().toString();
-        if (!TextUtils.isEmpty(description)) {
-            mExchange.setDescription(description);
-        }
-        mExchange.setExchangePlace(mExchangePlace);
+        mExchange.setDescription(String.valueOf(description));
+        mExchange.setPlace(mPlace);
         mExchange.setCreated(mCalendar.getTime());
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.extra_more_add), mExchange);
+        setResult(RequestCode.MORE_ADD, intent);
+        finish();
     }
 
     void initView() {
@@ -137,7 +138,12 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         rlLocation.setOnClickListener(this);
         mSwitchCompat = (SwitchCompat) findViewById(R.id.switchLoop);
         mSwitchCompat.setOnCheckedChangeListener(this);
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), "VND"));
+        mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mCalendar.getTime()));
+        mTvTime.setText(DateTimeUtils.getInstance().getStringTime(mCalendar.getTime()));
+        mAppCompatSpinner = (AppCompatSpinner) findViewById(R.id.spinnerTypeLoop);
         mDayPicker = new DayPicker();
+        mEditDescription.setText(null == mExchange.getDescription() ? "" : mExchange.getDescription());
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultYear(int year) {
@@ -176,7 +182,15 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
                 mTvTime.setText(time);
             }
         });
-
+        spinnerTypeLoopManger = new SpinnerTypeLoopManger(this, mAppCompatSpinner);
+        spinnerTypeLoopManger.registerSelectedItem(new SpinnerTypeLoopManger.ItemSelectedListener() {
+            @Override
+            public void onResultTypeLoop(int type) {
+                mExchange.setTypeLoop(type);
+            }
+        });
+        spinnerTypeLoopManger.setSelectItem(mExchange.getTypeLoop());
+        mSwitchCompat.setChecked(mExchange.isLoop());
     }
 
     @Override
@@ -198,7 +212,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+        mExchange.setLoop(isChecked);
     }
 
     public void onRequestPermissionMap() {
@@ -245,46 +259,57 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         if (requestCode == RequestCode.PICK_PLACE) {
             DialogUtils.getInstance().dismissProgressDialog();
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
+                com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);
                 onSetExchangePlace(place);
                 updateMap();
             }
         }
     }
 
-    private void onSetExchangePlace(Place place) {
-        if (place == null) {
-            return;
-        }
+    private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
         if (place.getName() != null) {
-            mExchangePlace.setName(place.getName().toString());
+            mPlace.setName(place.getName().toString());
         }
         if (place.getAddress() != null) {
-            mExchangePlace.setAddress(place.getAddress().toString());
+            mPlace.setAddress(place.getAddress().toString());
         }
-        mExchangePlace.setLatitude(place.getLatLng().latitude);
-        mExchangePlace.setLongitude(place.getLatLng().longitude);
+        mPlace.setLatitude(place.getLatLng().latitude);
+        mPlace.setLongitude(place.getLatLng().longitude);
     }
 
     private void updateMap() {
-        Log.d(TAG, "updateMap: " + mExchangePlace.getLatitude() + " - " + mExchangePlace.getLongitude());
-        if (mGoogleMap == null) {
-            return;
-        }
         mGoogleMap.clear();
         onTargetLocationExchange();
         mapView.refreshDrawableState();
     }
 
     private void onTargetLocationExchange() {
-        LatLng sydney = new LatLng(mExchangePlace.getLatitude(), mExchangePlace.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mExchangePlace.getAddress()));
+        LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         onTargetLocationExchange();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 }

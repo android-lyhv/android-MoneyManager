@@ -71,7 +71,7 @@ public class FilterManager {
      */
 
     public Filter changeFilter(Filter filter, int  steps) {
-        Date newDate = DateTimeUtils.getInstance().changeStepMonth(filter.getDateFilter(), filter.getViewType(), steps);
+        Date newDate = DateTimeUtils.getInstance().changeDateStep(filter.getDateFilter(), filter.getViewType(), steps);
         filter.setDateFilter(newDate);
         return filter;
     }

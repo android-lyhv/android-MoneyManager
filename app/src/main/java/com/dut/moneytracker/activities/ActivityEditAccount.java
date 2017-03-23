@@ -57,7 +57,7 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
         mTvAmount = (TextView) findViewById(R.id.tvInitAmount);
         mTvAmount.setOnClickListener(this);
-        mEdtNameAccount = (EditText) findViewById(R.id.tvAccountName);
+        mEdtNameAccount = (EditText) findViewById(R.id.tvDescription);
         mTvCurrencyCode = (TextView) findViewById(R.id.tvCurrency);
         mTvCurrencyCode.setOnClickListener(this);
         mSwitchLocation = (SwitchCompat) findViewById(R.id.switchLocation);

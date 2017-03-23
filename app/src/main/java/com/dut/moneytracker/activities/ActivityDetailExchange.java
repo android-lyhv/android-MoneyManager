@@ -11,7 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,17 +30,15 @@ import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.objects.ExchangePlace;
+import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -73,7 +70,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
     private MapView mapView;
     //
     private Exchange mExchange;
-    private ExchangePlace mExchangePlace;
+    private Place mPlace;
     //Google Map
     GoogleMap mGoogleMap;
 
@@ -88,7 +85,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
 
     private void onLoadExtra() {
         mExchange = getIntent().getParcelableExtra(getString(R.string.extra_account));
-        mExchangePlace = mExchange.getExchangePlace() != null ? mExchange.getExchangePlace() : new ExchangePlace();
+        mPlace = mExchange.getPlace() != null ? mExchange.getPlace() : new Place();
     }
 
     private void initView(Bundle savedInstanceState) {
@@ -122,7 +119,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
         //Init Map
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        MapsInitializer.initialize(this);
     }
 
     @Override
@@ -189,25 +185,25 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
         if (requestCode == RequestCode.PICK_PLACE) {
             DialogUtils.getInstance().dismissProgressDialog();
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
+                com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);
                 onSetExchangePlace(place);
                 updateMap();
             }
         }
     }
 
-    private void onSetExchangePlace(Place place) {
+    private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
         if (place == null) {
             return;
         }
         if (place.getName() != null) {
-            mExchangePlace.setName(place.getName().toString());
+            mPlace.setName(place.getName().toString());
         }
         if (place.getAddress() != null) {
-            mExchangePlace.setAddress(place.getAddress().toString());
+            mPlace.setAddress(place.getAddress().toString());
         }
-        mExchangePlace.setLatitude(place.getLatLng().latitude);
-        mExchangePlace.setLongitude(place.getLatLng().longitude);
+        mPlace.setLatitude(place.getLatLng().latitude);
+        mPlace.setLongitude(place.getLatLng().longitude);
     }
 
     @Override
@@ -253,9 +249,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
 
     @Override
     public void onLoadDetailExchange() {
-        if (mExchange == null) {
-            return;
-        }
         switch (mExchange.getTypeExchange()) {
             case ExchangeType.INCOME:
             case ExchangeType.EXPENSES:
@@ -269,7 +262,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
 
     @Override
     public void onChangeExchange() {
-        mExchange.setExchangePlace(mExchangePlace);
+        mExchange.setPlace(mPlace);
         ExchangeManger.getInstance().insertOrUpdate(mExchange);
         setResult(ResultCode.DETAIL_EXCHANGE);
     }
@@ -291,16 +284,12 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
     }
 
     private void onTargetLocationExchange() {
-        LatLng sydney = new LatLng(mExchangePlace.getLatitude(), mExchangePlace.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mExchangePlace.getAddress()));
+        LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
     }
 
     private void updateMap() {
-        Log.d(TAG, "updateMap: " + mExchangePlace.getLatitude() + " - " + mExchangePlace.getLongitude());
-        if (mGoogleMap == null) {
-            return;
-        }
         mGoogleMap.clear();
         onTargetLocationExchange();
         mapView.refreshDrawableState();

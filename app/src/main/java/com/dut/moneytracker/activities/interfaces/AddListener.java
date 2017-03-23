@@ -1,9 +1,8 @@
 package com.dut.moneytracker.activities.interfaces;
 
 public interface AddListener {
-    void onAddIncome();
 
-    void onAddExpenses();
+    void onAddExpensesOrIncome();
 
     void onAddTransfer();
 

@@ -12,7 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.dut.moneytracker.objects.ExchangePlace;
+import com.dut.moneytracker.objects.Place;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -42,7 +42,7 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
     private Geocoder geocoder;
 
     public interface CurrentPlaceListener {
-        void onResultPlace(ExchangePlace place);
+        void onResultPlace(Place place);
     }
 
     public void registerCurrentPlaceListener(GoogleLocation.CurrentPlaceListener currentPlaceListener) {
@@ -79,6 +79,7 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
 
     private void configLocationUpdate() {
         mLocationRequest = new LocationRequest();
+        mLocationRequest.setMaxWaitTime(2000L);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -112,14 +113,16 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        if (currentPlaceListener != null) {
+            currentPlaceListener.onResultPlace(new Place());
+        }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed: aaaaa");
         if (currentPlaceListener != null) {
-            currentPlaceListener.onResultPlace(new ExchangePlace());
+            currentPlaceListener.onResultPlace(new Place());
         }
     }
 
@@ -137,11 +140,11 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
             addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             String address = addresses.get(0).getAddressLine(0);
             // set up
-            ExchangePlace exchangePlace = new ExchangePlace();
-            exchangePlace.setAddress(address);
-            exchangePlace.setLatitude(location.getLatitude());
-            exchangePlace.setLongitude(location.getLongitude());
-            currentPlaceListener.onResultPlace(exchangePlace);
+            Place place = new Place();
+            place.setAddress(address);
+            place.setLatitude(location.getLatitude());
+            place.setLongitude(location.getLongitude());
+            currentPlaceListener.onResultPlace(place);
         } catch (IOException e) {
             e.printStackTrace();
         }

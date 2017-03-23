@@ -22,19 +22,19 @@ import java.util.List;
 public class LineChartAmount {
     private static final String TAG = LineChartAmount.class.getSimpleName();
     private List<ValueChartAmount> valueChartAmounts;
-    private LineData lineData;
+    private LineData mLineData;
     private LineDataSet lineDataSet;
     private String colorCode = "#FF028761";
     private int stokeCircle;
     private String label;
-    private LineChart lineChart;
+    private LineChart mChart;
 
-    public LineChart getLineChart() {
-        return lineChart;
+    public LineChart getmChart() {
+        return mChart;
     }
 
-    public void setLineChart(LineChart lineChart) {
-        this.lineChart = lineChart;
+    public void setChart(LineChart mChart) {
+        this.mChart = mChart;
     }
 
     public void setStokeCircle(int stokeCircle) {
@@ -72,7 +72,7 @@ public class LineChartAmount {
 
         public Builder(LineChart lineChart) {
             lineChartAmount = new LineChartAmount();
-            lineChartAmount.setLineChart(lineChart);
+            lineChartAmount.setChart(lineChart);
         }
 
         public Builder setValueChartAmounts(List<ValueChartAmount> valueChartAmounts) {
@@ -119,24 +119,22 @@ public class LineChartAmount {
         lineDataSet.setCircleColor(Color.parseColor(getColorCode()));
         lineDataSet.setColor(Color.parseColor(getColorCode()));
         lineDataSet.setDrawValues(false);
-        lineData = new LineData(lineDataSet);
-        lineChart.setData(lineData);
-        lineChart.getAxisLeft().setDrawGridLines(true);
-        lineChart.getAxisRight().setEnabled(false);
-        lineChart.setDragEnabled(false);
-        lineChart.setTouchEnabled(false);
-        lineChart.getXAxis().setDrawGridLines(false);
-        lineChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter());
-        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        mLineData = new LineData(lineDataSet);
+        mChart.setData(mLineData);
+        mChart.getAxisLeft().setDrawGridLines(true);
+        mChart.getAxisRight().setEnabled(false);
+        mChart.setDragEnabled(false);
+        mChart.setTouchEnabled(false);
+        mChart.getXAxis().setDrawGridLines(false);
+        mChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter());
+        mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
     }
-
-
     public void onDraw() {
         onSetupChart();
-        lineChart.invalidate();
+        mChart.invalidate();
     }
 
-    public class MyXAxisValueFormatter implements IAxisValueFormatter {
+    private class MyXAxisValueFormatter implements IAxisValueFormatter {
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             return valueChartAmounts.get((int) value).getLabel();

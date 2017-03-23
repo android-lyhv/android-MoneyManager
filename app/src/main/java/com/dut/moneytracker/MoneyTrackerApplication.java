@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.FacebookSdk;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.firebase.database.FirebaseDatabase;
 
 import io.realm.Realm;
@@ -23,6 +24,7 @@ public class MoneyTrackerApplication extends Application {
         configRealm(getApplicationContext());
         configFacebookSdk();
         configFireBase();
+        configMap();
     }
 
     private void configFacebookSdk() {
@@ -37,5 +39,8 @@ public class MoneyTrackerApplication extends Application {
 
     private void configFireBase() {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
+    private void configMap(){
+        MapsInitializer.initialize(this);
     }
 }

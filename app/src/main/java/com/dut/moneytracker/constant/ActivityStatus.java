@@ -8,4 +8,5 @@ package com.dut.moneytracker.constant;
 public class ActivityStatus {
     public static final int ON_FRAGMENT_DASHBOARD = 0;
     public static final int ON_FRAGMENT_EXCHANGES = 1;
+    public static final int ON_FRAGMENT_LOOP_EXCHANGE = 2;
 }

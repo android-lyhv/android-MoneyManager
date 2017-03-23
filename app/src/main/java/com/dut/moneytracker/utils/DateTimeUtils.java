@@ -80,19 +80,13 @@ public class DateTimeUtils {
         return dates;
     }
 
-    public static String formatEnglishTime(long times, String format) {
-        Locale locale = new Locale("VN");
-        DateFormat df1 = new SimpleDateFormat(format, locale);
-        return df1.format(new Date(times));
-    }
-
     /**
      * @param date
      * @param type Date, Month, year
      * @param step
      * @return
      */
-    public Date changeStepMonth(Date date, int type, int step) {
+    public Date changeDateStep(Date date, int type, int step) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         switch (type) {
@@ -110,5 +104,17 @@ public class DateTimeUtils {
 
         }
         return calendar.getTime();
+    }
+
+    public List<Date> getCurrentDaysOfWeek(Calendar calendar) {
+        List<Date> dates = new ArrayList<>();
+        int index = calendar.get(GregorianCalendar.DAY_OF_WEEK);
+        int step = index == 1 ? 7 : index - 1;
+        calendar.add(Calendar.DAY_OF_MONTH, -step);
+        for (int i = 0; i < 7; i++) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            dates.add(calendar.getTime());
+        }
+        return dates;
     }
 }
