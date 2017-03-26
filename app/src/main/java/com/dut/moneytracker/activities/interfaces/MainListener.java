@@ -6,7 +6,10 @@ package com.dut.moneytracker.activities.interfaces;
  */
 
 public interface MainListener {
-    void onLoadFragmentExchange();
 
-    void onLoadFragmentDashboard();
+    boolean checkFragmentDashboard();
+
+    boolean checkFragmentExchanges();
+
+    boolean checkFragmentLoop();
 }

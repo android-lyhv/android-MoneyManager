@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.MainActivity;
+import com.dut.moneytracker.activities.MainActivity_;
 import com.dut.moneytracker.adapter.BaseViewPagerAdapter;
 import com.dut.moneytracker.fragment.BaseFragment;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -112,5 +113,17 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity_) getActivity()).checkFragmentDashboard();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((MainActivity) getActivity()).checkFragmentDashboard();
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.activities.MainActivity_;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -27,5 +28,17 @@ public class FragmentLoopExchange extends BaseFragment {
 
     private void initView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerDefaultExchange);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity_) getActivity()).checkFragmentLoop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((MainActivity_) getActivity()).checkFragmentLoop();
     }
 }

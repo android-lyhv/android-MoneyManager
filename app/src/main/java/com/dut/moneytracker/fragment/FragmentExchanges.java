@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.ActivityDetailExchange;
-import com.dut.moneytracker.activities.MainActivity;
+import com.dut.moneytracker.activities.MainActivity_;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecyclerAdapter;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.fragment.dashboard.FragmentChildExchangeTab;
@@ -108,8 +108,14 @@ public class FragmentExchanges extends BaseFragment implements View.OnClickListe
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity_) getActivity()).checkFragmentExchanges();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ((MainActivity) getActivity()).checkFragmentDashboard();
+        ((MainActivity_) getActivity()).checkFragmentExchanges();
     }
 }

@@ -49,7 +49,7 @@
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".activities.ActivityPickCategory" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.MainActivity_"
             android:label="@string/title_activity_main_navigation"
             android:screenOrientation="portrait" />
         <!-- End List -->

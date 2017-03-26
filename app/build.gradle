@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 apply plugin: 'realm-android'
-def AAVersion = '4.0.0'
+def AAVersion = '4.3.0'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -45,7 +46,7 @@ dependencies {
     // Chart
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     // Annotation
-    annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
+    apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     // Lombok
     compile 'org.projectlombok:lombok:1.16.12'

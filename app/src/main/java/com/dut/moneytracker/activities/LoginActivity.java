@@ -204,7 +204,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!TextUtils.equals(currentUserId, firebaseUser.getUid())) {
             startActivity(new Intent(this, ActivityLoadData.class));
         } else {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity_.class));
         }
         finish();
     }
