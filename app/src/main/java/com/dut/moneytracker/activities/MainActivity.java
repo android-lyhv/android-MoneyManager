@@ -90,20 +90,16 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     @AfterViews
     void init() {
         mFragmentManager = getSupportFragmentManager();
-        initData();
+        mFilter = FilterManager.getInstance().getFilterDefault();
         initView();
         onLoadProfile();
         onLoadFragmentDashboard();
     }
 
-    void initData() {
-        mFilter = FilterManager.getInstance().getFilterDefault();
-    }
 
     void initView() {
         setSupportActionBar(mToolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         initSpinner();
@@ -120,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                     mFilter.setRequestByAccount(true);
                     mFilter.setAccountId(accountId);
                 }
-                // mFragmentExchanges.updateListExchanges(mFilter);
+                mFragmentExchanges.updateListExchanges(mFilter);
             }
         });
     }
@@ -332,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     public boolean checkFragmentLoop() {
         Fragment fragment = mFragmentManager.findFragmentByTag(LOOP);
         if (fragment instanceof FragmentLoopExchange) {
-            mFabAddExchange.setVisibility(View.GONE);
+            mFabAddExchange.setVisibility(View.VISIBLE);
             spinner.setVisibility(View.GONE);
             imgDateFilter.setVisibility(View.GONE);
             imgSettingAccount.setVisibility(View.GONE);
