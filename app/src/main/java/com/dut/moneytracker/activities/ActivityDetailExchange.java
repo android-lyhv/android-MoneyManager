@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.interfaces.DetailExchangeListener;
-import com.dut.moneytracker.models.type.ExchangeType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -28,6 +27,7 @@ import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
+import com.dut.moneytracker.models.type.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Place;
@@ -166,6 +166,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
             case R.id.imgLocaiton:
                 onRequestPermissionMap();
                 break;
+            case R.id.rlCategory:
+                startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
+                break;
         }
     }
 
@@ -188,6 +191,16 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
                 com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);
                 onSetExchangePlace(place);
                 updateMap();
+            }
+        }
+
+        if (requestCode == RequestCode.PICK_CATEGORY) {
+            if (resultCode == ResultCode.PICK_CATEGORY) {
+                Category category = data.getParcelableExtra(getString(R.string.extra_category));
+                String idCategory = category.getId();
+                String nameCategory = category.getName();
+                tvCategory.setText(nameCategory);
+                mExchange.setIdCategory(idCategory);
             }
         }
     }
