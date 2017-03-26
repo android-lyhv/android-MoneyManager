@@ -7,11 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.models.type.ExchangeType;
 import com.dut.moneytracker.currency.CurrencyUtils;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
+import com.dut.moneytracker.models.type.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
+import com.dut.moneytracker.utils.DateTimeUtils;
+import com.dut.moneytracker.utils.ResourceUtils;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -29,10 +32,11 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
 
     public ItemSimpleExchange(View itemView) {
         super(itemView);
-        tvAccountName = (TextView) itemView.findViewById(R.id.tvDescription);
+        tvAccountName = (TextView) itemView.findViewById(R.id.tvNameAccount);
         tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
         tvPymenType = (TextView) itemView.findViewById(R.id.tvPaymentType);
         tvDateCreated = (TextView) itemView.findViewById(R.id.tvDate);
+        tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
         imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
         tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
     }
@@ -40,10 +44,11 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
     public void onBind(Context context, Exchange exchange) {
         if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
             Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
-           /* imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
+            imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
             tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
             tvCategoryName.setText(category.getName());
-            tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));*/
+            tvDescription.setText(exchange.getDescription());
+            tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
             tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
             if (exchange.getTypeExchange() == ExchangeType.INCOME) {
                 tvAmount.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));

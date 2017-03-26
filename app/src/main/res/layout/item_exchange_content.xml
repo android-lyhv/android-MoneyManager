@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:clickable="true"
     android:background="@drawable/selector_bg_white"
+    android:clickable="true"
+    android:gravity="center_vertical"
     android:paddingTop="5dp">
 
     <ImageView
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="Khoan No"
             android:textColor="@android:color/black"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <LinearLayout
             android:id="@+id/llNote"
