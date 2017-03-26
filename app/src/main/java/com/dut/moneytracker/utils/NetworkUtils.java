@@ -9,9 +9,12 @@ import android.net.NetworkInfo;
  * Created by ly.ho on 27/02/2017.
  */
 public class NetworkUtils {
-    private static NetworkUtils ourInstance = new NetworkUtils();
+    private static NetworkUtils ourInstance;
 
     public static NetworkUtils getInstance() {
+        if (ourInstance == null){
+            ourInstance = new NetworkUtils();
+        }
         return ourInstance;
     }
 

@@ -7,12 +7,15 @@ import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 28/02/2017.
  */
-
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Exchange extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
@@ -27,104 +30,6 @@ public class Exchange extends RealmObject implements Parcelable {
     private boolean isLoop;
     private int typeLoop;
     private Place place;
-
-
-    public String getIdAccountTransfer() {
-        return idAccountTransfer;
-    }
-
-    public void setIdAccountTransfer(String idAccountTransfer) {
-        this.idAccountTransfer = idAccountTransfer;
-    }
-
-    public String getIdAccount() {
-        return idAccount;
-    }
-
-    public void setIdAccount(String idAccount) {
-        this.idAccount = idAccount;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getIdCategory() {
-        return idCategory;
-    }
-
-    public void setIdCategory(String idCategory) {
-        this.idCategory = idCategory;
-    }
-
-    public int getTypeExchange() {
-        return typeExchange;
-    }
-
-    public void setTypeExchange(int typeExchange) {
-        this.typeExchange = typeExchange;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Place getPlace() {
-        return place;
-    }
-
-    public void setPlace(Place place) {
-        this.place = place;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public boolean isLoop() {
-        return isLoop;
-    }
-
-    public void setLoop(boolean loop) {
-        isLoop = loop;
-    }
-
-    public int getTypeLoop() {
-        return typeLoop;
-    }
-
-    public void setTypeLoop(int typeLoop) {
-        this.typeLoop = typeLoop;
-    }
 
     public Exchange() {
     }

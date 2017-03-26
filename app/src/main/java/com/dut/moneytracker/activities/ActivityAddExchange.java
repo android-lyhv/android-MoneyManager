@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.interfaces.AddListener;
-import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
@@ -27,6 +26,7 @@ import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.dialogs.DialogPickCurrency;
 import com.dut.moneytracker.maps.GoogleLocation;
 import com.dut.moneytracker.models.realms.AccountManager;
+import com.dut.moneytracker.models.type.ExchangeType;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
@@ -42,7 +42,6 @@ import java.util.UUID;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 23/02/2017.
  */
-
 public class ActivityAddExchange extends AppCompatActivity implements View.OnClickListener, AddListener, GoogleApiClient.ConnectionCallbacks {
     private static final String TAG = ActivityAddExchange.class.getSimpleName();
     private Toolbar mToolbar;

@@ -5,50 +5,21 @@ import android.os.Parcelable;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 28/02/2017.
  */
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Category extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
     private String idGroup;
     private String name;
     private byte[] byteImage;
-
-    public byte[] getByteImage() {
-        return byteImage;
-    }
-
-    public void setByteImage(byte[] byteImage) {
-        this.byteImage = byteImage;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIdGroup() {
-        return idGroup;
-    }
-
-    public void setIdGroup(String idGroup) {
-        this.idGroup = idGroup;
-    }
-
     @Override
     public int describeContents() {
         return 0;

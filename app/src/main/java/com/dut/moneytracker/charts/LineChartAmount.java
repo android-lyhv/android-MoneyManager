@@ -23,7 +23,7 @@ public class LineChartAmount {
     private static final String TAG = LineChartAmount.class.getSimpleName();
     private List<ValueChartAmount> valueChartAmounts;
     private LineData mLineData;
-    private LineDataSet lineDataSet;
+    private LineDataSet mDataSet;
     private String colorCode = "#FF028761";
     private int stokeCircle;
     private String label;
@@ -115,11 +115,11 @@ public class LineChartAmount {
     }
 
     private void onSetupChart() {
-        lineDataSet = new LineDataSet(getListEntry(), getLabel());
-        lineDataSet.setCircleColor(Color.parseColor(getColorCode()));
-        lineDataSet.setColor(Color.parseColor(getColorCode()));
-        lineDataSet.setDrawValues(false);
-        mLineData = new LineData(lineDataSet);
+        mDataSet = new LineDataSet(getListEntry(), getLabel());
+        mDataSet.setCircleColor(Color.parseColor(getColorCode()));
+        mDataSet.setColor(Color.parseColor(getColorCode()));
+        mDataSet.setDrawValues(false);
+        mLineData = new LineData(mDataSet);
         mChart.setData(mLineData);
         mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisRight().setEnabled(false);

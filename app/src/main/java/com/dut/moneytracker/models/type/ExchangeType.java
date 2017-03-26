@@ -1,4 +1,4 @@
-package com.dut.moneytracker.constant;
+package com.dut.moneytracker.models.type;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -9,6 +9,6 @@ public class ExchangeType {
     public static final int INCOME = 0;
     public static final int EXPENSES = 1;
     public static final int TRANSFER = 2;
-    public static final int LEND = 4; // Cho vay
-    public static final int BORROWED = 5; // Muon
+    public static final int LEND = 3;
+    public static final int BORROWED = 4;
 }

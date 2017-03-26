@@ -8,12 +8,15 @@ import java.util.Date;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 28/02/2017.
  */
-
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Account extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
@@ -26,86 +29,6 @@ public class Account extends RealmObject implements Parcelable {
     private boolean isDefault;
     private RealmList<Exchange> exchanges;
     private RealmList<Debit> debits;
-
-    public RealmList<Debit> getDebits() {
-        return debits;
-    }
-
-    public void setDebits(RealmList<Debit> debits) {
-        this.debits = debits;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getInitAmount() {
-        return initAmount;
-    }
-
-    public void setInitAmount(String initAmount) {
-        this.initAmount = initAmount;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public String getColorCode() {
-        return colorCode;
-    }
-
-    public void setColorCode(String colorCode) {
-        this.colorCode = colorCode;
-    }
-
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
-    }
-
-    public boolean isSaveLocation() {
-        return saveLocation;
-    }
-
-    public void setSaveLocation(boolean saveLocation) {
-        this.saveLocation = saveLocation;
-    }
-
-    public RealmList<Exchange> getExchanges() {
-        return exchanges;
-    }
-
-    public void setExchanges(RealmList<Exchange> exchanges) {
-        this.exchanges = exchanges;
-    }
 
     @Override
     public int describeContents() {

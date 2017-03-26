@@ -8,12 +8,15 @@ import java.util.Date;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 28/02/2017.
  */
-
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Debit extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;

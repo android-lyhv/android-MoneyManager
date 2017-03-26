@@ -5,41 +5,27 @@ import android.os.Parcelable;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 06/03/2017.
  */
-
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Currency extends RealmObject implements Parcelable {
     @PrimaryKey
     private String currencyCode;
     private String currencyName;
 
+    public Currency() {
+    }
+
     public Currency(String currencyCode, String currencyName) {
         this.currencyCode = currencyCode;
         this.currencyName = currencyName;
     }
-
-    public Currency() {
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-    }
-
-    public String getCurrencyName() {
-        return currencyName;
-    }
-
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
-    }
-
     @Override
     public int describeContents() {
         return 0;

@@ -36,8 +36,6 @@ import com.github.mikephil.charting.charts.LineChart;
 
 import java.util.List;
 
-import static com.dut.moneytracker.R.id.lineChart;
-
 
 /**
  * Copyright@ AsianTech.Inc
@@ -105,7 +103,7 @@ public class FragmentParentExchangeTab extends BaseFragment implements TabAccoun
         mTvAmount = (TextView) view.findViewById(R.id.tvAmount);
         tvMoreExchange = (TextView) view.findViewById(R.id.tvMoreExchange);
         tvMoreExchange.setOnClickListener(this);
-        mLineChart = (LineChart) view.findViewById(lineChart);
+        mLineChart = (LineChart) view.findViewById(R.id.mChart);
     }
 
 

@@ -10,27 +10,31 @@ import java.util.Locale;
  * Created by ly.ho on 01/03/2017.
  */
 public class AppPreferences {
+    private static AppPreferences ourInstance;
     private static final String FIRST_INIT = "first_init";
     private static final String SHARED_PREF_NAME = "MoneyTracker";
     private static final String KEY_REFERENCE_DATABASE = "KEY_REFERENCE_DATABASE";
     private static final String KEY_USER_ID = "KEY_USER_ID";
     private static final String KEY_DEFAULT_CODE_CURRENCY = "KEY_DEFAULT_CODE_CURRENCY";
+
     private static final String KEY_LIMIT_VIEW = "KEY_LIMIT_VIEW";
 
-    private static AppPreferences ourInstance = new AppPreferences();
-
     public static AppPreferences getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new AppPreferences();
+        }
         return ourInstance;
     }
 
     private AppPreferences() {
     }
 
-    public int getLimitViewExchange(Context context){
+    public int getLimitViewExchange(Context context) {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return pref.getInt(KEY_LIMIT_VIEW, 5);
     }
-    public void setLimitViewExchange(Context context, int value){
+
+    public void setLimitViewExchange(Context context, int value) {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt(KEY_LIMIT_VIEW, value);

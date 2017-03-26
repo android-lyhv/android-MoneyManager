@@ -47,6 +47,7 @@ dependencies {
     // Annotation
     annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
-
+    // Lombok
+    compile 'org.projectlombok:lombok:1.16.12'
 }
 apply plugin: 'com.google.gms.google-services'
