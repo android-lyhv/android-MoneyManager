@@ -1,5 +1,7 @@
 package com.dut.moneytracker.models;
 
+import android.util.Log;
+
 import com.dut.moneytracker.constant.TypeView;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -16,6 +18,7 @@ import java.util.Locale;
  * Created by ly.ho on 15/03/2017.
  */
 public class FilterManager {
+    private static final String TAG = FilterManager.class.getSimpleName();
     private static FilterManager ourInstance = new FilterManager();
 
     public static FilterManager getInstance() {
@@ -64,15 +67,27 @@ public class FilterManager {
         return label;
     }
 
-    /**
-     * @param filter
-     * @param
-     * @return
-     */
 
-    public Filter changeFilter(Filter filter, int  steps) {
+    public Filter changeFilter(final Filter currentFilter, int steps) {
+        Filter filter = copyFilter(currentFilter);
+        int type = filter.getViewType();
+        if (type == TypeView.ALL || type == TypeView.CUSTOM) {
+            return filter;
+        }
         Date newDate = DateTimeUtils.getInstance().changeDateStep(filter.getDateFilter(), filter.getViewType(), steps);
         filter.setDateFilter(newDate);
+        Log.d(TAG, "changeFilter: " + String.valueOf(currentFilter));
+        return filter;
+    }
+
+    public Filter copyFilter(Filter currentFilter) {
+        Filter filter = new Filter();
+        filter.setAccountId(currentFilter.getAccountId());
+        filter.setRequestByAccount(currentFilter.isRequestByAccount());
+        filter.setViewType(currentFilter.getViewType());
+        filter.setDateFilter(currentFilter.getDateFilter());
+        filter.setEndDate(currentFilter.getEndDate());
+        filter.setStartDate(currentFilter.getStartDate());
         return filter;
     }
 }

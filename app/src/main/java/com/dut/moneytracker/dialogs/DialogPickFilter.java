@@ -14,16 +14,17 @@ import com.dut.moneytracker.constant.TypeView;
  */
 
 public class DialogPickFilter extends DialogFragment {
-    private String[] filter = new String[]{"All", "Day", "Month", "Week", "Year", "Custom"};
-    private int[] id = new int[]{TypeView.ALL, TypeView.DAY, TypeView.MONTH, TypeView.WEAK, TypeView.YEAR, TypeView.CUSTOM};
-    private int idFilter = 0;
+    private String[] filter = new String[]{"Tất cả", "Ngày", "Tuần", "Tháng", "Năm", "Khoảng thời gian"};
+    private int[] id = new int[]{TypeView.ALL, TypeView.DAY, TypeView.WEAK, TypeView.MONTH, TypeView.YEAR, TypeView.CUSTOM};
+    private int mIdFilter = 0;
     private FilterListener filterListener;
 
     public interface FilterListener {
         void onResult(int idFilter);
     }
 
-    public void registerFilter(FilterListener filterListener) {
+    public void registerFilter(int idFilter, FilterListener filterListener) {
+        mIdFilter = idFilter;
         this.filterListener = filterListener;
     }
 
@@ -32,15 +33,17 @@ public class DialogPickFilter extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the dialog title
         builder.setTitle("Chọn hiển thị!")
-                .setSingleChoiceItems(filter, -1, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(filter, mIdFilter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        idFilter = id[which];
+                        mIdFilter = id[which];
+                        filterListener.onResult(mIdFilter);
+                        dismiss();
                     }
                 }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                filterListener.onResult(idFilter);
+                //TODO
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override

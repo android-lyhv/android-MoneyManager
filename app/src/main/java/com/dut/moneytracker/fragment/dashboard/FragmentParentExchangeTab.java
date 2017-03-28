@@ -182,7 +182,7 @@ public class FragmentParentExchangeTab extends BaseFragment implements TabAccoun
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvMoreExchange:
-                ((MainActivity) getActivity()).onLoadFragmentDefaultExchange();
+                ((MainActivity) getActivity()).onLoadFragmentAllExchanges();
         }
     }
 }

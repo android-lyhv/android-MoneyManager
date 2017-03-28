@@ -38,6 +38,8 @@
     <string name="fragment_account.textview.showmore">Hiển thị thêm</string>
     <string name="tablyout.text.all_account">Tài khoản của tôi</string>
     <string name="extra.account">Account</string>
+    <string name="broadcast_filter">broadcast_filter</string>
+    <string name="broadcast_objects_filter">broadcast_objects_filter</string>
     <string name="extra.account_list">Accounts</string>
     <string name="dialoag.title.currency">Chọn tiền tệ</string>
     <string name="dialog.title.account">Danh sách tài khoản</string>
@@ -50,6 +52,9 @@
     <string name="toolbar.detail_exchange">Thông tin chi tiết</string>
     <string name="dialog.confirm.delete.title">Xóa giao dịch này?</string>
     <string name="extra_more_add">extra_more_add</string>
+    <string name="action.fiter">step_filter</string>
+    <string name="step_fitler">step_filter</string>
+    <string name="extra_filter">extra_filter</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>

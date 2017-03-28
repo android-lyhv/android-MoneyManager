@@ -40,7 +40,8 @@ public class MoneyTrackerApplication extends Application {
     private void configFireBase() {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
-    private void configMap(){
+
+    private void configMap() {
         MapsInitializer.initialize(this);
     }
 }

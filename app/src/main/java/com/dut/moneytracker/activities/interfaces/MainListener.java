@@ -12,4 +12,6 @@ public interface MainListener {
     boolean checkFragmentExchanges();
 
     boolean checkFragmentLoop();
+
+    void onChangeFilter();
 }
