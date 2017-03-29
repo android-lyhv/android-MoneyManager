@@ -3,6 +3,7 @@ package com.dut.moneytracker.fragment.exchanges;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,8 +11,8 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.ActivityDetailExchange;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecyclerAdapter;
 import com.dut.moneytracker.constant.RequestCode;
+import com.dut.moneytracker.constant.TypeView;
 import com.dut.moneytracker.fragment.BaseFragment;
-import com.dut.moneytracker.fragment.dashboard.FragmentChildExchangeTab;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;
@@ -32,7 +33,7 @@ import java.util.List;
  */
 @EFragment(R.layout.fragment_exchange)
 public class FragmentExchanges extends BaseFragment {
-    private static final String TAG = FragmentChildExchangeTab.class.getSimpleName();
+    private static final String TAG = FragmentExchanges.class.getSimpleName();
     @ViewById(R.id.llPrevious)
     LinearLayout llPrevious;
     @ViewById(R.id.llNext)
@@ -83,6 +84,13 @@ public class FragmentExchanges extends BaseFragment {
 
     public void changeDateLabel() {
         String label = FilterManager.getInstance().getLabel(mFilter, mExchanges);
+        if (mFilter.getViewType() == TypeView.CUSTOM || mFilter.getViewType() == TypeView.ALL) {
+            llNext.setVisibility(View.GONE);
+            llPrevious.setVisibility(View.GONE);
+        } else {
+            llNext.setVisibility(View.VISIBLE);
+            llPrevious.setVisibility(View.VISIBLE);
+        }
         tvInformationExchange.setText(label);
     }
 

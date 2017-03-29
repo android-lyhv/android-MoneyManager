@@ -31,7 +31,6 @@ public class DialogPickFilter extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Set the dialog title
         builder.setTitle("Chọn hiển thị!")
                 .setSingleChoiceItems(filter, mIdFilter, new DialogInterface.OnClickListener() {
                     @Override
@@ -40,12 +39,12 @@ public class DialogPickFilter extends DialogFragment {
                         filterListener.onResult(mIdFilter);
                         dismiss();
                     }
-                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                }).setPositiveButton("Bây giờ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                //TODO
+                filterListener.onResult(mIdFilter);
             }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dismiss();

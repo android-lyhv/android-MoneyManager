@@ -19,43 +19,61 @@ import java.util.Locale;
  */
 public class DateTimeUtils {
     private static final String TAG = DateTimeUtils.class.getSimpleName();
-    private static DateTimeUtils ourInstance = new DateTimeUtils();
+    private static DateTimeUtils ourInstance;
     private static final String DEFAULT_DATE = "Hôm nay";
-    DateFormat formatFullDate = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-    DateFormat formatDayMonth = new SimpleDateFormat("dd/MM", Locale.US);
-    DateFormat formatMonthYear = new SimpleDateFormat("MM/yyyy", Locale.US);
-    DateFormat formatYear = new SimpleDateFormat("yyyy", Locale.US);
-    DateFormat formatSortTime = new SimpleDateFormat("HH:mm", Locale.US);
+    private Locale mLocale;
 
     public static DateTimeUtils getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new DateTimeUtils();
+        }
         return ourInstance;
     }
 
     private DateTimeUtils() {
+        mLocale = new Locale("Vietnam");
     }
 
+
     public String getStringFullDate(Date date) {
+        DateFormat formatFullDate = new SimpleDateFormat("'ngày' dd 'tháng' M 'năm' yyyy", mLocale);
+        if (isSameDate(date, new Date())) {
+            return DEFAULT_DATE;
+        }
         return formatFullDate.format(date);
     }
 
     public String getStringTime(Date date) {
+        DateFormat formatSortTime = new SimpleDateFormat("HH:mm", mLocale);
         return formatSortTime.format(date);
     }
 
     public String getStringDayMonth(Date date) {
+        DateFormat formatDayMonth = new SimpleDateFormat("'Ngày' dd 'tháng' MM", mLocale);
         return formatDayMonth.format(date);
     }
 
     public String getStringMonthYear(Date date) {
+        DateFormat formatMonthYear = new SimpleDateFormat("'Tháng' MM 'năm' yyyy", mLocale);
         return formatMonthYear.format(date);
+    }
+    public String getStringDayMonthUs(Date date) {
+        DateFormat formatDayMonth = new SimpleDateFormat("dd/MM", Locale.US);
+        return formatDayMonth.format(date);
+    }
+
+    public String getStringDateUs(Date date) {
+        DateFormat formatFullDate = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        return formatFullDate.format(date);
     }
 
     public String getStringYear(Date date) {
+        DateFormat formatYear = new SimpleDateFormat("'Năm' yyyy", Locale.US);
         return formatYear.format(date);
     }
 
     public boolean isSameDate(Date date1, Date date2) {
-        return TextUtils.equals(getStringFullDate(date1), getStringFullDate(date2));
+        return TextUtils.equals(getStringDateUs(date1), getStringDateUs(date2));
     }
 
     public boolean isSameMonth(Date date1, Date date2) {
@@ -116,5 +134,17 @@ public class DateTimeUtils {
             dates.add(calendar.getTime());
         }
         return dates;
+    }
+
+    public Date getDate(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        return calendar.getTime();
+    }
+
+    public boolean isValidateFromDateToDate(Date fromDate, Date toDate) {
+        return !isSameDate(fromDate, toDate) && fromDate.getTime() < toDate.getTime();
     }
 }

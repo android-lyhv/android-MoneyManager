@@ -40,7 +40,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -59,7 +59,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
     private SwitchCompat mSwitchCompat;
     private Exchange mExchange;
     private Place mPlace;
-    private Calendar mCalendar;
+    private Date mDate;
     private MapView mapView;
     private AppCompatSpinner mAppCompatSpinner;
     private SpinnerTypeLoopManger spinnerTypeLoopManger;
@@ -81,9 +81,9 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
 
     private void setInData() {
         mExchange = getIntent().getParcelableExtra(getString(R.string.extra_more_add));
-        mCalendar = Calendar.getInstance();
+        mDate = new Date();
         if (null != mExchange.getCreated()) {
-            mCalendar.setTime(mExchange.getCreated());
+            mDate = mExchange.getCreated();
         }
         if (null != mExchange.getPlace()) {
             mPlace = mExchange.getPlace();
@@ -114,7 +114,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         String description = mEditDescription.getText().toString();
         mExchange.setDescription(String.valueOf(description));
         mExchange.setPlace(mPlace);
-        mExchange.setCreated(mCalendar.getTime());
+        mExchange.setCreated(mDate);
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_more_add), mExchange);
         setResult(RequestCode.MORE_ADD, intent);
@@ -139,42 +139,29 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         mSwitchCompat = (SwitchCompat) findViewById(R.id.switchLoop);
         mSwitchCompat.setOnCheckedChangeListener(this);
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), "VND"));
-        mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mCalendar.getTime()));
-        mTvTime.setText(DateTimeUtils.getInstance().getStringTime(mCalendar.getTime()));
+        mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
+        mTvTime.setText(DateTimeUtils.getInstance().getStringTime(mDate));
         mAppCompatSpinner = (AppCompatSpinner) findViewById(R.id.spinnerTypeLoop);
         mDayPicker = new DayPicker();
         mEditDescription.setText(null == mExchange.getDescription() ? "" : mExchange.getDescription());
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
-            @Override
-            public void onResultYear(int year) {
-                mCalendar.set(Calendar.YEAR, year);
-            }
 
             @Override
-            public void onResultMonthOfYear(int month) {
-                mCalendar.set(Calendar.MONTH, month);
-            }
-
-            @Override
-            public void onResultDayOfMonth(int day) {
-                mCalendar.set(Calendar.DAY_OF_MONTH, day);
-            }
-
-            @Override
-            public void onResultStringDate(String date) {
-                mTvDate.setText(date);
+            public void onResultDate(Date date) {
+                mDate = date;
+                mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
             }
         });
         mTimePicker = new TimePicker();
         mTimePicker.registerPicker(new TimePicker.TimePickerListener() {
             @Override
             public void onResultHour(int hour) {
-                mCalendar.set(Calendar.HOUR_OF_DAY, hour);
+               // mDate.set(Calendar.HOUR_OF_DAY, hour);
             }
 
             @Override
             public void onResultMinute(int minute) {
-                mCalendar.set(Calendar.MINUTE, minute);
+               // mDate.set(Calendar.MINUTE, minute);
             }
 
             @Override

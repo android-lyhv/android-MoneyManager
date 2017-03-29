@@ -6,22 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
+import com.dut.moneytracker.utils.DateTimeUtils;
+
+import org.androidannotations.annotations.EFragment;
+
 import java.util.Calendar;
-import java.util.Locale;
+import java.util.Date;
 
 /**
  * Copyright @2016 AsianTech Inc.
  * Created by HaloSumiu on 4/23/2016.
  */
+@EFragment
 public class DayPicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     public interface DatePickerListener {
-        void onResultYear(int year);
-
-        void onResultMonthOfYear(int month);
-
-        void onResultDayOfMonth(int day);
-
-        void onResultStringDate(String Date);
+        void onResultDate(Date date);
     }
 
     public DatePickerListener datePickerListener;
@@ -46,13 +45,6 @@ public class DayPicker extends DialogFragment implements DatePickerDialog.OnDate
 
     @Override
     public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        int month = monthOfYear+1;
-        datePickerListener.onResultYear(year);
-        datePickerListener.onResultMonthOfYear(month);
-        datePickerListener.onResultDayOfMonth(dayOfMonth);
-        String stringMonth = month < 10 ? String.format(Locale.US, "0%s", month) : String.valueOf(month);
-        String stringDay = dayOfMonth < 10 ? String.format(Locale.US, "0%s", dayOfMonth) : String.valueOf(dayOfMonth);
-        String date = String.format(Locale.US, "%s/%s/%s", stringDay, stringMonth, year);
-        datePickerListener.onResultStringDate(date);
+        datePickerListener.onResultDate(DateTimeUtils.getInstance().getDate(year, monthOfYear, dayOfMonth));
     }
 }

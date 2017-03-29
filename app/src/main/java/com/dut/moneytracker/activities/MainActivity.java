@@ -24,6 +24,9 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.interfaces.MainListener;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.TypeView;
+import com.dut.moneytracker.dialogs.DialogCustomFilter;
+import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
 import com.dut.moneytracker.fragment.FragmentLoopExchange;
 import com.dut.moneytracker.fragment.dashboard.FragmentDashboard;
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     @ViewById(R.id.imgSettingAccount)
     ImageView imgSettingAccount;
     private DialogPickFilter mDialogPickFilter;
-
+    private DialogCustomFilter mDialogCustomFilter;
     //model
     FragmentManager mFragmentManager = getSupportFragmentManager();
     FragmentDashboard mFragmentDashboard;
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     void init() {
         mFilter = FilterManager.getInstance().getFilterDefault();
         mDialogPickFilter = new DialogPickFilter();
+        mDialogCustomFilter = DialogCustomFilter_.builder().build();
         initView();
         onLoadProfile();
         onLoadFragmentDashboard();
@@ -336,6 +340,19 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mFragmentExchangesPager == null) {
             return;
         }
-        mFragmentExchangesPager.onReloadFragmentPager();
+        if (mFilter.getViewType() == TypeView.CUSTOM) {
+            mDialogCustomFilter.show(mFragmentManager, TAG);
+            mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
+                @Override
+                public void onResultDate(Date fromDate, Date toDate) {
+                    mFilter.setFormDate(fromDate);
+                    mFilter.setToDate(toDate);
+                    mFragmentExchangesPager.onReloadFragmentPager();
+                }
+            });
+        } else {
+            mFragmentExchangesPager.onReloadFragmentPager();
+
+        }
     }
 }

@@ -1,7 +1,5 @@
 package com.dut.moneytracker.models;
 
-import android.util.Log;
-
 import com.dut.moneytracker.constant.TypeView;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -51,7 +49,7 @@ public class FilterManager {
         String date = "";
         switch (filter.getViewType()) {
             case TypeView.ALL:
-                date = "ALL";
+                date = "Tất cả";
                 break;
             case TypeView.DAY:
                 date = DateTimeUtils.getInstance().getStringFullDate(filter.getDateFilter());
@@ -62,9 +60,13 @@ public class FilterManager {
             case TypeView.YEAR:
                 date = DateTimeUtils.getInstance().getStringYear(filter.getDateFilter());
                 break;
+            case TypeView.CUSTOM:
+                String fromDate = DateTimeUtils.getInstance().getStringDateUs(filter.getFormDate());
+                String toDate = DateTimeUtils.getInstance().getStringDateUs(filter.getToDate());
+                date = String.format(Locale.US, "%s đến %s", fromDate, toDate);
+                break;
         }
-        String label = String.format(Locale.US, "%s\n%s", date, convert);
-        return label;
+        return String.format(Locale.US, "%s\n%s", date, convert);
     }
 
 
@@ -76,18 +78,17 @@ public class FilterManager {
         }
         Date newDate = DateTimeUtils.getInstance().changeDateStep(filter.getDateFilter(), filter.getViewType(), steps);
         filter.setDateFilter(newDate);
-        Log.d(TAG, "changeFilter: " + String.valueOf(currentFilter));
         return filter;
     }
 
-    public Filter copyFilter(Filter currentFilter) {
+    private Filter copyFilter(Filter currentFilter) {
         Filter filter = new Filter();
         filter.setAccountId(currentFilter.getAccountId());
         filter.setRequestByAccount(currentFilter.isRequestByAccount());
         filter.setViewType(currentFilter.getViewType());
         filter.setDateFilter(currentFilter.getDateFilter());
-        filter.setEndDate(currentFilter.getEndDate());
-        filter.setStartDate(currentFilter.getStartDate());
+        filter.setToDate(currentFilter.getToDate());
+        filter.setFormDate(currentFilter.getFormDate());
         return filter;
     }
 }

@@ -87,7 +87,7 @@ public class ExchangeManger extends RealmHelper {
         int size = dates.size();
         for (int i = 0; i < size; i++) {
             String amount = AccountManager.getInstance().getAmountAvailableByDate(dates.get(i));
-            valueChartAmounts.add(new ValueChartAmount(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonth(dates.get(i))));
+            valueChartAmounts.add(new ValueChartAmount(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonthUs(dates.get(i))));
         }
         return valueChartAmounts;
     }
@@ -98,7 +98,7 @@ public class ExchangeManger extends RealmHelper {
         int size = dates.size();
         for (int i = 0; i < size; i++) {
             String amount = AccountManager.getInstance().getAmountAvailableByDate(idAccount, dates.get(i));
-            valueChartAmounts.add(new ValueChartAmount(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonth(dates.get(i))));
+            valueChartAmounts.add(new ValueChartAmount(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonthUs(dates.get(i))));
         }
         return valueChartAmounts;
     }

@@ -22,7 +22,6 @@ import java.util.Locale;
 
 public class DialogCalculator extends DialogFragment implements View.OnClickListener {
     public interface ResultListener {
-
         void onResult(String amount);
     }
 
