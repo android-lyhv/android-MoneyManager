@@ -24,10 +24,11 @@ import io.realm.Sort;
  */
 
 public class AccountManager extends RealmHelper implements AccountListener {
-    private static final String TAG = AccountManager.class.getSimpleName();
-    private static AccountManager accountManager = new AccountManager();
-
+    private static AccountManager accountManager;
     public static AccountManager getInstance() {
+        if (accountManager==null){
+            accountManager = new AccountManager();
+        }
         return accountManager;
     }
 

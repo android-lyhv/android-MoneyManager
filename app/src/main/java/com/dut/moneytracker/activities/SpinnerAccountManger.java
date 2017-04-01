@@ -1,14 +1,12 @@
 package com.dut.moneytracker.activities;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -53,7 +51,8 @@ public class SpinnerAccountManger implements Spinner.OnItemSelectedListener {
 
     private void onLoadItemSpinner() {
         String[] items = getListItemSpinner(mAccounts);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, R.layout.item_selected_spiner, items);
+        arrayAdapter.setDropDownViewResource(R.layout.item_list_spiner);
         mSpinner.setAdapter(arrayAdapter);
         mSpinner.setOnItemSelectedListener(this);
     }
@@ -64,11 +63,6 @@ public class SpinnerAccountManger implements Spinner.OnItemSelectedListener {
             itemSelectedListener.onItemSelected(null);
         } else {
             itemSelectedListener.onItemSelected(mAccounts.get(position).getId());
-        }
-
-        TextView selectedText = (TextView) parent.getChildAt(0);
-        if (selectedText != null) {
-            selectedText.setTextColor(Color.WHITE);
         }
     }
 
@@ -87,7 +81,7 @@ public class SpinnerAccountManger implements Spinner.OnItemSelectedListener {
         for (int i = 0; i < size; i++) {
             strings[i] = accounts.get(i).getName();
         }
-        strings[size] = "All";
+        strings[size] = mContext.getString(R.string.all_account);
         return strings;
     }
 

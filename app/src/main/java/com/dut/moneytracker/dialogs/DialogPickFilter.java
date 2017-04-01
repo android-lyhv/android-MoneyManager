@@ -14,8 +14,8 @@ import com.dut.moneytracker.constant.TypeView;
  */
 
 public class DialogPickFilter extends DialogFragment {
-    private String[] filter = new String[]{"Tất cả", "Ngày", "Tuần", "Tháng", "Năm", "Khoảng thời gian"};
-    private int[] id = new int[]{TypeView.ALL, TypeView.DAY, TypeView.WEAK, TypeView.MONTH, TypeView.YEAR, TypeView.CUSTOM};
+    private String[] filter = new String[]{"Tất cả", "Ngày", "Tháng", "Năm", "Khoảng thời gian"};
+    private int[] id = new int[]{TypeView.ALL, TypeView.DAY, TypeView.MONTH, TypeView.YEAR, TypeView.CUSTOM};
     private int mIdFilter = 0;
     private FilterListener filterListener;
 

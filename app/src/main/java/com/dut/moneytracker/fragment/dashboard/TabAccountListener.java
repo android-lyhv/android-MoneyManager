@@ -7,12 +7,12 @@ import com.dut.moneytracker.objects.Exchange;
  * Created by ly.ho on 09/03/2017.
  */
 
-public interface TabAccountListener {
+interface TabAccountListener {
     void onLoadChart();
 
     void onLoadExchanges();
 
-    void onLoadAmount();
+    void onShowAmount();
 
     void onShowDetailExchange(Exchange exchange);
 }

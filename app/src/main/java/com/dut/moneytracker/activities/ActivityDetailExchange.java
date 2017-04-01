@@ -23,7 +23,10 @@ import com.dut.moneytracker.activities.interfaces.DetailExchangeListener;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
+import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
+import com.dut.moneytracker.dialogs.DialogInput;
+import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
@@ -33,6 +36,8 @@ import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
+import com.dut.moneytracker.view.DayPicker;
+import com.dut.moneytracker.view.TimePicker;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -42,6 +47,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Date;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -58,6 +65,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
     private RelativeLayout rlDate;
     private RelativeLayout rlTime;
     private RelativeLayout rlLocation;
+    private RelativeLayout rlDescription;
 
     private TextView tvCategory;
     private TextView tvAmount;
@@ -91,6 +99,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
     private void initView(Bundle savedInstanceState) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        rlDescription = (RelativeLayout) findViewById(R.id.rlDescription);
+        rlDescription.setOnClickListener(this);
         toolbar.setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
         rlCategory = (RelativeLayout) findViewById(R.id.rlCategory);
@@ -168,6 +178,75 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
                 break;
             case R.id.rlCategory:
                 startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
+                break;
+            case R.id.rlAmount:
+                String amount = mExchange.getAmount();
+                if (amount.startsWith("-")) {
+                    amount = amount.substring(1);
+                }
+                DialogCalculator dialogCalculator = new DialogCalculator();
+                dialogCalculator.show(getFragmentManager(), null);
+                dialogCalculator.setAmount(amount);
+                dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+                    @Override
+                    public void onResult(String amount) {
+                        if (mExchange.getAmount().startsWith("-")) {
+                            mExchange.setAmount("-" + amount);
+                        } else {
+                            mExchange.setAmount(amount);
+                        }
+                        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+                    }
+                });
+                break;
+            case R.id.rlDescription:
+                DialogInput dialogInput = DialogInput_.builder().build();
+                dialogInput.register(new DialogInput.DescriptionListener() {
+                    @Override
+                    public void onResult(String content) {
+                        mTvDescription.setText(content);
+                        mExchange.setDescription(content);
+                    }
+                });
+                dialogInput.show(getSupportFragmentManager(), null);
+                break;
+            case R.id.rlDate:
+                DayPicker dayPicker = new DayPicker();
+                dayPicker.registerPicker(new DayPicker.DatePickerListener() {
+                    @Override
+                    public void onResultDate(Date date) {
+                        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+                        mExchange.setCreated(date);
+                    }
+                });
+                dayPicker.show(getSupportFragmentManager(), null);
+                break;
+            case R.id.rlTime:
+                TimePicker timePicker = new TimePicker();
+                timePicker.registerPicker(new TimePicker.TimePickerListener() {
+                    @Override
+                    public void onResultHour(int hour) {
+                        Date date = mExchange.getCreated();
+                        Date newDate = DateTimeUtils.getInstance().setHours(date, hour);
+                        mExchange.setCreated(newDate);
+                    }
+
+                    @Override
+                    public void onResultMinute(int minute) {
+                        Date date = mExchange.getCreated();
+                        Date newDate = DateTimeUtils.getInstance().setMinute(date, minute);
+                        mExchange.setCreated(newDate);
+                    }
+
+                    @Override
+                    public void onResultStringTime(String time) {
+                        tvTime.setText(time);
+                    }
+                });
+                timePicker.show(getSupportFragmentManager(), null);
+                break;
+            case R.id.rlAccount:
+                //TODO
                 break;
         }
     }
@@ -290,6 +369,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
         tvAccount.setText(String.valueOf(nameAccount));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
+        if (!mExchange.getAmount().startsWith("-")) {
+            tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
     }
 
     private void onLoadMap() {

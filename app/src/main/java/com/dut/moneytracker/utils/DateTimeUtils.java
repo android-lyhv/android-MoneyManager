@@ -57,6 +57,7 @@ public class DateTimeUtils {
         DateFormat formatMonthYear = new SimpleDateFormat("'Tháng' MM 'năm' yyyy", mLocale);
         return formatMonthYear.format(date);
     }
+
     public String getStringDayMonthUs(Date date) {
         DateFormat formatDayMonth = new SimpleDateFormat("dd/MM", Locale.US);
         return formatDayMonth.format(date);
@@ -146,5 +147,19 @@ public class DateTimeUtils {
 
     public boolean isValidateFromDateToDate(Date fromDate, Date toDate) {
         return !isSameDate(fromDate, toDate) && fromDate.getTime() < toDate.getTime();
+    }
+
+    public Date setHours(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        return calendar.getTime();
+    }
+
+    public Date setMinute(Date date, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MINUTE, minute);
+        return  calendar.getTime();
     }
 }

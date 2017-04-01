@@ -20,7 +20,7 @@ import java.util.Date;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 27/03/2017.
  */
-@EFragment(R.layout.custom_filter)
+@EFragment(R.layout.dialog_custom_filter)
 public class DialogCustomFilter extends DialogFragment {
     private static final String TAG = DialogCustomFilter.class.getSimpleName();
     @ViewById(R.id.tvToDate)

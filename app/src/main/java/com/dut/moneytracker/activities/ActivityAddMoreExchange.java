@@ -156,12 +156,12 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         mTimePicker.registerPicker(new TimePicker.TimePickerListener() {
             @Override
             public void onResultHour(int hour) {
-               // mDate.set(Calendar.HOUR_OF_DAY, hour);
+                mDate = DateTimeUtils.getInstance().setHours(mDate, hour);
             }
 
             @Override
             public void onResultMinute(int minute) {
-               // mDate.set(Calendar.MINUTE, minute);
+                mDate = DateTimeUtils.getInstance().setMinute(mDate, minute);
             }
 
             @Override

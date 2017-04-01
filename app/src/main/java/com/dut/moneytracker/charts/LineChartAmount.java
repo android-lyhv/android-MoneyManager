@@ -126,9 +126,11 @@ public class LineChartAmount {
         mChart.setDragEnabled(false);
         mChart.setTouchEnabled(false);
         mChart.getXAxis().setDrawGridLines(false);
+        mChart.setDescription(null);
         mChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter());
         mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
     }
+
     public void onDraw() {
         onSetupChart();
         mChart.invalidate();

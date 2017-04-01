@@ -30,6 +30,7 @@ import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
 import com.dut.moneytracker.fragment.FragmentLoopExchange;
 import com.dut.moneytracker.fragment.dashboard.FragmentDashboard;
+import com.dut.moneytracker.fragment.dashboard.FragmentDashboard_;
 import com.dut.moneytracker.fragment.exchanges.FragmentExchangesPager;
 import com.dut.moneytracker.fragment.exchanges.FragmentExchangesPager_;
 import com.dut.moneytracker.models.FilterManager;
@@ -277,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
     public void onLoadFragmentDashboard() {
-        mFragmentDashboard = new FragmentDashboard();
+        mFragmentDashboard = FragmentDashboard_.builder().build();
         requestReplaceFragment(mFragmentDashboard, DASHBOARD, false);
     }
 
@@ -352,7 +353,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             });
         } else {
             mFragmentExchangesPager.onReloadFragmentPager();
-
         }
     }
 }

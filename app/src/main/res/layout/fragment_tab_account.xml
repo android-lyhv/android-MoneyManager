@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keepScreenOn="false"
     android:background="@color/colorBackgroundMain">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,6 +14,7 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/cardViewCardAccount"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
@@ -99,7 +99,7 @@
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:paddingBottom="10dp"
-                    android:id="@+id/mChart"
+                    android:id="@+id/linchartAmount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/tvTitleChart" />
@@ -141,8 +141,8 @@
 
                 <TextView
                     android:id="@+id/tvMoreExchange"
-                    style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="match_parent"
+                    android:background="@drawable/selector_bg_white"
                     android:layout_height="60dp"
                     android:alpha="0.5"
                     android:gravity="center"

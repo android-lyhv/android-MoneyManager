@@ -33,7 +33,6 @@ import java.util.List;
  */
 @EFragment(R.layout.fragment_exchange)
 public class FragmentExchanges extends BaseFragment {
-    private static final String TAG = FragmentExchanges.class.getSimpleName();
     @ViewById(R.id.llPrevious)
     LinearLayout llPrevious;
     @ViewById(R.id.llNext)

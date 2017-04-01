@@ -25,10 +25,10 @@ import java.util.List;
  * Created by ly.ho on 09/03/2017.
  */
 
-public class ExchangeRecyclerAccountAdapter extends BaseRecyclerAdapter {
-    private static final String TAG = ExchangeRecyclerAccountAdapter.class.getSimpleName();
+public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
+    private static final String TAG = ExchangeRecyclerViewTabAdapter.class.getSimpleName();
 
-    public ExchangeRecyclerAccountAdapter(Context context, List objects) {
+    public ExchangeRecyclerViewTabAdapter(Context context, List objects) {
         super(context, objects);
     }
 

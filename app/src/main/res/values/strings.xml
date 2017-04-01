@@ -55,6 +55,7 @@
     <string name="action.fiter">step_filter</string>
     <string name="step_fitler">step_filter</string>
     <string name="extra_filter">extra_filter</string>
+    <string name="all_account">Tất cả</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>
