@@ -302,6 +302,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         intent.putExtra(getString(R.string.extra_more_add), mExchange);
         startActivityForResult(intent, RequestCode.MORE_ADD);
     }
+
     @Override
     public void onAddExpensesOrIncome() {
         if (!isAvailableIncomeAndExpense()) {
@@ -331,9 +332,11 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             mExchange.setCreated(new Date());
         }
         if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            String codeTransfer = UUID.randomUUID().toString();
             // Them giao dich account gui
             String amount = String.format(Locale.US, "-%s", tvAmount.getText().toString());
             mExchange.setAmount(amount);
+            mExchange.setCodeTransfer(codeTransfer);
             AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
@@ -342,6 +345,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             mExchange.setAmount(tvAmount.getText().toString());
             mExchange.setIdAccount(idTransfer);
             mExchange.setIdAccountTransfer(idAccount);
+            mExchange.setCodeTransfer(codeTransfer);
             AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
         } else {
             AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
