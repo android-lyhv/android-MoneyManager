@@ -35,7 +35,7 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
         @Override
         public void onReceive(Context context, Intent intent) {
             if (TextUtils.equals(intent.getAction(), context.getString(R.string.broadcast_filter))) {
-                int stepFilter = intent.getIntExtra(context.getString(R.string.step_fitler), 0);
+                int stepFilter = intent.getIntExtra(context.getString(R.string.step_filter), 0);
                 if (stepFilter == 1) {
                     nextPager();
                 }

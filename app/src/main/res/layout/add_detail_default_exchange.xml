@@ -134,7 +134,7 @@
                     android:clickable="true">
 
                     <TextView
-                        android:id="@+id/tvTitleSpinnerCurrency"
+                        android:id="@+id/tvTitleCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="Thể loại" />
@@ -149,8 +149,8 @@
                         android:id="@+id/tvCategoryName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@id/tvTitleSpinnerCurrency"
-                        android:layout_below="@+id/tvTitleSpinnerCurrency"
+                        android:layout_alignStart="@id/tvTitleCategory"
+                        android:layout_below="@+id/tvTitleCategory"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@android:color/transparent"
@@ -299,7 +299,7 @@
                     android:paddingTop="10dp">
 
                     <TextView
-                        android:id="@+id/tvTitleWallet"
+                        android:id="@+id/tvTitleAccount"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="Tài khoản" />
@@ -314,8 +314,8 @@
                         android:id="@+id/tvAccount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@id/tvTitleWallet"
-                        android:layout_below="@+id/tvTitleWallet"
+                        android:layout_alignStart="@id/tvTitleAccount"
+                        android:layout_below="@+id/tvTitleAccount"
                         android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
                         android:text="Cash"

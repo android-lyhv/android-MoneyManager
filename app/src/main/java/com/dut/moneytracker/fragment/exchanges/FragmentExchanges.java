@@ -8,9 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.activities.ActivityDetailExchange;
+import com.dut.moneytracker.activities.ActivityDetailExchange_;
+import com.dut.moneytracker.adapter.ClickItemListener;
+import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecyclerAdapter;
-import com.dut.moneytracker.constant.RequestCode;
+import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.constant.TypeView;
 import com.dut.moneytracker.fragment.BaseFragment;
 import com.dut.moneytracker.models.FilterManager;
@@ -22,6 +24,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -58,12 +61,17 @@ public class FragmentExchanges extends BaseFragment {
         mExchangeRecyclerAdapter = new ExchangeRecyclerAdapter(getContext(), new ArrayList());
         recyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerExchange.setAdapter(mExchangeRecyclerAdapter);
+        recyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
+            @Override
+            public void onClick(View view, int position) {
+                ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mExchangeRecyclerAdapter.getItem(position)).startForResult(ResultCode.DETAIL_EXCHANGE);
+            }
+        }));
     }
 
-    public void onShowDetailExchange(Exchange exchange) {
-        Intent intent = new Intent(getActivity(), ActivityDetailExchange.class);
-        intent.putExtra(getString(R.string.extra_account), exchange);
-        startActivityForResult(intent, RequestCode.DETAIL_EXCHANGE);
+    @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
+    void onResult() {
+        mExchangeRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Click(R.id.llNext)
@@ -95,7 +103,7 @@ public class FragmentExchanges extends BaseFragment {
 
     private void sendBroadcastFilter(int step) {
         Intent intent = new Intent(getContext().getString(R.string.broadcast_filter));
-        intent.putExtra(getContext().getString(R.string.step_fitler), step);
+        intent.putExtra(getContext().getString(R.string.step_filter), step);
         getContext().sendBroadcast(intent);
     }
 }

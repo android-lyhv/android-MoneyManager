@@ -29,8 +29,8 @@ public class DialogCustomFilter extends DialogFragment {
     TextView mTvFromDate;
     FilterListener mFilterListener;
     private DayPicker mDayPicker;
-    private Date fromDate;
-    private Date toDate;
+    private Date fromDate = new Date();
+    private Date toDate = new Date();
 
     @AfterViews
     void init() {

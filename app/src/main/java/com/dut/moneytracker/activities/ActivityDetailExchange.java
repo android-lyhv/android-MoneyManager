@@ -11,8 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -48,113 +46,92 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
+
 import java.util.Date;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 12/03/2017.
  */
-
-public class ActivityDetailExchange extends AppCompatActivity implements View.OnClickListener, DetailExchangeListener, OnMapReadyCallback {
-    private static final String TAG = ActivityDetailExchange.class.getSimpleName();
-    private Toolbar toolbar;
-    private RelativeLayout rlCategory;
-    private RelativeLayout rlAmount;
-    private RelativeLayout rlAccount;
-    private RelativeLayout rlCurrency;
-    private RelativeLayout rlDate;
-    private RelativeLayout rlTime;
-    private RelativeLayout rlLocation;
-    private RelativeLayout rlDescription;
-
-    private TextView tvCategory;
-    private TextView tvAmount;
-    private TextView tvAccount;
-    private TextView tvCurrency;
-    private TextView mTvDescription;
-    private TextView tvDate;
-    private TextView tvTime;
-    private ImageView imgLocation;
-    private MapView mapView;
-    //
-    private Exchange mExchange;
-    private Place mPlace;
-    //Google Map
+@EActivity(R.layout.activity_detail_exchange)
+@OptionsMenu(R.menu.menu_detail_exchange)
+public class ActivityDetailExchange extends AppCompatActivity implements DetailExchangeListener, OnMapReadyCallback {
+    static final String TAG = ActivityDetailExchange.class.getSimpleName();
+    @ViewById(R.id.toolbar)
+    Toolbar toolbar;
+    @ViewById(R.id.tvExchangeName)
+    TextView tvExchangeName;
+    @ViewById(R.id.tvCategoryName)
+    TextView tvCategoryName;
+    @ViewById(R.id.tvAmount)
+    TextView tvAmount;
+    @ViewById(R.id.tvAccount)
+    TextView tvAccount;
+    @ViewById(R.id.tvCurrency)
+    TextView tvCurrency;
+    @ViewById(R.id.tvDescription)
+    TextView mTvDescription;
+    @ViewById(R.id.tvDate)
+    TextView tvDate;
+    @ViewById(R.id.tvTime)
+    TextView tvTime;
+    @ViewById(R.id.mapView)
+    MapView mapView;
+    @ViewById(R.id.tvTitleCategory)
+    TextView mTvTitleCategory;
+    @ViewById(R.id.rlCategory)
+    RelativeLayout rlCategory;
+    @ViewById(R.id.rlAccount)
+    RelativeLayout rlAccount;
+    @ViewById(R.id.tvTitleAccount)
+    TextView tvTitleAccount;
+    @ViewById(R.id.imgEditCategory)
+    ImageView imgEditCategory;
+    @ViewById(R.id.imgEditAccount)
+    ImageView imgEditAccount;
+    @Extra
+    Exchange mExchange;
+    //GoogleMap
+    Place mPlace;
     GoogleMap mGoogleMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_exchange);
-        onLoadExtra();
-        initView(savedInstanceState);
-        onLoadDetailExchange();
+
     }
 
-    private void onLoadExtra() {
-        mExchange = getIntent().getParcelableExtra(getString(R.string.extra_account));
-        mPlace = mExchange.getPlace() != null ? mExchange.getPlace() : new Place();
-    }
-
-    private void initView(Bundle savedInstanceState) {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+    @AfterViews
+    void init() {
         setSupportActionBar(toolbar);
-        rlDescription = (RelativeLayout) findViewById(R.id.rlDescription);
-        rlDescription.setOnClickListener(this);
-        toolbar.setTitle(R.string.toolbar_detail_exchange);
+        setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
-        rlCategory = (RelativeLayout) findViewById(R.id.rlCategory);
-        rlCategory.setOnClickListener(this);
-        rlAmount = (RelativeLayout) findViewById(R.id.rlAmount);
-        rlAmount.setOnClickListener(this);
-        rlAccount = (RelativeLayout) findViewById(R.id.rlAccount);
-        rlAccount.setOnClickListener(this);
-        rlCurrency = (RelativeLayout) findViewById(R.id.rlCurrency);
-        rlCurrency.setOnClickListener(this);
-        rlDate = (RelativeLayout) findViewById(R.id.rlDate);
-        rlDate.setOnClickListener(this);
-        rlTime = (RelativeLayout) findViewById(R.id.rlTime);
-        rlTime.setOnClickListener(this);
-        rlLocation = (RelativeLayout) findViewById(R.id.rlLocation);
-        rlLocation.setOnClickListener(this);
-        tvCategory = (TextView) findViewById(R.id.tvCategoryName);
-        tvAmount = (TextView) findViewById(R.id.tvAmount);
-        tvAccount = (TextView) findViewById(R.id.tvAccount);
-        mTvDescription = (TextView) findViewById(R.id.tvDescription);
-        tvCurrency = (TextView) findViewById(R.id.tvCurrency);
-        tvDate = (TextView) findViewById(R.id.tvDate);
-        tvTime = (TextView) findViewById(R.id.tvTime);
-        imgLocation = (ImageView) findViewById(R.id.imgLocaiton);
-        imgLocation.setOnClickListener(this);
-        //Init Map
-        mapView = (MapView) findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
+        mPlace = mExchange.getPlace() != null ? mExchange.getPlace() : new Place();
+        onShowDetailExchange();
+        mapView.onCreate(new Bundle());
+        mapView.getMapAsync(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail_exchange, menu);
-        return super.onCreateOptionsMenu(menu);
+    @OptionsItem(android.R.id.home)
+    void onClickHomeBack() {
+        finish();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.actionSave:
-                onChangeExchange();
-                finish();
-                break;
-            case R.id.actionDelete:
-                onShowDialogConfirmDelete();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+    @OptionsItem(R.id.actionSave)
+    void onClickSave() {
+        onChangeExchange();
+        finish();
     }
 
-    private void onShowDialogConfirmDelete() {
+    @OptionsItem(R.id.actionDelete)
+    void onClickDelete() {
         DialogConfirm dialogConfirm = new DialogConfirm();
         dialogConfirm.setMessage(getString(R.string.dialog_confirm_delete_title));
         dialogConfirm.show(getSupportFragmentManager(), TAG);
@@ -169,89 +146,102 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.rlLocation:
-            case R.id.imgLocaiton:
-                onRequestPermissionMap();
-                break;
-            case R.id.rlCategory:
-                startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
-                break;
-            case R.id.rlAmount:
-                String amount = mExchange.getAmount();
-                if (amount.startsWith("-")) {
-                    amount = amount.substring(1);
-                }
-                DialogCalculator dialogCalculator = new DialogCalculator();
-                dialogCalculator.show(getFragmentManager(), null);
-                dialogCalculator.setAmount(amount);
-                dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
-                    @Override
-                    public void onResult(String amount) {
-                        if (mExchange.getAmount().startsWith("-")) {
-                            mExchange.setAmount("-" + amount);
-                        } else {
-                            mExchange.setAmount(amount);
-                        }
-                        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
-                    }
-                });
-                break;
-            case R.id.rlDescription:
-                DialogInput dialogInput = DialogInput_.builder().build();
-                dialogInput.register(new DialogInput.DescriptionListener() {
-                    @Override
-                    public void onResult(String content) {
-                        mTvDescription.setText(content);
-                        mExchange.setDescription(content);
-                    }
-                });
-                dialogInput.show(getSupportFragmentManager(), null);
-                break;
-            case R.id.rlDate:
-                DayPicker dayPicker = new DayPicker();
-                dayPicker.registerPicker(new DayPicker.DatePickerListener() {
-                    @Override
-                    public void onResultDate(Date date) {
-                        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
-                        mExchange.setCreated(date);
-                    }
-                });
-                dayPicker.show(getSupportFragmentManager(), null);
-                break;
-            case R.id.rlTime:
-                TimePicker timePicker = new TimePicker();
-                timePicker.registerPicker(new TimePicker.TimePickerListener() {
-                    @Override
-                    public void onResultHour(int hour) {
-                        Date date = mExchange.getCreated();
-                        Date newDate = DateTimeUtils.getInstance().setHours(date, hour);
-                        mExchange.setCreated(newDate);
-                    }
-
-                    @Override
-                    public void onResultMinute(int minute) {
-                        Date date = mExchange.getCreated();
-                        Date newDate = DateTimeUtils.getInstance().setMinute(date, minute);
-                        mExchange.setCreated(newDate);
-                    }
-
-                    @Override
-                    public void onResultStringTime(String time) {
-                        tvTime.setText(time);
-                    }
-                });
-                timePicker.show(getSupportFragmentManager(), null);
-                break;
-            case R.id.rlAccount:
-                //TODO
-                break;
-        }
+    @Click(R.id.rlLocation)
+    void onClickLocation() {
+        onRequestPermissionMap();
     }
 
-    private void showDialogPickPlace() {
+    @Click(R.id.rlCategory)
+    void onClickPickCategory() {
+        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            return;
+        }
+        startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
+    }
+
+    @Click(R.id.rlAmount)
+    void onClickAmount() {
+        String amount = mExchange.getAmount();
+        if (amount.startsWith("-")) {
+            amount = amount.substring(1);
+        }
+        DialogCalculator dialogCalculator = new DialogCalculator();
+        dialogCalculator.show(getFragmentManager(), null);
+        dialogCalculator.setAmount(amount);
+        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+            @Override
+            public void onResult(String amount) {
+                if (mExchange.getAmount().startsWith("-")) {
+                    mExchange.setAmount("-" + amount);
+                } else {
+                    mExchange.setAmount(amount);
+                }
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+            }
+        });
+    }
+
+    @Click(R.id.rlDescription)
+    void onClickDescription() {
+        DialogInput dialogInput = DialogInput_.builder().build();
+        dialogInput.register(new DialogInput.DescriptionListener() {
+            @Override
+            public void onResult(String content) {
+                mTvDescription.setText(content);
+                mExchange.setDescription(content);
+            }
+        });
+        dialogInput.show(getSupportFragmentManager(), null);
+    }
+
+    @Click(R.id.rlDate)
+    void onClickDate() {
+        DayPicker dayPicker = new DayPicker();
+        dayPicker.registerPicker(new DayPicker.DatePickerListener() {
+            @Override
+            public void onResultDate(Date date) {
+                tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+                mExchange.setCreated(date);
+            }
+        });
+        dayPicker.show(getSupportFragmentManager(), null);
+    }
+
+    @Click(R.id.rlTime)
+    void onClickTime() {
+        TimePicker timePicker = new TimePicker();
+        timePicker.registerPicker(new TimePicker.TimePickerListener() {
+            @Override
+            public void onResultHour(int hour) {
+                Date date = mExchange.getCreated();
+                Date newDate = DateTimeUtils.getInstance().setHours(date, hour);
+                mExchange.setCreated(newDate);
+            }
+
+            @Override
+            public void onResultMinute(int minute) {
+                Date date = mExchange.getCreated();
+                Date newDate = DateTimeUtils.getInstance().setMinute(date, minute);
+                mExchange.setCreated(newDate);
+            }
+
+            @Override
+            public void onResultStringTime(String time) {
+                tvTime.setText(time);
+            }
+        });
+        timePicker.show(getSupportFragmentManager(), null);
+    }
+
+    @Click(R.id.rlAccount)
+    void onCLickAccount() {
+        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            return;
+        }
+        //TODO
+    }
+
+    void showDialogPickPlace() {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
             startActivityForResult(builder.build(this), RequestCode.PICK_PLACE);
@@ -278,13 +268,13 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
                 Category category = data.getParcelableExtra(getString(R.string.extra_category));
                 String idCategory = category.getId();
                 String nameCategory = category.getName();
-                tvCategory.setText(nameCategory);
+                tvCategoryName.setText(nameCategory);
                 mExchange.setIdCategory(idCategory);
             }
         }
     }
 
-    private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
+    void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
         if (place == null) {
             return;
         }
@@ -340,16 +330,16 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onLoadDetailExchange() {
+    public void onShowDetailExchange() {
         switch (mExchange.getTypeExchange()) {
             case ExchangeType.INCOME:
             case ExchangeType.EXPENSES:
                 showDetailTypeIncomeAndExpenses();
+                break;
             case ExchangeType.TRANSFER:
-                //TODO
+                showDetailTypeTransfer();
                 break;
         }
-        onLoadMap();
     }
 
     @Override
@@ -361,9 +351,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
 
     private void showDetailTypeIncomeAndExpenses() {
         Category category = CategoryManager.getInstance().getCategoryById(mExchange.getIdCategory());
-        tvCategory.setText(category.getName());
+        tvCategoryName.setText(category.getName());
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
-        mTvDescription.setText(String.valueOf(mExchange.getDescription()));
+        mTvDescription.setText(mExchange.getDescription());
         tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
         String nameAccount = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
         tvAccount.setText(String.valueOf(nameAccount));
@@ -372,19 +362,49 @@ public class ActivityDetailExchange extends AppCompatActivity implements View.On
         if (!mExchange.getAmount().startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
+        if (mExchange.getTypeExchange() == ExchangeType.INCOME) {
+            tvExchangeName.setText(R.string.exchange_name_expense);
+        } else {
+            tvExchangeName.setText(R.string.exchange_name_income);
+        }
     }
 
-    private void onLoadMap() {
-        mapView.getMapAsync(this);
+    private void showDetailTypeTransfer() {
+        imgEditAccount.setVisibility(View.GONE);
+        imgEditCategory.setVisibility(View.GONE);
+        tvExchangeName.setText(R.string.exchange_name_transfer);
+        mTvTitleCategory.setText(R.string.account_send);
+        tvTitleAccount.setText(R.string.account_recever);
+        mTvDescription.setText(mExchange.getDescription());
+        tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
+        String amount = mExchange.getAmount();
+        if (amount.startsWith("-")) {
+            String accountSend = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
+            tvCategoryName.setText(accountSend);
+            String accountReceiver = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccountTransfer());
+            tvAccount.setText(accountReceiver);
+        } else {
+            String accountSend = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccountTransfer());
+            tvCategoryName.setText(accountSend);
+            String accountReceiver = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
+            tvAccount.setText(accountReceiver);
+        }
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+        tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
+        if (!mExchange.getAmount().startsWith("-")) {
+            tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
     }
 
-    private void onTargetLocationExchange() {
+
+    void onTargetLocationExchange() {
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
     }
 
-    private void updateMap() {
+    void updateMap() {
         mGoogleMap.clear();
         onTargetLocationExchange();
         mapView.refreshDrawableState();

@@ -47,6 +47,10 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
     void onBind(Context context, Exchange exchange) {
         tvDescription.setText(exchange.getDescription());
         tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
+        String amount = exchange.getAmount();
+        if (!amount.startsWith("-")) {
+            tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
+        }
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
         tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
         if (TextUtils.isEmpty(exchange.getDescription())) {
@@ -56,13 +60,11 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
             imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
             tvCategoryName.setText(category.getName());
-            if (exchange.getTypeExchange() == ExchangeType.INCOME) {
-                tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
-            }
         }
         if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
             imgCategory.setImageResource(R.drawable.ic_transfer);
             tvCategoryName.setText(context.getResources().getString(R.string.transfer));
         }
+
     }
 }

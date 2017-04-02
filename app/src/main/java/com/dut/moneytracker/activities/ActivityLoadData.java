@@ -1,6 +1,5 @@
 package com.dut.moneytracker.activities;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +9,8 @@ import android.widget.ProgressBar;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.GroupTag;
-import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.AppPreferences;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.CurrencyManager;
 import com.dut.moneytracker.models.realms.PaymentManager;
@@ -49,7 +48,7 @@ public class ActivityLoadData extends AppCompatActivity {
         onCreateCurrency();
         // The end start main
         AppPreferences.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
-        startActivity(new Intent(this, MainActivity.class));
+        MainActivity_.intent(this).start();
         finish();
     }
 
@@ -159,7 +158,6 @@ public class ActivityLoadData extends AppCompatActivity {
     class AsyncTaskLoadData extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            onLoadCategory();
             return null;
         }
 

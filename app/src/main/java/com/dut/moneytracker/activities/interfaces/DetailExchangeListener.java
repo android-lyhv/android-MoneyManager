@@ -6,6 +6,6 @@ package com.dut.moneytracker.activities.interfaces;
  */
 
 public interface DetailExchangeListener {
-    void onLoadDetailExchange();
+    void onShowDetailExchange();
     void onChangeExchange();
 }

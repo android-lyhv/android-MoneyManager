@@ -34,7 +34,7 @@
             android:name=".activities.ActivityEditAccount"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActivityDetailExchange"
+            android:name=".activities.ActivityDetailExchange_"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.UserInformationActivity"

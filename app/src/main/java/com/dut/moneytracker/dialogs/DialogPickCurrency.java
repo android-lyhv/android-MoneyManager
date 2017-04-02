@@ -35,7 +35,7 @@ public class DialogPickCurrency extends DialogFragment {
         final int[] selected = {0};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the dialog title
-        builder.setTitle(R.string.dialoag_title_currency)
+        builder.setTitle(R.string.dialog_title_currency)
                 .setSingleChoiceItems(list, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

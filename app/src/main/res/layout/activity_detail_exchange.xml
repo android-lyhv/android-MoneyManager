@@ -81,12 +81,13 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tvTitleSpinnerCurrency"
+                    android:id="@+id/tvTitleCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Thể loại" />
 
                 <ImageView
+                    android:id="@+id/imgEditCategory"
                     android:layout_width="@dimen/activity_detail_exchange.image.with"
                     android:layout_height="@dimen/activity_detail_exchange.image.height"
                     android:layout_alignParentEnd="true"
@@ -96,8 +97,8 @@
                     android:id="@+id/tvCategoryName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/tvTitleSpinnerCurrency"
-                    android:layout_below="@+id/tvTitleSpinnerCurrency"
+                    android:layout_alignStart="@id/tvTitleCategory"
+                    android:layout_below="@+id/tvTitleCategory"
                     android:background="@android:color/transparent"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
@@ -243,12 +244,13 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/tvTitleWallet"
+                    android:id="@+id/tvTitleAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Tài khoản" />
 
                 <ImageView
+                    android:id="@+id/imgEditAccount"
                     android:layout_width="@dimen/activity_detail_exchange.image.with"
                     android:layout_height="@dimen/activity_detail_exchange.image.height"
                     android:layout_alignParentEnd="true"
@@ -258,8 +260,8 @@
                     android:id="@+id/tvAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/tvTitleWallet"
-                    android:layout_below="@+id/tvTitleWallet"
+                    android:layout_alignStart="@id/tvTitleAccount"
+                    android:layout_below="@+id/tvTitleAccount"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:text="Cash"

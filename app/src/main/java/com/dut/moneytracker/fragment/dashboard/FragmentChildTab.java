@@ -1,6 +1,5 @@
 package com.dut.moneytracker.fragment.dashboard;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,14 +8,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.activities.ActivityDetailExchange;
+import com.dut.moneytracker.activities.ActivityDetailExchange_;
 import com.dut.moneytracker.activities.MainActivity;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
 import com.dut.moneytracker.charts.LineChartAmount;
 import com.dut.moneytracker.charts.ValueChartAmount;
-import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.fragment.BaseFragment;
@@ -31,6 +29,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -93,19 +92,12 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onShowDetailExchange(Exchange exchange) {
-        Intent intent = new Intent(getActivity(), ActivityDetailExchange.class);
-        intent.putExtra(getString(R.string.extra_account), exchange);
-        startActivityForResult(intent, RequestCode.DETAIL_EXCHANGE);
+        ActivityDetailExchange_.intent(FragmentChildTab.this).mExchange(exchange).startForResult(ResultCode.DETAIL_EXCHANGE);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case ResultCode.DETAIL_EXCHANGE:
-                mExchangeAdapter.notifyDataSetChanged();
-                break;
-        }
+    @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
+    void onResult() {
+        mExchangeAdapter.notifyDataSetChanged();
     }
 
     @Override

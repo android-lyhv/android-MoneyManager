@@ -41,7 +41,7 @@
     <string name="broadcast_filter">broadcast_filter</string>
     <string name="broadcast_objects_filter">broadcast_objects_filter</string>
     <string name="extra.account_list">Accounts</string>
-    <string name="dialoag.title.currency">Chọn tiền tệ</string>
+    <string name="dialog.title.currency">Chọn tiền tệ</string>
     <string name="dialog.title.account">Danh sách tài khoản</string>
     <string name="extra.category">extra_category</string>
     <string name="activity_add_exchange.title">Giao Dịch Mới</string>
@@ -52,10 +52,15 @@
     <string name="toolbar.detail_exchange">Thông tin chi tiết</string>
     <string name="dialog.confirm.delete.title">Xóa giao dịch này?</string>
     <string name="extra_more_add">extra_more_add</string>
-    <string name="action.fiter">step_filter</string>
-    <string name="step_fitler">step_filter</string>
+    <string name="action_filter">step_filter</string>
+    <string name="step_filter">step_filter</string>
     <string name="extra_filter">extra_filter</string>
     <string name="all_account">Tất cả</string>
+    <string name="exchange.name.income">Thu Nhập</string>
+    <string name="exchange.name.expense">Chi Tiêu</string>
+    <string name="exchange.name.transfer">Chuyển khoản</string>
+    <string name="account.send">Tải khoản gửi</string>
+    <string name="account.recever">Tài khoản nhận</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>
