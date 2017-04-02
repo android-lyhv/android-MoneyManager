@@ -14,7 +14,7 @@ import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecyclerAdapter;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.constant.TypeView;
-import com.dut.moneytracker.fragment.BaseFragment;
+import com.dut.moneytracker.fragment.base.BaseFragment;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;

@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.MainActivity_;
 import com.dut.moneytracker.adapter.exchanges.ExchangePagerAdapter;
-import com.dut.moneytracker.fragment.BaseFragment;
+import com.dut.moneytracker.fragment.base.BaseFragment;
 import com.dut.moneytracker.objects.Filter;
 
 import org.androidannotations.annotations.AfterViews;

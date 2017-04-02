@@ -1,4 +1,4 @@
-package com.dut.moneytracker.fragment;
+package com.dut.moneytracker.fragment.base;
 
 
 import android.support.v4.app.Fragment;

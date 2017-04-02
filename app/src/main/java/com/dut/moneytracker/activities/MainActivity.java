@@ -1,7 +1,6 @@
 package com.dut.moneytracker.activities;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,11 +27,12 @@ import com.dut.moneytracker.constant.TypeView;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
-import com.dut.moneytracker.fragment.FragmentLoopExchange;
 import com.dut.moneytracker.fragment.dashboard.FragmentDashboard;
 import com.dut.moneytracker.fragment.dashboard.FragmentDashboard_;
 import com.dut.moneytracker.fragment.exchanges.FragmentExchangesPager;
 import com.dut.moneytracker.fragment.exchanges.FragmentExchangesPager_;
+import com.dut.moneytracker.fragment.loopexchange.FragmentLoopExchange;
+import com.dut.moneytracker.fragment.loopexchange.FragmentLoopExchange_;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     static final String LOOP = "LOOP";
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @ViewById(R.id.fab)
-    FloatingActionButton mFabAddExchange;
     @ViewById(R.id.imgUserLogo)
     CircleImageView imgUserLogo;
     @ViewById(R.id.tvUserName)
@@ -161,16 +159,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             super.onBackPressed();
         }
     }
-
-    @Click(R.id.fab)
-    void onCLickFab() {
-        if (checkFragmentLoop()) {
-            startActivityAddLoopExchange();
-        } else {
-            startActivityAddExchange();
-        }
-    }
-
     @Click(R.id.rlProfile)
     void onCLickProfile() {
         checkCloseNavigation();
@@ -211,12 +199,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
-
-    void startActivityAddLoopExchange() {
-        Intent intent = new Intent(this, ActivityAddLoopExchange.class);
-        startActivity(intent);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -227,9 +209,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             case ResultCode.EDIT_ACCOUNT:
                 onResultEditAccount(data);
                 break;
-            case ResultCode.ADD_EXCHANGE:
-                onResultAddAccount();
-                break;
         }
     }
 
@@ -239,19 +218,9 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         startActivityForResult(intent, RequestCode.EDIT_ACCOUNT);
     }
 
-    void startActivityAddExchange() {
-        Intent intent = new Intent(this, ActivityAddExchange.class);
-        intent.putExtra(getString(R.string.extra_account), mAccount);
-        startActivityForResult(intent, RequestCode.ADD_EXCHANGE);
-    }
-
     void onResultEditAccount(Intent data) {
         Account account = data.getParcelableExtra(getString(R.string.extra_account));
         AccountManager.getInstance().insertOrUpdate(account);
-        mFragmentDashboard.notifyDataSetChanged();
-    }
-
-    void onResultAddAccount() {
         mFragmentDashboard.notifyDataSetChanged();
     }
 
@@ -283,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
     public void onLoadFragmentLoopExchange() {
-        mFragmentLoopExchange = new FragmentLoopExchange();
+        mFragmentLoopExchange = FragmentLoopExchange_.builder().build();
         requestReplaceFragment(mFragmentLoopExchange, LOOP, true);
     }
 
@@ -301,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     public boolean checkFragmentDashboard() {
         Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
         if (fragment instanceof FragmentDashboard) {
-            mFabAddExchange.setVisibility(View.VISIBLE);
             spinner.setVisibility(View.GONE);
             imgDateFilter.setVisibility(View.GONE);
             imgSettingAccount.setVisibility(View.VISIBLE);
@@ -314,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     public boolean checkFragmentExchanges() {
         Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGES);
         if (fragment instanceof FragmentExchangesPager) {
-            mFabAddExchange.setVisibility(View.GONE);
             spinner.setVisibility(View.VISIBLE);
             imgDateFilter.setVisibility(View.VISIBLE);
             imgSettingAccount.setVisibility(View.GONE);
@@ -327,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     public boolean checkFragmentLoop() {
         Fragment fragment = mFragmentManager.findFragmentByTag(LOOP);
         if (fragment instanceof FragmentLoopExchange) {
-            mFabAddExchange.setVisibility(View.VISIBLE);
             spinner.setVisibility(View.GONE);
             imgDateFilter.setVisibility(View.GONE);
             imgSettingAccount.setVisibility(View.GONE);

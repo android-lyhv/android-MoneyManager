@@ -21,7 +21,7 @@ public class DialogInput extends DialogFragment {
 
     @AfterViews
     void init() {
-
+      // no-of
     }
 
     public interface DescriptionListener {

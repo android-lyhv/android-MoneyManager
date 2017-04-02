@@ -1,18 +1,23 @@
 package com.dut.moneytracker.fragment.dashboard;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.activities.ActivityAddExchange;
 import com.dut.moneytracker.activities.MainActivity;
 import com.dut.moneytracker.activities.MainActivity_;
 import com.dut.moneytracker.adapter.BaseViewPagerAdapter;
-import com.dut.moneytracker.fragment.BaseFragment;
+import com.dut.moneytracker.constant.RequestCode;
+import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.fragment.base.BaseFragment;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
@@ -29,6 +34,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     @ViewById(R.id.viewpager)
     ViewPager mViewPager;
     private List<Account> mAccounts;
+    private int targetAccount;
     private BaseViewPagerAdapter mViewPagerTabAccountAdapter;
 
     @AfterViews
@@ -72,8 +78,8 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        int positionAccountSelected = tab.getPosition() == 0 ? 0 : tab.getPosition() - 1;
-        ((MainActivity_) getActivity()).registerAccount(mAccounts.get(positionAccountSelected));
+        targetAccount= tab.getPosition() == 0 ? 0 : tab.getPosition() - 1;
+        ((MainActivity_) getActivity()).registerAccount(mAccounts.get(targetAccount));
     }
 
     @Override
@@ -101,5 +107,22 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     @Override
     public void onClickCardAccount(int position) {
         mViewPager.setCurrentItem(position);
+    }
+
+    @Click(R.id.fab)
+    void onClickAddExchange() {
+        Intent intent = new Intent(getActivity(), ActivityAddExchange.class);
+        intent.putExtra(getString(R.string.extra_account), mAccounts.get(targetAccount));
+        startActivityForResult(intent, RequestCode.ADD_EXCHANGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case ResultCode.ADD_EXCHANGE:
+                notifyDataSetChanged();
+                break;
+        }
     }
 }

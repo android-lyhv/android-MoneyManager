@@ -18,7 +18,7 @@ import com.dut.moneytracker.charts.LineChartAmount;
 import com.dut.moneytracker.charts.ValueChartAmount;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
-import com.dut.moneytracker.fragment.BaseFragment;
+import com.dut.moneytracker.fragment.base.BaseFragment;
 import com.dut.moneytracker.models.AppPreferences;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CurrencyManager;
