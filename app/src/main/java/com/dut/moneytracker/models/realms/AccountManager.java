@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -25,8 +24,9 @@ import io.realm.Sort;
 
 public class AccountManager extends RealmHelper implements AccountListener {
     private static AccountManager accountManager;
+
     public static AccountManager getInstance() {
-        if (accountManager==null){
+        if (accountManager == null) {
             accountManager = new AccountManager();
         }
         return accountManager;
@@ -37,7 +37,7 @@ public class AccountManager extends RealmHelper implements AccountListener {
     }
 
     @Override
-    public List<Account> getListAccount() {
+    public List<Account> getAccounts() {
         realm.beginTransaction();
         RealmResults<Account> realmResults = realm.where(Account.class).findAll();
         realmResults.sort("created", Sort.ASCENDING);
@@ -47,32 +47,18 @@ public class AccountManager extends RealmHelper implements AccountListener {
     }
 
     @Override
-    public String getAmountAvailableByAccount(String id) {
+    public String getAmountAvailableByAccount(String idAccount) {
+        BigDecimal bigDecimal = new BigDecimal(getInitAmountByAccount(idAccount));
         realm.beginTransaction();
-        Account account = realm.where(Account.class).equalTo("id", id).findFirst();
-        BigDecimal bigDecimal = new BigDecimal(account.getInitAmount());
-        RealmList<Exchange> exchanges = account.getExchanges();
+        RealmResults<Exchange> exchanges = realm.where(Exchange.class).equalTo("idAccount", idAccount).findAll();
         for (Exchange exchange : exchanges) {
             bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
         }
         realm.commitTransaction();
         return bigDecimal.toString();
     }
-
-    public Date findDate(Date date) {
-        realm.beginTransaction();
-        RealmResults<Exchange> resultsExchange = realm.where(Exchange.class).findAllSorted("created", Sort.ASCENDING);
-        for (Exchange exchange : resultsExchange) {
-            if (DateTimeUtils.getInstance().isSameDate(date, exchange.getCreated())) {
-                date = exchange.getCreated();
-            }
-        }
-        realm.commitTransaction();
-        return date;
-    }
-
     public String getAmountAvailableByDate(Date date) {
-        BigDecimal bigDecimal = new BigDecimal(getTotalInitAllAmount());
+        BigDecimal bigDecimal = new BigDecimal(getTotalInitAmount());
         realm.beginTransaction();
         RealmResults<Exchange> resultsExchange = realm.where(Exchange.class).findAllSorted("created", Sort.ASCENDING);
         List<Exchange> newExchanges = new ArrayList<>();
@@ -91,10 +77,10 @@ public class AccountManager extends RealmHelper implements AccountListener {
     public String getAmountAvailableByDate(String idAccount, Date date) {
         BigDecimal bigDecimal = new BigDecimal(getInitAmountByAccount(idAccount));
         realm.beginTransaction();
-        RealmList<Exchange> realmList = realm.where(Account.class).equalTo("id", idAccount).findFirst().getExchanges();
-        realmList.sort("created", Sort.ASCENDING);
+        RealmResults<Exchange> exchanges = realm.where(Exchange.class).equalTo("idAccount", idAccount).findAll();
+        exchanges.sort("created", Sort.ASCENDING);
         List<Exchange> newExchanges = new ArrayList<>();
-        for (Exchange exchange : realmList) {
+        for (Exchange exchange : exchanges) {
             if (DateTimeUtils.getInstance().isSameDate(date, exchange.getCreated()) || exchange.getCreated().before(date)) {
                 newExchanges.add(exchange);
             }
@@ -108,13 +94,9 @@ public class AccountManager extends RealmHelper implements AccountListener {
 
 
     @Override
-    public String getAllAmountAvailable() {
-        BigDecimal bigDecimal = new BigDecimal("0");
+    public String getTotalAmountAvailable() {
+        BigDecimal bigDecimal = new BigDecimal(getTotalInitAmount());
         realm.beginTransaction();
-        RealmResults<Account> resultsAccount = realm.where(Account.class).findAll();
-        for (Account account : resultsAccount) {
-            bigDecimal = bigDecimal.add(new BigDecimal(account.getInitAmount()));
-        }
         RealmResults<Exchange> resultsExchange = realm.where(Exchange.class).findAll();
         for (Exchange exchange : resultsExchange) {
             bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
@@ -123,19 +105,29 @@ public class AccountManager extends RealmHelper implements AccountListener {
         return bigDecimal.toString();
     }
 
-    @Override
+   /* @Override
     public void addExchange(Account account, Exchange exchange) {
         realm.beginTransaction();
         account.getExchanges().add(exchange);
         realm.commitTransaction();
-    }
+    }*/
 
-    public String getTotalInitAllAmount() {
+    public String getTotalInitAmount() {
+        realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
         RealmResults<Account> resultsAccount = realm.where(Account.class).findAll();
         for (Account account : resultsAccount) {
             bigDecimal = bigDecimal.add(new BigDecimal(account.getInitAmount()));
         }
+        realm.commitTransaction();
+        return bigDecimal.toString();
+    }
+
+    public String getInitAmountByAccount(String idAccount) {
+        realm.beginTransaction();
+        Account resultsAccount = realm.where(Account.class).equalTo("id", idAccount).findFirst();
+        BigDecimal bigDecimal = new BigDecimal(resultsAccount.getInitAmount());
+        realm.commitTransaction();
         return bigDecimal.toString();
     }
 
@@ -147,12 +139,6 @@ public class AccountManager extends RealmHelper implements AccountListener {
         return bigDecimal.toString();
     }
 
-    public String getInitAmountByAccount(String idAccount) {
-        Account resultsAccount = realm.where(Account.class).like("id", idAccount).findFirst();
-        BigDecimal bigDecimal = new BigDecimal(resultsAccount.getInitAmount());
-        return bigDecimal.toString();
-    }
-
     public String getAccountNameById(String id) {
         realm.beginTransaction();
         Account account = realm.where(Account.class).equalTo("id", id).findFirst();
@@ -161,14 +147,14 @@ public class AccountManager extends RealmHelper implements AccountListener {
         return name;
     }
 
-    public void addExchange(String idAccount, Exchange exchange) {
+   /* public void addExchange(String idAccount, Exchange exchange) {
         realm.beginTransaction();
         Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
         if (account != null) {
             account.getExchanges().add(exchange);
         }
         realm.commitTransaction();
-    }
+    }*/
 
     public void createDefaultAccount(Context context) {
         Account account = new Account();

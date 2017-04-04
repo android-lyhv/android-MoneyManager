@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import java.util.Date;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import lombok.Data;
@@ -28,7 +27,6 @@ public class Debit extends RealmObject implements Parcelable {
     private Date expires;
     private String name;
     private String description;
-    private RealmList<Exchange> exchanges;
 
     public Debit() {
     }
@@ -49,7 +47,6 @@ public class Debit extends RealmObject implements Parcelable {
         dest.writeLong(this.expires != null ? this.expires.getTime() : -1);
         dest.writeString(this.name);
         dest.writeString(this.description);
-        dest.writeList(this.exchanges);
     }
 
     protected Debit(Parcel in) {
@@ -64,8 +61,6 @@ public class Debit extends RealmObject implements Parcelable {
         this.expires = tmpExpires == -1 ? null : new Date(tmpExpires);
         this.name = in.readString();
         this.description = in.readString();
-        this.exchanges = new RealmList<>();
-        in.readList(this.exchanges, Exchange.class.getClassLoader());
     }
 
     public static final Creator<Debit> CREATOR = new Creator<Debit>() {

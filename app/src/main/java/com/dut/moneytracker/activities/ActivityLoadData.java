@@ -71,10 +71,10 @@ public class ActivityLoadData extends AppCompatActivity {
     }
 
     private void onCreateDefaultAccount() {
-        if (mAccountManager.getListAccount().isEmpty()) {
+        if (mAccountManager.getAccounts().isEmpty()) {
             mAccountManager.createDefaultAccount(this);
         }
-        Log.d(TAG, "onCreateDefaultAccount: " + mAccountManager.getListAccount().size());
+        Log.d(TAG, "onCreateDefaultAccount: " + mAccountManager.getAccounts().size());
     }
 
     private void onLoadCategory() {

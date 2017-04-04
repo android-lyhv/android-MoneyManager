@@ -43,7 +43,7 @@ public class SpinnerAccountManger implements Spinner.OnItemSelectedListener {
     }
 
     private void initAccounts() {
-        mAccounts = AccountManager.getInstance().getListAccount();
+        mAccounts = AccountManager.getInstance().getAccounts();
         if (mAccounts == null) {
             mAccounts = new ArrayList<>();
         }
