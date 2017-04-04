@@ -10,13 +10,15 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
+import org.androidannotations.annotations.EFragment;
+
 import java.util.List;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 07/03/2017.
  */
-
+@EFragment
 public class DialogPickAccount extends DialogFragment {
     private List<Account> accounts = AccountManager.getInstance().getListAccount();
     private AccountListener accountListener;

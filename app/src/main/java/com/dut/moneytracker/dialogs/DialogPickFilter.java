@@ -6,7 +6,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.dut.moneytracker.constant.TypeView;
+import com.dut.moneytracker.constant.TypeFilter;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -15,7 +15,7 @@ import com.dut.moneytracker.constant.TypeView;
 
 public class DialogPickFilter extends DialogFragment {
     private String[] filter = new String[]{"Tất cả", "Ngày", "Tháng", "Năm", "Khoảng thời gian"};
-    private int[] id = new int[]{TypeView.ALL, TypeView.DAY, TypeView.MONTH, TypeView.YEAR, TypeView.CUSTOM};
+    private int[] id = new int[]{TypeFilter.ALL, TypeFilter.DAY, TypeFilter.MONTH, TypeFilter.YEAR, TypeFilter.CUSTOM};
     private int mIdFilter = 0;
     private FilterListener filterListener;
 

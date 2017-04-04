@@ -96,8 +96,15 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     }
 
     @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
-    void onResult() {
-        mExchangeAdapter.notifyDataSetChanged();
+    void onResult(int resultCode) {
+        if (resultCode == ResultCode.DELETE_EXCHANGE) {
+            int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
+            final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimitByAccount(mAccount.getId(), limit);
+            mExchangeAdapter.setObjects(exchanges);
+            mExchangeAdapter.notifyDataSetChanged();
+        } else {
+            mExchangeAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

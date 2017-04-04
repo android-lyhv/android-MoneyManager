@@ -5,7 +5,7 @@ package com.dut.moneytracker.constant;
  * Created by ly.ho on 15/03/2017.
  */
 
-public class TypeView {
+public class TypeFilter {
     public static final int ALL = 0;
     public static final int DAY = 1;
     public static final int WEAK = 2;

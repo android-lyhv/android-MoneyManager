@@ -22,11 +22,14 @@ import io.realm.RealmResults;
  */
 
 public class CurrencyManager extends RealmHelper {
-    private static CurrencyManager currencyManager = new CurrencyManager();
+    private static CurrencyManager currencyManager;
     private static final String FILE_NAME_JSON = "default_currency_map.json";
     private static final String TAG = CurrencyManager.class.getSimpleName();
 
     public static CurrencyManager getInstance() {
+        if (currencyManager==null){
+            currencyManager = new CurrencyManager();
+        }
         return currencyManager;
     }
 

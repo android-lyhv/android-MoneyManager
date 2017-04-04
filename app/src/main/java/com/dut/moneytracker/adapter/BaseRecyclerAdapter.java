@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
@@ -24,6 +22,9 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
      * @param object The object to add at the end of the array.
      */
     public void add(final T object) {
+        if (mObjects == null) {
+            mObjects = new ArrayList<>();
+        }
         mObjects.add(object);
         notifyItemInserted(getItemCount() - 1);
     }
@@ -32,6 +33,9 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
      * Remove all elements from the list.
      */
     public void clear() {
+        if (mObjects == null) {
+            mObjects = new ArrayList<>();
+        }
         final int size = getItemCount();
         mObjects.clear();
         notifyItemRangeRemoved(0, size);
@@ -47,6 +51,10 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     public void removeItem(final int position) {
+        if (mObjects == null) {
+            mObjects = new ArrayList<>();
+            return;
+        }
         mObjects.remove(position);
         notifyItemRemoved(position);
     }
@@ -69,11 +77,18 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
      * @param index  The index at which the object must be inserted.
      */
     public void insert(final T object, int index) {
+        if (mObjects == null) {
+            mObjects = new ArrayList<>();
+        }
         mObjects.add(index, object);
         notifyItemInserted(index);
     }
 
     public void addItems(final List<T> objects) {
+        if (mObjects == null) {
+            mObjects = new ArrayList<>();
+            return;
+        }
         mObjects.clear();
         mObjects.addAll(objects);
         notifyDataSetChanged();
@@ -85,22 +100,19 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
      * @param object The object to remove.
      */
     public void remove(T object) {
+        if (mObjects == null) {
+            return;
+        }
         final int position = getPosition(object);
         mObjects.remove(object);
         notifyItemRemoved(position);
     }
 
-    /**
-     * Sorts the content of this adapter using the specified comparator.
-     *
-     * @param comparator The comparator used to sort the objects contained in this adapter.
-     */
-    public void sort(Comparator<? super T> comparator) {
-        Collections.sort(mObjects, comparator);
-        notifyItemRangeChanged(0, getItemCount());
-    }
-
     public Context getContext() {
         return context;
+    }
+
+    public void setObjects(List<T> mObjects) {
+        this.mObjects = mObjects;
     }
 }

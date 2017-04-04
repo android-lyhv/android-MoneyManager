@@ -129,9 +129,15 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
-    void onResult() {
-        mCardAccountAdapter.notifyDataSetChanged();
-        mExchangeAdapter.notifyDataSetChanged();
+    void onResult(int resultCode) {
+        if (resultCode == ResultCode.DELETE_EXCHANGE) {
+            int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
+            final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimit(limit);
+            mExchangeAdapter.setObjects(exchanges);
+            mExchangeAdapter.notifyDataSetChanged();
+        }else {
+            mExchangeAdapter.notifyDataSetChanged();
+        }
     }
 
     @Click(R.id.tvMoreExchange)

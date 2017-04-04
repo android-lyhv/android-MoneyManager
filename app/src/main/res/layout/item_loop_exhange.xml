@@ -5,73 +5,93 @@
     android:background="@drawable/selector_bg_white"
     android:clickable="true">
 
-    <ImageView
-        android:id="@+id/imgCategory"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true"
-        android:layout_margin="10dp"
-        android:src="@drawable/ic_house_service" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@id/imgCategory"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp">
 
-        <TextView
-            android:id="@+id/tvCategoryName"
+        <ImageView
+            android:id="@+id/imgCategory"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_house_service" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ăn Uống"
-            android:textColor="@android:color/black"
-            android:textSize="17dp" />
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@id/imgCategory"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvDescription"
+            <TextView
+                android:id="@+id/tvCategoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Ăn Uống"
+                android:textColor="@android:color/black"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Hoa qua" />
+
+            <TextView
+                android:id="@+id/tvTypeLoop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Weak" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hoa qua" />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvTypeLoop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Weak" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:padding="5dp"
+                android:text="-10000"
+                android:textColor="@android:color/holo_red_light" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
-        android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvLastCreated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:padding="5dp"
+                android:text="07/02/2017" />
 
-        <TextView
-            android:id="@+id/tvAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="end"
-            android:text="-10000"
-            android:textColor="@android:color/holo_red_light" />
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchLoop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="5dp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvCreated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:gravity="end"
-            android:text="07/02/2017" />
+    </RelativeLayout>
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/switchLoop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-    </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorBackgroundLine" />
 </RelativeLayout>

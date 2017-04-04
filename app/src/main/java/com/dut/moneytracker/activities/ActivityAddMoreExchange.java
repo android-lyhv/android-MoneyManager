@@ -9,14 +9,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,7 +44,7 @@ import java.util.Date;
  * Created by ly.ho on 17/03/2017.
  */
 
-public class ActivityAddMoreExchange extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, OnMapReadyCallback {
+public class ActivityAddMoreExchange extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
     private static final String TAG = ActivityAddMoreExchange.class.getSimpleName();
     private EditText mEditDescription;
     private TextView mTvDate;
@@ -56,13 +53,10 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
     private TextView tvAmount;
     private DayPicker mDayPicker;
     private TimePicker mTimePicker;
-    private SwitchCompat mSwitchCompat;
     private Exchange mExchange;
     private Place mPlace;
     private Date mDate;
     private MapView mapView;
-    private AppCompatSpinner mAppCompatSpinner;
-    private SpinnerTypeLoopManger spinnerTypeLoopManger;
     //Google Map
     GoogleMap mGoogleMap;
 
@@ -136,12 +130,9 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         mTvTime.setOnClickListener(this);
         rlLocation = (RelativeLayout) findViewById(R.id.rlLocation);
         rlLocation.setOnClickListener(this);
-        mSwitchCompat = (SwitchCompat) findViewById(R.id.switchLoop);
-        mSwitchCompat.setOnCheckedChangeListener(this);
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), "VND"));
         mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
         mTvTime.setText(DateTimeUtils.getInstance().getStringTime(mDate));
-        mAppCompatSpinner = (AppCompatSpinner) findViewById(R.id.spinnerTypeLoop);
         mDayPicker = new DayPicker();
         mEditDescription.setText(null == mExchange.getDescription() ? "" : mExchange.getDescription());
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
@@ -169,15 +160,6 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
                 mTvTime.setText(time);
             }
         });
-        spinnerTypeLoopManger = new SpinnerTypeLoopManger(this, mAppCompatSpinner);
-        spinnerTypeLoopManger.registerSelectedItem(new SpinnerTypeLoopManger.ItemSelectedListener() {
-            @Override
-            public void onResultTypeLoop(int type) {
-                mExchange.setTypeLoop(type);
-            }
-        });
-        spinnerTypeLoopManger.setSelectItem(mExchange.getTypeLoop());
-        mSwitchCompat.setChecked(mExchange.isLoop());
     }
 
     @Override
@@ -195,11 +177,6 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
                 onRequestPermissionMap();
                 break;
         }
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mExchange.setLoop(isChecked);
     }
 
     public void onRequestPermissionMap() {

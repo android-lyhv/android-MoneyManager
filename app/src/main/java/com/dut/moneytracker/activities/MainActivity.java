@@ -23,7 +23,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.interfaces.MainListener;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
-import com.dut.moneytracker.constant.TypeView;
+import com.dut.moneytracker.constant.TypeFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentExchangesPager mFragmentExchangesPager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
-    private Filter mFilter;
-
     @AfterViews
     void init() {
         mFilter = FilterManager.getInstance().getFilterDefault();
@@ -97,7 +95,10 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         initView();
         onLoadProfile();
         onLoadFragmentDashboard();
+        mToolbar.setTitle(getString(R.string.main_account));
     }
+
+    private Filter mFilter;
 
 
     void initView() {
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mFragmentExchangesPager == null) {
             return;
         }
-        if (mFilter.getViewType() == TypeView.CUSTOM) {
+        if (mFilter.getViewType() == TypeFilter.CUSTOM) {
             mDialogCustomFilter.show(mFragmentManager, TAG);
             mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
                 @Override

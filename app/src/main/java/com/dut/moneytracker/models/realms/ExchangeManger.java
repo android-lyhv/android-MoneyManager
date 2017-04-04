@@ -1,7 +1,7 @@
 package com.dut.moneytracker.models.realms;
 
 import com.dut.moneytracker.charts.ValueChartAmount;
-import com.dut.moneytracker.constant.TypeView;
+import com.dut.moneytracker.constant.TypeFilter;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
@@ -20,9 +20,12 @@ import io.realm.Sort;
  * Created by ly.ho on 06/03/2017.
  */
 public class ExchangeManger extends RealmHelper {
-    private static ExchangeManger ourInstance = new ExchangeManger();
+    private static ExchangeManger ourInstance;
 
     public static ExchangeManger getInstance() {
+        if (ourInstance==null){
+            ourInstance = new ExchangeManger();
+        }
         return ourInstance;
     }
 
@@ -123,17 +126,17 @@ public class ExchangeManger extends RealmHelper {
 
     public List<Exchange> getExchangesFilterByAccount(String accountID, Date date, int viewType) {
         switch (viewType) {
-            case TypeView.ALL:
+            case TypeFilter.ALL:
                 return getExchangesByAccount(accountID);
-            case TypeView.DAY:
+            case TypeFilter.DAY:
                 return getExchangesSameDay(accountID, date);
-            case TypeView.MONTH:
+            case TypeFilter.MONTH:
                 return getExchangesSameMonth(accountID, date);
-            case TypeView.YEAR:
+            case TypeFilter.YEAR:
                 return getExchangesSameYear(accountID, date);
-            case TypeView.CUSTOM:
+            case TypeFilter.CUSTOM:
                 //TODO
-            case TypeView.WEAK:
+            case TypeFilter.WEAK:
                 //TODO
         }
         return new ArrayList<>();
@@ -141,17 +144,17 @@ public class ExchangeManger extends RealmHelper {
 
     public List<Exchange> getExchangesFilter(Date date, int viewType) {
         switch (viewType) {
-            case TypeView.ALL:
+            case TypeFilter.ALL:
                 return getExchanges();
-            case TypeView.DAY:
+            case TypeFilter.DAY:
                 return getExchangesSameDay(date);
-            case TypeView.MONTH:
+            case TypeFilter.MONTH:
                 return getExchangesSameMonth(date);
-            case TypeView.YEAR:
+            case TypeFilter.YEAR:
                 return getExchangesSameYear(date);
-            case TypeView.CUSTOM:
+            case TypeFilter.CUSTOM:
                 //TODO
-            case TypeView.WEAK:
+            case TypeFilter.WEAK:
                 //TODO
         }
         return new ArrayList<>();

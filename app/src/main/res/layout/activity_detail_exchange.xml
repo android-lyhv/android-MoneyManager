@@ -374,7 +374,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imgLocaiton"
+                    android:id="@+id/imgLocation"
                     android:layout_width="@dimen/activity_detail_exchange.image.with"
                     android:layout_height="@dimen/activity_detail_exchange.image.height"
                     android:layout_alignParentEnd="true"
@@ -385,7 +385,7 @@
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_below="@id/imgLocaiton"
+                    android:layout_below="@id/imgLocation"
                     android:layout_marginTop="10dp" />
             </RelativeLayout>
 

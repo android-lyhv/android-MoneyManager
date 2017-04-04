@@ -1,6 +1,6 @@
 package com.dut.moneytracker.models;
 
-import com.dut.moneytracker.constant.TypeView;
+import com.dut.moneytracker.constant.TypeFilter;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Exchange;
@@ -17,9 +17,12 @@ import java.util.Locale;
  */
 public class FilterManager {
     private static final String TAG = FilterManager.class.getSimpleName();
-    private static FilterManager ourInstance = new FilterManager();
+    private static FilterManager ourInstance;
 
     public static FilterManager getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new FilterManager();
+        }
         return ourInstance;
     }
 
@@ -30,7 +33,7 @@ public class FilterManager {
         Filter filter = new Filter();
         filter.setRequestByAccount(false);
         filter.setDateFilter(new Date());
-        filter.setViewType(TypeView.DAY);
+        filter.setViewType(TypeFilter.DAY);
         return filter;
     }
 
@@ -39,7 +42,7 @@ public class FilterManager {
         filter.setRequestByAccount(true);
         filter.setAccountId(idAccount);
         filter.setDateFilter(new Date());
-        filter.setViewType(TypeView.DAY);
+        filter.setViewType(TypeFilter.DAY);
         return filter;
     }
 
@@ -48,19 +51,19 @@ public class FilterManager {
         String convert = CurrencyUtils.getInstance().getStringMoneyType(amount, "VND");
         String date = "";
         switch (filter.getViewType()) {
-            case TypeView.ALL:
+            case TypeFilter.ALL:
                 date = "Tất cả";
                 break;
-            case TypeView.DAY:
+            case TypeFilter.DAY:
                 date = DateTimeUtils.getInstance().getStringFullDate(filter.getDateFilter());
                 break;
-            case TypeView.MONTH:
+            case TypeFilter.MONTH:
                 date = DateTimeUtils.getInstance().getStringMonthYear(filter.getDateFilter());
                 break;
-            case TypeView.YEAR:
+            case TypeFilter.YEAR:
                 date = DateTimeUtils.getInstance().getStringYear(filter.getDateFilter());
                 break;
-            case TypeView.CUSTOM:
+            case TypeFilter.CUSTOM:
                 String fromDate = DateTimeUtils.getInstance().getStringDateUs(filter.getFormDate());
                 String toDate = DateTimeUtils.getInstance().getStringDateUs(filter.getToDate());
                 date = String.format(Locale.US, "%s đến %s", fromDate, toDate);
@@ -73,7 +76,7 @@ public class FilterManager {
     public Filter changeFilter(final Filter currentFilter, int steps) {
         Filter filter = copyFilter(currentFilter);
         int type = filter.getViewType();
-        if (type == TypeView.ALL || type == TypeView.CUSTOM) {
+        if (type == TypeFilter.ALL || type == TypeFilter.CUSTOM) {
             return filter;
         }
         Date newDate = DateTimeUtils.getInstance().changeDateStep(filter.getDateFilter(), filter.getViewType(), steps);

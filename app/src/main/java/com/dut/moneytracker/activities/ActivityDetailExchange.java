@@ -23,6 +23,7 @@ import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
+import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -105,7 +106,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @AfterViews
@@ -132,7 +132,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
-        DialogConfirm dialogConfirm = new DialogConfirm();
+        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
         dialogConfirm.setMessage(getString(R.string.dialog_confirm_delete_title));
         dialogConfirm.show(getSupportFragmentManager(), TAG);
         dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
@@ -140,6 +140,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             public void onClickResult(boolean value) {
                 if (value) {
                     ExchangeManger.getInstance().deleteExchangeById(mExchange.getId());
+                    setResult(ResultCode.DELETE_EXCHANGE);
                     finish();
                 }
             }
@@ -363,9 +364,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
         if (mExchange.getTypeExchange() == ExchangeType.INCOME) {
-            tvExchangeName.setText(R.string.exchange_name_expense);
-        } else {
             tvExchangeName.setText(R.string.exchange_name_income);
+        } else {
+            tvExchangeName.setText(R.string.exchange_name_expense);
         }
     }
 

@@ -3,7 +3,7 @@
     <color name="colorPrimary">#03a879</color>
     <color name="colorPrimaryDark">#FF028761</color>
     <color name="colorAccent">#03a879</color>
-    <color name="colorBackgroundLine">#c4c4c4</color>
+    <color name="colorBackgroundLine">#d9d8d8</color>
     <color name="colorBackgroundMain">#ededed</color>
     <color name="defaultAccountColor">#FF028761</color>
     <color name="white_select">#05000000</color>
@@ -11,4 +11,5 @@
     <color name="color_main_select">#c4baa8</color>
     <color name="color_main">#BFAC8A</color>
     <color name="color_normal">#B9B9B9</color>
+    <color name="color_background_tab_unselect">#ededed</color>
 </resources>

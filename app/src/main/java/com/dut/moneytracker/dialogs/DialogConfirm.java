@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
+import org.androidannotations.annotations.EFragment;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 14/03/2017.
  */
-
+@EFragment
 public class DialogConfirm extends DialogFragment {
     String message;
 

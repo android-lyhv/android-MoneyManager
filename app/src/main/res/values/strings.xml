@@ -61,6 +61,17 @@
     <string name="exchange.name.transfer">Chuyển khoản</string>
     <string name="account.send">Tải khoản gửi</string>
     <string name="account.recever">Tài khoản nhận</string>
+    <string name="main.account">Tài khoản</string>
+    <string name="input_money">Nhap so tien!</string>
+    <string name="input_account">Chon tai khoan</string>
+    <string name="input_category">Chon the loai</string>
+    <string name="loop_week">"Tuần"</string>
+    <string name="loop_day">"Ngày"</string>
+    <string name="loop_month">"Tháng"</string>
+    <string name="loop_year">"Năm"</string>
+    <string name="exchange_all">Tất cả</string>
+    <string name="extra_loop_exchange">extra_loop_exchange</string>
+    <string name="delete_exchange">Xoa giao dich nay</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>
