@@ -467,7 +467,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             return false;
         }
         if (TextUtils.isEmpty(tvAmount.getText().toString())) {
-            Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
