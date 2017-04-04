@@ -1,4 +1,4 @@
-package com.dut.moneytracker.models.type;
+package com.dut.moneytracker.constant;
 
 /**
  * Copyright@ AsianTech.Inc

@@ -13,6 +13,7 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.fragment.base.BaseFragment;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 import com.dut.moneytracker.objects.ExchangeLooper;
+import com.dut.moneytracker.recevier.GenerateManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -33,9 +34,11 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     @ViewById(R.id.recyclerDefaultExchange)
     RecyclerView mRecyclerView;
     private LoopExchangeAdapter mAdapter;
+    private GenerateManager mGnerateManager;
 
     @AfterViews
     void init() {
+        mGnerateManager = new GenerateManager(getActivity().getApplicationContext());
         initLoopAdapter();
         loadListLoopExchange();
     }
@@ -48,7 +51,7 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     }
 
     private void loadListLoopExchange() {
-        List<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance().getListLoopExchange();
+        List<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance(getActivity().getApplicationContext()).getListLoopExchange();
         mAdapter.addItems(exchangeLoopers);
     }
 
@@ -82,7 +85,7 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
 
     @OnActivityResult(RequestCode.DETAIL_LOOP_EXCHANGE)
     void onResultDetail() {
-        List<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance().getListLoopExchange();
+        List<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance(getActivity().getApplicationContext()).getListLoopExchange();
         mAdapter.setObjects(exchangeLoopers);
         mAdapter.notifyDataSetChanged();
     }

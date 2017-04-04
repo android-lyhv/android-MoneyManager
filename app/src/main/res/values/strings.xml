@@ -72,6 +72,7 @@
     <string name="exchange_all">Tất cả</string>
     <string name="extra_loop_exchange">extra_loop_exchange</string>
     <string name="delete_exchange">Xoa giao dich nay</string>
+    <string name="id_exchange_looper">extra_id_looper</string>
     <!--PaymentType-->
     <string-array name="payment_type">
         <item>Tiền Mặt</item>

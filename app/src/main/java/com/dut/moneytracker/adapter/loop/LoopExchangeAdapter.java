@@ -18,7 +18,7 @@ import com.dut.moneytracker.adapter.BaseRecyclerAdapter;
 import com.dut.moneytracker.constant.TypeLoop;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.models.type.ExchangeType;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.utils.DateTimeUtils;

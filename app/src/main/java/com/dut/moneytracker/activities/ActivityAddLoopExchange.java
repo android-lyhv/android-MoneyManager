@@ -12,13 +12,13 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.constant.TypeLoop;
@@ -29,7 +29,6 @@ import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
-import com.dut.moneytracker.models.type.ExchangeType;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
@@ -101,6 +100,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         mExchangeLoop.setCreated(new Date());
         mExchangeLoop.setTypeLoop(TypeLoop.DAY);
         mExchangeLoop.setLoop(switchCompat.isChecked());
+        mExchangeLoop.setAmount("");
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
         mPlace = new Place();
         initToolbar();
@@ -113,7 +113,6 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         spinnerTypeLoopManger.registerSelectedItem(new SpinnerTypeLoopManger.ItemSelectedListener() {
             @Override
             public void onResultTypeLoop(int type) {
-                Log.d(TAG, "onResultTypeLoop: " + type);
                 mExchangeLoop.setTypeLoop(type);
             }
         });
@@ -156,11 +155,16 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         }
         mExchangeLoop.setPlace(mPlace);
         mExchangeLoop.setTypeExchange(mType);
-        ExchangeLoopManager.getInstance().insertNewExchangeLoop(mExchangeLoop);
+        mExchangeLoop.setCurrencyCode("VND");
+        onSaveDatabase();
+        finish();
+    }
+
+    private void onSaveDatabase() {
+        ExchangeLoopManager.getInstance(getApplicationContext()).insertNewExchangeLoop(mExchangeLoop);
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_loop_exchange), mExchangeLoop);
         setResult(ResultCode.ADD_LOOP_EXCHANGE, intent);
-        finish();
     }
 
     @Click(R.id.tvTabIncome)

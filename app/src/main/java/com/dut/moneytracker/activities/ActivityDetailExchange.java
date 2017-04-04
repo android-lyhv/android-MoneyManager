@@ -29,7 +29,7 @@ import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
-import com.dut.moneytracker.models.type.ExchangeType;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Place;
