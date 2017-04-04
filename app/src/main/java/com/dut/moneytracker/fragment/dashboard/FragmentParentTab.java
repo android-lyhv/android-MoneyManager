@@ -81,7 +81,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     private void onLoadCardAccount() {
-        mAccounts = AccountManager.getInstance().getListAccount();
+        mAccounts = AccountManager.getInstance().getAccounts();
         mCardAccountAdapter = new CardAccountAdapter(getContext(), mAccounts);
         mRecyclerViewCardAccount.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mRecyclerViewCardAccount.setNestedScrollingEnabled(false);
@@ -123,7 +123,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @Override
     public void onShowAmount() {
         mTvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
-        String money = CurrencyUtils.getInstance().getStringMoneyType(AccountManager.getInstance().getAllAmountAvailable(),
+        String money = CurrencyUtils.getInstance().getStringMoneyType(AccountManager.getInstance().getTotalAmountAvailable(),
                 CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
         mTvAmount.setText(money);
     }

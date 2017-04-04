@@ -20,7 +20,7 @@ import java.util.List;
  */
 @EFragment
 public class DialogPickAccount extends DialogFragment {
-    private List<Account> accounts = AccountManager.getInstance().getListAccount();
+    private List<Account> accounts = AccountManager.getInstance().getAccounts();
     private AccountListener accountListener;
 
     public interface AccountListener {

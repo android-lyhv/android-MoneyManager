@@ -337,7 +337,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             String amount = String.format(Locale.US, "-%s", tvAmount.getText().toString());
             mExchange.setAmount(amount);
             mExchange.setCodeTransfer(codeTransfer);
-            AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
+            AccountManager.getInstance().insertOrUpdate(mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
             String idAccount = mExchange.getIdAccount();
@@ -346,9 +346,9 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             mExchange.setIdAccount(idTransfer);
             mExchange.setIdAccountTransfer(idAccount);
             mExchange.setCodeTransfer(codeTransfer);
-            AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
+            AccountManager.getInstance().insertOrUpdate(mExchange);
         } else {
-            AccountManager.getInstance().addExchange(mExchange.getIdAccount(), mExchange);
+            AccountManager.getInstance().insertOrUpdate(mExchange);
         }
         setResult(ResultCode.ADD_EXCHANGE);
         finish();

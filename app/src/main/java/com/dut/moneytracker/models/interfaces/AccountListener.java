@@ -1,7 +1,6 @@
 package com.dut.moneytracker.models.interfaces;
 
 import com.dut.moneytracker.objects.Account;
-import com.dut.moneytracker.objects.Exchange;
 
 import java.util.List;
 
@@ -11,11 +10,9 @@ import java.util.List;
  */
 
 public interface AccountListener {
-    List<Account> getListAccount();
+    List<Account> getAccounts();
 
     String getAmountAvailableByAccount(String id);
 
-    String getAllAmountAvailable();
-
-    void addExchange(Account account, Exchange exchange);
+    String getTotalAmountAvailable();
 }

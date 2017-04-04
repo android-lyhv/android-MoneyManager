@@ -22,6 +22,7 @@ public class Exchange extends RealmObject implements Parcelable {
     private int typeExchange;
     private String idAccount;
     private String idCategory;
+    private String idDebit;
     private String idAccountTransfer;
     private String codeTransfer;
     private String currencyCode;

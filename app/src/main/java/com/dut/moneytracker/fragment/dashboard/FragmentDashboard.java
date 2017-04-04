@@ -43,7 +43,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                mAccounts = AccountManager.getInstance().getListAccount();
+                mAccounts = AccountManager.getInstance().getAccounts();
                 initLoadListFragmentAccount();
             }
         });

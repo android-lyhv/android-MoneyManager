@@ -2,7 +2,6 @@ package com.dut.moneytracker.models.realms;
 
 import com.dut.moneytracker.charts.ValueChartAmount;
 import com.dut.moneytracker.constant.TypeFilter;
-import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -51,8 +49,8 @@ public class ExchangeManger extends RealmHelper {
 
     public List<Exchange> getExchangesByAccount(String accountID) {
         realm.beginTransaction();
-        Account account = realm.where(Account.class).equalTo("id", accountID).findFirst();
-        List<Exchange> exchanges = account.getExchanges();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
+        List<Exchange> exchanges = realmResults.subList(0, realmResults.size());
         realm.commitTransaction();
         return exchanges;
     }
@@ -74,11 +72,11 @@ public class ExchangeManger extends RealmHelper {
     public List<Exchange> getExchangesLimitByAccount(String accountID, int limit) {
         realm.beginTransaction();
         List<Exchange> exchanges;
-        RealmList<Exchange> realmList = realm.where(Account.class).equalTo("id", accountID).findFirst().getExchanges();
+        RealmResults<Exchange> realmList = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
         if (limit >= realmList.size()) {
-            exchanges = realmList.sort("created", Sort.DESCENDING).subList(0, realmList.size());
+            exchanges = realmList.subList(0, realmList.size());
         } else {
-            exchanges = realmList.sort("created", Sort.DESCENDING).subList(0, limit);
+            exchanges = realmList.subList(0, limit);
         }
         realm.commitTransaction();
         return exchanges;
@@ -214,9 +212,7 @@ public class ExchangeManger extends RealmHelper {
 
     private List<Exchange> getExchangesSameDay(String accountID, Date date) {
         realm.beginTransaction();
-        Account account = realm.where(Account.class).equalTo("id", accountID).findFirst();
-        RealmList<Exchange> exchanges = account.getExchanges();
-        RealmResults<Exchange> realmResults = exchanges.sort("created", Sort.DESCENDING);
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
         List<Exchange> result = new ArrayList<>();
         for (Exchange exchange : realmResults) {
             if (DateTimeUtils.getInstance().isSameDate(exchange.getCreated(), date)) {
@@ -229,9 +225,7 @@ public class ExchangeManger extends RealmHelper {
 
     private List<Exchange> getExchangesSameMonth(String accountID, Date date) {
         realm.beginTransaction();
-        Account account = realm.where(Account.class).equalTo("id", accountID).findFirst();
-        RealmList<Exchange> exchanges = account.getExchanges();
-        RealmResults<Exchange> realmResults = exchanges.sort("created", Sort.DESCENDING);
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
         List<Exchange> result = new ArrayList<>();
         for (Exchange exchange : realmResults) {
             if (DateTimeUtils.getInstance().isSameMonth(exchange.getCreated(), date)) {
@@ -244,9 +238,7 @@ public class ExchangeManger extends RealmHelper {
 
     private List<Exchange> getExchangesSameYear(String accountID, Date date) {
         realm.beginTransaction();
-        Account account = realm.where(Account.class).equalTo("id", accountID).findFirst();
-        RealmList<Exchange> exchanges = account.getExchanges();
-        RealmResults<Exchange> realmResults = exchanges.sort("created", Sort.DESCENDING);
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
         List<Exchange> result = new ArrayList<>();
         for (Exchange exchange : realmResults) {
             if (DateTimeUtils.getInstance().isSameYear(exchange.getCreated(), date)) {
