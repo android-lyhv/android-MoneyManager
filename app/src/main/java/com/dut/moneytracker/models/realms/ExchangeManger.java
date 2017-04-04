@@ -23,7 +23,7 @@ public class ExchangeManger extends RealmHelper {
     private static ExchangeManger ourInstance;
 
     public static ExchangeManger getInstance() {
-        if (ourInstance==null){
+        if (ourInstance == null) {
             ourInstance = new ExchangeManger();
         }
         return ourInstance;
@@ -110,21 +110,16 @@ public class ExchangeManger extends RealmHelper {
     public List<Exchange> getExchanges(Filter filter) {
         boolean isRequestAccount = filter.isRequestByAccount();
         if (!isRequestAccount) {
-            return getExchangesFilter(filter.getDateFilter(), filter.getViewType());
+            return getExchangesFilter(filter);
         } else {
-            return getExchangesFilterByAccount(filter.getAccountId(), filter.getDateFilter(), filter.getViewType());
-
+            return getExchangesFilterByAccount(filter);
         }
     }
 
-    /**
-     * @param accountID account id
-     * @param date      time for filter
-     * @param viewType  month, year, day..
-     * @return
-     */
-
-    public List<Exchange> getExchangesFilterByAccount(String accountID, Date date, int viewType) {
+    public List<Exchange> getExchangesFilterByAccount(Filter filter) {
+        int viewType = filter.getViewType();
+        String accountID = filter.getAccountId();
+        Date date = filter.getDateFilter();
         switch (viewType) {
             case TypeFilter.ALL:
                 return getExchangesByAccount(accountID);
@@ -135,14 +130,16 @@ public class ExchangeManger extends RealmHelper {
             case TypeFilter.YEAR:
                 return getExchangesSameYear(accountID, date);
             case TypeFilter.CUSTOM:
-                //TODO
-            case TypeFilter.WEAK:
-                //TODO
+                Date fromDate = filter.getFormDate();
+                Date toDate = filter.getToDate();
+                return getExchangesCustom(accountID, fromDate, toDate);
         }
         return new ArrayList<>();
     }
 
-    public List<Exchange> getExchangesFilter(Date date, int viewType) {
+    public List<Exchange> getExchangesFilter(Filter filter) {
+        int viewType = filter.getViewType();
+        Date date = filter.getDateFilter();
         switch (viewType) {
             case TypeFilter.ALL:
                 return getExchanges();
@@ -153,11 +150,27 @@ public class ExchangeManger extends RealmHelper {
             case TypeFilter.YEAR:
                 return getExchangesSameYear(date);
             case TypeFilter.CUSTOM:
-                //TODO
-            case TypeFilter.WEAK:
-                //TODO
+                Date fromDate = filter.getFormDate();
+                Date toDate = filter.getToDate();
+                return getExchangesCustom(fromDate, toDate);
         }
         return new ArrayList<>();
+    }
+
+    private List<Exchange> getExchangesCustom(String idAccount, Date fromDate, Date toDate) {
+        realm.beginTransaction();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).like("idAccount", idAccount).between("created", fromDate, toDate).findAllSorted("created", Sort.DESCENDING);
+        List<Exchange> exchangesNew = realmResults.subList(0, realmResults.size());
+        realm.commitTransaction();
+        return exchangesNew;
+    }
+
+    private List<Exchange> getExchangesCustom(Date fromDate, Date toDate) {
+        realm.beginTransaction();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).between("created", fromDate, toDate).findAllSorted("created", Sort.DESCENDING);
+        List<Exchange> exchangesNew = realmResults.subList(0, realmResults.size());
+        realm.commitTransaction();
+        return exchangesNew;
     }
 
     private List<Exchange> getExchangesSameDay(Date date) {

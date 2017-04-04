@@ -46,7 +46,7 @@ public class FragmentExchanges extends BaseFragment {
     RecyclerView recyclerExchange;
     @FragmentArg
     Filter mFilter;
-    private ExchangeRecyclerAdapter mExchangeRecyclerAdapter;
+    private ExchangeRecyclerAdapter mAdapter;
     private List<Exchange> mExchanges;
 
     @AfterViews
@@ -58,20 +58,22 @@ public class FragmentExchanges extends BaseFragment {
 
 
     private void initRecyclerView() {
-        mExchangeRecyclerAdapter = new ExchangeRecyclerAdapter(getContext(), new ArrayList());
+        mAdapter = new ExchangeRecyclerAdapter(getContext(), new ArrayList());
         recyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerExchange.setAdapter(mExchangeRecyclerAdapter);
+        recyclerExchange.setAdapter(mAdapter);
         recyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
             @Override
             public void onClick(View view, int position) {
-                ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mExchangeRecyclerAdapter.getItem(position)).startForResult(ResultCode.DETAIL_EXCHANGE);
+                ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(ResultCode.DETAIL_EXCHANGE);
             }
         }));
     }
 
     @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
     void onResult() {
-        mExchangeRecyclerAdapter.notifyDataSetChanged();
+        mExchanges = ExchangeManger.getInstance().getExchanges(mFilter);
+        mAdapter.setObjects(mExchanges);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Click(R.id.llNext)
@@ -85,7 +87,7 @@ public class FragmentExchanges extends BaseFragment {
     }
 
     private void updateExchangeRecyclerView() {
-        mExchangeRecyclerAdapter.addItems(mExchanges);
+        mAdapter.addItems(mExchanges);
         changeDateLabel();
     }
 
