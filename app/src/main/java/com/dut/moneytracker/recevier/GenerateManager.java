@@ -19,7 +19,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 
 public class GenerateManager {
-    private static final long PENDING_DAY = 24 * 60 * 60 * 1000L;
+    private static final long PENDING_DAY = 24 * 24 * 60 * 1000L;
     private static final long PENDING_WEEK = 7 * PENDING_DAY;
     private static final long PENDING_MONTH = 30 * PENDING_DAY;
     private static final long PENDING_YEAH = 365 * PENDING_DAY;
@@ -56,5 +56,12 @@ public class GenerateManager {
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_YEAH + step, PENDING_YEAH, pendingIntent);
                 break;
         }
+    }
+
+    public void removePendingLoopExchange(int idLoopExchange) {
+        Intent intent = new Intent(mContext, ReceiveGenerateExchange.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idLoopExchange, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pendingIntent.cancel();
+        mAlarmManager.cancel(pendingIntent);
     }
 }

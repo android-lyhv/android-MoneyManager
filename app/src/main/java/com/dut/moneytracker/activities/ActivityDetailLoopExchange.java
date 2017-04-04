@@ -99,6 +99,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private GoogleMap mGoogleMap;
     private Place mPlace;
     private int mTypeExchange;
+    private int currentTypeLoop = -1;
 
     @AfterViews
     void init() {
@@ -109,6 +110,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void onShowData() {
+        currentTypeLoop = mExchangeLoop.getTypeLoop();
         mPlace = mExchangeLoop.getPlace();
         mTypeExchange = mExchangeLoop.getTypeExchange();
         switchCompat.setChecked(mExchangeLoop.isLoop());
@@ -185,7 +187,11 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void onSaveDataBase() {
-        ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(mExchangeLoop);
+        if (currentTypeLoop != mExchangeLoop.getTypeLoop()) {
+            ExchangeLoopManager.getInstance(getApplicationContext()).upDateIfTypeLoopChanged(mExchangeLoop);
+        } else {
+            ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(mExchangeLoop);
+        }
         setResult(ResultCode.ADD_LOOP_EXCHANGE);
         finish();
     }

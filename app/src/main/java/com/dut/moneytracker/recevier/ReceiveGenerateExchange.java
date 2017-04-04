@@ -15,11 +15,14 @@ import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 
 public class ReceiveGenerateExchange extends BroadcastReceiver {
     private static final String TAG = ReceiveGenerateExchange.class.getSimpleName();
+    private static final int DEFAULT_VALUE = -1;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        int idExchangeLooper = intent.getIntExtra(context.getString(R.string.id_exchange_looper), -1);
+        int idExchangeLooper = intent.getIntExtra(context.getString(R.string.id_exchange_looper), DEFAULT_VALUE);
         Log.d(TAG, "onReceive pending:" + idExchangeLooper);
-        ExchangeLoopManager.getInstance(context).generateNewExchange(idExchangeLooper);
+        if (idExchangeLooper != DEFAULT_VALUE) {
+            ExchangeLoopManager.getInstance(context).generateNewExchange(idExchangeLooper);
+        }
     }
 }

@@ -100,7 +100,6 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         mExchangeLoop.setCreated(new Date());
         mExchangeLoop.setTypeLoop(TypeLoop.DAY);
         mExchangeLoop.setLoop(switchCompat.isChecked());
-        mExchangeLoop.setAmount("");
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
         mPlace = new Place();
         initToolbar();
@@ -177,7 +176,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        if (!TextUtils.isEmpty(mExchangeLoop.getAmount())) {
+            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        }
     }
 
     @Click(R.id.tvTabExpense)
@@ -190,7 +191,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        if (!TextUtils.isEmpty(mExchangeLoop.getAmount())) {
+            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        }
     }
 
     @Click(R.id.tvTabTransfer)
@@ -203,7 +206,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        if (!TextUtils.isEmpty(mExchangeLoop.getAmount())) {
+            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        }
     }
 
     @Click(R.id.rlCategory)

@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -49,6 +48,7 @@ public class ExchangeLoopManager extends RealmHelper {
         ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
         exchangeLooper.deleteFromRealm();
         realm.commitTransaction();
+        mGenerateManager.removePendingLoopExchange(id);
     }
 
     public ExchangeLooper getExchangeLooperById(int id) {
@@ -69,24 +69,24 @@ public class ExchangeLoopManager extends RealmHelper {
     public Exchange copyExchange(ExchangeLooper exchangeLooper) {
         Exchange exchange = new Exchange();
         exchange.setId(UUID.randomUUID().toString());
+        exchange.setAmount(exchangeLooper.getAmount());
+        exchange.setDescription(exchangeLooper.getDescription());
+        exchange.setPlace(exchangeLooper.getPlace());
+        exchange.setCurrencyCode(exchangeLooper.getCurrencyCode());
+        exchange.setCreated(new Date());
         if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
             exchange.setTypeExchange(exchangeLooper.getTypeExchange());
             exchange.setIdAccount(exchangeLooper.getIdAccount());
-            exchange.setCreated(new Date());
             exchange.setIdCategory(exchangeLooper.getIdCategory());
-            exchange.setAmount(exchangeLooper.getAmount());
-            exchange.setDescription(exchangeLooper.getDescription());
-            exchange.setPlace(exchangeLooper.getPlace());
-            exchange.setCurrencyCode(exchangeLooper.getCurrencyCode());
         } else {
             //TODO
         }
         return exchange;
     }
 
-    @Override
-    public void insertOrUpdate(RealmObject object) {
-        super.insertOrUpdate(object);
+    public void upDateIfTypeLoopChanged(ExchangeLooper exchangeLooper) {
+        insertOrUpdate(exchangeLooper);
+        mGenerateManager.pendingGenerateExchange(exchangeLooper);
     }
 
     public void insertNewExchangeLoop(ExchangeLooper exchangeLooper) {
