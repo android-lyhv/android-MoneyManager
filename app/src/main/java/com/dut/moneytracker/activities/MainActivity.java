@@ -49,10 +49,16 @@ import java.util.Date;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener {
-    static final String TAG = MainActivity.class.getSimpleName();
-    static final String DASHBOARD = "DASHBOARD";
-    static final String EXCHANGES = "EXCHANGES";
-    static final String LOOP = "LOOP";
+    public enum FragmentTag {
+        DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE
+    }
+
+    FragmentTag mFragmentTag;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String DASHBOARD = "DASHBOARD";
+    private static final String EXCHANGES = "EXCHANGES";
+    private static final String LOOP = "EXCHANGE_LOOPS";
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @ViewById(R.id.imgUserLogo)
@@ -87,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentExchangesPager mFragmentExchangesPager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
+
     @AfterViews
     void init() {
         mFilter = FilterManager.getInstance().getFilterDefault();
@@ -103,7 +110,32 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     void initView() {
         setSupportActionBar(mToolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                switch (mFragmentTag) {
+                    case DASHBOARD:
+                        onLoadFragmentDashboard();
+                        break;
+                    case EXCHANGES:
+                        onLoadFragmentAllExchanges();
+                        break;
+                    case EXCHANGE_LOOPS:
+                        onLoadFragmentLoopExchange();
+                        break;
+                    case PROFILE:
+                        startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), RequestCode.PROFILE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mFragmentTag = null;
+            }
+        };
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
         initSpinnerFilter();
@@ -160,34 +192,34 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             super.onBackPressed();
         }
     }
-    @Click(R.id.rlProfile)
-    void onCLickProfile() {
-        checkCloseNavigation();
-        startActivityForResult(new Intent(this, UserInformationActivity.class), RequestCode.PROFILE);
-    }
 
     @Click(R.id.imgDateFilter)
     void onClickFilter() {
-        checkCloseNavigation();
         onShowDialogPickFilterDate();
+    }
+
+    @Click(R.id.rlProfile)
+    void onCLickProfile() {
+        mFragmentTag = FragmentTag.PROFILE;
+        onCloseNavigation();
     }
 
     @Click(R.id.llDashBoard)
     void onClickDashBoard() {
-        checkCloseNavigation();
-        onLoadFragmentDashboard();
+        mFragmentTag = FragmentTag.DASHBOARD;
+        onCloseNavigation();
     }
 
     @Click(R.id.llRecode)
     void onClickRecodes() {
-        checkCloseNavigation();
-        onLoadFragmentAllExchanges();
+        mFragmentTag = FragmentTag.EXCHANGES;
+        onCloseNavigation();
     }
 
     @Click(R.id.llDefaultExchange)
     void onClickDefault() {
-        checkCloseNavigation();
-        onLoadFragmentLoopExchange();
+        mFragmentTag = FragmentTag.EXCHANGE_LOOPS;
+        onCloseNavigation();
     }
 
     @Click(R.id.imgSettingAccount)
@@ -195,11 +227,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         startActivityEditAccount();
     }
 
-    private void checkCloseNavigation() {
+    private void onCloseNavigation() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
