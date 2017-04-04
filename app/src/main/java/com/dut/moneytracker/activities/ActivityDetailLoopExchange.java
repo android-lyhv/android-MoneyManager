@@ -12,6 +12,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ import java.util.Locale;
 @EActivity(R.layout.activity_add_loop_exchange)
 @OptionsMenu(R.menu.menu_detail_exchange)
 public class ActivityDetailLoopExchange extends AppCompatActivity implements OnMapReadyCallback {
+    private static final String TAG = ActivityDetailLoopExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvTabIncome)
@@ -179,16 +181,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         }
         mExchangeLoop.setPlace(mPlace);
         mExchangeLoop.setTypeExchange(mTypeExchange);
-        String amount = mExchangeLoop.getAmount();
-        if (amount.startsWith("-")) {
-            if (mExchangeLoop.getTypeExchange() == ExchangeType.INCOME) {
-                mExchangeLoop.setAmount(amount.substring(1));
-            }
-        } else {
-            if (mExchangeLoop.getTypeExchange() != ExchangeType.INCOME) {
-                mExchangeLoop.setAmount(String.format("-%s", amount));
-            }
-        }
+        Log.d(TAG, "onClickSave: "+ mExchangeLoop.getTypeExchange());
         ExchangeLoopManager.getInstance().insertOrUpdate(mExchangeLoop);
         setResult(ResultCode.ADD_LOOP_EXCHANGE);
         finish();
@@ -209,7 +202,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         });
         dialogConfirm.show(getSupportFragmentManager(), null);
     }
-
     @Click(R.id.tvTabIncome)
     void onClickTabIncome() {
         mTypeExchange = ExchangeType.INCOME;
@@ -220,6 +212,10 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
+        if (mExchangeLoop.getAmount().startsWith("-")){
+            mExchangeLoop.setAmount(mExchangeLoop.getAmount().substring(1));
+        }
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabExpense)
@@ -232,6 +228,11 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
+        if (!mExchangeLoop.getAmount().startsWith("-")){
+            mExchangeLoop.setAmount(String.format(Locale.US,"-%s",mExchangeLoop.getAmount()));
+        }
+        Log.d(TAG, "onClickTabExpense: "+ mExchangeLoop.getAmount());
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabTransfer)
@@ -244,6 +245,11 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
+        if (!mExchangeLoop.getAmount().startsWith("-")){
+            mExchangeLoop.setAmount(String.format(Locale.US,"-%s",mExchangeLoop.getAmount()));
+        }
+        Log.d(TAG, "onClickTabExpense: "+ mExchangeLoop.getAmount());
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.rlCategory)
@@ -263,12 +269,12 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(amount, "VND"));
                 if (mTypeExchange == ExchangeType.INCOME) {
                     mExchangeLoop.setAmount(amount);
                 } else {
                     mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
                 }
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
             }
         });
     }

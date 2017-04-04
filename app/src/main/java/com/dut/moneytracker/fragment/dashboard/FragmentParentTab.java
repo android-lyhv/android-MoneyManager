@@ -49,6 +49,11 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     CardAccountListener cardAccountListener;
+    NotificationListener notificationListener;
+
+    public void registerNotification(NotificationListener notificationListner){
+        this.notificationListener = notificationListner;
+    }
 
     public void registerCardAccountListener(CardAccountListener cardAccountListener) {
         this.cardAccountListener = cardAccountListener;
@@ -130,15 +135,17 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
     void onResult(int resultCode) {
-        if (resultCode == ResultCode.DELETE_EXCHANGE) {
+       /* if (resultCode == ResultCode.DELETE_EXCHANGE) {
             int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
             final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimit(limit);
             mExchangeAdapter.setObjects(exchanges);
             mExchangeAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             mExchangeAdapter.notifyDataSetChanged();
-        }
+        }*/
+        notificationListener.onNotification();
     }
+
 
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {

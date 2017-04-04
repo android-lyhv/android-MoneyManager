@@ -54,6 +54,11 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @FragmentArg
     Account mAccount;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
+    NotificationListener notificationListener;
+
+    public void registerNotification(NotificationListener notificationListner) {
+        this.notificationListener = notificationListner;
+    }
 
     @AfterViews
     void init() {
@@ -76,7 +81,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadExchanges() {
-        int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
+        final int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
         final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimitByAccount(mAccount.getId(), limit);
         mExchangeAdapter = new ExchangeRecyclerViewTabAdapter(getContext(), exchanges);
         mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -97,14 +102,15 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
     void onResult(int resultCode) {
-        if (resultCode == ResultCode.DELETE_EXCHANGE) {
-            int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
+     /*   if (resultCode == ResultCode.DELETE_EXCHANGE) {
+            final int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
             final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimitByAccount(mAccount.getId(), limit);
             mExchangeAdapter.setObjects(exchanges);
             mExchangeAdapter.notifyDataSetChanged();
         } else {
             mExchangeAdapter.notifyDataSetChanged();
-        }
+        }*/
+        notificationListener.onNotification();
     }
 
     @Override

@@ -28,7 +28,7 @@ import java.util.List;
  * Created by ly.ho on 14/03/2017.
  */
 @EFragment(R.layout.fragment_exchange_account)
-public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener {
+public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener, NotificationListener {
     @ViewById(R.id.tabLayout)
     TabLayout mTabLayout;
     @ViewById(R.id.viewpager)
@@ -63,11 +63,13 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
         if (size > 1) {
             FragmentParentTab mFragmentParentTab = FragmentParentTab_.builder().build();
             mFragmentParentTab.registerCardAccountListener(this);
+            mFragmentParentTab.registerNotification(this);
             mViewPagerTabAccountAdapter.addFragment(mFragmentParentTab, getString(R.string.tablyout_text_all_account));
         }
         for (int i = 0; i < size; i++) {
             FragmentChildTab mFragmentChildTab = FragmentChildTab_.builder().mAccount(mAccounts.get(i)).build();
             mViewPagerTabAccountAdapter.addFragment(mFragmentChildTab, mAccounts.get(i).getName());
+            mFragmentChildTab.registerNotification(this);
         }
         mViewPagerTabAccountAdapter.notifyDataSetChanged();
     }
@@ -78,7 +80,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        targetAccount= tab.getPosition() == 0 ? 0 : tab.getPosition() - 1;
+        targetAccount = tab.getPosition() == 0 ? 0 : tab.getPosition() - 1;
         ((MainActivity_) getActivity()).registerAccount(mAccounts.get(targetAccount));
     }
 
@@ -124,5 +126,10 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
                 notifyDataSetChanged();
                 break;
         }
+    }
+
+    @Override
+    public void onNotification() {
+        notifyDataSetChanged();
     }
 }

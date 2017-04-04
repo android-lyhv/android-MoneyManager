@@ -112,13 +112,14 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
             switchLoop.setChecked(exchangeLooper.isLoop());
             if (exchangeLooper.getTypeExchange() == ExchangeType.INCOME) {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            }else {
+                tvAmount.setTextColor(ContextCompat.getColor(getContext(),android.R.color.holo_red_light));
             }
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             switchLoop.setChecked(isChecked);
-            //
         }
 
         @Override
