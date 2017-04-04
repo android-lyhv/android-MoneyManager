@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
     FragmentTag mFragmentTag;
-
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
     private static final String EXCHANGES = "EXCHANGES";
