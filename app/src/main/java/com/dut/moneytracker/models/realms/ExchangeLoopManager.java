@@ -31,10 +31,22 @@ public class ExchangeLoopManager extends RealmHelper {
         return exchangeLoopers;
     }
 
-    public void deleteExchangeLoopById(String id) {
+    public void deleteExchangeLoopById(int id) {
         realm.beginTransaction();
-        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).like("id", id).findFirst();
+        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
         exchangeLooper.deleteFromRealm();
         realm.commitTransaction();
+    }
+
+    public void insertNewExchangeLoop(ExchangeLooper exchangeLooper) {
+        Number currentIdNum = realm.where(ExchangeLooper.class).max("id");
+        int nextId;
+        if (currentIdNum == null) {
+            nextId = 0;
+        } else {
+            nextId = currentIdNum.intValue() + 1;
+        }
+        exchangeLooper.setId(nextId);
+        insertOrUpdate(exchangeLooper);
     }
 }

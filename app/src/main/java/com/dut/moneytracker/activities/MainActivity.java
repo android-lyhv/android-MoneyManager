@@ -1,5 +1,7 @@
 package com.dut.moneytracker.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,6 +39,7 @@ import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
+import com.dut.moneytracker.services.Receive;
 import com.dut.moneytracker.view.CircleImageView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -102,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         onLoadProfile();
         onLoadFragmentDashboard();
         mToolbar.setTitle(getString(R.string.main_account));
+        //
+        Intent intent = new Intent(getApplicationContext(), Receive.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext()
+                .getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, 5000L, 60000L, pendingIntent);
     }
 
     private Filter mFilter;

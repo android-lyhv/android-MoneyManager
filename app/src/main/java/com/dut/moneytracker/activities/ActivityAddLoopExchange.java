@@ -57,7 +57,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -99,7 +98,6 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     @AfterViews
     void init() {
         mExchangeLoop = new ExchangeLooper();
-        mExchangeLoop.setId(UUID.randomUUID().toString());
         mExchangeLoop.setCreated(new Date());
         mExchangeLoop.setTypeLoop(TypeLoop.DAY);
         mExchangeLoop.setLoop(switchCompat.isChecked());
@@ -158,7 +156,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         }
         mExchangeLoop.setPlace(mPlace);
         mExchangeLoop.setTypeExchange(mType);
-        ExchangeLoopManager.getInstance().insertOrUpdate(mExchangeLoop);
+        ExchangeLoopManager.getInstance().insertNewExchangeLoop(mExchangeLoop);
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_loop_exchange), mExchangeLoop);
         setResult(ResultCode.ADD_LOOP_EXCHANGE, intent);
@@ -175,7 +173,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(),"VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabExpense)
@@ -188,7 +186,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(),"VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabTransfer)
@@ -201,7 +199,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(),"VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.rlCategory)
@@ -228,7 +226,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
                 } else {
                     mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
                 }
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(),"VND"));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
             }
         });
     }

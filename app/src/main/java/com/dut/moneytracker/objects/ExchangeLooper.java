@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ExchangeLooper extends RealmObject implements Parcelable {
     @PrimaryKey
-    private String id;
+    private int id;
     private int typeExchange;
     private String idAccount;
     private String idCategory;
@@ -42,7 +42,7 @@ public class ExchangeLooper extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeInt(this.id);
         dest.writeInt(this.typeExchange);
         dest.writeString(this.idAccount);
         dest.writeString(this.idCategory);
@@ -58,7 +58,7 @@ public class ExchangeLooper extends RealmObject implements Parcelable {
     }
 
     protected ExchangeLooper(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readInt();
         this.typeExchange = in.readInt();
         this.idAccount = in.readString();
         this.idCategory = in.readString();
