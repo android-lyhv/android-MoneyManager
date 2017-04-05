@@ -99,7 +99,7 @@
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:paddingBottom="10dp"
-                    android:id="@+id/linchartAmount"
+                    android:id="@+id/pieChart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/tvTitleChart" />

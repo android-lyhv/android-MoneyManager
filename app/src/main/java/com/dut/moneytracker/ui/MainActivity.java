@@ -20,27 +20,29 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.ui.account.ActivityEditAccount;
-import com.dut.moneytracker.ui.user.LoginActivity;
-import com.dut.moneytracker.ui.base.SpinnerAccountManger;
-import com.dut.moneytracker.ui.user.UserInformationActivity;
-import com.dut.moneytracker.ui.interfaces.MainListener;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
-import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
-import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
-import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager;
-import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager_;
-import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
-import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange_;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
+import com.dut.moneytracker.ui.account.ActivityEditAccount;
+import com.dut.moneytracker.ui.base.SpinnerAccountManger;
+import com.dut.moneytracker.ui.charts.income.FragmentIncomeChartPager;
+import com.dut.moneytracker.ui.charts.income.FragmentIncomeChartPager_;
+import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
+import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
+import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
+import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange_;
+import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager;
+import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager_;
+import com.dut.moneytracker.ui.interfaces.MainListener;
+import com.dut.moneytracker.ui.user.LoginActivity;
+import com.dut.moneytracker.ui.user.UserInformationActivity;
 import com.dut.moneytracker.view.CircleImageView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -51,17 +53,20 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 
+import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
+
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener {
     public enum FragmentTag {
-        DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE
+        DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME
     }
 
-    FragmentTag mFragmentTag;
+    FragmentTag mFragmentTag = DEFAULT;
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
     private static final String EXCHANGES = "EXCHANGES";
     private static final String LOOP = "EXCHANGE_LOOPS";
+    private static final String CHART_INCOME = "CHART_INCOME";
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @ViewById(R.id.imgUserLogo)
@@ -94,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentDashboard mFragmentDashboard;
     FragmentLoopExchange mFragmentLoopExchange;
     FragmentExchangesPager mFragmentExchangesPager;
+    FragmentIncomeChartPager mFragmentIncomeChartPager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
 
@@ -127,6 +133,9 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                     case EXCHANGE_LOOPS:
                         onLoadFragmentLoopExchange();
                         break;
+                    case CHART_INCOME:
+                        onLoadFragmentChartIncome();
+                        break;
                     case PROFILE:
                         startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), RequestCode.PROFILE);
                         break;
@@ -136,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mFragmentTag = null;
+                mFragmentTag = DEFAULT;
             }
         };
         mDrawerLayout.setDrawerListener(toggle);
@@ -230,6 +239,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         startActivityEditAccount();
     }
 
+    @Click(R.id.llChartIncome)
+    void onClickChartIncome() {
+        mFragmentTag = FragmentTag.CHART_INCOME;
+        onCloseNavigation();
+    }
+
     private void onCloseNavigation() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -264,6 +279,13 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     void onResultLogout() {
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
+    }
+
+    public void onLoadFragmentChartIncome() {
+        mFilter = FilterManager.getInstance().getFilterDefault();
+        mSpinnerAccount.setSelectItem(null);
+        mFragmentIncomeChartPager = FragmentIncomeChartPager_.builder().mFilter(mFilter).build();
+        requestReplaceFragment(mFragmentIncomeChartPager, CHART_INCOME, true);
     }
 
     public void onLoadFragmentAllExchanges() {

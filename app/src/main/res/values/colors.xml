@@ -12,4 +12,5 @@
     <color name="color_main">#BFAC8A</color>
     <color name="color_normal">#B9B9B9</color>
     <color name="color_background_tab_unselect">#ededed</color>
+    <color name="color_title_chart">#6d6d6d</color>
 </resources>
