@@ -93,21 +93,25 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     @ViewById(R.id.switchLoop)
     SwitchCompat switchCompat;
     private GoogleMap mGoogleMap;
-    private Place mPlace;
-    private int mType = ExchangeType.EXPENSES;
+    private Place mPlace = new Place();
     private ExchangeLooper mExchangeLoop;
+    private int mType;
 
     @AfterViews
     void init() {
+        initBaseExchangeLoop();
+        tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
+        onClickTabExpense();
+        initToolbar();
+        initSpinner();
+        initMapView();
+    }
+
+    void initBaseExchangeLoop() {
         mExchangeLoop = new ExchangeLooper();
         mExchangeLoop.setCreated(new Date());
         mExchangeLoop.setTypeLoop(LoopType.DAY);
         mExchangeLoop.setLoop(switchCompat.isChecked());
-        tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
-        mPlace = new Place();
-        initToolbar();
-        initSpinner();
-        initMapView();
     }
 
     private void initSpinner() {
@@ -179,9 +183,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        if (!TextUtils.isEmpty(mExchangeLoop.getAmount())) {
-            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
-        }
+        onChangeAmount(mExchangeLoop.getAmount());
     }
 
     @Click(R.id.tvTabExpense)
@@ -194,9 +196,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        if (!TextUtils.isEmpty(mExchangeLoop.getAmount())) {
-            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
-        }
+        onChangeAmount(mExchangeLoop.getAmount());
     }
 
     @Click(R.id.tvTabTransfer)
@@ -209,9 +209,23 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        if (!TextUtils.isEmpty(mExchangeLoop.getAmount())) {
-            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        onChangeAmount(mExchangeLoop.getAmount());
+    }
+
+    private void onChangeAmount(String amount) {
+        if (TextUtils.isEmpty(amount)) {
+            return;
+        } else {
+            if (amount.startsWith("-")) {
+                amount = amount.substring(1);
+            }
         }
+        if (mType == ExchangeType.INCOME) {
+            mExchangeLoop.setAmount(amount);
+        } else {
+            mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
+        }
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.rlCategory)
@@ -223,9 +237,13 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @Click(R.id.rlAmount)
     void onCLickAmount() {
-        String amount = mExchangeLoop.getAmount() == null ? "" : mExchangeLoop.getAmount();
-        if (amount.startsWith("-")) {
-            amount = amount.substring(1);
+        String amount = mExchangeLoop.getAmount();
+        if (!TextUtils.isEmpty(amount)) {
+            if (amount.startsWith("-")) {
+                amount = amount.substring(1);
+            }
+        } else {
+            amount = "";
         }
         DialogCalculator dialogCalculator = new DialogCalculator();
         dialogCalculator.show(getFragmentManager(), null);
@@ -233,12 +251,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
-                if (mType == ExchangeType.INCOME) {
-                    mExchangeLoop.setAmount(amount);
-                } else {
-                    mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
-                }
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+               onChangeAmount(amount);
             }
         });
     }
