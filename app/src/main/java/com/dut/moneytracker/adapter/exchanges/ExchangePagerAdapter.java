@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.dut.moneytracker.adapter.base.BasePagerLoopAdapter;
-import com.dut.moneytracker.fragment.exchanges.FragmentExchanges_;
+import com.dut.moneytracker.ui.exchanges.FragmentExchanges_;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.objects.Filter;
 

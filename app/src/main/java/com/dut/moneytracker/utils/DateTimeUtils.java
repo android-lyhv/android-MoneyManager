@@ -2,7 +2,7 @@ package com.dut.moneytracker.utils;
 
 import android.text.TextUtils;
 
-import com.dut.moneytracker.constant.TypeFilter;
+import com.dut.moneytracker.constant.FilterType;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -109,16 +109,16 @@ public class DateTimeUtils {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         switch (type) {
-            case TypeFilter.DAY:
+            case FilterType.DAY:
                 calendar.add(Calendar.DAY_OF_MONTH, step);
                 break;
-            case TypeFilter.MONTH:
+            case FilterType.MONTH:
                 calendar.add(Calendar.MONTH, step);
                 break;
-            case TypeFilter.YEAR:
+            case FilterType.YEAR:
                 calendar.add(Calendar.YEAR, step);
                 break;
-            case TypeFilter.WEAK:
+            case FilterType.WEAK:
                 break;
 
         }

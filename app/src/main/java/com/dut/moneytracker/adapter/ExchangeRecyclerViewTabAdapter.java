@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.models.type.ExchangeType;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
@@ -63,9 +63,11 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
         public void onBind(Exchange exchange) {
             if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
                 Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
-                imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
+                if (category != null) {
+                    imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
+                    tvCategoryName.setText(category.getName());
+                }
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
-                tvCategoryName.setText(category.getName());
                 tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
                 tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
                 if (exchange.getTypeExchange() == ExchangeType.INCOME) {

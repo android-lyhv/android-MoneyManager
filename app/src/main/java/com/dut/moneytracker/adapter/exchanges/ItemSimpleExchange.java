@@ -13,7 +13,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.models.type.ExchangeType;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
