@@ -1,7 +1,7 @@
 package com.dut.moneytracker.models.realms;
 
 import com.dut.moneytracker.charts.ValueChartAmount;
-import com.dut.moneytracker.constant.TypeFilter;
+import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -119,15 +119,15 @@ public class ExchangeManger extends RealmHelper {
         String accountID = filter.getAccountId();
         Date date = filter.getDateFilter();
         switch (viewType) {
-            case TypeFilter.ALL:
+            case FilterType.ALL:
                 return getExchangesByAccount(accountID);
-            case TypeFilter.DAY:
+            case FilterType.DAY:
                 return getExchangesSameDay(accountID, date);
-            case TypeFilter.MONTH:
+            case FilterType.MONTH:
                 return getExchangesSameMonth(accountID, date);
-            case TypeFilter.YEAR:
+            case FilterType.YEAR:
                 return getExchangesSameYear(accountID, date);
-            case TypeFilter.CUSTOM:
+            case FilterType.CUSTOM:
                 Date fromDate = filter.getFormDate();
                 Date toDate = filter.getToDate();
                 return getExchangesCustom(accountID, fromDate, toDate);
@@ -139,15 +139,15 @@ public class ExchangeManger extends RealmHelper {
         int viewType = filter.getViewType();
         Date date = filter.getDateFilter();
         switch (viewType) {
-            case TypeFilter.ALL:
+            case FilterType.ALL:
                 return getExchanges();
-            case TypeFilter.DAY:
+            case FilterType.DAY:
                 return getExchangesSameDay(date);
-            case TypeFilter.MONTH:
+            case FilterType.MONTH:
                 return getExchangesSameMonth(date);
-            case TypeFilter.YEAR:
+            case FilterType.YEAR:
                 return getExchangesSameYear(date);
-            case TypeFilter.CUSTOM:
+            case FilterType.CUSTOM:
                 Date fromDate = filter.getFormDate();
                 Date toDate = filter.getToDate();
                 return getExchangesCustom(fromDate, toDate);

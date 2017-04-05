@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.BaseRecyclerAdapter;
-import com.dut.moneytracker.constant.TypeLoop;
+import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -95,16 +95,16 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
                 tvDescription.setText(description);
             }
             switch (exchangeLooper.getTypeLoop()) {
-                case TypeLoop.DAY:
+                case LoopType.DAY:
                     tvTypeLoop.setText(R.string.loop_day);
                     break;
-                case TypeLoop.WEAK:
+                case LoopType.WEAK:
                     tvTypeLoop.setText(R.string.loop_week);
                     break;
-                case TypeLoop.MONTH:
+                case LoopType.MONTH:
                     tvTypeLoop.setText(R.string.loop_month);
                     break;
-                case TypeLoop.YEAR:
+                case LoopType.YEAR:
                     tvTypeLoop.setText(R.string.loop_year);
             }
             tvLastCreated.setText(DateTimeUtils.getInstance().getStringDateUs(exchangeLooper.getCreated()));

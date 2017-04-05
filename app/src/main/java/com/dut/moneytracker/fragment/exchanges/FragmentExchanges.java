@@ -12,8 +12,8 @@ import com.dut.moneytracker.activities.ActivityDetailExchange_;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecyclerAdapter;
+import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.ResultCode;
-import com.dut.moneytracker.constant.TypeFilter;
 import com.dut.moneytracker.fragment.base.BaseFragment;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
@@ -93,7 +93,7 @@ public class FragmentExchanges extends BaseFragment {
 
     public void changeDateLabel() {
         String label = FilterManager.getInstance().getLabel(mFilter, mExchanges);
-        if (mFilter.getViewType() == TypeFilter.CUSTOM || mFilter.getViewType() == TypeFilter.ALL) {
+        if (mFilter.getViewType() == FilterType.CUSTOM || mFilter.getViewType() == FilterType.ALL) {
             llNext.setVisibility(View.GONE);
             llPrevious.setVisibility(View.GONE);
         } else {

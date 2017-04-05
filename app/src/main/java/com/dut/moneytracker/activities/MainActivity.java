@@ -21,9 +21,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.activities.interfaces.MainListener;
+import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
-import com.dut.moneytracker.constant.TypeFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mFragmentExchangesPager == null) {
             return;
         }
-        if (mFilter.getViewType() == TypeFilter.CUSTOM) {
+        if (mFilter.getViewType() == FilterType.CUSTOM) {
             mDialogCustomFilter.show(mFragmentManager, TAG);
             mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
                 @Override

@@ -1,6 +1,6 @@
 package com.dut.moneytracker.models;
 
-import com.dut.moneytracker.constant.TypeFilter;
+import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Exchange;
@@ -33,7 +33,7 @@ public class FilterManager {
         Filter filter = new Filter();
         filter.setRequestByAccount(false);
         filter.setDateFilter(new Date());
-        filter.setViewType(TypeFilter.DAY);
+        filter.setViewType(FilterType.DAY);
         return filter;
     }
 
@@ -42,7 +42,7 @@ public class FilterManager {
         filter.setRequestByAccount(true);
         filter.setAccountId(idAccount);
         filter.setDateFilter(new Date());
-        filter.setViewType(TypeFilter.DAY);
+        filter.setViewType(FilterType.DAY);
         return filter;
     }
 
@@ -51,19 +51,19 @@ public class FilterManager {
         String convert = CurrencyUtils.getInstance().getStringMoneyType(amount, "VND");
         String date = "";
         switch (filter.getViewType()) {
-            case TypeFilter.ALL:
+            case FilterType.ALL:
                 date = "Tất cả";
                 break;
-            case TypeFilter.DAY:
+            case FilterType.DAY:
                 date = DateTimeUtils.getInstance().getStringFullDate(filter.getDateFilter());
                 break;
-            case TypeFilter.MONTH:
+            case FilterType.MONTH:
                 date = DateTimeUtils.getInstance().getStringMonthYear(filter.getDateFilter());
                 break;
-            case TypeFilter.YEAR:
+            case FilterType.YEAR:
                 date = DateTimeUtils.getInstance().getStringYear(filter.getDateFilter());
                 break;
-            case TypeFilter.CUSTOM:
+            case FilterType.CUSTOM:
                 String fromDate = DateTimeUtils.getInstance().getStringDateUs(filter.getFormDate());
                 String toDate = DateTimeUtils.getInstance().getStringDateUs(filter.getToDate());
                 date = String.format(Locale.US, "%s đến %s", fromDate, toDate);
@@ -76,7 +76,7 @@ public class FilterManager {
     public Filter changeFilter(final Filter currentFilter, int steps) {
         Filter filter = copyFilter(currentFilter);
         int type = filter.getViewType();
-        if (type == TypeFilter.ALL || type == TypeFilter.CUSTOM) {
+        if (type == FilterType.ALL || type == FilterType.CUSTOM) {
             return filter;
         }
         Date newDate = DateTimeUtils.getInstance().changeDateStep(filter.getDateFilter(), filter.getViewType(), steps);

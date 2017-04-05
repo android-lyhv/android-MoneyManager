@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.constant.TypeLoop;
+import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.objects.ExchangeLooper;
 
 import java.util.Calendar;
@@ -43,16 +43,16 @@ public class GenerateManager {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, mExchangeLooper.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         long step = Calendar.getInstance().getTimeInMillis();
         switch (mExchangeLooper.getTypeLoop()) {
-            case TypeLoop.DAY:
+            case LoopType.DAY:
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_DAY + step, PENDING_DAY, pendingIntent);
                 break;
-            case TypeLoop.WEAK:
+            case LoopType.WEAK:
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_WEEK + step, PENDING_WEEK, pendingIntent);
                 break;
-            case TypeLoop.MONTH:
+            case LoopType.MONTH:
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_MONTH + step, PENDING_MONTH, pendingIntent);
                 break;
-            case TypeLoop.YEAR:
+            case LoopType.YEAR:
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_YEAH + step, PENDING_YEAH, pendingIntent);
                 break;
         }

@@ -5,7 +5,7 @@ package com.dut.moneytracker.constant;
  * Created by ly.ho on 03/04/2017.
  */
 
-public class TypeLoop {
+public class LoopType {
     public static final int DAY = 0;
     public static final int WEAK = 1;
     public static final int MONTH = 2;

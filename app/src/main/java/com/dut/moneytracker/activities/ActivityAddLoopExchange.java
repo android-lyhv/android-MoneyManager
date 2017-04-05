@@ -19,9 +19,9 @@ import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
-import com.dut.moneytracker.constant.TypeLoop;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -98,7 +98,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     void init() {
         mExchangeLoop = new ExchangeLooper();
         mExchangeLoop.setCreated(new Date());
-        mExchangeLoop.setTypeLoop(TypeLoop.DAY);
+        mExchangeLoop.setTypeLoop(LoopType.DAY);
         mExchangeLoop.setLoop(switchCompat.isChecked());
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
         mPlace = new Place();
