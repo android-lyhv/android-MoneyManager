@@ -19,40 +19,32 @@
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner"
+                style="?android:attr/spinnerItemStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:layout_centerVertical="true"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinner"
-                    style="?android:attr/spinnerItemStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+            <ImageView
+                android:id="@+id/imgDateFilter"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/spinner"
+                android:clickable="true"
+                android:padding="15dp"
+                android:src="@drawable/ic_date" />
 
-                <ImageView
-                    android:id="@+id/imgDateFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/spinner"
-                    android:clickable="true"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_date" />
-
-                <ImageView
-                    android:id="@+id/imgSettingAccount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_settings_white" />
-            </RelativeLayout>
-
+            <ImageView
+                android:id="@+id/imgSettingAccount"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="end"
+                android:layout_marginEnd="5dp"
+                android:padding="15dp"
+                android:src="@drawable/ic_settings_white" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

@@ -149,6 +149,6 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
-        ((MainActivity) getActivity()).onLoadFragmentAllExchanges();
+        ((MainActivity) getActivity()).onLoadFragmentExchanges();
     }
 }

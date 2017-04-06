@@ -82,13 +82,7 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity_) getActivity()).checkFragmentExchanges();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((MainActivity_) getActivity()).checkFragmentExchanges();
+        ((MainActivity_) getActivity()).loadMenuItemFragmentExchanges();
     }
 
     public void onReloadFragmentPager() {

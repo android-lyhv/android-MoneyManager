@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/app_bar_viewpager" />
+    <include layout="@layout/toolbar_viewpager" />
 
     <TextView
         android:id="@+id/tvTitle"

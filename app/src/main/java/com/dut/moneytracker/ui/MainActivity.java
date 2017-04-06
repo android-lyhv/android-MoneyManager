@@ -58,16 +58,15 @@ import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener {
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String DASHBOARD = "DASHBOARD";
+
     public enum FragmentTag {
         DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES
+
     }
 
     FragmentTag mFragmentTag = DEFAULT;
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String DASHBOARD = "DASHBOARD";
-    private static final String EXCHANGES = "EXCHANGES";
-    private static final String LOOP = "EXCHANGE_LOOPS";
-    private static final String CHART_INCOME_EXPENSES = "CHART_INCOME_EXPENSES";
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @ViewById(R.id.imgUserLogo)
@@ -103,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentChartPager mFragmentChartPager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
+    private Filter mFilter;
 
     @AfterViews
     void init() {
@@ -112,11 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         initView();
         onLoadProfile();
         onLoadFragmentDashboard();
-        mToolbar.setTitle(getString(R.string.main_account));
     }
-
-    private Filter mFilter;
-
 
     void initView() {
         setSupportActionBar(mToolbar);
@@ -129,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                         onLoadFragmentDashboard();
                         break;
                     case EXCHANGES:
-                        onLoadFragmentAllExchanges();
+                        onLoadFragmentExchanges();
                         break;
                     case EXCHANGE_LOOPS:
                         onLoadFragmentLoopExchange();
@@ -205,7 +201,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
+            if (fragment != null) {
+                super.onBackPressed();
+            } else {
+                onLoadFragmentDashboard();
+            }
         }
     }
 
@@ -291,84 +292,96 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         finish();
     }
 
+    /**
+     * load piechart
+     *
+     * @param typeChart
+     */
     public void onLoadFragmentChart(int typeChart) {
         mFilter = FilterManager.getInstance().getFilterDefault();
         mSpinnerAccount.setSelectItem(null);
         mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
-        requestReplaceFragment(mFragmentChartPager, CHART_INCOME_EXPENSES, true);
+        onReplaceFragment(mFragmentChartPager, null);
     }
 
-    public void onLoadFragmentAllExchanges() {
+    /**
+     * Load all records Exchange
+     */
+    public void onLoadFragmentExchanges() {
         mFilter = FilterManager.getInstance().getFilterDefault();
         mSpinnerAccount.setSelectItem(null);
         onLoadFragmentExchange(mFilter);
     }
 
-    public void onLoadFragmentAllExchangesByAccount(String idAccount) {
+    /**
+     * Load all records Exchange by account
+     */
+    public void onLoadFragmentExchangesByAccount(String idAccount) {
         mFilter = FilterManager.getInstance().getFilterDefaultAccount(idAccount);
         mSpinnerAccount.setSelectItem(idAccount);
         onLoadFragmentExchange(mFilter);
     }
 
+    /**
+     * load filter
+     *
+     * @param filter
+     */
     private void onLoadFragmentExchange(Filter filter) {
         mFragmentExchangesPager = FragmentExchangesPager_.builder().mFilter(filter).build();
-        requestReplaceFragment(mFragmentExchangesPager, EXCHANGES, true);
+        onReplaceFragment(mFragmentExchangesPager, null);
     }
 
     public void onLoadFragmentDashboard() {
         mFragmentDashboard = FragmentDashboard_.builder().build();
-        requestReplaceFragment(mFragmentDashboard, DASHBOARD, false);
+        onReplaceFragment(mFragmentDashboard, DASHBOARD);
     }
 
+    /**
+     * load fragment list exchanges loop
+     */
     public void onLoadFragmentLoopExchange() {
         mFragmentLoopExchange = FragmentLoopExchange_.builder().build();
-        requestReplaceFragment(mFragmentLoopExchange, LOOP, true);
+        onReplaceFragment(mFragmentLoopExchange, null);
     }
 
-    private void requestReplaceFragment(Fragment fragment, String TAG, boolean isStack) {
+    private void onReplaceFragment(Fragment fragment, String TAG) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameContent, fragment, TAG);
-        if (isStack) {
-            fragmentTransaction.addToBackStack(null);
-        }
         fragmentTransaction.commit();
     }
 
-    // Change View
+    // Change Menu items
     @Override
-    public boolean checkFragmentDashboard() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
-        if (fragment instanceof FragmentDashboard) {
-            spinner.setVisibility(View.GONE);
-            imgDateFilter.setVisibility(View.GONE);
-            imgSettingAccount.setVisibility(View.VISIBLE);
-            return true;
-        }
-        return false;
+    public void loadMenuItemFragmentDashboard() {
+        setTitle(getString(R.string.main_account));
+        spinner.setVisibility(View.GONE);
+        imgDateFilter.setVisibility(View.GONE);
+        imgSettingAccount.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public boolean checkFragmentExchanges() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGES);
-        if (fragment instanceof FragmentExchangesPager) {
-            spinner.setVisibility(View.VISIBLE);
-            imgDateFilter.setVisibility(View.VISIBLE);
-            imgSettingAccount.setVisibility(View.GONE);
-            return true;
-        }
-        return false;
+    public void loadMenuItemFragmentExchanges() {
+        setTitle(null);
+        spinner.setVisibility(View.VISIBLE);
+        imgDateFilter.setVisibility(View.VISIBLE);
+        imgSettingAccount.setVisibility(View.GONE);
     }
 
     @Override
-    public boolean checkFragmentLoop() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(LOOP);
-        if (fragment instanceof FragmentLoopExchange) {
-            spinner.setVisibility(View.GONE);
-            imgDateFilter.setVisibility(View.GONE);
-            imgSettingAccount.setVisibility(View.GONE);
-            return true;
-        }
-        return false;
+    public void loadMenuItemFragmentLoop() {
+        setTitle(null);
+        spinner.setVisibility(View.GONE);
+        imgDateFilter.setVisibility(View.GONE);
+        imgSettingAccount.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void loadMenuItemFragmentChart() {
+        setTitle(null);
+        spinner.setVisibility(View.VISIBLE);
+        imgDateFilter.setVisibility(View.VISIBLE);
+        imgSettingAccount.setVisibility(View.GONE);
     }
 
     @Override

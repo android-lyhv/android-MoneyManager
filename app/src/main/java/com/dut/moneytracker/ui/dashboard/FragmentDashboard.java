@@ -11,7 +11,6 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
-import com.dut.moneytracker.ui.MainActivity;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.ui.base.BaseFragment;
 import com.dut.moneytracker.ui.exchanges.ActivityAddExchange;
@@ -97,13 +96,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity_) getActivity()).checkFragmentDashboard();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((MainActivity) getActivity()).checkFragmentDashboard();
+        ((MainActivity_) getActivity()).loadMenuItemFragmentDashboard();
     }
 
     @Override

@@ -123,6 +123,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
-        ((MainActivity) getActivity()).onLoadFragmentAllExchangesByAccount(mAccount.getId());
+        ((MainActivity) getActivity()).onLoadFragmentExchangesByAccount(mAccount.getId());
     }
 }

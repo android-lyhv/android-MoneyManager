@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bolder_login_google"
+                android:background="@drawable/bg_login_google"
                 android:text="@string/activity_login.button.text.google"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bolder_login_facebook"
+                android:background="@drawable/bg_login_facebook"
                 android:text="@string/activity_login.button.text.facebook"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />

@@ -56,13 +56,7 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity_) getActivity()).checkFragmentLoop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((MainActivity_) getActivity()).checkFragmentLoop();
+        ((MainActivity_) getActivity()).loadMenuItemFragmentLoop();
     }
 
     @Click(R.id.fab)

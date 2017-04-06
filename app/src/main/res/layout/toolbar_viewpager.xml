@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selector_bg_white_filter"
+        android:background="@color/colorPrimary"
         android:clickable="true"
         android:paddingBottom="2dp"
         android:paddingTop="2dp">
@@ -17,7 +17,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:clickable="true">
+            android:background="@drawable/selector_bg_white_steps_filter"
+            android:clickable="true"
+            android:paddingEnd="10dp">
 
             <ImageView
                 android:layout_width="30dp"
@@ -51,7 +53,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:clickable="true">
+            android:background="@drawable/selector_bg_white_steps_filter"
+            android:clickable="true"
+            android:paddingStart="10dp">
 
             <TextView
                 android:layout_width="wrap_content"

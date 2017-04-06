@@ -86,13 +86,7 @@ public class FragmentChartPager extends BaseFragment implements PagerFragmentLis
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity_) getActivity()).checkFragmentExchanges();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((MainActivity_) getActivity()).checkFragmentExchanges();
+        ((MainActivity_) getActivity()).loadMenuItemFragmentChart();
     }
 
     public void onReloadFragmentPager() {
