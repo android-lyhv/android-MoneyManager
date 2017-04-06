@@ -46,7 +46,7 @@ public class ExchangeManger extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public List<Exchange> getFilterExchanges() {
+    public List<Exchange> getExchanges() {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAll();
         realmResults = realmResults.sort("created", Sort.DESCENDING);
@@ -118,7 +118,7 @@ public class ExchangeManger extends RealmHelper {
      * @param filter
      */
     public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int type) {
-        List<Exchange> exchanges = getExchangesFilter(filter);
+        List<Exchange> exchanges = getExchanges(filter);
         List<ValuePieChart> valuePieCharts = new ArrayList<>();
         List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategory();
         if (type == PieChartType.INCOME) {
@@ -195,7 +195,7 @@ public class ExchangeManger extends RealmHelper {
         return valuePieChart;
     }
 
-    public List<Exchange> getFilterExchanges(Filter filter) {
+    public List<Exchange> getExchanges(Filter filter) {
         boolean isRequestAccount = filter.isRequestByAccount();
         if (!isRequestAccount) {
             return getExchangesFilter(filter);
@@ -230,7 +230,7 @@ public class ExchangeManger extends RealmHelper {
         Date date = filter.getDateFilter();
         switch (viewType) {
             case FilterType.ALL:
-                return getFilterExchanges();
+                return getExchanges();
             case FilterType.DAY:
                 return getExchangesSameDay(date);
             case FilterType.MONTH:

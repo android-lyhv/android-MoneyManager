@@ -50,7 +50,7 @@ public class FragmentExchanges extends BaseFragment {
 
     @AfterViews
     void init() {
-        mExchanges = ExchangeManger.getInstance().getFilterExchanges(mFilter);
+        mExchanges = ExchangeManger.getInstance().getExchanges(mFilter);
         initRecyclerView();
         updateExchangeRecyclerView();
     }
@@ -70,7 +70,7 @@ public class FragmentExchanges extends BaseFragment {
 
     @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
     void onResult() {
-        mExchanges = ExchangeManger.getInstance().getFilterExchanges(mFilter);
+        mExchanges = ExchangeManger.getInstance().getExchanges(mFilter);
         mAdapter.setObjects(mExchanges);
         mAdapter.notifyDataSetChanged();
     }

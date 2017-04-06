@@ -103,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
     private Filter mFilter;
+    private Filter mLastFilter;
 
     @AfterViews
     void init() {
-        mFilter = FilterManager.getInstance().getFilterDefault();
         mDialogPickFilter = new DialogPickFilter();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
         initView();
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                     mFilter.setRequestByAccount(true);
                     mFilter.setAccountId(accountId);
                 }
-                onChangeFilter();
+                reloadFragmentFilter();
             }
         });
     }
@@ -174,10 +174,15 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         mDialogPickFilter.show(getFragmentManager(), TAG);
         mDialogPickFilter.registerFilter(mFilter.getViewType(), new DialogPickFilter.FilterListener() {
             @Override
-            public void onResult(int idFilter) {
-                mFilter.setViewType(idFilter);
-                mFilter.setDateFilter(new Date());
-                onChangeFilter();
+            public void onResult(int filterType) {
+                if (filterType == FilterType.CUSTOM) {
+                    onChangeFilterCustom();
+                } else {
+                    mFilter.setViewType(filterType);
+                    mFilter.setDateFilter(new Date());
+                    reloadFragmentFilter();
+                }
+
             }
         });
     }
@@ -299,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     public void onLoadFragmentChart(int typeChart) {
         mFilter = FilterManager.getInstance().getFilterDefault();
+        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(null);
         mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
         onReplaceFragment(mFragmentChartPager, null);
@@ -309,6 +315,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     public void onLoadFragmentExchanges() {
         mFilter = FilterManager.getInstance().getFilterDefault();
+        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(null);
         onLoadFragmentExchange(mFilter);
     }
@@ -318,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     public void onLoadFragmentExchangesByAccount(String idAccount) {
         mFilter = FilterManager.getInstance().getFilterDefaultAccount(idAccount);
+        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(idAccount);
         onLoadFragmentExchange(mFilter);
     }
@@ -332,6 +340,9 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         onReplaceFragment(mFragmentExchangesPager, null);
     }
 
+    /**
+     * Load fragment dashboard account
+     */
     public void onLoadFragmentDashboard() {
         mFragmentDashboard = FragmentDashboard_.builder().build();
         onReplaceFragment(mFragmentDashboard, DASHBOARD);
@@ -384,23 +395,25 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         imgSettingAccount.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onChangeFilter() {
-        if (mFragmentExchangesPager != null) {
-            if (mFilter.getViewType() == FilterType.CUSTOM) {
-                mDialogCustomFilter.show(mFragmentManager, TAG);
-                mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
-                    @Override
-                    public void onResultDate(Date fromDate, Date toDate) {
-                        mFilter.setFormDate(fromDate);
-                        mFilter.setToDate(toDate);
-                        mFragmentExchangesPager.onReloadFragmentPager();
-                    }
-                });
-            } else {
-                mFragmentExchangesPager.onReloadFragmentPager();
+    public void onChangeFilterCustom() {
+        mDialogCustomFilter.show(mFragmentManager, TAG);
+        mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
+            @Override
+            public void onResultDate(Date fromDate, Date toDate) {
+                mFilter.setFormDate(fromDate);
+                mFilter.setToDate(toDate);
+                mFilter.setViewType(FilterType.CUSTOM);
+                reloadFragmentFilter();
             }
-        }
+        });
+    }
 
+    private void reloadFragmentFilter() {
+        if (mFragmentChartPager != null) {
+            mFragmentChartPager.onReloadFragmentPager();
+        }
+        if (mFragmentExchangesPager != null) {
+            mFragmentExchangesPager.onReloadFragmentPager();
+        }
     }
 }
