@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.constant.LoopType;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -17,8 +18,8 @@ import com.dut.moneytracker.R;
 public class SpinnerTypeLoopManger implements Spinner.OnItemSelectedListener {
     private AppCompatSpinner mSpinner;
     private Context mContext;
-    private String[] items = new String[]{"Day", "Week", "Month", "Year"};
-    private int[] listId = new int[]{0, 1, 2, 3};
+    private String[] items = new String[]{"Ngày", "Tuần", "Tháng", "Năm"};
+    private int[] listId = new int[]{LoopType.DAY, LoopType.DAY, LoopType.MONTH, LoopType.YEAR};
 
     public interface ItemSelectedListener {
         void onResultTypeLoop(int type);
