@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.FilterType;
+import com.dut.moneytracker.constant.PieChartType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.charts.MoneyChartManager;
@@ -42,6 +43,8 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
     TextView mTvMinMoney;
     @ViewById(R.id.tvAverageMoney)
     TextView mTvAverageMoney;
+    @ViewById(R.id.tvTitle)
+    TextView mTvTitle;
     @ViewById(R.id.tvMaxMoney)
     TextView mTvMaxMoney;
     @ViewById(R.id.pieChart)
@@ -55,17 +58,24 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
 
     @AfterViews
     void init() {
+        switch (mChartType) {
+            case PieChartType.INCOME:
+                mTvTitle.setText(getString(R.string.piechart_income));
+                break;
+            case PieChartType.EXPENSES:
+                mTvTitle.setText(getString(R.string.piechart_expense));
+                break;
+        }
+        changeDateLabel();
         initChart();
     }
 
     void initChart() {
-        mPieChartMoney = new PieChartMoney(mPieChart);
+        mPieChartMoney = new PieChartMoney(getContext(), mPieChart);
         mValuePieCharts = ExchangeManger.getInstance().getFilterValuePieCharts(mFilter, mChartType);
-        changeDateLabel();
         MoneyChartManager.getInstance().onLoadInforPieChart(mValuePieCharts, this);
         mPieChartMoney.updateValuePieChart(mValuePieCharts);
         mPieChartMoney.notifyDataSetChanged();
-
     }
 
 

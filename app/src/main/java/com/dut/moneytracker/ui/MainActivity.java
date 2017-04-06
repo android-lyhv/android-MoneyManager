@@ -373,21 +373,21 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Override
     public void onChangeFilter() {
-        if (mFragmentExchangesPager == null) {
-            return;
+        if (mFragmentExchangesPager != null) {
+            if (mFilter.getViewType() == FilterType.CUSTOM) {
+                mDialogCustomFilter.show(mFragmentManager, TAG);
+                mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
+                    @Override
+                    public void onResultDate(Date fromDate, Date toDate) {
+                        mFilter.setFormDate(fromDate);
+                        mFilter.setToDate(toDate);
+                        mFragmentExchangesPager.onReloadFragmentPager();
+                    }
+                });
+            } else {
+                mFragmentExchangesPager.onReloadFragmentPager();
+            }
         }
-        if (mFilter.getViewType() == FilterType.CUSTOM) {
-            mDialogCustomFilter.show(mFragmentManager, TAG);
-            mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
-                @Override
-                public void onResultDate(Date fromDate, Date toDate) {
-                    mFilter.setFormDate(fromDate);
-                    mFilter.setToDate(toDate);
-                    mFragmentExchangesPager.onReloadFragmentPager();
-                }
-            });
-        } else {
-            mFragmentExchangesPager.onReloadFragmentPager();
-        }
+
     }
 }
