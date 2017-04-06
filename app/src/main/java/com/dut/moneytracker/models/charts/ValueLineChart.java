@@ -1,4 +1,4 @@
-package com.dut.moneytracker.charts;
+package com.dut.moneytracker.models.charts;
 
 import java.util.Date;
 
@@ -9,12 +9,12 @@ import lombok.Data;
  * Created by ly.ho on 10/03/2017.
  */
 @Data
-public class ValueChartAmount {
+public class ValueLineChart {
     private Date date;
     private String amount;
     private String label;
 
-    public ValueChartAmount(Date date, String amount, String label) {
+    public ValueLineChart(Date date, String amount, String label) {
         this.date = date;
         this.amount = amount;
         this.label = label;

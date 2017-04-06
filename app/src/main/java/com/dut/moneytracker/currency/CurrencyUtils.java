@@ -9,9 +9,12 @@ import java.util.Currency;
  * Created by ly.ho on 05/03/2017.
  */
 public class CurrencyUtils {
-    private static CurrencyUtils ourInstance = new CurrencyUtils();
+    private static CurrencyUtils ourInstance;
 
     public static CurrencyUtils getInstance() {
+        if (ourInstance==null){
+            ourInstance = new CurrencyUtils();
+        }
         return ourInstance;
     }
 

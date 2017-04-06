@@ -1,4 +1,4 @@
-package com.dut.moneytracker.ui.charts.income;
+package com.dut.moneytracker.ui.charts;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.chart.IncomeChartPagerAdapter;
+import com.dut.moneytracker.adapter.chart.ChartPagerAdapter;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.ui.base.BaseFragment;
@@ -24,14 +24,16 @@ import org.androidannotations.annotations.ViewById;
  * Created by ly.ho on 26/03/2017.
  */
 @EFragment(R.layout.fragment_pager)
-public class FragmentIncomeChartPager extends BaseFragment implements PagerFragmentListener {
-    private static final String TAG = FragmentIncomeChartPager.class.getSimpleName();
+public class FragmentChartPager extends BaseFragment implements PagerFragmentListener {
+    private static final String TAG = FragmentChartPager.class.getSimpleName();
     @ViewById(R.id.viewpager)
     ViewPager viewPager;
     @FragmentArg
     Filter mFilter;
+    @FragmentArg
+    int mChartType;
     private int viewType;
-    private IncomeChartPagerAdapter mPagerAdapter;
+    private ChartPagerAdapter mPagerAdapter;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -66,8 +68,9 @@ public class FragmentIncomeChartPager extends BaseFragment implements PagerFragm
 
     private void initPager() {
         viewType = mFilter.getViewType();
-        mPagerAdapter = new IncomeChartPagerAdapter(getChildFragmentManager());
+        mPagerAdapter = new ChartPagerAdapter(getChildFragmentManager());
         mPagerAdapter.init(viewPager, mFilter);
+        mPagerAdapter.setTypePieChart(mChartType);
     }
 
     @Override

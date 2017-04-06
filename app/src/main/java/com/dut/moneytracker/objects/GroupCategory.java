@@ -22,6 +22,7 @@ public class GroupCategory extends RealmObject implements Parcelable {
     private String tag;
     private String description;
     private byte[] byteImage;
+    private int colorCode;
     private RealmList<Category> categories;
 
     @Override
@@ -31,6 +32,7 @@ public class GroupCategory extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.colorCode);
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.tag);
@@ -42,6 +44,7 @@ public class GroupCategory extends RealmObject implements Parcelable {
     }
 
     protected GroupCategory(Parcel in) {
+        this.colorCode = in.readInt();
         this.id = in.readString();
         this.name = in.readString();
         this.tag = in.readString();

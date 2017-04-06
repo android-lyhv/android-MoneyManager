@@ -105,13 +105,6 @@ public class AccountManager extends RealmHelper implements AccountListener {
         return bigDecimal.toString();
     }
 
-   /* @Override
-    public void addExchange(Account account, Exchange exchange) {
-        realm.beginTransaction();
-        account.getExchanges().add(exchange);
-        realm.commitTransaction();
-    }*/
-
     public String getTotalInitAmount() {
         realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
@@ -146,16 +139,6 @@ public class AccountManager extends RealmHelper implements AccountListener {
         realm.commitTransaction();
         return name;
     }
-
-   /* public void addExchange(String idAccount, Exchange exchange) {
-        realm.beginTransaction();
-        Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
-        if (account != null) {
-            account.getExchanges().add(exchange);
-        }
-        realm.commitTransaction();
-    }*/
-
     public void createDefaultAccount(Context context) {
         Account account = new Account();
         account.setId(context.getString(R.string.id_default_account));

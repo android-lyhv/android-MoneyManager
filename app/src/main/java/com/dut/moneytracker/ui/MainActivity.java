@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.FilterType;
+import com.dut.moneytracker.constant.PieChartType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
@@ -32,8 +33,8 @@ import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.account.ActivityEditAccount;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
-import com.dut.moneytracker.ui.charts.income.FragmentIncomeChartPager;
-import com.dut.moneytracker.ui.charts.income.FragmentIncomeChartPager_;
+import com.dut.moneytracker.ui.charts.FragmentChartPager;
+import com.dut.moneytracker.ui.charts.FragmentChartPager_;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
 import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
@@ -58,7 +59,7 @@ import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener {
     public enum FragmentTag {
-        DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME
+        DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES
     }
 
     FragmentTag mFragmentTag = DEFAULT;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     private static final String DASHBOARD = "DASHBOARD";
     private static final String EXCHANGES = "EXCHANGES";
     private static final String LOOP = "EXCHANGE_LOOPS";
-    private static final String CHART_INCOME = "CHART_INCOME";
+    private static final String CHART_INCOME_EXPENSES = "CHART_INCOME_EXPENSES";
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @ViewById(R.id.imgUserLogo)
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentDashboard mFragmentDashboard;
     FragmentLoopExchange mFragmentLoopExchange;
     FragmentExchangesPager mFragmentExchangesPager;
-    FragmentIncomeChartPager mFragmentIncomeChartPager;
+    FragmentChartPager mFragmentChartPager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
 
@@ -134,7 +135,10 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                         onLoadFragmentLoopExchange();
                         break;
                     case CHART_INCOME:
-                        onLoadFragmentChartIncome();
+                        onLoadFragmentChart(PieChartType.INCOME);
+                        break;
+                    case CHART_EXPENSES:
+                        onLoadFragmentChart(PieChartType.EXPENSES);
                         break;
                     case PROFILE:
                         startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), RequestCode.PROFILE);
@@ -245,6 +249,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         onCloseNavigation();
     }
 
+    @Click(R.id.llChartExpense)
+    void onClickChartExpense() {
+        mFragmentTag = FragmentTag.CHART_EXPENSES;
+        onCloseNavigation();
+    }
+
     private void onCloseNavigation() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -281,11 +291,11 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         finish();
     }
 
-    public void onLoadFragmentChartIncome() {
+    public void onLoadFragmentChart(int typeChart) {
         mFilter = FilterManager.getInstance().getFilterDefault();
         mSpinnerAccount.setSelectItem(null);
-        mFragmentIncomeChartPager = FragmentIncomeChartPager_.builder().mFilter(mFilter).build();
-        requestReplaceFragment(mFragmentIncomeChartPager, CHART_INCOME, true);
+        mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
+        requestReplaceFragment(mFragmentChartPager, CHART_INCOME_EXPENSES, true);
     }
 
     public void onLoadFragmentAllExchanges() {

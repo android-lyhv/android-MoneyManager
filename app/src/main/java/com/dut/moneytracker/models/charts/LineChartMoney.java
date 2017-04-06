@@ -1,4 +1,4 @@
-package com.dut.moneytracker.charts;
+package com.dut.moneytracker.models.charts;
 
 import android.graphics.Color;
 import android.util.Log;
@@ -19,9 +19,9 @@ import java.util.List;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 10/03/2017.
  */
-public class LineChartAmount {
-    private static final String TAG = LineChartAmount.class.getSimpleName();
-    private List<ValueChartAmount> valueChartAmounts;
+public class LineChartMoney {
+    private static final String TAG = LineChartMoney.class.getSimpleName();
+    private List<ValueLineChart> valueLineCharts;
     private LineData mLineData;
     private LineDataSet mDataSet;
     private String colorCode = "#FF028761";
@@ -42,8 +42,8 @@ public class LineChartAmount {
     }
 
 
-    public void setValueChartAmounts(List<ValueChartAmount> valueChartAmounts) {
-        this.valueChartAmounts = valueChartAmounts;
+    public void setValueLineCharts(List<ValueLineChart> valueLineCharts) {
+        this.valueLineCharts = valueLineCharts;
     }
 
     public String getColorCode() {
@@ -68,47 +68,47 @@ public class LineChartAmount {
 
     public static class Builder {
 
-        LineChartAmount lineChartAmount;
+        LineChartMoney lineChartMoney;
 
         public Builder(LineChart lineChart) {
-            lineChartAmount = new LineChartAmount();
-            lineChartAmount.setChart(lineChart);
+            lineChartMoney = new LineChartMoney();
+            lineChartMoney.setChart(lineChart);
         }
 
-        public Builder setValueChartAmounts(List<ValueChartAmount> valueChartAmounts) {
-            lineChartAmount.setValueChartAmounts(valueChartAmounts);
+        public Builder setValueChartAmounts(List<ValueLineChart> valueLineCharts) {
+            lineChartMoney.setValueLineCharts(valueLineCharts);
             return this;
         }
 
         public Builder setColorLine(String color) {
-            lineChartAmount.setColorCode(color);
+            lineChartMoney.setColorCode(color);
             return this;
         }
 
         public Builder setCirleStokce(int stoke) {
-            lineChartAmount.setStokeCircle(stoke);
+            lineChartMoney.setStokeCircle(stoke);
             return this;
         }
 
         public Builder setLabel(String label) {
-            lineChartAmount.setLabel(label);
+            lineChartMoney.setLabel(label);
             return this;
         }
 
-        public LineChartAmount build() {
-            return lineChartAmount;
+        public LineChartMoney build() {
+            return lineChartMoney;
         }
 
     }
 
     private List<Entry> getListEntry() {
         List<Entry> entries = new ArrayList<>();
-        int size = valueChartAmounts.size();
+        int size = valueLineCharts.size();
         for (int i = 0; i < size; i++) {
-            Log.d(TAG, "getListEntry: " + valueChartAmounts.get(i).getAmount());
+            Log.d(TAG, "getListEntry: " + valueLineCharts.get(i).getAmount());
             Entry entry = new Entry();
             entry.setX(i);
-            entry.setY(CurrencyUtils.getInstance().getFloatMoney(valueChartAmounts.get(i).getAmount()));
+            entry.setY(CurrencyUtils.getInstance().getFloatMoney(valueLineCharts.get(i).getAmount()));
             entries.add(entry);
         }
         return entries;
@@ -139,7 +139,7 @@ public class LineChartAmount {
     private class MyXAxisValueFormatter implements IAxisValueFormatter {
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            return valueChartAmounts.get((int) value).getLabel();
+            return valueLineCharts.get((int) value).getLabel();
         }
     }
 }

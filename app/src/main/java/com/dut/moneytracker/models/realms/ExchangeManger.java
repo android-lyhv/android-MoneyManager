@@ -1,11 +1,19 @@
 package com.dut.moneytracker.models.realms;
 
-import com.dut.moneytracker.charts.ValueChartAmount;
+import android.text.TextUtils;
+
+import com.dut.moneytracker.R;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.FilterType;
+import com.dut.moneytracker.constant.PieChartType;
+import com.dut.moneytracker.models.charts.ValueLineChart;
+import com.dut.moneytracker.models.charts.ValuePieChart;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
+import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.DateTimeUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +46,7 @@ public class ExchangeManger extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public List<Exchange> getExchanges() {
+    public List<Exchange> getFilterExchanges() {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAll();
         realmResults = realmResults.sort("created", Sort.DESCENDING);
@@ -82,30 +90,112 @@ public class ExchangeManger extends RealmHelper {
         return exchanges;
     }
 
-    public List<ValueChartAmount> getValueChartByDailyDay(int limitDay) {
+    public List<ValueLineChart> getValueChartByDailyDay(int limitDay) {
         List<Date> dates = DateTimeUtils.getInstance().getListLastDay(limitDay);
-        List<ValueChartAmount> valueChartAmounts = new ArrayList<>();
+        List<ValueLineChart> valueLineCharts = new ArrayList<>();
         int size = dates.size();
         for (int i = 0; i < size; i++) {
             String amount = AccountManager.getInstance().getAmountAvailableByDate(dates.get(i));
-            valueChartAmounts.add(new ValueChartAmount(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonthUs(dates.get(i))));
+            valueLineCharts.add(new ValueLineChart(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonthUs(dates.get(i))));
         }
-        return valueChartAmounts;
+        return valueLineCharts;
     }
 
-    public List<ValueChartAmount> getValueChartByDailyDay(String idAccount, int limitDay) {
+    public List<ValueLineChart> getValueChartByDailyDay(String idAccount, int limitDay) {
         List<Date> dates = DateTimeUtils.getInstance().getListLastDay(limitDay);
-        List<ValueChartAmount> valueChartAmounts = new ArrayList<>();
+        List<ValueLineChart> valueLineCharts = new ArrayList<>();
         int size = dates.size();
         for (int i = 0; i < size; i++) {
             String amount = AccountManager.getInstance().getAmountAvailableByDate(idAccount, dates.get(i));
-            valueChartAmounts.add(new ValueChartAmount(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonthUs(dates.get(i))));
+            valueLineCharts.add(new ValueLineChart(dates.get(i), amount, DateTimeUtils.getInstance().getStringDayMonthUs(dates.get(i))));
         }
-        return valueChartAmounts;
+        return valueLineCharts;
     }
 
+    /**
+     * get list exchange for chart pie
+     *
+     * @param filter
+     */
+    public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int type) {
+        List<Exchange> exchanges = getExchangesFilter(filter);
+        List<ValuePieChart> valuePieCharts = new ArrayList<>();
+        List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategory();
+        if (type == PieChartType.INCOME) {
+            for (GroupCategory groupCategory : groupCategories) {
+                ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.INCOME);
+                if (valuePieChart != null) {
+                    valuePieCharts.add(valuePieChart);
+                }
+            }
+        }
+        if (type == PieChartType.EXPENSES) {
+            for (GroupCategory groupCategory : groupCategories) {
+                ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.EXPENSES);
+                if (valuePieChart != null) {
+                    valuePieCharts.add(valuePieChart);
+                }
+            }
+        }
+        ValuePieChart valuePieChart = getValePieChartTransfer(exchanges, type);
+        if (valuePieChart != null) {
+            valuePieCharts.add(valuePieChart);
+        }
+        return valuePieCharts;
+    }
 
-    public List<Exchange> getExchanges(Filter filter) {
+    private ValuePieChart getValePieChart(List<Exchange> exchanges, GroupCategory groupCategory, int exchangeType) {
+        ValuePieChart valuePieChart = new ValuePieChart();
+        BigDecimal bigDecimal = new BigDecimal("0");
+        List<String> idCategories = CategoryManager.getInstance().getListIdCategoryByGroupId(groupCategory.getId());
+        for (String idCategory : idCategories) {
+            for (Exchange exchange : exchanges) {
+                if (TextUtils.equals(idCategory, exchange.getIdCategory()) && exchange.getTypeExchange() == exchangeType) {
+                    bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
+                }
+            }
+        }
+        if (bigDecimal.floatValue() == 0f) {
+            return null;
+        }
+        if (bigDecimal.toString().startsWith("-")) {
+            bigDecimal = new BigDecimal(bigDecimal.toString().substring(1));
+        }
+        valuePieChart.setColorGroup(groupCategory.getColorCode());
+        valuePieChart.setNameGroup(groupCategory.getName());
+        valuePieChart.setAmount(bigDecimal.floatValue());
+        valuePieChart.setAmountString(bigDecimal.toString());
+        return valuePieChart;
+    }
+
+    private ValuePieChart getValePieChartTransfer(List<Exchange> exchanges, int type) {
+        ValuePieChart valuePieChart = new ValuePieChart();
+        BigDecimal bigDecimal = new BigDecimal("0");
+        if (type == PieChartType.EXPENSES) {
+            for (Exchange exchange : exchanges) {
+                if (exchange.getTypeExchange() == ExchangeType.TRANSFER && exchange.getAmount().startsWith("-")) {
+                    bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount().substring(1)));
+                }
+            }
+        }
+        if (type == PieChartType.INCOME) {
+            for (Exchange exchange : exchanges) {
+                if (exchange.getTypeExchange() == ExchangeType.TRANSFER && !exchange.getAmount().startsWith("-")) {
+                    bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
+                }
+            }
+        }
+        if (bigDecimal.floatValue() == 0f) {
+            return null;
+        }
+        valuePieChart.setColorGroup(R.color.color_transfer);
+        valuePieChart.setNameGroup("Chuyển khoản");
+        valuePieChart.setAmount(bigDecimal.floatValue());
+        valuePieChart.setAmountString(bigDecimal.toString());
+        return valuePieChart;
+    }
+
+    public List<Exchange> getFilterExchanges(Filter filter) {
         boolean isRequestAccount = filter.isRequestByAccount();
         if (!isRequestAccount) {
             return getExchangesFilter(filter);
@@ -140,7 +230,7 @@ public class ExchangeManger extends RealmHelper {
         Date date = filter.getDateFilter();
         switch (viewType) {
             case FilterType.ALL:
-                return getExchanges();
+                return getFilterExchanges();
             case FilterType.DAY:
                 return getExchangesSameDay(date);
             case FilterType.MONTH:
