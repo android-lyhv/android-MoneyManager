@@ -36,7 +36,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
     public ItemSimpleExchange(View itemView) {
         super(itemView);
         tvAccountName = (TextView) itemView.findViewById(R.id.tvNameAccount);
-        tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
+        tvDescription = (TextView) itemView.findViewById(R.id.tvAccountName);
         tvDateCreated = (TextView) itemView.findViewById(R.id.tvDate);
         tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
         imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);

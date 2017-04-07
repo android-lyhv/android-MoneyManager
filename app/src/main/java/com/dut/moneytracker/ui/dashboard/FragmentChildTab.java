@@ -1,6 +1,6 @@
 package com.dut.moneytracker.ui.dashboard;
 
-import android.support.v4.content.ContextCompat;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +65,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @AfterViews
     void init() {
         mCardView.setVisibility(View.GONE);
-        mLineChartMoney = new LineChartMoney(getContext(), mLineChart, mAccount.getColorCode());
+        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         onShowAmount();
         onLoadExchanges();
         onLoadChart();
@@ -74,6 +74,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @Override
     public void onLoadChart() {
         mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
+        mLineChartMoney.setColorChart(mAccount.getColorHex());
         mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
         mLineChartMoney.notifyDataSetChanged();
     }
@@ -114,7 +115,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onShowAmount() {
-        mTvAmount.setTextColor(ContextCompat.getColor(getContext(), mAccount.getColorCode()));
+        mTvAmount.setTextColor(Color.parseColor(mAccount.getColorHex()));
         String money = CurrencyUtils.getInstance().getStringMoneyType(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), mAccount.getCurrencyCode());
         mTvAmount.setText(money);
     }

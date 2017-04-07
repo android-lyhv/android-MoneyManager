@@ -55,7 +55,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
             super(itemView);
             imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
             tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
-            tvAccountName = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvAccountName = (TextView) itemView.findViewById(R.id.tvAccountName);
             tvDateCreated = (TextView) itemView.findViewById(R.id.tvLastCreated);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
         }

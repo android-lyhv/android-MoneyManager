@@ -122,7 +122,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mEditDescription = (EditText) findViewById(R.id.tvDescription);
+        mEditDescription = (EditText) findViewById(R.id.tvAccountName);
         tvAmount = (TextView) findViewById(R.id.tvAmount);
         mTvDate = (TextView) findViewById(R.id.tvDate);
         mTvDate.setOnClickListener(this);
@@ -165,7 +165,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvDescription:
+            case R.id.tvAccountName:
                 break;
             case R.id.tvDate:
                 mDayPicker.show(getSupportFragmentManager(), TAG);

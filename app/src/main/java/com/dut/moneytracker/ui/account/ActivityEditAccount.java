@@ -3,9 +3,9 @@ package com.dut.moneytracker.ui.account;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -13,12 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,95 +26,72 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogPickColor;
+import com.dut.moneytracker.dialogs.DialogPickColor_;
 import com.dut.moneytracker.objects.Account;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 07/03/2017.
  */
-
-public class ActivityEditAccount extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+@EActivity(R.layout.activity_edit_account)
+@OptionsMenu(R.menu.menu_edit_account)
+public class ActivityEditAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
     private static final java.lang.String TAG = ActivityEditAccount.class.getSimpleName();
+    @ViewById(R.id.toolbar)
+    Toolbar mToolbar;
+    @ViewById(R.id.tvInitAmount)
     TextView mTvAmount;
+    @ViewById(R.id.tvAccountName)
     EditText mEdtNameAccount;
+    @ViewById(R.id.tvCurrency)
     TextView mTvCurrencyCode;
-    private SwitchCompat mSwitchLocation;
-    private Account mAccount;
+    @ViewById(R.id.imgColor)
+    ImageView imgColor;
+    @ViewById(R.id.switchLocation)
+    SwitchCompat mSwitchLocation;
+    @Extra
+    Account mAccount;
+    private DialogPickColor mDialogPickColor;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_account);
+    @AfterViews
+    void init() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        initView();
-        onAccountExtra();
+        initToolbar();
+        onLoadData();
+        initDialogPickColor();
     }
 
-    private void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_close_white);
-        mTvAmount = (TextView) findViewById(R.id.tvInitAmount);
-        mTvAmount.setOnClickListener(this);
-        mEdtNameAccount = (EditText) findViewById(R.id.tvDescription);
-        mTvCurrencyCode = (TextView) findViewById(R.id.tvCurrency);
-        mTvCurrencyCode.setOnClickListener(this);
-        mSwitchLocation = (SwitchCompat) findViewById(R.id.switchLocation);
-        mSwitchLocation.setOnCheckedChangeListener(this);
+    private void initDialogPickColor() {
+        mDialogPickColor = DialogPickColor_.builder().build();
+        mDialogPickColor.register(this);
     }
 
-    private void onAccountExtra() {
-        mAccount = getIntent().getParcelableExtra(getString(R.string.extra_account));
+    private void initToolbar() {
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_close_white);
+    }
+
+    private void onLoadData() {
         mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mAccount.getInitAmount(), mAccount.getCurrencyCode()));
         mEdtNameAccount.setText(mAccount.getName());
         mTvCurrencyCode.setText(mAccount.getCurrencyCode());
         mSwitchLocation.setChecked(mAccount.isSaveLocation());
+        GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
+        shapeDrawable.setColor(Color.parseColor(mAccount.getColorHex()));
+        imgColor.setBackground(shapeDrawable);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_edit_account, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.actionSave:
-                onSaveDataAccount();
-                break;
-            case R.id.actionDelete:
-                //TODO
-                finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tvInitAmount:
-                DialogCalculator dialogCalculator = new DialogCalculator();
-                dialogCalculator.setAmount(mAccount.getInitAmount());
-                dialogCalculator.show(getFragmentManager(), TAG);
-                dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
-                    @Override
-                    public void onResult(String amount) {
-                        mAccount.setInitAmount(amount);
-                        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(amount, mAccount.getCurrencyCode()));
-                    }
-                });
-                break;
-            case R.id.spinnerTypeLoop:
-                break;
-        }
-    }
-
-    private void onSaveDataAccount() {
+    @OptionsItem(R.id.actionSave)
+    void onSaveAccount() {
         String accountName = mEdtNameAccount.getText().toString();
         if (TextUtils.isEmpty(accountName)) {
             Toast.makeText(this, "Fill the name account!", Toast.LENGTH_SHORT).show();
@@ -126,6 +102,35 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
         intent.putExtra(getString(R.string.extra_account), mAccount);
         setResult(ResultCode.EDIT_ACCOUNT, intent);
         finish();
+    }
+
+    @OptionsItem(R.id.actionDelete)
+    void onDeleteAccount() {
+        //TODO
+    }
+
+    @OptionsItem(android.R.id.home)
+    void onColse() {
+        finish();
+    }
+
+    @Click(R.id.tvInitAmount)
+    void onClickInitAmount() {
+        DialogCalculator dialogCalculator = new DialogCalculator();
+        dialogCalculator.setAmount(mAccount.getInitAmount());
+        dialogCalculator.show(getFragmentManager(), TAG);
+        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+            @Override
+            public void onResult(String amount) {
+                mAccount.setInitAmount(amount);
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(amount, mAccount.getCurrencyCode()));
+            }
+        });
+    }
+
+    @Click(R.id.imgColor)
+    void onClickImgColor() {
+        mDialogPickColor.show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -178,4 +183,11 @@ public class ActivityEditAccount extends AppCompatActivity implements View.OnCli
         }
     }
 
+    @Override
+    public void onResult(String colorHex) {
+        mAccount.setColorHex(colorHex);
+        GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
+        shapeDrawable.setColor(Color.parseColor(colorHex));
+        imgColor.setBackground(shapeDrawable);
+    }
 }

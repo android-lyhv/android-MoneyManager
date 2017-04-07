@@ -1,6 +1,6 @@
 package com.dut.moneytracker.ui.dashboard;
 
-import android.support.v4.content.ContextCompat;
+import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.CardAccountAdapter;
+import com.dut.moneytracker.adapter.account.CardAccountAdapter;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
@@ -76,7 +76,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @AfterViews
     public void init() {
-        mLineChartMoney = new LineChartMoney(getContext(), mLineChart, R.color.colorPrimary);
+        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         onShowAmount();
         onLoadCardAccount();
         onLoadExchanges();
@@ -100,6 +100,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @Override
     public void onLoadChart() {
         mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
+        mLineChartMoney.setColorChart(getString(R.string.color_account_default));
         mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
         mLineChartMoney.notifyDataSetChanged();
     }
@@ -122,7 +123,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onShowAmount() {
-        mTvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+        mTvAmount.setTextColor(Color.parseColor(getString(R.string.color_account_default)));
         String money = CurrencyUtils.getInstance().getStringMoneyType(AccountManager.getInstance().getTotalAmountAvailable(),
                 CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
         mTvAmount.setText(money);

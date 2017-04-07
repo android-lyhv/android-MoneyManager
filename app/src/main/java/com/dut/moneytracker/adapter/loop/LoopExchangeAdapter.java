@@ -74,7 +74,7 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
             super(itemView);
             imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
             tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
-            tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvDescription = (TextView) itemView.findViewById(R.id.tvAccountName);
             tvTypeLoop = (TextView) itemView.findViewById(R.id.tvTypeLoop);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
             tvLastCreated = (TextView) itemView.findViewById(R.id.tvLastCreated);

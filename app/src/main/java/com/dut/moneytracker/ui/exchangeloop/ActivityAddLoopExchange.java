@@ -80,7 +80,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     TextView tvCategoryName;
     @ViewById(R.id.tvAmount)
     TextView mTvAmount;
-    @ViewById(R.id.tvDescription)
+    @ViewById(R.id.tvAccountName)
     TextView tvDescription;
     @ViewById(R.id.tvDate)
     TextView tvDate;

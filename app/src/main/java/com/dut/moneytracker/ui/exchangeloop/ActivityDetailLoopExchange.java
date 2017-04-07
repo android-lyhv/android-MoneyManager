@@ -84,7 +84,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     TextView tvCategoryName;
     @ViewById(R.id.tvAmount)
     TextView mTvAmount;
-    @ViewById(R.id.tvDescription)
+    @ViewById(R.id.tvAccountName)
     TextView tvDescription;
     @ViewById(R.id.tvDate)
     TextView tvDate;

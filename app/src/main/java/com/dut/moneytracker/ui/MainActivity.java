@@ -31,7 +31,7 @@ import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
-import com.dut.moneytracker.ui.account.ActivityEditAccount;
+import com.dut.moneytracker.ui.account.ActivityEditAccount_;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
 import com.dut.moneytracker.ui.charts.FragmentChartPager;
 import com.dut.moneytracker.ui.charts.FragmentChartPager_;
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
-        startActivityEditAccount();
+        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.EDIT_ACCOUNT);
     }
 
     @Click(R.id.llChartIncome)
@@ -278,12 +278,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                 onResultEditAccount(data);
                 break;
         }
-    }
-
-    void startActivityEditAccount() {
-        Intent intent = new Intent(this, ActivityEditAccount.class);
-        intent.putExtra(getString(R.string.extra_account), mAccount);
-        startActivityForResult(intent, RequestCode.EDIT_ACCOUNT);
     }
 
     void onResultEditAccount(Intent data) {

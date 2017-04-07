@@ -1,9 +1,9 @@
 package com.dut.moneytracker.ui.exchanges;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -128,7 +128,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         btnExpenses.setOnClickListener(this);
         btnTransfer = (Button) findViewById(R.id.btnTransfer);
         btnTransfer.setOnClickListener(this);
-        tvAccountName = (TextView) findViewById(R.id.tvDescription);
+        tvAccountName = (TextView) findViewById(R.id.tvAccountName);
         tvCategoryName = (TextView) findViewById(R.id.tvCategoryName);
         llAccount = (LinearLayout) findViewById(R.id.llAccount);
         llAccount.setOnClickListener(this);
@@ -145,8 +145,8 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         btnTransfer.setAlpha(0.5f);
         tvAccountName.setText(mAccount.getName());
         tvCurrency.setText(mAccount.getCurrencyCode());
-        mToolbar.setBackgroundColor(ContextCompat.getColor(this, mAccount.getColorCode()));
-        llInformation.setBackgroundColor(ContextCompat.getColor(this, mAccount.getColorCode()));
+        mToolbar.setBackgroundColor(Color.parseColor(mAccount.getColorHex()));
+        llInformation.setBackgroundColor(Color.parseColor(mAccount.getColorHex()));
     }
 
     private void initDataExchange() {

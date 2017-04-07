@@ -1,7 +1,7 @@
 package com.dut.moneytracker.models.charts;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.graphics.Color;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -27,14 +27,17 @@ public class LineChartMoney {
     private LineDataSet mLineDataSet;
     private LineChart mChart;
     private List<Entry> mEntries = new ArrayList<>();
-    private int mColorChart;
+    private String mColorChart;
     private Context mContext;
 
-    public LineChartMoney(Context context, LineChart chart, int colorChart) {
+    public LineChartMoney(Context context, LineChart chart) {
         mChart = chart;
         mContext = context;
-        mColorChart = colorChart;
         onSetupChart();
+    }
+
+    public void setColorChart(String mColorChart) {
+        this.mColorChart = mColorChart;
     }
 
     public void updateNewValueLineChart(List<ValueLineChart> valueLineCharts) {
@@ -48,8 +51,8 @@ public class LineChartMoney {
             mEntries.add(entry);
         }
         mLineDataSet = new LineDataSet(mEntries, mContext.getString(R.string.label_linechart));
-        mLineDataSet.setCircleColor((ContextCompat.getColor(mContext, mColorChart)));
-        mLineDataSet.setColor(ContextCompat.getColor(mContext, mColorChart));
+        mLineDataSet.setCircleColor(Color.parseColor(mColorChart));
+        mLineDataSet.setColor(Color.parseColor(mColorChart));
         mLineDataSet.setDrawValues(false);
         mLineData = new LineData(mLineDataSet);
         mChart.setData(mLineData);

@@ -227,4 +227,21 @@
     <string-array name="other_path">
         <item>ic_other</item>
     </string-array>
+    <string-array name="colors_account">
+        <item>#F44336</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#2196F3</item>
+        <item>#009688</item>
+        <item>#4CAF50</item>
+        <item>#8BC34A</item>
+        <item>#FFEB3B</item>
+        <item>#795548</item>
+        <item>#607D8B</item>
+        <item>#64dd17</item>
+        <item>#9E9E9E</item>
+        <item>#212121</item>
+    </string-array>
+    <string name="color_account_default">#03a879</string>
 </resources>

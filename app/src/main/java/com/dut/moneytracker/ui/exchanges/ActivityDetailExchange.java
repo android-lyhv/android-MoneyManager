@@ -78,7 +78,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     TextView tvAccount;
     @ViewById(R.id.tvCurrency)
     TextView tvCurrency;
-    @ViewById(R.id.tvDescription)
+    @ViewById(R.id.tvAccountName)
     TextView mTvDescription;
     @ViewById(R.id.tvDate)
     TextView tvDate;

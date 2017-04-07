@@ -43,7 +43,7 @@
 
 
                 <EditText
-                    android:id="@+id/tvDescription"
+                    android:id="@+id/tvAccountName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleAccountName"
@@ -58,7 +58,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@id/tvDescription"
+                    android:layout_below="@id/tvAccountName"
                     android:layout_marginTop="5dp"
                     android:background="#c4c4c4" />
             </RelativeLayout>
@@ -141,9 +141,8 @@
                     android:layout_height="match_parent"
                     android:text="Chọn màu" />
 
-
                 <ImageView
-                    android:id="@+id/tvColor"
+                    android:id="@+id/imgColor"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignStart="@id/tvTitleColor"
@@ -157,7 +156,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@id/tvColor"
+                    android:layout_below="@id/imgColor"
                     android:layout_marginTop="5dp"
                     android:background="#c4c4c4" />
             </RelativeLayout>
