@@ -19,6 +19,7 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.CategoryManager;
+import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -112,14 +113,16 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
             switchLoop.setChecked(exchangeLooper.isLoop());
             if (exchangeLooper.getTypeExchange() == ExchangeType.INCOME) {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-            }else {
-                tvAmount.setTextColor(ContextCompat.getColor(getContext(),android.R.color.holo_red_light));
+            } else {
+                tvAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_light));
             }
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             switchLoop.setChecked(isChecked);
+            ExchangeLooper exchangeLooper = (ExchangeLooper) getItem(getAdapterPosition());
+            ExchangeLoopManager.getInstance(getContext()).updateCheckLoopExchange(exchangeLooper.getId(), isChecked);
         }
 
         @Override

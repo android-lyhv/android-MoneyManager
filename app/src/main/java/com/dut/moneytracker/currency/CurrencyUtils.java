@@ -9,9 +9,12 @@ import java.util.Currency;
  * Created by ly.ho on 05/03/2017.
  */
 public class CurrencyUtils {
-    private static CurrencyUtils ourInstance = new CurrencyUtils();
+    private static CurrencyUtils ourInstance;
 
     public static CurrencyUtils getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new CurrencyUtils();
+        }
         return ourInstance;
     }
 
@@ -42,5 +45,12 @@ public class CurrencyUtils {
     public float getFloatMoney(String amount) {
         BigDecimal bigDecimal = new BigDecimal(amount);
         return bigDecimal.floatValue();
+    }
+
+    public String getDecialFortmat(String value) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        numberFormat.setMinimumFractionDigits(0);
+        numberFormat.setMaximumFractionDigits(2);
+        return numberFormat.format(value);
     }
 }

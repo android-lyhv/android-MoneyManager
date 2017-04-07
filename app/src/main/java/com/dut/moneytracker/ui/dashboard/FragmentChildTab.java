@@ -11,8 +11,8 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
-import com.dut.moneytracker.charts.LineChartAmount;
-import com.dut.moneytracker.charts.ValueChartAmount;
+import com.dut.moneytracker.models.charts.LineChartMoney;
+import com.dut.moneytracker.models.charts.ValueLineChart;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.AppPreferences;
@@ -49,7 +49,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     TextView mTvAmount;
     @ViewById(R.id.cardViewCardAccount)
     CardView mCardView;
-    @ViewById(R.id.linchartAmount)
+    @ViewById(R.id.pieChart)
     LineChart mLineChart;
     @FragmentArg
     Account mAccount;
@@ -70,13 +70,13 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadChart() {
-        final List<ValueChartAmount> valueChartAmounts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
-        LineChartAmount lineChartAmount = new LineChartAmount.Builder(mLineChart)
-                .setValueChartAmounts(valueChartAmounts)
+        final List<ValueLineChart> valueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
+        LineChartMoney lineChartMoney = new LineChartMoney.Builder(mLineChart)
+                .setValueChartAmounts(valueLineCharts)
                 .setLabel(getString(R.string.chart_title))
                 .setColorLine(mAccount.getColorCode())
                 .build();
-        lineChartAmount.onDraw();
+        lineChartMoney.onDraw();
     }
 
     @Override
@@ -123,6 +123,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
-        ((MainActivity) getActivity()).onLoadFragmentAllExchangesByAccount(mAccount.getId());
+        ((MainActivity) getActivity()).onLoadFragmentExchangesByAccount(mAccount.getId());
     }
 }

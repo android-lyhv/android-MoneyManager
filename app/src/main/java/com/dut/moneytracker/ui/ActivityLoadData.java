@@ -19,8 +19,6 @@ import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Arrays;
-
 import io.realm.RealmList;
 
 /**
@@ -102,33 +100,43 @@ public class ActivityLoadData extends AppCompatActivity {
     private void setListCategory(GroupCategory groupCategory, int index) {
         switch (index) {
             case GroupTag.INCOME:
+                groupCategory.setColorCode(R.color.color_income);
                 setListChildCategory(groupCategory, R.array.income_name, R.array.income_path);
                 break;
             case GroupTag.FOOD:
+                groupCategory.setColorCode(R.color.color_food);
                 setListChildCategory(groupCategory, R.array.food_drink_name, R.array.food_drink_path);
                 break;
             case GroupTag.TRANSPORTATION:
+                groupCategory.setColorCode(R.color.color_transportation);
                 setListChildCategory(groupCategory, R.array.transportation_name, R.array.transportation_path);
                 break;
             case GroupTag.ENTERTAINMENT:
+                groupCategory.setColorCode(R.color.color_entertainment);
                 setListChildCategory(groupCategory, R.array.entertainment_name, R.array.entertainment_path);
                 break;
             case GroupTag.HEALTH:
+                groupCategory.setColorCode(R.color.color_health);
                 setListChildCategory(groupCategory, R.array.health_name, R.array.health_path);
                 break;
             case GroupTag.FAMILY:
+                groupCategory.setColorCode(R.color.color_family);
                 setListChildCategory(groupCategory, R.array.family_name, R.array.family_path);
                 break;
             case GroupTag.SHOPPING:
+                groupCategory.setColorCode(R.color.color_shopping);
                 setListChildCategory(groupCategory, R.array.shopping_name, R.array.shopping_path);
                 break;
             case GroupTag.EDUCATION:
+                groupCategory.setColorCode(R.color.color_education);
                 setListChildCategory(groupCategory, R.array.education_name, R.array.education_path);
                 break;
             case GroupTag.LOVE:
+                groupCategory.setColorCode(R.color.color_love);
                 setListChildCategory(groupCategory, R.array.love_name, R.array.love_path);
                 break;
             case GroupTag.OTHER:
+                groupCategory.setColorCode(R.color.color_other);
                 setListChildCategory(groupCategory, R.array.other_name, R.array.other_path);
                 break;
         }
@@ -137,12 +145,12 @@ public class ActivityLoadData extends AppCompatActivity {
     private void setListChildCategory(GroupCategory groupCategory, int idListName, int idListPath) {
         String[] name = getResources().getStringArray(idListName);
         String[] path = getResources().getStringArray(idListPath);
-        Log.d(TAG, "setListChildCategory: \n" + Arrays.toString(name) + "\n" + Arrays.toString(path));
         RealmList<Category> realmList = new RealmList<>();
         int size = name.length;
         for (int i = 0; i < size; i++) {
             idCategory += 1;
             Category category = new Category();
+            category.setIdGroup(groupCategory.getId());
             category.setId(String.valueOf(idCategory));
             category.setName(name[i]);
             category.setByteImage(loadByteBitmap(path[i]));

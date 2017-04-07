@@ -20,27 +20,30 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.ui.account.ActivityEditAccount;
-import com.dut.moneytracker.ui.user.LoginActivity;
-import com.dut.moneytracker.ui.base.SpinnerAccountManger;
-import com.dut.moneytracker.ui.user.UserInformationActivity;
-import com.dut.moneytracker.ui.interfaces.MainListener;
 import com.dut.moneytracker.constant.FilterType;
+import com.dut.moneytracker.constant.PieChartType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
-import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
-import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
-import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager;
-import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager_;
-import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
-import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange_;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
+import com.dut.moneytracker.ui.account.ActivityEditAccount;
+import com.dut.moneytracker.ui.base.SpinnerAccountManger;
+import com.dut.moneytracker.ui.charts.FragmentChartPager;
+import com.dut.moneytracker.ui.charts.FragmentChartPager_;
+import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
+import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
+import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
+import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange_;
+import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager;
+import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager_;
+import com.dut.moneytracker.ui.interfaces.MainListener;
+import com.dut.moneytracker.ui.user.LoginActivity;
+import com.dut.moneytracker.ui.user.UserInformationActivity;
 import com.dut.moneytracker.view.CircleImageView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -51,17 +54,19 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 
+import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
+
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener {
-    public enum FragmentTag {
-        DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE
-    }
-
-    FragmentTag mFragmentTag;
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
-    private static final String EXCHANGES = "EXCHANGES";
-    private static final String LOOP = "EXCHANGE_LOOPS";
+
+    public enum FragmentTag {
+        DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES
+
+    }
+
+    FragmentTag mFragmentTag = DEFAULT;
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @ViewById(R.id.imgUserLogo)
@@ -94,22 +99,20 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentDashboard mFragmentDashboard;
     FragmentLoopExchange mFragmentLoopExchange;
     FragmentExchangesPager mFragmentExchangesPager;
+    FragmentChartPager mFragmentChartPager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
+    private Filter mFilter;
+    private Filter mLastFilter;
 
     @AfterViews
     void init() {
-        mFilter = FilterManager.getInstance().getFilterDefault();
         mDialogPickFilter = new DialogPickFilter();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
         initView();
         onLoadProfile();
         onLoadFragmentDashboard();
-        mToolbar.setTitle(getString(R.string.main_account));
     }
-
-    private Filter mFilter;
-
 
     void initView() {
         setSupportActionBar(mToolbar);
@@ -122,10 +125,16 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                         onLoadFragmentDashboard();
                         break;
                     case EXCHANGES:
-                        onLoadFragmentAllExchanges();
+                        onLoadFragmentExchanges();
                         break;
                     case EXCHANGE_LOOPS:
                         onLoadFragmentLoopExchange();
+                        break;
+                    case CHART_INCOME:
+                        onLoadFragmentChart(PieChartType.INCOME);
+                        break;
+                    case CHART_EXPENSES:
+                        onLoadFragmentChart(PieChartType.EXPENSES);
                         break;
                     case PROFILE:
                         startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), RequestCode.PROFILE);
@@ -136,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mFragmentTag = null;
+                mFragmentTag = DEFAULT;
             }
         };
         mDrawerLayout.setDrawerListener(toggle);
@@ -156,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                     mFilter.setRequestByAccount(true);
                     mFilter.setAccountId(accountId);
                 }
-                onChangeFilter();
+                reloadFragmentFilter();
             }
         });
     }
@@ -165,10 +174,15 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         mDialogPickFilter.show(getFragmentManager(), TAG);
         mDialogPickFilter.registerFilter(mFilter.getViewType(), new DialogPickFilter.FilterListener() {
             @Override
-            public void onResult(int idFilter) {
-                mFilter.setViewType(idFilter);
-                mFilter.setDateFilter(new Date());
-                onChangeFilter();
+            public void onResult(int filterType) {
+                if (filterType == FilterType.CUSTOM) {
+                    onChangeFilterCustom();
+                } else {
+                    mFilter.setViewType(filterType);
+                    mFilter.setDateFilter(new Date());
+                    reloadFragmentFilter();
+                }
+
             }
         });
     }
@@ -192,7 +206,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
+            if (fragment != null) {
+                super.onBackPressed();
+            } else {
+                onLoadFragmentDashboard();
+            }
         }
     }
 
@@ -228,6 +247,18 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
         startActivityEditAccount();
+    }
+
+    @Click(R.id.llChartIncome)
+    void onClickChartIncome() {
+        mFragmentTag = FragmentTag.CHART_INCOME;
+        onCloseNavigation();
+    }
+
+    @Click(R.id.llChartExpense)
+    void onClickChartExpense() {
+        mFragmentTag = FragmentTag.CHART_EXPENSES;
+        onCloseNavigation();
     }
 
     private void onCloseNavigation() {
@@ -266,95 +297,122 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         finish();
     }
 
-    public void onLoadFragmentAllExchanges() {
+    /**
+     * load piechart
+     *
+     * @param typeChart
+     */
+    public void onLoadFragmentChart(int typeChart) {
         mFilter = FilterManager.getInstance().getFilterDefault();
+        mLastFilter = mFilter;
+        mSpinnerAccount.setSelectItem(null);
+        mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
+        onReplaceFragment(mFragmentChartPager, null);
+    }
+
+    /**
+     * Load all records Exchange
+     */
+    public void onLoadFragmentExchanges() {
+        mFilter = FilterManager.getInstance().getFilterDefault();
+        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(null);
         onLoadFragmentExchange(mFilter);
     }
 
-    public void onLoadFragmentAllExchangesByAccount(String idAccount) {
+    /**
+     * Load all records Exchange by account
+     */
+    public void onLoadFragmentExchangesByAccount(String idAccount) {
         mFilter = FilterManager.getInstance().getFilterDefaultAccount(idAccount);
+        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(idAccount);
         onLoadFragmentExchange(mFilter);
     }
 
+    /**
+     * load filter
+     *
+     * @param filter
+     */
     private void onLoadFragmentExchange(Filter filter) {
         mFragmentExchangesPager = FragmentExchangesPager_.builder().mFilter(filter).build();
-        requestReplaceFragment(mFragmentExchangesPager, EXCHANGES, true);
+        onReplaceFragment(mFragmentExchangesPager, null);
     }
 
+    /**
+     * Load fragment dashboard account
+     */
     public void onLoadFragmentDashboard() {
         mFragmentDashboard = FragmentDashboard_.builder().build();
-        requestReplaceFragment(mFragmentDashboard, DASHBOARD, false);
+        onReplaceFragment(mFragmentDashboard, DASHBOARD);
     }
 
+    /**
+     * load fragment list exchanges loop
+     */
     public void onLoadFragmentLoopExchange() {
         mFragmentLoopExchange = FragmentLoopExchange_.builder().build();
-        requestReplaceFragment(mFragmentLoopExchange, LOOP, true);
+        onReplaceFragment(mFragmentLoopExchange, null);
     }
 
-    private void requestReplaceFragment(Fragment fragment, String TAG, boolean isStack) {
+    private void onReplaceFragment(Fragment fragment, String TAG) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameContent, fragment, TAG);
-        if (isStack) {
-            fragmentTransaction.addToBackStack(null);
-        }
         fragmentTransaction.commit();
     }
 
-    // Change View
+    // Change Menu items
     @Override
-    public boolean checkFragmentDashboard() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
-        if (fragment instanceof FragmentDashboard) {
-            spinner.setVisibility(View.GONE);
-            imgDateFilter.setVisibility(View.GONE);
-            imgSettingAccount.setVisibility(View.VISIBLE);
-            return true;
-        }
-        return false;
+    public void loadMenuItemFragmentDashboard() {
+        setTitle(getString(R.string.main_account));
+        spinner.setVisibility(View.GONE);
+        imgDateFilter.setVisibility(View.GONE);
+        imgSettingAccount.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public boolean checkFragmentExchanges() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGES);
-        if (fragment instanceof FragmentExchangesPager) {
-            spinner.setVisibility(View.VISIBLE);
-            imgDateFilter.setVisibility(View.VISIBLE);
-            imgSettingAccount.setVisibility(View.GONE);
-            return true;
-        }
-        return false;
+    public void loadMenuItemFragmentExchanges() {
+        setTitle(null);
+        spinner.setVisibility(View.VISIBLE);
+        imgDateFilter.setVisibility(View.VISIBLE);
+        imgSettingAccount.setVisibility(View.GONE);
     }
 
     @Override
-    public boolean checkFragmentLoop() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(LOOP);
-        if (fragment instanceof FragmentLoopExchange) {
-            spinner.setVisibility(View.GONE);
-            imgDateFilter.setVisibility(View.GONE);
-            imgSettingAccount.setVisibility(View.GONE);
-            return true;
-        }
-        return false;
+    public void loadMenuItemFragmentLoop() {
+        setTitle(null);
+        spinner.setVisibility(View.GONE);
+        imgDateFilter.setVisibility(View.GONE);
+        imgSettingAccount.setVisibility(View.GONE);
     }
 
     @Override
-    public void onChangeFilter() {
-        if (mFragmentExchangesPager == null) {
-            return;
+    public void loadMenuItemFragmentChart() {
+        setTitle(null);
+        spinner.setVisibility(View.VISIBLE);
+        imgDateFilter.setVisibility(View.VISIBLE);
+        imgSettingAccount.setVisibility(View.GONE);
+    }
+
+    public void onChangeFilterCustom() {
+        mDialogCustomFilter.show(mFragmentManager, TAG);
+        mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
+            @Override
+            public void onResultDate(Date fromDate, Date toDate) {
+                mFilter.setFormDate(fromDate);
+                mFilter.setToDate(toDate);
+                mFilter.setViewType(FilterType.CUSTOM);
+                reloadFragmentFilter();
+            }
+        });
+    }
+
+    private void reloadFragmentFilter() {
+        if (mFragmentChartPager != null) {
+            mFragmentChartPager.onReloadFragmentPager();
         }
-        if (mFilter.getViewType() == FilterType.CUSTOM) {
-            mDialogCustomFilter.show(mFragmentManager, TAG);
-            mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
-                @Override
-                public void onResultDate(Date fromDate, Date toDate) {
-                    mFilter.setFormDate(fromDate);
-                    mFilter.setToDate(toDate);
-                    mFragmentExchangesPager.onReloadFragmentPager();
-                }
-            });
-        } else {
+        if (mFragmentExchangesPager != null) {
             mFragmentExchangesPager.onReloadFragmentPager();
         }
     }

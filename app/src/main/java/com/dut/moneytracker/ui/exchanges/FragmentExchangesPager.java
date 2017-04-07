@@ -22,7 +22,7 @@ import org.androidannotations.annotations.ViewById;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 26/03/2017.
  */
-@EFragment(R.layout.fragment_exchange_pager)
+@EFragment(R.layout.fragment_pager)
 public class FragmentExchangesPager extends BaseFragment implements PagerFragmentListener {
     private static final String TAG = FragmentExchangesPager.class.getSimpleName();
     @ViewById(R.id.viewpager)
@@ -82,13 +82,7 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity_) getActivity()).checkFragmentExchanges();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((MainActivity_) getActivity()).checkFragmentExchanges();
+        ((MainActivity_) getActivity()).loadMenuItemFragmentExchanges();
     }
 
     public void onReloadFragmentPager() {

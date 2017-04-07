@@ -150,7 +150,7 @@
                     android:layout_below="@+id/tvTitleColor"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/shap_color_account"
+                    android:background="@drawable/circle_dote"
                     android:clickable="true"
                     android:textColor="@android:color/black"
                     android:textSize="20dp"

@@ -7,11 +7,11 @@ package com.dut.moneytracker.ui.interfaces;
 
 public interface MainListener {
 
-    boolean checkFragmentDashboard();
+    void loadMenuItemFragmentDashboard();
 
-    boolean checkFragmentExchanges();
+    void loadMenuItemFragmentExchanges();
 
-    boolean checkFragmentLoop();
+    void loadMenuItemFragmentLoop();
 
-    void onChangeFilter();
+    void loadMenuItemFragmentChart();
 }

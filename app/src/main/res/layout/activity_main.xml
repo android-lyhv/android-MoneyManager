@@ -305,30 +305,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/llBubget"
-                    style="@style/navigation_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:paddingStart="10dp">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/img_log" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:text="Ngân sách"
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/llLocation"
                     style="@style/navigation_item"
                     android:layout_width="match_parent"
