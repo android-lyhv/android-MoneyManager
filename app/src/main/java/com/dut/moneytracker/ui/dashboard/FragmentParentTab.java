@@ -12,11 +12,11 @@ import com.dut.moneytracker.adapter.CardAccountAdapter;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
-import com.dut.moneytracker.models.charts.LineChartMoney;
-import com.dut.moneytracker.models.charts.ValueLineChart;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.AppPreferences;
+import com.dut.moneytracker.models.charts.LineChartMoney;
+import com.dut.moneytracker.models.charts.ValueLineChart;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CurrencyManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
@@ -51,7 +51,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     CardAccountListener cardAccountListener;
     NotificationListener notificationListener;
 
-    public void registerNotification(NotificationListener notificationListner){
+    public void registerNotification(NotificationListener notificationListner) {
         this.notificationListener = notificationListner;
     }
 
@@ -71,9 +71,12 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     private List<Account> mAccounts;
     private CardAccountAdapter mCardAccountAdapter;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
+    private List<ValueLineChart> mValueLineCharts;
+    private LineChartMoney mLineChartMoney;
 
     @AfterViews
     public void init() {
+        mLineChartMoney = new LineChartMoney(getContext(), mLineChart, R.color.colorPrimary);
         onShowAmount();
         onLoadCardAccount();
         onLoadExchanges();
@@ -96,12 +99,9 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onLoadChart() {
-        final List<ValueLineChart> valueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
-        LineChartMoney lineChartMoney = new LineChartMoney.Builder(mLineChart)
-                .setValueChartAmounts(valueLineCharts)
-                .setLabel(getString(R.string.chart_title))
-                .build();
-        lineChartMoney.onDraw();
+        mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
+        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+        mLineChartMoney.notifyDataSetChanged();
     }
 
     @Override

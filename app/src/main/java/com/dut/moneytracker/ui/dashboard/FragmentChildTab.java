@@ -1,6 +1,6 @@
 package com.dut.moneytracker.ui.dashboard;
 
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +11,11 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
-import com.dut.moneytracker.models.charts.LineChartMoney;
-import com.dut.moneytracker.models.charts.ValueLineChart;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.AppPreferences;
+import com.dut.moneytracker.models.charts.LineChartMoney;
+import com.dut.moneytracker.models.charts.ValueLineChart;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
@@ -54,6 +54,8 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @FragmentArg
     Account mAccount;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
+    private List<ValueLineChart> mValueLineCharts;
+    private LineChartMoney mLineChartMoney;
     NotificationListener notificationListener;
 
     public void registerNotification(NotificationListener notificationListner) {
@@ -63,6 +65,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @AfterViews
     void init() {
         mCardView.setVisibility(View.GONE);
+        mLineChartMoney = new LineChartMoney(getContext(), mLineChart, mAccount.getColorCode());
         onShowAmount();
         onLoadExchanges();
         onLoadChart();
@@ -70,13 +73,9 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadChart() {
-        final List<ValueLineChart> valueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
-        LineChartMoney lineChartMoney = new LineChartMoney.Builder(mLineChart)
-                .setValueChartAmounts(valueLineCharts)
-                .setLabel(getString(R.string.chart_title))
-                .setColorLine(mAccount.getColorCode())
-                .build();
-        lineChartMoney.onDraw();
+        mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
+        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+        mLineChartMoney.notifyDataSetChanged();
     }
 
     @Override
@@ -115,7 +114,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onShowAmount() {
-        mTvAmount.setTextColor(Color.parseColor(mAccount.getColorCode()));
+        mTvAmount.setTextColor(ContextCompat.getColor(getContext(), mAccount.getColorCode()));
         String money = CurrencyUtils.getInstance().getStringMoneyType(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), mAccount.getCurrencyCode());
         mTvAmount.setText(money);
     }

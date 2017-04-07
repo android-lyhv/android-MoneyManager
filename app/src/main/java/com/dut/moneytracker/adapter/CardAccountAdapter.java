@@ -1,7 +1,7 @@
 package com.dut.moneytracker.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
-import com.dut.moneytracker.currency.CurrencyUtils;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
 
         public void setView(Account account) {
             String value = AccountManager.getInstance().getAmountAvailableByAccount(account.getId());
-            llCard.setBackgroundColor(Color.parseColor(account.getColorCode()));
+            llCard.setBackgroundColor(ContextCompat.getColor(mContext, account.getColorCode()));
             String money = CurrencyUtils.getInstance().getStringMoneyType(value, account.getCurrencyCode());
             tvAmount.setText(money);
             tvAccountName.setText(account.getName());

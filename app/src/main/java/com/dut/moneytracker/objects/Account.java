@@ -23,7 +23,7 @@ public class Account extends RealmObject implements Parcelable {
     private String currencyCode;
     private String initAmount;
     private Date created;
-    private String colorCode;
+    private int colorCode;
     private boolean saveLocation;
     private boolean isDefault;
 
@@ -39,7 +39,7 @@ public class Account extends RealmObject implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.initAmount);
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
-        dest.writeString(this.colorCode);
+        dest.writeInt(this.colorCode);
         dest.writeByte(this.saveLocation ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isDefault ? (byte) 1 : (byte) 0);
     }
@@ -54,7 +54,7 @@ public class Account extends RealmObject implements Parcelable {
         this.initAmount = in.readString();
         long tmpCreated = in.readLong();
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
-        this.colorCode = in.readString();
+        this.colorCode = in.readInt();
         this.saveLocation = in.readByte() != 0;
         this.isDefault = in.readByte() != 0;
     }

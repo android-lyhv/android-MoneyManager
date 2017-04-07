@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -144,12 +143,12 @@ public class AccountManager extends RealmHelper implements AccountListener {
         account.setId(context.getString(R.string.id_default_account));
         account.setName(context.getString(R.string.name_default_account));
         account.setDefault(true);
-        account.setColorCode("#FF028761");
+        account.setColorCode(R.color.colorPrimary);
         account.setCreated(new Date());
         account.setCurrencyCode(CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
         account.setInitAmount("100000");
         insertOrUpdate(account);
-
+/*
         Account account1 = new Account();
         account1.setId(UUID.randomUUID().toString());
         account1.setName("ATM");
@@ -158,6 +157,6 @@ public class AccountManager extends RealmHelper implements AccountListener {
         account1.setCreated(new Date());
         account1.setCurrencyCode(CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
         account1.setInitAmount("100000");
-        insertOrUpdate(account1);
+        insertOrUpdate(account1);*/
     }
 }
