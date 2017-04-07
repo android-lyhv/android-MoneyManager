@@ -26,7 +26,7 @@ import java.util.List;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 14/03/2017.
  */
-@EFragment(R.layout.fragment_exchange_account)
+@EFragment(R.layout.fragment_dashboard)
 public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener, NotificationListener {
     @ViewById(R.id.tabLayout)
     TabLayout mTabLayout;
@@ -51,6 +51,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     private void setUpViewpager() {
         mViewPagerTabAccountAdapter = new BaseViewPagerAdapter(getChildFragmentManager());
+        mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(mViewPagerTabAccountAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.addOnTabSelectedListener(this);

@@ -1,7 +1,6 @@
 package com.dut.moneytracker.ui.exchanges;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -68,7 +67,6 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
     private TextView tvAccountName;
     private TextView tvCategoryName;
     private TextView tvMoreAdd;
-    private LinearLayout llInformation;
     private TextView tvStatus;
     private StringBuilder stringBuilder;
     private TextView tvTitleFromAccount;
@@ -115,7 +113,6 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         tvCal8 = (TextView) findViewById(R.id.tvCal8);
         tvCal8.setOnClickListener(this);
         tvCal9 = (TextView) findViewById(R.id.tvCal9);
-        llInformation = (LinearLayout) findViewById(R.id.llInformation);
         tvCal9.setOnClickListener(this);
         imgCalBack = (ImageView) findViewById(R.id.imgCalBack);
         imgCalBack.setOnClickListener(this);
@@ -145,8 +142,6 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         btnTransfer.setAlpha(0.5f);
         tvAccountName.setText(mAccount.getName());
         tvCurrency.setText(mAccount.getCurrencyCode());
-        mToolbar.setBackgroundColor(Color.parseColor(mAccount.getColorHex()));
-        llInformation.setBackgroundColor(Color.parseColor(mAccount.getColorHex()));
     }
 
     private void initDataExchange() {

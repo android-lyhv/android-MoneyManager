@@ -1,7 +1,6 @@
 package com.dut.moneytracker.ui.account;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -28,23 +27,25 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.UUID;
+
 /**
  * Copyright@ AsianTech.Inc
- * Created by ly.ho on 07/03/2017.
+ * Created by ly.ho on 07/04/2017.
  */
 @EActivity(R.layout.activity_edit_account)
-@OptionsMenu(R.menu.menu_edit_account)
-public class ActivityEditAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
+@OptionsMenu(R.menu.menu_add_exchange)
+public class ActivityAddNewAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
     private static final java.lang.String TAG = ActivityEditAccount.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
@@ -58,7 +59,6 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     ImageView imgColor;
     @ViewById(R.id.switchLocation)
     SwitchCompat mSwitchLocation;
-    @Extra
     Account mAccount;
     private DialogPickColor mDialogPickColor;
 
@@ -66,8 +66,26 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     void init() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initToolbar();
-        onLoadData();
+        initBaseAccount();
         initDialogPickColor();
+    }
+
+    private void initBaseAccount() {
+        mAccount = new Account();
+        mAccount.setId(UUID.randomUUID().toString());
+        mAccount.setColorHex(getString(R.string.color_account_default));
+        mAccount.setCurrencyCode("VND");
+        mAccount.setName("");
+        onLoadData();
+    }
+
+    private void onLoadData() {
+        mEdtNameAccount.setText(mAccount.getName());
+        mTvCurrencyCode.setText(mAccount.getCurrencyCode());
+        mSwitchLocation.setChecked(mAccount.isSaveLocation());
+        GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
+        shapeDrawable.setColor(Color.parseColor(mAccount.getColorHex()));
+        imgColor.setBackground(shapeDrawable);
     }
 
     private void initDialogPickColor() {
@@ -80,18 +98,7 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
         mToolbar.setNavigationIcon(R.drawable.ic_close_white);
     }
 
-    private void onLoadData() {
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mAccount.getInitAmount(), mAccount.getCurrencyCode()));
-        mEdtNameAccount.setText(mAccount.getName());
-        mTvCurrencyCode.setText(mAccount.getCurrencyCode());
-        mSwitchLocation.setChecked(mAccount.isSaveLocation());
-        mSwitchLocation.setOnCheckedChangeListener(this);
-        GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
-        shapeDrawable.setColor(Color.parseColor(mAccount.getColorHex()));
-        imgColor.setBackground(shapeDrawable);
-    }
-
-    @OptionsItem(R.id.actionSave)
+    @OptionsItem(R.id.actionAdd)
     void onSaveAccount() {
         String accountName = mEdtNameAccount.getText().toString();
         if (TextUtils.isEmpty(accountName)) {
@@ -99,15 +106,9 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
             return;
         }
         mAccount.setName(accountName);
-        Intent intent = new Intent();
-        intent.putExtra(getString(R.string.extra_account), mAccount);
-        setResult(ResultCode.EDIT_ACCOUNT, intent);
+        AccountManager.getInstance().insertOrUpdate(mAccount);
+        setResult(ResultCode.ADD_NEW_ACCOUNT);
         finish();
-    }
-
-    @OptionsItem(R.id.actionDelete)
-    void onDeleteAccount() {
-        //TODO
     }
 
     @OptionsItem(android.R.id.home)
@@ -118,7 +119,11 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     @Click(R.id.tvInitAmount)
     void onClickInitAmount() {
         DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.setAmount(mAccount.getInitAmount());
+        if (!TextUtils.isEmpty(mAccount.getInitAmount())) {
+            dialogCalculator.setAmount(mAccount.getInitAmount());
+        } else {
+            dialogCalculator.setAmount("");
+        }
         dialogCalculator.show(getFragmentManager(), TAG);
         dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
@@ -166,7 +171,7 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ActivityCompat.requestPermissions(ActivityEditAccount.this,
+                                ActivityCompat.requestPermissions(ActivityAddNewAccount.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
                                         RequestCode.PERMISSION_LOCATION);

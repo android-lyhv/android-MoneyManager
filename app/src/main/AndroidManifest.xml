@@ -28,6 +28,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.account.ActivityAccounts_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.account.ActivityAddNewAccount_"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.exchanges.ActivityAddMoreExchange"
             android:screenOrientation="portrait" />
         <activity
@@ -87,7 +93,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <receiver android:name=".recevier.ReceiveGenerateExchange"/>
+
+        <receiver android:name=".recevier.ReceiveGenerateExchange" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

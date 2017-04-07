@@ -71,11 +71,11 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/llAddAccount"
-                    style="@style/navigation_item"
+                    android:id="@+id/llAccount"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingEnd="10dp"
                     android:paddingStart="10dp">
 
@@ -92,13 +92,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="20dp"
-                        android:text="Thêm tài khoản"
+                        android:text="Tài khoản"
                         android:textColor="@android:color/black" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginTop="10dp"
                     android:background="#b4b3b3" />
 
@@ -111,10 +111,10 @@
 
                 <LinearLayout
                     android:id="@+id/llDashBoard"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -136,10 +136,10 @@
 
                 <LinearLayout
                     android:id="@+id/llRecode"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -160,10 +160,10 @@
 
                 <LinearLayout
                     android:id="@+id/llDefaultExchange"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -197,10 +197,10 @@
 
                 <LinearLayout
                     android:id="@+id/llChartIncome"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -221,10 +221,10 @@
 
                 <LinearLayout
                     android:id="@+id/llChartExpense"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -245,10 +245,10 @@
 
                 <LinearLayout
                     android:id="@+id/llChartCategory"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -282,10 +282,10 @@
 
                 <LinearLayout
                     android:id="@+id/llDebit"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -306,10 +306,10 @@
 
                 <LinearLayout
                     android:id="@+id/llLocation"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView
@@ -330,78 +330,16 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#b4b3b3" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Báo cáo" />
-
-                <LinearLayout
-                    android:id="@+id/llMoneyFlow"
-                    style="@style/navigation_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:paddingStart="10dp">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/img_log" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:text="Dòng Tiền"
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/llExport"
-                    style="@style/navigation_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:paddingStart="10dp">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/img_log" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="20dp"
-                        android:text="Xuất File"
-                        android:textColor="@android:color/black" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginTop="10dp"
                     android:background="#b4b3b3" />
 
                 <LinearLayout
                     android:id="@+id/llSetting"
-                    style="@style/navigation_item"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="5dp"
+                    android:background="@drawable/selector_bg_white"
                     android:paddingStart="10dp">
 
                     <ImageView

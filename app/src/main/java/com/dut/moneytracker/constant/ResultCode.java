@@ -17,4 +17,5 @@ public class ResultCode {
     public static final int ADD_LOOP_EXCHANGE = 8;
     public static final int DETAIL_LOOP_EXCHANGE = 9;
     public static final int DELETE_EXCHANGE = 10;
+    public static final int ADD_NEW_ACCOUNT = 11;
 }
