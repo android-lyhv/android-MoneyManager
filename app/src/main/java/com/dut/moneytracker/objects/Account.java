@@ -24,8 +24,12 @@ public class Account extends RealmObject implements Parcelable {
     private String initAmount;
     private Date created;
     private String colorHex;
+    private String description;
     private boolean saveLocation;
     private boolean isDefault;
+
+    public Account() {
+    }
 
     @Override
     public int describeContents() {
@@ -35,31 +39,30 @@ public class Account extends RealmObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
-        dest.writeString(this.currencyCode);
         dest.writeString(this.name);
+        dest.writeString(this.currencyCode);
         dest.writeString(this.initAmount);
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
         dest.writeString(this.colorHex);
+        dest.writeString(this.description);
         dest.writeByte(this.saveLocation ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isDefault ? (byte) 1 : (byte) 0);
     }
 
-    public Account() {
-    }
-
     protected Account(Parcel in) {
         this.id = in.readString();
-        this.currencyCode = in.readString();
         this.name = in.readString();
+        this.currencyCode = in.readString();
         this.initAmount = in.readString();
         long tmpCreated = in.readLong();
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
         this.colorHex = in.readString();
+        this.description = in.readString();
         this.saveLocation = in.readByte() != 0;
         this.isDefault = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<Account> CREATOR = new Parcelable.Creator<Account>() {
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
         @Override
         public Account createFromParcel(Parcel source) {
             return new Account(source);
