@@ -130,7 +130,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         mTvTime.setOnClickListener(this);
         rlLocation = (RelativeLayout) findViewById(R.id.rlLocation);
         rlLocation.setOnClickListener(this);
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), "VND"));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), "VND"));
         mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
         mTvTime.setText(DateTimeUtils.getInstance().getStringTime(mDate));
         mDayPicker = new DayPicker();

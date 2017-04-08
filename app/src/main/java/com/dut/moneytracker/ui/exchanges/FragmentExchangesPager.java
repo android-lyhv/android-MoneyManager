@@ -63,6 +63,12 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
         initPager();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
+    }
+
     private void initPager() {
         viewType = mFilter.getViewType();
         mPagerAdapter = new ExchangePagerAdapter(getChildFragmentManager());
@@ -77,12 +83,6 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     @Override
     public void prevPager() {
         mPagerAdapter.prevPager();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
     }
 
     public void onReloadFragmentPager() {

@@ -51,7 +51,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
         if (!amount.startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         }
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
         tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
         if (TextUtils.isEmpty(exchange.getDescription())) {
             llNote.setVisibility(View.GONE);

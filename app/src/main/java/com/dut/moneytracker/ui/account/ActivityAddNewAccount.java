@@ -105,6 +105,9 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
             Toast.makeText(this, "Fill the name account!", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (TextUtils.isEmpty(mAccount.getInitAmount())){
+            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
+        }
         mAccount.setName(accountName);
         AccountManager.getInstance().insertOrUpdate(mAccount);
         setResult(ResultCode.ADD_NEW_ACCOUNT);
@@ -129,7 +132,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
             @Override
             public void onResult(String amount) {
                 mAccount.setInitAmount(amount);
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(amount, mAccount.getCurrencyCode()));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, mAccount.getCurrencyCode()));
             }
         });
     }

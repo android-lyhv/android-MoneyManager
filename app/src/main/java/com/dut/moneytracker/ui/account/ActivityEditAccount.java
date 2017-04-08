@@ -81,7 +81,9 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     }
 
     private void onLoadData() {
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mAccount.getInitAmount(), mAccount.getCurrencyCode()));
+        if (!TextUtils.isEmpty(mAccount.getInitAmount())){
+            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mAccount.getInitAmount(), mAccount.getCurrencyCode()));
+        }
         mEdtNameAccount.setText(mAccount.getName());
         mTvCurrencyCode.setText(mAccount.getCurrencyCode());
         mSwitchLocation.setChecked(mAccount.isSaveLocation());
@@ -118,13 +120,17 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     @Click(R.id.tvInitAmount)
     void onClickInitAmount() {
         DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.setAmount(mAccount.getInitAmount());
+        if (!TextUtils.isEmpty(mAccount.getInitAmount())){
+            dialogCalculator.setAmount(mAccount.getInitAmount());
+        }else{
+            dialogCalculator.setAmount("");
+        }
         dialogCalculator.show(getFragmentManager(), TAG);
         dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 mAccount.setInitAmount(amount);
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(amount, mAccount.getCurrencyCode()));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, mAccount.getCurrencyCode()));
             }
         });
     }

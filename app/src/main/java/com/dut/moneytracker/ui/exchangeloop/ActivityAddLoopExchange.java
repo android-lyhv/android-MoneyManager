@@ -225,7 +225,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         } else {
             mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.rlCategory)

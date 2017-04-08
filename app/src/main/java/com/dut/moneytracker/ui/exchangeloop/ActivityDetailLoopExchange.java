@@ -121,7 +121,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
             tvCategoryName.setText(category.getName());
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
         switch (mExchangeLoop.getTypeExchange()) {
             case ExchangeType.INCOME:
                 onClickTabIncome();
@@ -227,7 +227,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         if (mExchangeLoop.getAmount().startsWith("-")) {
             mExchangeLoop.setAmount(mExchangeLoop.getAmount().substring(1));
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabExpense)
@@ -244,7 +244,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             mExchangeLoop.setAmount(String.format(Locale.US, "-%s", mExchangeLoop.getAmount()));
         }
         Log.d(TAG, "onClickTabExpense: " + mExchangeLoop.getAmount());
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabTransfer)
@@ -261,7 +261,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             mExchangeLoop.setAmount(String.format(Locale.US, "-%s", mExchangeLoop.getAmount()));
         }
         Log.d(TAG, "onClickTabExpense: " + mExchangeLoop.getAmount());
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.rlCategory)
@@ -286,7 +286,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 } else {
                     mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
                 }
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
             }
         });
     }

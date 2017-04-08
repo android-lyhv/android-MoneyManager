@@ -57,7 +57,7 @@ public class FilterManager {
         String amountFormat = "";
         if (exchanges != null) {
             String amount = AccountManager.getInstance().getTotalAmountByListExchange(exchanges);
-            amountFormat = CurrencyUtils.getInstance().getStringMoneyType(amount, "VND");
+            amountFormat = CurrencyUtils.getInstance().getStringMoneyFormat(amount, "VND");
         }
         String dateFormat = "";
         switch (filter.getViewType()) {

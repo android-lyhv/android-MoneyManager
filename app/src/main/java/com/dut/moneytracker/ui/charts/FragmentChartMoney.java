@@ -110,9 +110,9 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
 
     @Override
     public void onResultMutilMoney(String minMoney, String averageMoney, String maxMoney) {
-        mTvMinMoney.setText(CurrencyUtils.getInstance().getStringMoneyType(minMoney, "VND"));
-        mTvAverageMoney.setText(CurrencyUtils.getInstance().getStringMoneyType(averageMoney, "VND"));
-        mTvMaxMoney.setText(CurrencyUtils.getInstance().getStringMoneyType(maxMoney, "VND"));
+        mTvMinMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(minMoney, "VND"));
+        mTvAverageMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(averageMoney, "VND"));
+        mTvMaxMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(maxMoney, "VND"));
     }
 
     @Override

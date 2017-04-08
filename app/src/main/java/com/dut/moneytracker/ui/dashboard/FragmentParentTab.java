@@ -124,7 +124,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @Override
     public void onShowAmount() {
         mTvAmount.setTextColor(Color.parseColor(getString(R.string.color_account_default)));
-        String money = CurrencyUtils.getInstance().getStringMoneyType(AccountManager.getInstance().getTotalAmountAvailable(),
+        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
                 CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
         mTvAmount.setText(money);
     }

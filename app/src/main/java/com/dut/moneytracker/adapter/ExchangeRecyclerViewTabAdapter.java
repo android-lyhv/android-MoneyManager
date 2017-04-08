@@ -69,7 +69,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
                 }
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
                 tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
                 if (exchange.getTypeExchange() == ExchangeType.INCOME) {
                     tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
                 }
@@ -78,7 +78,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
                 imgCategory.setImageResource(R.drawable.ic_transfer);
                 tvCategoryName.setText(getContext().getResources().getString(R.string.transfer));
                 tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
                 if (CurrencyUtils.getInstance().getFloatMoney(exchange.getAmount()) > 0) {
                     tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));

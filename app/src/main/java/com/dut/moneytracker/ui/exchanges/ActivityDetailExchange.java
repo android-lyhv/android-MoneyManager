@@ -178,7 +178,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
                 } else {
                     mExchange.setAmount(amount);
                 }
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
             }
         });
     }
@@ -354,7 +354,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     private void showDetailTypeIncomeAndExpenses() {
         Category category = CategoryManager.getInstance().getCategoryById(mExchange.getIdCategory());
         tvCategoryName.setText(category.getName());
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
         mTvDescription.setText(mExchange.getDescription());
         tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
         String nameAccount = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
@@ -391,7 +391,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             String accountReceiver = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
             tvAccount.setText(accountReceiver);
         }
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {

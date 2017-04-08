@@ -109,7 +109,7 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
                     tvTypeLoop.setText(R.string.loop_year);
             }
             tvLastCreated.setText(DateTimeUtils.getInstance().getStringDateUs(exchangeLooper.getCreated()));
-            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchangeLooper.getAmount(), "VND"));
+            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchangeLooper.getAmount(), "VND"));
             switchLoop.setChecked(exchangeLooper.isLoop());
             if (exchangeLooper.getTypeExchange() == ExchangeType.INCOME) {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
