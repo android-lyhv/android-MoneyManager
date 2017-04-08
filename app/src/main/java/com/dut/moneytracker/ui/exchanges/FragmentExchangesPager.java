@@ -49,12 +49,12 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     @Override
     public void onStart() {
         super.onStart();
-        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
+        ((MainActivity_) getActivity()).loadMenuItemFragmentExchanges();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -82,7 +82,7 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity_) getActivity()).loadMenuItemFragmentExchanges();
+        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
     }
 
     public void onReloadFragmentPager() {
