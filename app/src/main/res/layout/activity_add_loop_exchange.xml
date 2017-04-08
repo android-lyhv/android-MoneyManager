@@ -233,44 +233,6 @@
                     android:background="#c4c4c4" />
 
                 <RelativeLayout
-                    android:id="@+id/rlCurrency"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/selector_bg_white"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/tvTitleCurrency"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="Tiền tệ" />
-
-                    <ImageView
-                        android:layout_width="@dimen/activity_detail_exchange.image.with"
-                        android:layout_height="@dimen/activity_detail_exchange.image.height"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_edit" />
-
-                    <TextView
-                        android:id="@+id/tvCurrency"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@id/tvTitleCurrency"
-                        android:layout_below="@+id/tvTitleCurrency"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@android:color/transparent"
-                        android:text="VND"
-                        android:textColor="@android:color/black"
-                        android:textSize="17dp" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="#c4c4c4" />
-
-                <RelativeLayout
                     android:id="@+id/rlAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

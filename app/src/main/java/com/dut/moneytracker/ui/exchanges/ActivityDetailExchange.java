@@ -76,8 +76,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     TextView tvAmount;
     @ViewById(R.id.tvAccount)
     TextView tvAccount;
-    @ViewById(R.id.tvCurrency)
-    TextView tvCurrency;
     @ViewById(R.id.tvAccountName)
     TextView mTvDescription;
     @ViewById(R.id.tvDate)
@@ -356,7 +354,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         tvCategoryName.setText(category.getName());
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
         mTvDescription.setText(mExchange.getDescription());
-        tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
         String nameAccount = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
         tvAccount.setText(String.valueOf(nameAccount));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
@@ -378,7 +375,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         mTvTitleCategory.setText(R.string.account_send);
         tvTitleAccount.setText(R.string.account_recever);
         mTvDescription.setText(mExchange.getDescription());
-        tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
         String amount = mExchange.getAmount();
         if (amount.startsWith("-")) {
             String accountSend = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());

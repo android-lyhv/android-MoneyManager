@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/base_toolbar"/>
+    <include layout="@layout/base_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,13 +14,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tvTitleAccountName"
@@ -42,18 +41,17 @@
                     android:textColor="@android:color/black"
                     android:textSize="20dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@id/tvAccountName"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBackgroundLine" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tvTitleInitAmount"
@@ -75,24 +73,24 @@
                     android:textSize="15dp"
                     tools:text="1.000" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@id/tvInitAmount"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
+
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBackgroundLine" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tvTitleCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Tiền tệ" />
+                    android:text="Mô tả" />
 
 
                 <TextView
@@ -103,24 +101,20 @@
                     android:layout_below="@+id/tvTitleCategory"
                     android:background="@android:color/transparent"
                     android:clickable="true"
-                    android:paddingBottom="5dp"
                     android:paddingTop="10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="20dp"
-                    tools:text="USD" />
+                    tools:text="Tài khoản từ exambank" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@id/tvCurrency"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBackgroundLine" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tvTitleColor"
@@ -140,19 +134,19 @@
                     android:clickable="true"
                     android:textSize="20dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@id/imgColor"
-                    android:layout_marginTop="5dp"
-                    android:background="#c4c4c4" />
+
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBackgroundLine" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="10dp"
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tvTitleLocaion"
@@ -160,7 +154,6 @@
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:text="Lưu vị trí" />
-
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/switchLocation"

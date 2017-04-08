@@ -22,7 +22,6 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickCurrency;
 import com.dut.moneytracker.maps.GoogleLocation;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
@@ -61,7 +60,6 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
     private Button btnTransfer;
     private Button btnIncome;
     private Button btnExpenses;
-    private TextView tvCurrency;
     private LinearLayout llAccount;
     private LinearLayout llCategory;
     private TextView tvAccountName;
@@ -71,7 +69,6 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
     private StringBuilder stringBuilder;
     private TextView tvTitleFromAccount;
     private TextView tvTitleToAccount;
-
 
     //Model
     private Account mAccount;
@@ -133,15 +130,12 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         llCategory.setOnClickListener(this);
         tvMoreAdd = (TextView) findViewById(R.id.tvMoreAdd);
         tvMoreAdd.setOnClickListener(this);
-        tvCurrency = (TextView) findViewById(R.id.tvCurrency);
-        tvCurrency.setOnClickListener(this);
         tvTitleFromAccount = (TextView) findViewById(R.id.tvTitleFromAccount);
         tvTitleToAccount = (TextView) findViewById(R.id.tvTitleToAccount);
         btnExpenses.setAlpha(1f);
         btnIncome.setAlpha(0.5f);
         btnTransfer.setAlpha(0.5f);
         tvAccountName.setText(mAccount.getName());
-        tvCurrency.setText(mAccount.getCurrencyCode());
     }
 
     private void initDataExchange() {
@@ -233,9 +227,6 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.tvMoreAdd:
                 startAddDetail();
-                break;
-            case R.id.tvCurrency:
-                showDialogPickCurrency();
                 break;
             case R.id.btnIncome:
                 if (mExchange.getTypeExchange() == ExchangeType.INCOME) {
@@ -384,17 +375,6 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void showDialogPickCurrency() {
-        DialogPickCurrency dialogPickCurrency = new DialogPickCurrency();
-        dialogPickCurrency.show(getFragmentManager(), TAG);
-        dialogPickCurrency.registerResultListener(new DialogPickCurrency.ResultListener() {
-            @Override
-            public void onResultCurrencyCode(String code) {
-                tvCurrency.setText(code);
-                mExchange.setCurrencyCode(code);
-            }
-        });
-    }
 
     private void showActivityPickCategory() {
         startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
