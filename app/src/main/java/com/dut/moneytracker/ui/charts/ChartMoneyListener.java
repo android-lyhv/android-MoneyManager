@@ -6,7 +6,7 @@ package com.dut.moneytracker.ui.charts;
  */
 
 public interface ChartMoneyListener {
-    void onResultMutilMoney(String minMoney, String averageMoney, String maxMoney);
+    void onResultMultiMoney(String minMoney, String averageMoney, String maxMoney);
 
     void onResultTotal(String money);
 }

@@ -57,14 +57,13 @@
     <string name="step_filter">step_filter</string>
     <string name="extra_filter">extra_filter</string>
     <string name="all_account">Tất cả</string>
-    <string name="exchange.name.income">Thu Nhập</string>
-    <string name="exchange.name.expense">Chi Tiêu</string>
-    <string name="piechart.income">Thu Nhập</string>
-    <string name="piechart.expense">Chi Tiêu</string>
+    <string name="income_name">Thu Nhập</string>
+    <string name="expense_name">Chi Tiêu</string>
     <string name="exchange.name.transfer">Chuyển khoản</string>
-    <string name="account.send">Tải khoản gửi</string>
-    <string name="account.recever">Tài khoản nhận</string>
-    <string name="main.account">Tài khoản</string>
+    <string name="account_send">Tải khoản gửi</string>
+    <string name="account_receive">Tài khoản nhận</string>
+    <string name="main_account">Tài khoản</string>
+    <string name="category_name">Thể loại</string>
     <string name="input_money">Nhap so tien!</string>
     <string name="input_account">Chon tai khoan</string>
     <string name="input_category">Chon the loai</string>
@@ -76,6 +75,7 @@
     <string name="extra_loop_exchange">extra_loop_exchange</string>
     <string name="delete_exchange">Xoa giao dich nay</string>
     <string name="id_exchange_looper">extra_id_looper</string>
+    <string name="unknown">Chưa biết</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Thu Nhập</item>

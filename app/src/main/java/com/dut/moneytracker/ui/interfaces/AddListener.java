@@ -9,6 +9,4 @@ public interface AddListener {
     boolean isAvailableIncomeAndExpense();
 
     void onSaveDataBase();
-
-    void onUpToServer();
 }

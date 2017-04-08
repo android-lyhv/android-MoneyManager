@@ -8,16 +8,16 @@ import android.support.v4.view.ViewPager;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.BaseViewPagerAdapter;
 import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.ui.base.BaseFragment;
-import com.dut.moneytracker.ui.exchanges.ActivityAddExchange;
+import com.dut.moneytracker.ui.exchanges.ActivityAddExchange_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -107,19 +107,15 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Click(R.id.fab)
     void onClickAddExchange() {
-        Intent intent = new Intent(getActivity(), ActivityAddExchange.class);
-        intent.putExtra(getString(R.string.extra_account), mAccounts.get(targetAccount));
-        startActivityForResult(intent, RequestCode.ADD_EXCHANGE);
+        ActivityAddExchange_.intent(this).mAccount(mAccounts.get(targetAccount)).startForResult(RequestCode.ADD_EXCHANGE);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case ResultCode.ADD_EXCHANGE:
-                notifyDataSetChanged();
-                break;
+    @OnActivityResult(RequestCode.ADD_EXCHANGE)
+    void onResultAddNewExchange(Intent data) {
+        if (data == null) {
+            return;
         }
+        notifyDataSetChanged();
     }
 
     @Override

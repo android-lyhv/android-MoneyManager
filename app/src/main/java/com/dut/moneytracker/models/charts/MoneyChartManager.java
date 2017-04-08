@@ -22,7 +22,7 @@ public class MoneyChartManager {
 
     public void onLoadInforPieChart(List<ValuePieChart> valuePieCharts, ChartMoneyListener chartMoneyListener) {
         chartMoneyListener.onResultTotal(getTotalMoney(valuePieCharts));
-        chartMoneyListener.onResultMutilMoney(getMinMoney(valuePieCharts), geAverageMoney(valuePieCharts), getMaxMoney(valuePieCharts));
+        chartMoneyListener.onResultMultiMoney(getMinMoney(valuePieCharts), geAverageMoney(valuePieCharts), getMaxMoney(valuePieCharts));
     }
 
     private String getTotalMoney(List<ValuePieChart> valuePieCharts) {
