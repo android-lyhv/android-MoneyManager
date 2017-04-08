@@ -217,16 +217,12 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         } else {
             mExchange.setAmount(textAmount);
         }
-        Log.d(TAG, "startAddDetail: " + mExchange.toString());
-        Intent intent = new Intent(this, ActivityAddMoreExchange.class);
-        intent.putExtra(getString(R.string.extra_more_add), mExchange);
-        startActivityForResult(intent, RequestCode.MORE_ADD);
+        ActivityAddMoreExchange_.intent(this).mExchange(mExchange).startForResult(RequestCode.MORE_ADD);
     }
 
     @Click(R.id.btnIncome)
     void onClickTabIncome() {
         mExchange.setTypeExchange(ExchangeType.INCOME);
-        //Change view
         tvTitleFromAccount.setText(getString(R.string.main_account));
         tvTitleToAccount.setText(getString(R.string.category_name));
         tvCategoryName.setText(mNameCategory);
@@ -240,7 +236,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     @Click(R.id.btnExpenses)
     void onClickTabExpenses() {
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
-        //Change view
         tvTitleFromAccount.setText(getString(R.string.main_account));
         tvTitleToAccount.setText(getString(R.string.category_name));
         tvCategoryName.setText(mNameCategory);
@@ -254,7 +249,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     @Click(R.id.btnTransfer)
     void onClickTabTransfer() {
         mExchange.setTypeExchange(ExchangeType.TRANSFER);
-        //ChangeView
         tvStatus.setVisibility(View.GONE);
         tvTitleFromAccount.setText(getString(R.string.account_send));
         tvTitleToAccount.setText(getString(R.string.expense_name));

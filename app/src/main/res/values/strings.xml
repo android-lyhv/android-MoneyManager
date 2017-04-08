@@ -76,6 +76,7 @@
     <string name="delete_exchange">Xoa giao dich nay</string>
     <string name="id_exchange_looper">extra_id_looper</string>
     <string name="unknown">Chưa biết</string>
+    <integer name="zoom_map">10</integer>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Thu Nhập</item>

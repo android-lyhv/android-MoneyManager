@@ -34,7 +34,7 @@
             android:name=".ui.account.ActivityAddNewAccount_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.exchanges.ActivityAddMoreExchange"
+            android:name=".ui.exchanges.ActivityAddMoreExchange_"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.account.ActivityEditAccount_"

@@ -112,9 +112,9 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @OnActivityResult(RequestCode.ADD_EXCHANGE)
     void onResultAddNewExchange(Intent data) {
-        if (data == null) {
+       /* if (data == null) {
             return;
-        }
+        }*/
         notifyDataSetChanged();
     }
 

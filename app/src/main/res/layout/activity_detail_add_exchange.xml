@@ -18,10 +18,10 @@
 
             <TextView
                 android:id="@+id/tvAmount"
-                android:text="10000d"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="10000d"
                 android:textColor="@android:color/white"
                 android:textSize="15dp" />
         </android.support.v7.widget.Toolbar>
@@ -52,7 +52,7 @@
                     android:text="Chú thích" />
 
                 <EditText
-                    android:id="@+id/tvAccountName"
+                    android:id="@+id/edtDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleDescription"
@@ -67,7 +67,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@id/tvAccountName"
+                    android:layout_below="@id/edtDescription"
                     android:layout_marginTop="10dp"
                     android:background="@color/colorBackgroundLine" />
             </RelativeLayout>
@@ -154,8 +154,10 @@
                     android:layout_alignTop="@id/tvTitlePosition"
                     android:src="@drawable/ic_maker" />
 
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/mapView"
+
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_below="@id/imgLocation"

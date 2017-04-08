@@ -396,7 +396,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     void onTargetLocationExchange() {
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 
     void updateMap() {
