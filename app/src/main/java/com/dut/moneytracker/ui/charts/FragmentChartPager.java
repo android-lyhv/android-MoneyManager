@@ -91,7 +91,7 @@ public class FragmentChartPager extends BaseFragment implements PagerFragmentLis
     public void onReloadFragmentPager() {
         if (viewType != mFilter.getViewType()) {
             viewType = mFilter.getViewType();
-            mPagerAdapter.centerPager();
+            mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();
     }

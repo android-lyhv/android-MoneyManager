@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.BaseRecyclerAdapter;
+import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.objects.Account;
 
 import java.util.List;

@@ -9,6 +9,8 @@ import java.util.Currency;
  * Created by ly.ho on 05/03/2017.
  */
 public class CurrencyUtils {
+    public static final String DEFAULT_CURRENCY_CODE = "VND";
+
     private static CurrencyUtils ourInstance;
 
     public static CurrencyUtils getInstance() {

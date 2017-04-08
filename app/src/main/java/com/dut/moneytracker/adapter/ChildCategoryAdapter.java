@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.utils.ResourceUtils;
 
@@ -37,7 +38,7 @@ public class ChildCategoryAdapter extends BaseRecyclerAdapter {
         categoryHolder.onBind((Category) getItem(position));
     }
 
-    class CategoryHolder extends RecyclerView.ViewHolder {
+    private class CategoryHolder extends RecyclerView.ViewHolder {
         private ImageView imgCategory;
         private TextView mTvCategoryName;
         private ImageView imgMore;

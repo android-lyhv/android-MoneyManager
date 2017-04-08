@@ -88,7 +88,7 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     public void onReloadFragmentPager() {
         if (viewType != mFilter.getViewType()) {
             viewType = mFilter.getViewType();
-            mPagerAdapter.centerPager();
+            mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();
     }

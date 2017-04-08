@@ -27,10 +27,10 @@ public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements V
 
     public void init(ViewPager viewPager, Filter filter) {
         mFilter = filter;
-        setViewPager(viewPager);
-        getViewPager().setAdapter(this);
-        getViewPager().addOnPageChangeListener(this);
-        centerPager();
+        mViewPager = viewPager;
+        mViewPager.setAdapter(this);
+        mViewPager.addOnPageChangeListener(this);
+        targetCenterPager();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements V
         mViewPager.setCurrentItem(positionSelected - 1);
     }
 
-    public void centerPager() {
+    public void targetCenterPager() {
         mViewPager.setCurrentItem(CENTER);
     }
 
@@ -74,28 +74,8 @@ public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements V
         return null;
     }
 
-    public int getMaxPager() {
-        return MAX_PAGE;
-    }
-
     public int getCenter() {
         return CENTER;
-    }
-
-    public ViewPager getViewPager() {
-        return mViewPager;
-    }
-
-    public void setViewPager(ViewPager mViewPager) {
-        this.mViewPager = mViewPager;
-    }
-
-    public int getPositionSelected() {
-        return positionSelected;
-    }
-
-    public void setPositionSelected(int positionSelected) {
-        this.positionSelected = positionSelected;
     }
 
     public Filter getFilter() {

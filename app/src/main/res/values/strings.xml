@@ -76,15 +76,6 @@
     <string name="extra_loop_exchange">extra_loop_exchange</string>
     <string name="delete_exchange">Xoa giao dich nay</string>
     <string name="id_exchange_looper">extra_id_looper</string>
-    <!--PaymentType-->
-    <string-array name="payment_type">
-        <item>Tiền Mặt</item>
-        <item>Thẻ ghi nợ</item>
-        <item>Thẻ tín dụng</item>
-        <item>Chuyển khoán ngân hàng</item>
-        <item>Thanh toán bằng điện thoại di động</item>
-        <item>Thanh toán web</item>
-    </string-array>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Thu Nhập</item>

@@ -1,4 +1,4 @@
-package com.dut.moneytracker.adapter;
+package com.dut.moneytracker.adapter.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,10 +9,14 @@ import java.util.List;
 public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private Context context;
-    private List<T> mObjects = new ArrayList<>();
+    private List<T> mObjects;
 
     public BaseRecyclerAdapter(Context context, final List<T> objects) {
-        mObjects = objects;
+        if (objects == null) {
+            mObjects = new ArrayList<>();
+        } else {
+            mObjects = objects;
+        }
         this.context = context;
     }
 
@@ -22,9 +26,6 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
      * @param object The object to add at the end of the array.
      */
     public void add(final T object) {
-        if (mObjects == null) {
-            mObjects = new ArrayList<>();
-        }
         mObjects.add(object);
         notifyItemInserted(getItemCount() - 1);
     }
@@ -51,14 +52,9 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     public void removeItem(final int position) {
-        if (mObjects == null) {
-            mObjects = new ArrayList<>();
-            return;
-        }
         mObjects.remove(position);
         notifyItemRemoved(position);
     }
-
 
     /**
      * Returns the position of the specified item in the array.
@@ -77,18 +73,11 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
      * @param index  The index at which the object must be inserted.
      */
     public void insert(final T object, int index) {
-        if (mObjects == null) {
-            mObjects = new ArrayList<>();
-        }
         mObjects.add(index, object);
         notifyItemInserted(index);
     }
 
     public void addItems(final List<T> objects) {
-        if (mObjects == null) {
-            mObjects = new ArrayList<>();
-            return;
-        }
         mObjects.clear();
         mObjects.addAll(objects);
         notifyDataSetChanged();
@@ -97,12 +86,9 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     /**
      * Removes the specified object from the array.
      *
-     * @param object The object to remove.
+     * @param object The object to removeItem.
      */
-    public void remove(T object) {
-        if (mObjects == null) {
-            return;
-        }
+    public void removeItem(T object) {
         final int position = getPosition(object);
         mObjects.remove(object);
         notifyItemRemoved(position);

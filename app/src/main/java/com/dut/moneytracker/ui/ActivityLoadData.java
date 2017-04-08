@@ -13,7 +13,6 @@ import com.dut.moneytracker.models.AppPreferences;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.CurrencyManager;
-import com.dut.moneytracker.models.realms.PaymentManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
@@ -41,7 +40,6 @@ public class ActivityLoadData extends AppCompatActivity {
         onLoadDataServer();
         // After then
         onLoadCategory();
-        onCreatePaymentType();
         onCreateDefaultAccount();
         onCreateCurrency();
         // The end start main
@@ -55,10 +53,7 @@ public class ActivityLoadData extends AppCompatActivity {
         mProgressBar.setProgress(50);
     }
 
-    private void onCreatePaymentType() {
-        String[] payMenType = getResources().getStringArray(R.array.payment_type);
-        PaymentManager.getInstance().createPaymentType(payMenType);
-    }
+
 
     private void onLoadDataServer() {
         //TODO

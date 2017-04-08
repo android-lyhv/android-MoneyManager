@@ -3,6 +3,8 @@ package com.dut.moneytracker.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.dut.moneytracker.currency.CurrencyUtils;
+
 import java.util.Date;
 
 import io.realm.RealmObject;
@@ -20,7 +22,7 @@ public class Account extends RealmObject implements Parcelable {
     @PrimaryKey
     private String id;
     private String name;
-    private String currencyCode;
+    private String currencyCode = CurrencyUtils.DEFAULT_CURRENCY_CODE;
     private String initAmount;
     private Date created;
     private String colorHex;
