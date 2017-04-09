@@ -69,12 +69,15 @@ public class ActivityAccounts extends AppCompatActivity {
         }
         Account account = data.getParcelableExtra(getString(R.string.extra_account));
         AccountManager.getInstance().insertOrUpdate(account);
-        onLoadNewAccounts();
+        sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
     }
 
     @OnActivityResult(RequestCode.ADD_NEW_ACCOUNT)
-    void onResultAddNewAccount() {
-       onLoadNewAccounts();
+    void onResultAddNewAccount(Intent data) {
+        if (data == null) {
+            return;
+        }
+        sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
     }
 
     @Click(R.id.fab)
@@ -85,11 +88,5 @@ public class ActivityAccounts extends AppCompatActivity {
     @OptionsItem(android.R.id.home)
     void onClose() {
         finish();
-    }
-
-    private void onLoadNewAccounts() {
-       /* List<Account> accounts = AccountManager.getInstance().getAccounts();
-        mAdapter.setObjects(accounts);
-        mAdapter.notifyDataSetChanged();*/
     }
 }

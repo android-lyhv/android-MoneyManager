@@ -239,4 +239,6 @@
     </string-array>
     <string name="color_account_default">#03a879</string>
     <string name="manger_accounts">Quản lý tài khoản</string>
+    <string name="loop_status_ok">Mở</string>
+    <string name="loop_status_close">Đóng</string>
 </resources>

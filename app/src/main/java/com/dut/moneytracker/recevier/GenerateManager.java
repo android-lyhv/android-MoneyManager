@@ -39,6 +39,9 @@ public class GenerateManager {
      * @param mExchangeLooper
      */
     public void pendingGenerateExchange(ExchangeLooper mExchangeLooper) {
+        if (!mExchangeLooper.isLoop()) {
+            return;
+        }
         Intent intent = new Intent(mContext, ReceiveGenerateExchange.class);
         intent.putExtra(mContext.getString(R.string.id_exchange_looper), mExchangeLooper.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, mExchangeLooper.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);

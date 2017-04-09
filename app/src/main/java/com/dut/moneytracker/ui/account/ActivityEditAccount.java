@@ -81,7 +81,7 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     }
 
     private void onLoadData() {
-        if (!TextUtils.isEmpty(mAccount.getInitAmount())){
+        if (!TextUtils.isEmpty(mAccount.getInitAmount())) {
             mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mAccount.getInitAmount(), mAccount.getCurrencyCode()));
         }
         mEdtNameAccount.setText(mAccount.getName());
@@ -120,9 +120,9 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     @Click(R.id.tvInitAmount)
     void onClickInitAmount() {
         DialogCalculator dialogCalculator = new DialogCalculator();
-        if (!TextUtils.isEmpty(mAccount.getInitAmount())){
+        if (!TextUtils.isEmpty(mAccount.getInitAmount())) {
             dialogCalculator.setAmount(mAccount.getInitAmount());
-        }else{
+        } else {
             dialogCalculator.setAmount("");
         }
         dialogCalculator.show(getFragmentManager(), TAG);

@@ -3,7 +3,6 @@ package com.dut.moneytracker.ui.exchangeloop;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -45,8 +44,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -88,12 +87,10 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     TextView tvAccount;
     @ViewById(R.id.spinnerTypeLoop)
     AppCompatSpinner mAppCompatSpinner;
-    @ViewById(R.id.mapView)
-    MapView mapView;
     @ViewById(R.id.switchLoop)
     SwitchCompat switchCompat;
     private GoogleMap mGoogleMap;
-    private Place mPlace = new Place();
+    private Place mPlace;
     private ExchangeLooper mExchangeLoop;
     private int mType;
 
@@ -104,7 +101,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         onClickTabExpense();
         initToolbar();
         initSpinner();
-        initMapView();
+        initMap();
     }
 
     void initBaseExchangeLoop() {
@@ -130,9 +127,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         });
     }
 
-    private void initMapView() {
-        mapView.onCreate(new Bundle());
-        mapView.getMapAsync(this);
+    private void initMap() {
+        SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
     }
 
     private void initToolbar() {
@@ -161,16 +158,8 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         }
         mExchangeLoop.setPlace(mPlace);
         mExchangeLoop.setTypeExchange(mType);
-        mExchangeLoop.setCurrencyCode("VND");
-        onSaveDatabase();
-        finish();
-    }
-
-    private void onSaveDatabase() {
         ExchangeLoopManager.getInstance(getApplicationContext()).insertNewExchangeLoop(mExchangeLoop);
-        Intent intent = new Intent();
-        intent.putExtra(getString(R.string.extra_loop_exchange), mExchangeLoop);
-        setResult(ResultCode.ADD_LOOP_EXCHANGE, intent);
+        finish();
     }
 
     @Click(R.id.tvTabIncome)
@@ -251,7 +240,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
-               onChangeAmount(amount);
+                onChangeAmount(amount);
             }
         });
     }
@@ -364,16 +353,19 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     private void updateMap() {
         mGoogleMap.clear();
         onTargetLocationExchange();
-        mapView.refreshDrawableState();
     }
 
     private void onTargetLocationExchange() {
+        if (mPlace == null) {
+            return;
+        }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
+        mPlace = new Place();
         if (place.getName() != null) {
             mPlace.setName(place.getName().toString());
         }
@@ -384,28 +376,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         mPlace.setLongitude(place.getLatLng().longitude);
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         onTargetLocationExchange();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
     }
 }

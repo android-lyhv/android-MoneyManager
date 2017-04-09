@@ -78,12 +78,14 @@
                 android:padding="5dp"
                 android:text="07/02/2017" />
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchLoop"
+            <TextView
+                android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:text="On"
+                android:textColor="@color/colorPrimary" />
         </LinearLayout>
 
     </RelativeLayout>

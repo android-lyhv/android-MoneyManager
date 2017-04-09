@@ -10,20 +10,15 @@ import io.realm.RealmResults;
 
 public abstract class BaseRecyclerAdapter<T extends RealmModel, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
-    private Context context;
+    private Context mContext;
     private RealmResults<T> mObjects;
     private Realm mRealm;
 
     public BaseRecyclerAdapter(final Context context, final RealmResults<T> objects) {
         mObjects = objects;
-        this.context = context;
+        mContext = context;
         mRealm = Realm.getDefaultInstance();
-        mObjects.addChangeListener(new RealmChangeListener<RealmResults<T>>() {
-            @Override
-            public void onChange(RealmResults<T> element) {
-                notifyDataSetChanged();
-            }
-        });
+        registerDataChangeListener();
     }
 
     /**
@@ -61,7 +56,7 @@ public abstract class BaseRecyclerAdapter<T extends RealmModel, VH extends Recyc
     }
 
     public Context getContext() {
-        return context;
+        return mContext;
     }
 
     public void setObjects(RealmResults<T> mObjects) {
@@ -77,5 +72,14 @@ public abstract class BaseRecyclerAdapter<T extends RealmModel, VH extends Recyc
 
     public void removeAllChangeListeners() {
         mObjects.removeAllChangeListeners();
+    }
+
+    private void registerDataChangeListener() {
+        mObjects.addChangeListener(new RealmChangeListener<RealmResults<T>>() {
+            @Override
+            public void onChange(RealmResults<T> element) {
+                notifyDataSetChanged();
+            }
+        });
     }
 }

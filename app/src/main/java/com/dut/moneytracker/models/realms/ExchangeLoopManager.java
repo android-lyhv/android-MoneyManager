@@ -48,25 +48,6 @@ public class ExchangeLoopManager extends RealmHelper {
         mGenerateManager.removePendingLoopExchange(id);
     }
 
-    /**
-     * enable and disable loop exchange;
-     *
-     * @param id
-     * @param status
-     */
-    public void updateCheckLoopExchange(int id, boolean status) {
-        realm.beginTransaction();
-        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
-        exchangeLooper.setLoop(status);
-        realm.commitTransaction();
-        if (status) {
-            ExchangeLooper newExchangeLooper = getExchangeLooperById(id);
-            mGenerateManager.pendingGenerateExchange(newExchangeLooper);
-        } else {
-            mGenerateManager.removePendingLoopExchange(id);
-        }
-    }
-
     public ExchangeLooper getExchangeLooperById(int id) {
         realm.beginTransaction();
         ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
@@ -100,7 +81,7 @@ public class ExchangeLoopManager extends RealmHelper {
         return exchange;
     }
 
-    public void upDateIfTypeLoopChanged(ExchangeLooper exchangeLooper) {
+    public void upDatePendingExchange(ExchangeLooper exchangeLooper) {
         insertOrUpdate(exchangeLooper);
         mGenerateManager.pendingGenerateExchange(exchangeLooper);
     }
