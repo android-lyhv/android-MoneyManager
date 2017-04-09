@@ -91,6 +91,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @AfterViews
     public void init() {
         mHandler = new Handler();
+        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         onShowAmount();
         onLoadCardAccount();
         onLoadExchanges();
@@ -113,14 +114,10 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onLoadChart() {
-        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
-                mLineChartMoney.setColorChart(getString(R.string.color_account_default));
-                mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
-                mLineChartMoney.notifyDataSetChanged();
+                reloadChartExchange();
             }
         }, FragmentDashboard.DELAY);
     }
@@ -194,15 +191,9 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     public void onReloadData() {
-        reloadChartExchange();
-        reloadTvAmount();
+        onLoadChart();
+        onShowAmount();
         reloadCardAccount();
-    }
-
-    private void reloadTvAmount() {
-        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
-                CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
-        mTvAmount.setText(money);
     }
 
     private void reloadCardAccount() {

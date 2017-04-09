@@ -36,8 +36,8 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     @ViewById(R.id.viewpager)
     ViewPager mViewPager;
     private RealmResults<Account> mAccounts;
-    private int targetAccount;
     private BaseViewPagerAdapter mViewPagerTabAccountAdapter;
+    private int targetAccount;
 
     @AfterViews
     void init() {
