@@ -10,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,7 +24,6 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.charts.LineChartMoney;
 import com.dut.moneytracker.models.charts.ValueLineChart;
 import com.dut.moneytracker.models.realms.AccountManager;
-import com.dut.moneytracker.models.realms.CurrencyManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
@@ -75,12 +75,14 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
             if (TextUtils.equals(intent.getAction(), context.getString(R.string.action_reload_tab_account))) {
                 onReloadData();
             }
+            Log.d("onReceive: ", "aaaaaaaa");
         }
     };
 
     @AfterViews
     void init() {
         mHandler = new Handler();
+        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         mCardView.setVisibility(View.GONE);
         onShowAmount();
         onLoadExchanges();
@@ -95,14 +97,10 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadChart() {
-        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
-                mLineChartMoney.setColorChart(mAccount.getColorHex());
-                mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
-                mLineChartMoney.notifyDataSetChanged();
+                reloadChartExchange();
             }
         }, FragmentDashboard.DELAY);
     }
@@ -170,17 +168,14 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     }
 
     public void onReloadData() {
-        reloadChartExchange();
-        reloadTvAmount();
-    }
-
-    private void reloadTvAmount() {
-        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
-                CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
-        mTvAmount.setText(money);
+        onLoadChart();
+        onShowAmount();
     }
 
     private void reloadChartExchange() {
-      //  onLoadChart();
+        mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
+        mLineChartMoney.setColorChart(mAccount.getColorHex());
+        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+        mLineChartMoney.notifyDataSetChanged();
     }
 }
