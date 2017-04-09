@@ -3,7 +3,6 @@ package com.dut.moneytracker.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import lombok.Data;
@@ -23,7 +22,6 @@ public class GroupCategory extends RealmObject implements Parcelable {
     private String description;
     private byte[] byteImage;
     private int colorCode;
-    private RealmList<Category> categories;
 
     @Override
     public int describeContents() {
@@ -37,7 +35,6 @@ public class GroupCategory extends RealmObject implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.tag);
         dest.writeByteArray(this.byteImage);
-        dest.writeList(this.categories);
     }
 
     public GroupCategory() {
@@ -49,8 +46,6 @@ public class GroupCategory extends RealmObject implements Parcelable {
         this.name = in.readString();
         this.tag = in.readString();
         this.byteImage = in.createByteArray();
-        this.categories = new RealmList<>();
-        in.readList(this.categories, Category.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<GroupCategory> CREATOR = new Parcelable.Creator<GroupCategory>() {

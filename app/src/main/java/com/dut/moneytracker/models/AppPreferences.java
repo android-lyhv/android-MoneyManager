@@ -28,19 +28,6 @@ public class AppPreferences {
 
     private AppPreferences() {
     }
-
-    public int getLimitViewExchange(Context context) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return pref.getInt(KEY_LIMIT_VIEW, 5);
-    }
-
-    public void setLimitViewExchange(Context context, int value) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(KEY_LIMIT_VIEW, value);
-        editor.apply();
-    }
-
     public boolean isInitCategory(Context context) {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return pref.getBoolean(FIRST_INIT, false);

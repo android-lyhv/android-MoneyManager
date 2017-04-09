@@ -3,29 +3,26 @@ package com.dut.moneytracker.adapter.loop;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.BaseRecyclerAdapter;
+import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.ResourceUtils;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -33,19 +30,17 @@ import java.util.List;
  */
 
 public class LoopExchangeAdapter extends BaseRecyclerAdapter {
-    ClickItemListener clickItemListener;
+    private ClickItemListener clickItemListener;
 
     public interface ClickItemListener {
         void onClickItem(int position);
-
-        void onClickSwichItem(int position);
     }
 
     public void registerItemClick(ClickItemListener clickItemListener) {
         this.clickItemListener = clickItemListener;
     }
 
-    public LoopExchangeAdapter(Context context, List objects) {
+    public LoopExchangeAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 
@@ -60,7 +55,7 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
         ((ItemLoopExchange) holder).onBind((ExchangeLooper) getItem(position));
     }
 
-    public class ItemLoopExchange extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+    public class ItemLoopExchange extends RecyclerView.ViewHolder implements View.OnClickListener {
         RelativeLayout rlContent;
         ImageView imgCategory;
         TextView tvCategoryName;
@@ -68,20 +63,19 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
         TextView tvTypeLoop;
         TextView tvAmount;
         TextView tvLastCreated;
-        SwitchCompat switchLoop;
+        TextView tvStatus;
 
         public ItemLoopExchange(View itemView) {
             super(itemView);
             imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
             tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
-            tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvDescription = (TextView) itemView.findViewById(R.id.tvAccountName);
             tvTypeLoop = (TextView) itemView.findViewById(R.id.tvTypeLoop);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
             tvLastCreated = (TextView) itemView.findViewById(R.id.tvLastCreated);
             rlContent = (RelativeLayout) itemView.findViewById(R.id.content);
             rlContent.setOnClickListener(this);
-            switchLoop = (SwitchCompat) itemView.findViewById(R.id.switchLoop);
-            switchLoop.setOnCheckedChangeListener(this);
+            tvStatus = (TextView) itemView.findViewById(R.id.tvStatus);
         }
 
         public void onBind(ExchangeLooper exchangeLooper) {
@@ -109,20 +103,19 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
                     tvTypeLoop.setText(R.string.loop_year);
             }
             tvLastCreated.setText(DateTimeUtils.getInstance().getStringDateUs(exchangeLooper.getCreated()));
-            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchangeLooper.getAmount(), "VND"));
-            switchLoop.setChecked(exchangeLooper.isLoop());
+            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchangeLooper.getAmount(), "VND"));
             if (exchangeLooper.getTypeExchange() == ExchangeType.INCOME) {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             } else {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_light));
             }
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            switchLoop.setChecked(isChecked);
-            ExchangeLooper exchangeLooper = (ExchangeLooper) getItem(getAdapterPosition());
-            ExchangeLoopManager.getInstance(getContext()).updateCheckLoopExchange(exchangeLooper.getId(), isChecked);
+            if (exchangeLooper.isLoop()) {
+                tvStatus.setText(R.string.loop_status_ok);
+                tvStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            } else {
+                tvStatus.setText(R.string.loop_status_close);
+                tvStatus.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_light));
+            }
         }
 
         @Override

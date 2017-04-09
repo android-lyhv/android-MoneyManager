@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -18,7 +19,7 @@ import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.ResourceUtils;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -26,9 +27,8 @@ import java.util.List;
  */
 
 public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
-    private static final String TAG = ExchangeRecyclerViewTabAdapter.class.getSimpleName();
 
-    public ExchangeRecyclerViewTabAdapter(Context context, List objects) {
+    public ExchangeRecyclerViewTabAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 
@@ -36,6 +36,11 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_exchange_dashboard, parent, false);
         return new ExchangeHolder(view);
+    }
+
+    @Override
+    public int getItemCount() {
+        return getSize() > 5 ? 5 : getSize();
     }
 
     @Override
@@ -55,7 +60,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
             super(itemView);
             imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
             tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
-            tvAccountName = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvAccountName = (TextView) itemView.findViewById(R.id.tvAccountName);
             tvDateCreated = (TextView) itemView.findViewById(R.id.tvLastCreated);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
         }
@@ -69,7 +74,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
                 }
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
                 tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
                 if (exchange.getTypeExchange() == ExchangeType.INCOME) {
                     tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
                 }
@@ -78,7 +83,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
                 imgCategory.setImageResource(R.drawable.ic_transfer);
                 tvCategoryName.setText(getContext().getResources().getString(R.string.transfer));
                 tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
                 if (CurrencyUtils.getInstance().getFloatMoney(exchange.getAmount()) > 0) {
                     tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));

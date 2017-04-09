@@ -10,10 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -32,16 +32,19 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
     private ImageView imgCategory;
     private TextView tvAmount;
     private LinearLayout llNote;
+    private ImageView imgLocation;
 
     public ItemSimpleExchange(View itemView) {
         super(itemView);
         tvAccountName = (TextView) itemView.findViewById(R.id.tvNameAccount);
-        tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
+        tvDescription = (TextView) itemView.findViewById(R.id.tvAccountName);
         tvDateCreated = (TextView) itemView.findViewById(R.id.tvDate);
         tvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
         imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
         tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
         llNote = (LinearLayout) itemView.findViewById(R.id.llNote);
+        imgLocation = (ImageView) itemView.findViewById(R.id.imgLocation);
+
     }
 
     void onBind(Context context, Exchange exchange) {
@@ -51,7 +54,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
         if (!amount.startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         }
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(exchange.getAmount(), exchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
         tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
         if (TextUtils.isEmpty(exchange.getDescription())) {
             llNote.setVisibility(View.GONE);
@@ -65,6 +68,10 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             imgCategory.setImageResource(R.drawable.ic_transfer);
             tvCategoryName.setText(context.getResources().getString(R.string.transfer));
         }
-
+        if (exchange.getPlace() == null) {
+            imgLocation.setVisibility(View.GONE);
+        } else {
+            imgLocation.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -37,13 +36,11 @@ public class AccountManager extends RealmHelper implements AccountListener {
     }
 
     @Override
-    public List<Account> getAccounts() {
+    public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).findAll();
-        realmResults.sort("created", Sort.ASCENDING);
-        List<Account> accounts = realmResults.subList(0, realmResults.size());
+        RealmResults<Account> realmResults = realm.where(Account.class).findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
-        return accounts;
+        return realmResults;
     }
 
     @Override
@@ -57,6 +54,7 @@ public class AccountManager extends RealmHelper implements AccountListener {
         realm.commitTransaction();
         return bigDecimal.toString();
     }
+
     public String getAmountAvailableByDate(Date date) {
         BigDecimal bigDecimal = new BigDecimal(getTotalInitAmount());
         realm.beginTransaction();
@@ -139,25 +137,15 @@ public class AccountManager extends RealmHelper implements AccountListener {
         realm.commitTransaction();
         return name;
     }
+
     public void createDefaultAccount(Context context) {
         Account account = new Account();
         account.setId(context.getString(R.string.id_default_account));
         account.setName(context.getString(R.string.name_default_account));
         account.setDefault(true);
-        account.setColorCode("#FF028761");
+        account.setColorHex(context.getString(R.string.color_account_default));
         account.setCreated(new Date());
-        account.setCurrencyCode(CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
-        account.setInitAmount("100000");
+        account.setInitAmount("0");
         insertOrUpdate(account);
-
-        Account account1 = new Account();
-        account1.setId(UUID.randomUUID().toString());
-        account1.setName("ATM");
-        account1.setDefault(true);
-        account1.setColorCode("#B71C1C");
-        account1.setCreated(new Date());
-        account1.setCurrencyCode(CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
-        account1.setInitAmount("100000");
-        insertOrUpdate(account1);
     }
 }

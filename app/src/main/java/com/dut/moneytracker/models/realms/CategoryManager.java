@@ -24,15 +24,11 @@ public class CategoryManager extends RealmHelper {
 
     }
 
-    public List<GroupCategory> getGroupCategory() {
-        List<GroupCategory> groupCategories = new ArrayList<>();
+    public RealmResults<GroupCategory> getGroupCategory() {
         realm.beginTransaction();
         RealmResults<GroupCategory> realmResults = realm.where(GroupCategory.class).findAll();
-        for (GroupCategory groupCategory : realmResults) {
-            groupCategories.add(groupCategory);
-        }
         realm.commitTransaction();
-        return groupCategories;
+        return realmResults;
     }
 
     public byte[] getImageByte(String id) {
@@ -49,6 +45,13 @@ public class CategoryManager extends RealmHelper {
         Category category = realm.where(Category.class).equalTo("id", id).findFirst();
         realm.commitTransaction();
         return category;
+    }
+
+    public RealmResults<Category> getCategoriesByGroupId(String idGroup) {
+        realm.beginTransaction();
+        RealmResults<Category> realmResults = realm.where(Category.class).equalTo("idGroup", idGroup).findAll();
+        realm.commitTransaction();
+        return realmResults;
     }
 
     public List<String> getListIdCategoryByGroupId(String idGroup) {

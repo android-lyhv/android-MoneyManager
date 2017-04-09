@@ -28,10 +28,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.exchanges.ActivityAddMoreExchange"
+            android:name=".ui.account.ActivityAccounts_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.account.ActivityEditAccount"
+            android:name=".ui.account.ActivityAddNewAccount_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.exchanges.ActivityAddMoreExchange_"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.account.ActivityEditAccount_"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.exchanges.ActivityDetailExchange_"
@@ -73,7 +79,7 @@
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.exchanges.ActivityAddExchange"
+            android:name=".ui.exchanges.ActivityAddExchange_"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -87,7 +93,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <receiver android:name=".recevier.ReceiveGenerateExchange"/>
+
+        <receiver android:name=".recevier.ReceiveGenerateExchange" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

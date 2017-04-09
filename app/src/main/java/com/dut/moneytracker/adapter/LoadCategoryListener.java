@@ -2,7 +2,7 @@ package com.dut.moneytracker.adapter;
 
 import com.dut.moneytracker.objects.Category;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface LoadCategoryListener {
     void onLoadGroupCategory();
-    void onLoadChildCategory(List<Category> categories);
+    void onLoadChildCategory(RealmResults<Category> categories);
 }

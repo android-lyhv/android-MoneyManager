@@ -49,18 +49,24 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     @Override
     public void onStart() {
         super.onStart();
-        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
+        ((MainActivity_) getActivity()).loadMenuItemFragmentExchanges();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     @AfterViews
     void init() {
         initPager();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
     }
 
     private void initPager() {
@@ -79,16 +85,10 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
         mPagerAdapter.prevPager();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((MainActivity_) getActivity()).loadMenuItemFragmentExchanges();
-    }
-
     public void onReloadFragmentPager() {
         if (viewType != mFilter.getViewType()) {
             viewType = mFilter.getViewType();
-            mPagerAdapter.centerPager();
+            mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();
     }

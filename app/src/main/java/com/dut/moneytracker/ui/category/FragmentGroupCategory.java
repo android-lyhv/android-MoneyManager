@@ -17,7 +17,7 @@ import com.dut.moneytracker.adapter.LoadCategoryListener;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.objects.GroupCategory;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -28,7 +28,7 @@ public class FragmentGroupCategory extends Fragment implements ClickItemListener
     private LoadCategoryListener mLoadCategoryListener;
     private RecyclerView mRecyclerCategory;
     private GroupCategoryAdapter childCategoryRecyclerAdapter;
-    private List<GroupCategory> mGroupCategories = CategoryManager.getInstance().getGroupCategory();
+    private RealmResults<GroupCategory> mGroupCategories = CategoryManager.getInstance().getGroupCategory();
 
     public void registerLoadChildCategory(LoadCategoryListener loadCategoryListener) {
         mLoadCategoryListener = loadCategoryListener;
@@ -52,7 +52,8 @@ public class FragmentGroupCategory extends Fragment implements ClickItemListener
 
     @Override
     public void onClick(View view, int position) {
-        mLoadCategoryListener.onLoadChildCategory(mGroupCategories.get(position).getCategories());
+        String idGroup = mGroupCategories.get(position).getId();
+        mLoadCategoryListener.onLoadChildCategory(CategoryManager.getInstance().getCategoriesByGroupId(idGroup));
     }
 
 }

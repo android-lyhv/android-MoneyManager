@@ -16,6 +16,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
+    <string name="label_linechart">30 ngày gần nhất</string>
     <string name="activity_main_navigation.textview.text.chart">Biểu đồ</string>
     <string name="activity_add_exchange.textview.text.income">THU NHẬP</string>
     <string name="activity_add_exchange.textview.text.spend">CHI TIÊU</string>
@@ -24,6 +25,7 @@
     <string name="toast.text.connection_internet">Vui lòng kết nối internet!</string>
     <string name="name_default_account">Tiền Mặt</string>
     <string name="id_default_account">moneytracker</string>
+    <string name="action_reload_tab_account">action_reload_tab_account</string>
     <!--Currency-->
     <string name="current_api_id">bd8e8fc3b2bd4af58a7617bc9ce3651f</string>
     <!--FIREBASE-->
@@ -36,7 +38,7 @@
     <string name="fragment_account.textview.chartlist">30 ngày gần nhất</string>
     <string name="fragment_account.textview.exchange">Giao dịch gần đây</string>
     <string name="fragment_account.textview.showmore">Hiển thị thêm</string>
-    <string name="tablyout.text.all_account">Tài khoản của tôi</string>
+    <string name="title_all_account">Tài khoản của tôi</string>
     <string name="extra.account">Account</string>
     <string name="broadcast_filter">broadcast_filter</string>
     <string name="broadcast_objects_filter">broadcast_objects_filter</string>
@@ -56,14 +58,13 @@
     <string name="step_filter">step_filter</string>
     <string name="extra_filter">extra_filter</string>
     <string name="all_account">Tất cả</string>
-    <string name="exchange.name.income">Thu Nhập</string>
-    <string name="exchange.name.expense">Chi Tiêu</string>
-    <string name="piechart.income">Thu Nhập</string>
-    <string name="piechart.expense">Chi Tiêu</string>
+    <string name="income_name">Thu Nhập</string>
+    <string name="expense_name">Chi Tiêu</string>
     <string name="exchange.name.transfer">Chuyển khoản</string>
-    <string name="account.send">Tải khoản gửi</string>
-    <string name="account.recever">Tài khoản nhận</string>
-    <string name="main.account">Tài khoản</string>
+    <string name="account_send">Tải khoản gửi</string>
+    <string name="account_receive">Tài khoản nhận</string>
+    <string name="main_account">Tài khoản</string>
+    <string name="category_name">Thể loại</string>
     <string name="input_money">Nhap so tien!</string>
     <string name="input_account">Chon tai khoan</string>
     <string name="input_category">Chon the loai</string>
@@ -75,15 +76,9 @@
     <string name="extra_loop_exchange">extra_loop_exchange</string>
     <string name="delete_exchange">Xoa giao dich nay</string>
     <string name="id_exchange_looper">extra_id_looper</string>
-    <!--PaymentType-->
-    <string-array name="payment_type">
-        <item>Tiền Mặt</item>
-        <item>Thẻ ghi nợ</item>
-        <item>Thẻ tín dụng</item>
-        <item>Chuyển khoán ngân hàng</item>
-        <item>Thanh toán bằng điện thoại di động</item>
-        <item>Thanh toán web</item>
-    </string-array>
+    <string name="unknown">Chưa biết</string>
+    <integer name="zoom_map">12</integer>
+    <string name="extra_edit_exchange">extra_edit_exchange</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Thu Nhập</item>
@@ -226,4 +221,24 @@
     <string-array name="other_path">
         <item>ic_other</item>
     </string-array>
+    <string-array name="colors_account">
+        <item>#F44336</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#2196F3</item>
+        <item>#009688</item>
+        <item>#4CAF50</item>
+        <item>#8BC34A</item>
+        <item>#FFEB3B</item>
+        <item>#795548</item>
+        <item>#607D8B</item>
+        <item>#64dd17</item>
+        <item>#9E9E9E</item>
+        <item>#212121</item>
+    </string-array>
+    <string name="color_account_default">#03a879</string>
+    <string name="manger_accounts">Quản lý tài khoản</string>
+    <string name="loop_status_ok">Mở</string>
+    <string name="loop_status_close">Đóng</string>
 </resources>

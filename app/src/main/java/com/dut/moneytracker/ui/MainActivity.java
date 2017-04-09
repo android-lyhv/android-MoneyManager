@@ -31,7 +31,8 @@ import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
-import com.dut.moneytracker.ui.account.ActivityEditAccount;
+import com.dut.moneytracker.ui.account.ActivityAccounts_;
+import com.dut.moneytracker.ui.account.ActivityEditAccount_;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
 import com.dut.moneytracker.ui.charts.FragmentChartPager;
 import com.dut.moneytracker.ui.charts.FragmentChartPager_;
@@ -62,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     private static final String DASHBOARD = "DASHBOARD";
 
     public enum FragmentTag {
-        DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES
-
+        DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, ACCOUNT
     }
 
     FragmentTag mFragmentTag = DEFAULT;
@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
     private Filter mFilter;
-    private Filter mLastFilter;
 
     @AfterViews
     void init() {
@@ -121,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 switch (mFragmentTag) {
+                    case ACCOUNT:
+                        ActivityAccounts_.intent(MainActivity.this).start();
+                        break;
                     case DASHBOARD:
                         onLoadFragmentDashboard();
                         break;
@@ -226,6 +228,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         onCloseNavigation();
     }
 
+    @Click(R.id.llAccount)
+    void onClickAccount() {
+        mFragmentTag = FragmentTag.ACCOUNT;
+        onCloseNavigation();
+    }
+
     @Click(R.id.llDashBoard)
     void onClickDashBoard() {
         mFragmentTag = FragmentTag.DASHBOARD;
@@ -246,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
-        startActivityEditAccount();
+        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.EDIT_ACCOUNT);
     }
 
     @Click(R.id.llChartIncome)
@@ -280,16 +288,9 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         }
     }
 
-    void startActivityEditAccount() {
-        Intent intent = new Intent(this, ActivityEditAccount.class);
-        intent.putExtra(getString(R.string.extra_account), mAccount);
-        startActivityForResult(intent, RequestCode.EDIT_ACCOUNT);
-    }
-
     void onResultEditAccount(Intent data) {
         Account account = data.getParcelableExtra(getString(R.string.extra_account));
         AccountManager.getInstance().insertOrUpdate(account);
-        mFragmentDashboard.notifyDataSetChanged();
     }
 
     void onResultLogout() {
@@ -304,7 +305,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     public void onLoadFragmentChart(int typeChart) {
         mFilter = FilterManager.getInstance().getFilterDefault();
-        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(null);
         mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
         onReplaceFragment(mFragmentChartPager, null);
@@ -315,7 +315,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     public void onLoadFragmentExchanges() {
         mFilter = FilterManager.getInstance().getFilterDefault();
-        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(null);
         onLoadFragmentExchange(mFilter);
     }
@@ -325,7 +324,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     public void onLoadFragmentExchangesByAccount(String idAccount) {
         mFilter = FilterManager.getInstance().getFilterDefaultAccount(idAccount);
-        mLastFilter = mFilter;
         mSpinnerAccount.setSelectItem(idAccount);
         onLoadFragmentExchange(mFilter);
     }

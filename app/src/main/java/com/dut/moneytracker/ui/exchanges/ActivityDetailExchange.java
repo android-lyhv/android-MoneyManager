@@ -3,9 +3,7 @@ package com.dut.moneytracker.ui.exchanges;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,8 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.ui.category.ActivityPickCategory;
-import com.dut.moneytracker.ui.interfaces.DetailExchangeListener;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -29,11 +26,11 @@ import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.models.realms.ExchangeManger;
-import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Place;
+import com.dut.moneytracker.ui.category.ActivityPickCategory;
+import com.dut.moneytracker.ui.interfaces.DetailExchangeListener;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.view.DayPicker;
@@ -43,8 +40,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -76,16 +73,12 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     TextView tvAmount;
     @ViewById(R.id.tvAccount)
     TextView tvAccount;
-    @ViewById(R.id.tvCurrency)
-    TextView tvCurrency;
-    @ViewById(R.id.tvDescription)
+    @ViewById(R.id.tvAccountName)
     TextView mTvDescription;
     @ViewById(R.id.tvDate)
     TextView tvDate;
     @ViewById(R.id.tvTime)
     TextView tvTime;
-    @ViewById(R.id.mapView)
-    MapView mapView;
     @ViewById(R.id.tvTitleCategory)
     TextView mTvTitleCategory;
     @ViewById(R.id.rlCategory)
@@ -103,11 +96,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     //GoogleMap
     Place mPlace;
     GoogleMap mGoogleMap;
+    private SupportMapFragment mMapFragment;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @AfterViews
     void init() {
@@ -116,18 +106,23 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
         mPlace = mExchange.getPlace() != null ? mExchange.getPlace() : new Place();
         onShowDetailExchange();
-        mapView.onCreate(new Bundle());
-        mapView.getMapAsync(this);
+        initMap();
+    }
+
+    private void initMap() {
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
     }
 
     @OptionsItem(android.R.id.home)
-    void onClickHomeBack() {
+    void onClose() {
         finish();
     }
 
     @OptionsItem(R.id.actionSave)
     void onClickSave() {
-        onChangeExchange();
+        onSaveChangeExchange();
         finish();
     }
 
@@ -140,8 +135,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    ExchangeManger.getInstance().deleteExchangeById(mExchange.getId());
-                    setResult(ResultCode.DELETE_EXCHANGE);
+                    setResult(ResultCode.DELETE_EXCHANGE, new Intent());
                     finish();
                 }
             }
@@ -178,7 +172,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
                 } else {
                     mExchange.setAmount(amount);
                 }
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
             }
         });
     }
@@ -345,18 +339,18 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
     @Override
-    public void onChangeExchange() {
+    public void onSaveChangeExchange() {
         mExchange.setPlace(mPlace);
-        ExchangeManger.getInstance().insertOrUpdate(mExchange);
-        setResult(ResultCode.DETAIL_EXCHANGE);
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.extra_edit_exchange), mExchange);
+        setResult(ResultCode.EDIT_EXCHANGE, intent);
     }
 
     private void showDetailTypeIncomeAndExpenses() {
         Category category = CategoryManager.getInstance().getCategoryById(mExchange.getIdCategory());
         tvCategoryName.setText(category.getName());
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
         mTvDescription.setText(mExchange.getDescription());
-        tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
         String nameAccount = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
         tvAccount.setText(String.valueOf(nameAccount));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
@@ -365,9 +359,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         }
         if (mExchange.getTypeExchange() == ExchangeType.INCOME) {
-            tvExchangeName.setText(R.string.exchange_name_income);
+            tvExchangeName.setText(R.string.income_name);
         } else {
-            tvExchangeName.setText(R.string.exchange_name_expense);
+            tvExchangeName.setText(R.string.expense_name);
         }
     }
 
@@ -376,9 +370,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         imgEditCategory.setVisibility(View.GONE);
         tvExchangeName.setText(R.string.exchange_name_transfer);
         mTvTitleCategory.setText(R.string.account_send);
-        tvTitleAccount.setText(R.string.account_recever);
+        tvTitleAccount.setText(R.string.account_receive);
         mTvDescription.setText(mExchange.getDescription());
-        tvCurrency.setText(String.valueOf(mExchange.getCurrencyCode()));
         String amount = mExchange.getAmount();
         if (amount.startsWith("-")) {
             String accountSend = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
@@ -391,7 +384,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             String accountReceiver = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
             tvAccount.setText(accountReceiver);
         }
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {
@@ -403,36 +396,17 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     void onTargetLocationExchange() {
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 
     void updateMap() {
         mGoogleMap.clear();
         onTargetLocationExchange();
-        mapView.refreshDrawableState();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         onTargetLocationExchange();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
     }
 }

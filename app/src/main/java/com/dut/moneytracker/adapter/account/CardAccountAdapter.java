@@ -1,4 +1,4 @@
-package com.dut.moneytracker.adapter;
+package com.dut.moneytracker.adapter.account;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,11 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
-import com.dut.moneytracker.currency.CurrencyUtils;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -23,9 +23,9 @@ import java.util.List;
 
 public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.CardHolder> {
     private final Context mContext;
-    private final List<Account> mAccounts;
+    private RealmResults<Account> mAccounts;
 
-    public CardAccountAdapter(Context context, List<Account> accounts) {
+    public CardAccountAdapter(Context context, RealmResults<Account> accounts) {
         mContext = context;
         mAccounts = accounts;
     }
@@ -41,6 +41,10 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
         holder.setView(mAccounts.get(position));
     }
 
+    public void setAccounts(RealmResults<Account> mAccounts) {
+        this.mAccounts = mAccounts;
+    }
+
     @Override
     public int getItemCount() {
         return mAccounts == null ? 0 : mAccounts.size();
@@ -54,14 +58,14 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
         CardHolder(View itemView) {
             super(itemView);
             llCard = (LinearLayout) itemView.findViewById(R.id.llCard);
-            tvAccountName = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvAccountName = (TextView) itemView.findViewById(R.id.tvAccountName);
             tvAmount = (TextView) itemView.findViewById(R.id.tvAmount);
         }
 
         public void setView(Account account) {
             String value = AccountManager.getInstance().getAmountAvailableByAccount(account.getId());
-            llCard.setBackgroundColor(Color.parseColor(account.getColorCode()));
-            String money = CurrencyUtils.getInstance().getStringMoneyType(value, account.getCurrencyCode());
+            llCard.setBackgroundColor(Color.parseColor(account.getColorHex()));
+            String money = CurrencyUtils.getInstance().getStringMoneyFormat(value, account.getCurrencyCode());
             tvAmount.setText(money);
             tvAccountName.setText(account.getName());
         }

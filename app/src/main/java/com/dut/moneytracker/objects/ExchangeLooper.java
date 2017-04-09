@@ -3,6 +3,8 @@ package com.dut.moneytracker.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.dut.moneytracker.currency.CurrencyUtils;
+
 import java.util.Date;
 
 import io.realm.RealmObject;
@@ -24,7 +26,7 @@ public class ExchangeLooper extends RealmObject implements Parcelable {
     private String idCategory;
     private String idAccountTransfer;
     private String codeTransfer;
-    private String currencyCode;
+    private String currencyCode = CurrencyUtils.DEFAULT_CURRENCY_CODE;
     private String amount;
     private String description;
     private Date created;

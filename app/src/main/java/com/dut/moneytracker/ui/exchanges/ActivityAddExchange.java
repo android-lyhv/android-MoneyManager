@@ -1,19 +1,14 @@
 package com.dut.moneytracker.ui.exchanges;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +18,6 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickCurrency;
 import com.dut.moneytracker.maps.GoogleLocation;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
@@ -35,6 +29,14 @@ import com.dut.moneytracker.ui.interfaces.AddListener;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
+
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -43,252 +45,169 @@ import java.util.UUID;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 23/02/2017.
  */
-public class ActivityAddExchange extends AppCompatActivity implements View.OnClickListener, AddListener, GoogleApiClient.ConnectionCallbacks {
+@EActivity(R.layout.activity_add_exchange)
+@OptionsMenu(R.menu.menu_add_exchange)
+public class ActivityAddExchange extends AppCompatActivity implements AddListener, GoogleApiClient.ConnectionCallbacks {
     private static final String TAG = ActivityAddExchange.class.getSimpleName();
-    private Toolbar mToolbar;
-    private TextView tvCal0;
-    private TextView tvCal1;
-    private TextView tvCal2;
-    private TextView tvCal3;
-    private TextView tvCal4;
-    private TextView tvCal5;
-    private TextView tvCal6;
-    private TextView tvCal7;
-    private TextView tvCal8;
-    private TextView tvCal9;
-    private ImageView imgCalBack;
-    private TextView tvCalDot;
-    private TextView tvAmount;
-    private Button btnTransfer;
-    private Button btnIncome;
-    private Button btnExpenses;
-    private TextView tvCurrency;
-    private LinearLayout llAccount;
-    private LinearLayout llCategory;
-    private TextView tvAccountName;
-    private TextView tvCategoryName;
-    private TextView tvMoreAdd;
-    private LinearLayout llInformation;
-    private TextView tvStatus;
-    private StringBuilder stringBuilder;
-    private TextView tvTitleFromAccount;
-    private TextView tvTitleToAccount;
-
-
+    @ViewById(R.id.toolbar)
+    Toolbar mToolbar;
+    @ViewById(R.id.tvAmount)
+    TextView tvAmount;
+    @ViewById(R.id.btnTransfer)
+    Button btnTransfer;
+    @ViewById(R.id.btnIncome)
+    Button btnIncome;
+    @ViewById(R.id.btnExpenses)
+    Button btnExpenses;
+    @ViewById(R.id.tvAccountName)
+    TextView tvAccountName;
+    @ViewById(R.id.tvCategoryName)
+    TextView tvCategoryName;
+    @ViewById(R.id.tvStatus)
+    TextView tvStatus;
+    @ViewById(R.id.tvTitleFromAccount)
+    TextView tvTitleFromAccount;
+    @ViewById(R.id.tvTitleToAccount)
+    TextView tvTitleToAccount;
     //Model
-    private Account mAccount;
-    private Exchange mExchange = new Exchange();
-    private String idCategory;
-    private String nameCategory = "Chưa biết";
-    private String nameAccountTransfer = "Chưa biết";
+    @Extra
+    Account mAccount;
+    private Exchange mExchange;
+    private String mIdCategory;
+    private String mNameCategory;
+    private String mNameAccountTransfer;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_exchange);
+    @AfterViews
+    void init() {
         initDataExchange();
         initView();
     }
 
     private void initView() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_close_white);
         setTitle(getString(R.string.activity_add_exchange_title));
         setSupportActionBar(mToolbar);
-        tvStatus = (TextView) findViewById(R.id.tvStatus);
-        tvCal0 = (TextView) findViewById(R.id.tvCal0);
-        tvCal0.setOnClickListener(this);
-        tvCal1 = (TextView) findViewById(R.id.tvCal1);
-        tvCal1.setOnClickListener(this);
-        tvCal2 = (TextView) findViewById(R.id.tvCal2);
-        tvCal2.setOnClickListener(this);
-        tvCal3 = (TextView) findViewById(R.id.tvCal3);
-        tvCal3.setOnClickListener(this);
-        tvCal4 = (TextView) findViewById(R.id.tvCal4);
-        tvCal4.setOnClickListener(this);
-        tvCal5 = (TextView) findViewById(R.id.tvCal5);
-        tvCal5.setOnClickListener(this);
-        tvCal6 = (TextView) findViewById(R.id.tvCal6);
-        tvCal6.setOnClickListener(this);
-        tvCal7 = (TextView) findViewById(R.id.tvCal7);
-        tvCal7.setOnClickListener(this);
-        tvCal8 = (TextView) findViewById(R.id.tvCal8);
-        tvCal8.setOnClickListener(this);
-        tvCal9 = (TextView) findViewById(R.id.tvCal9);
-        llInformation = (LinearLayout) findViewById(R.id.llInformation);
-        tvCal9.setOnClickListener(this);
-        imgCalBack = (ImageView) findViewById(R.id.imgCalBack);
-        imgCalBack.setOnClickListener(this);
-        tvCalDot = (TextView) findViewById(R.id.tvCalDot);
-        tvCalDot.setOnClickListener(this);
-        tvAmount = (TextView) findViewById(R.id.tvAmount);
-        btnIncome = (Button) findViewById(R.id.btnIncome);
-        btnIncome.setOnClickListener(this);
-        btnExpenses = (Button) findViewById(R.id.btnExpenses);
-        btnExpenses.setOnClickListener(this);
-        btnTransfer = (Button) findViewById(R.id.btnTransfer);
-        btnTransfer.setOnClickListener(this);
-        tvAccountName = (TextView) findViewById(R.id.tvDescription);
-        tvCategoryName = (TextView) findViewById(R.id.tvCategoryName);
-        llAccount = (LinearLayout) findViewById(R.id.llAccount);
-        llAccount.setOnClickListener(this);
-        llCategory = (LinearLayout) findViewById(R.id.llCategory);
-        llCategory.setOnClickListener(this);
-        tvMoreAdd = (TextView) findViewById(R.id.tvMoreAdd);
-        tvMoreAdd.setOnClickListener(this);
-        tvCurrency = (TextView) findViewById(R.id.tvCurrency);
-        tvCurrency.setOnClickListener(this);
-        tvTitleFromAccount = (TextView) findViewById(R.id.tvTitleFromAccount);
-        tvTitleToAccount = (TextView) findViewById(R.id.tvTitleToAccount);
         btnExpenses.setAlpha(1f);
         btnIncome.setAlpha(0.5f);
         btnTransfer.setAlpha(0.5f);
         tvAccountName.setText(mAccount.getName());
-        tvCurrency.setText(mAccount.getCurrencyCode());
-        mToolbar.setBackgroundColor(Color.parseColor(mAccount.getColorCode()));
-        llInformation.setBackgroundColor(Color.parseColor(mAccount.getColorCode()));
+        mNameCategory = getString(R.string.unknown);
+        mNameAccountTransfer = getString(R.string.unknown);
     }
 
     private void initDataExchange() {
-        mAccount = getIntent().getParcelableExtra(getString(R.string.extra_account));
+        mExchange = new Exchange();
         mExchange.setId(UUID.randomUUID().toString());
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
         mExchange.setIdAccount(mAccount.getId());
         mExchange.setCurrencyCode(mAccount.getCurrencyCode());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_exchange, menu);
-        return super.onCreateOptionsMenu(menu);
+    @OptionsItem(android.R.id.home)
+    void onClose() {
+        finish();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
+    @OptionsItem(R.id.actionAdd)
+    void onSave() {
+        switch (mExchange.getTypeExchange()) {
+            case ExchangeType.INCOME:
+            case ExchangeType.EXPENSES:
+                onAddExpensesOrIncome();
                 break;
-            case R.id.actionAdd:
-                switch (mExchange.getTypeExchange()) {
-                    case ExchangeType.INCOME:
-                    case ExchangeType.EXPENSES:
-                        onAddExpensesOrIncome();
-                        break;
-                    case ExchangeType.TRANSFER:
-                        onAddTransfer();
-                        break;
-                }
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tvCal0:
-                onSetValueAmount("0");
-                break;
-            case R.id.tvCal1:
-                onSetValueAmount("1");
-                break;
-            case R.id.tvCal2:
-                onSetValueAmount("2");
-                break;
-            case R.id.tvCal3:
-                onSetValueAmount("3");
-                break;
-            case R.id.tvCal4:
-                onSetValueAmount("4");
-                break;
-            case R.id.tvCal5:
-                onSetValueAmount("5");
-                break;
-            case R.id.tvCal6:
-                onSetValueAmount("6");
-                break;
-            case R.id.tvCal7:
-                onSetValueAmount("7");
-                break;
-            case R.id.tvCal8:
-                onSetValueAmount("8");
-                break;
-            case R.id.tvCal9:
-                onSetValueAmount("9");
-                break;
-            case R.id.tvCalDot:
-                onSetValueAmount(".");
-                break;
-            case R.id.imgCalBack:
-                String current = tvAmount.getText().toString();
-                if (!TextUtils.isEmpty(current)) {
-                    tvAmount.setText(current.substring(0, current.length() - 1));
-                }
-                break;
-            case R.id.llAccount:
-                showDialogPickAccount();
-                break;
-            case R.id.llCategory:
-                if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
-                    showDialogPickAccountReceive();
-                } else {
-                    showActivityPickCategory();
-                }
-                break;
-            case R.id.tvMoreAdd:
-                startAddDetail();
-                break;
-            case R.id.tvCurrency:
-                showDialogPickCurrency();
-                break;
-            case R.id.btnIncome:
-                if (mExchange.getTypeExchange() == ExchangeType.INCOME) {
-                    return;
-                }
-                mExchange.setTypeExchange(ExchangeType.INCOME);
-                //Change view
-                tvTitleFromAccount.setText("Tài khoản");
-                tvTitleToAccount.setText("Thể lọai");
-                tvCategoryName.setText(nameCategory);
-                tvStatus.setVisibility(View.VISIBLE);
-                tvStatus.setText("+");
-                btnExpenses.setAlpha(0.5f);
-                btnIncome.setAlpha(1f);
-                btnTransfer.setAlpha(0.5f);
-                break;
-            case R.id.btnExpenses:
-                if (mExchange.getTypeExchange() == ExchangeType.EXPENSES) {
-                    return;
-                }
-                mExchange.setTypeExchange(ExchangeType.EXPENSES);
-                //Change view
-                tvCategoryName.setText(nameCategory);
-                tvTitleFromAccount.setText("Tài khoản");
-                tvTitleToAccount.setText("Thể lọai");
-                tvStatus.setText("-");
-                btnExpenses.setAlpha(1f);
-                btnIncome.setAlpha(0.5f);
-                btnTransfer.setAlpha(0.5f);
-                break;
-            case R.id.btnTransfer:
-                if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
-                    return;
-                }
-                mExchange.setTypeExchange(ExchangeType.TRANSFER);
-                //ChangeView
-                tvStatus.setVisibility(View.GONE);
-                tvTitleFromAccount.setText("Tài khoản gửi");
-                tvTitleToAccount.setText("Tài khoản nhận");
-                tvCategoryName.setText(nameAccountTransfer);
-                btnExpenses.setAlpha(0.5f);
-                btnIncome.setAlpha(0.5f);
-                btnTransfer.setAlpha(1f);
+            case ExchangeType.TRANSFER:
+                onAddTransfer();
                 break;
         }
     }
 
-    private void startAddDetail() {
+    @Click(R.id.tvCal0)
+    void onClickTvCalZero() {
+        onSetValueAmount("0");
+    }
+
+    @Click(R.id.tvCal1)
+    void onClickTvCalOne() {
+        onSetValueAmount("1");
+    }
+
+    @Click(R.id.tvCal2)
+    void onClickTvCalTwo() {
+        onSetValueAmount("2");
+    }
+
+    @Click(R.id.tvCal3)
+    void onClickTvCalThree() {
+        onSetValueAmount("3");
+    }
+
+    @Click(R.id.tvCal4)
+    void onClickTvCalFour() {
+        onSetValueAmount("4");
+    }
+
+    @Click(R.id.tvCal5)
+    void onClickTvCalFive() {
+        onSetValueAmount("5");
+    }
+
+    @Click(R.id.tvCal6)
+    void onClickTvCalSix() {
+        onSetValueAmount("6");
+    }
+
+    @Click(R.id.tvCal7)
+    void onClickTvCalSeven() {
+        onSetValueAmount("7");
+    }
+
+    @Click(R.id.tvCal8)
+    void onClickTvCalEight() {
+        onSetValueAmount("8");
+    }
+
+    @Click(R.id.tvCal9)
+    void onClickTvCalNight() {
+        onSetValueAmount("9");
+    }
+
+    @Click(R.id.tvCalDot)
+    void onClickTvCalDot() {
+        onSetValueAmount(".");
+    }
+
+    @Click(R.id.imgCalBack)
+    void onClickBackNumber() {
+        String current = tvAmount.getText().toString();
+        if (!TextUtils.isEmpty(current)) {
+            tvAmount.setText(current.substring(0, current.length() - 1));
+        }
+    }
+
+    @Click(R.id.llAccount)
+    void onClickPickAccount() {
+        DialogPickAccount dialogPickAccount = new DialogPickAccount();
+        dialogPickAccount.show(getFragmentManager(), TAG);
+        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+            @Override
+            public void onResultAccount(Account account) {
+                mExchange.setIdAccount(account.getId());
+                tvAccountName.setText(account.getName());
+            }
+        });
+    }
+
+    @Click(R.id.llCategory)
+    void onClickPickCategory() {
+        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            showDialogPickAccountReceive();
+        } else {
+            showActivityPickCategory();
+        }
+    }
+
+    @Click(R.id.tvMoreAdd)
+    void onClickMoreAddExchange() {
         String textAmount = tvAmount.getText().toString().trim();
         if (TextUtils.isEmpty(textAmount)) {
             textAmount = "0";
@@ -298,11 +217,47 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         } else {
             mExchange.setAmount(textAmount);
         }
-        Log.d(TAG, "startAddDetail: " + mExchange.toString());
-        Intent intent = new Intent(this, ActivityAddMoreExchange.class);
-        intent.putExtra(getString(R.string.extra_more_add), mExchange);
-        startActivityForResult(intent, RequestCode.MORE_ADD);
+        ActivityAddMoreExchange_.intent(this).mExchange(mExchange).startForResult(RequestCode.MORE_ADD);
     }
+
+    @Click(R.id.btnIncome)
+    void onClickTabIncome() {
+        mExchange.setTypeExchange(ExchangeType.INCOME);
+        tvTitleFromAccount.setText(getString(R.string.main_account));
+        tvTitleToAccount.setText(getString(R.string.category_name));
+        tvCategoryName.setText(mNameCategory);
+        tvStatus.setVisibility(View.VISIBLE);
+        tvStatus.setText("+");
+        btnExpenses.setAlpha(0.5f);
+        btnIncome.setAlpha(1f);
+        btnTransfer.setAlpha(0.5f);
+    }
+
+    @Click(R.id.btnExpenses)
+    void onClickTabExpenses() {
+        mExchange.setTypeExchange(ExchangeType.EXPENSES);
+        tvTitleFromAccount.setText(getString(R.string.main_account));
+        tvTitleToAccount.setText(getString(R.string.category_name));
+        tvCategoryName.setText(mNameCategory);
+        tvStatus.setVisibility(View.VISIBLE);
+        tvStatus.setText("-");
+        btnExpenses.setAlpha(1f);
+        btnIncome.setAlpha(0.5f);
+        btnTransfer.setAlpha(0.5f);
+    }
+
+    @Click(R.id.btnTransfer)
+    void onClickTabTransfer() {
+        mExchange.setTypeExchange(ExchangeType.TRANSFER);
+        tvStatus.setVisibility(View.GONE);
+        tvTitleFromAccount.setText(getString(R.string.account_send));
+        tvTitleToAccount.setText(getString(R.string.expense_name));
+        tvCategoryName.setText(mNameAccountTransfer);
+        btnExpenses.setAlpha(0.5f);
+        btnIncome.setAlpha(0.5f);
+        btnTransfer.setAlpha(1f);
+    }
+
 
     @Override
     public void onAddExpensesOrIncome() {
@@ -315,7 +270,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         } else {
             mExchange.setAmount(textAmount);
         }
-        mExchange.setIdCategory(idCategory);
+        mExchange.setIdCategory(mIdCategory);
         onRequestExchangePlace();
     }
 
@@ -351,25 +306,8 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         } else {
             AccountManager.getInstance().insertOrUpdate(mExchange);
         }
-        setResult(ResultCode.ADD_EXCHANGE);
+        setResult(ResultCode.ADD_NEW_EXCHANGE, new Intent());
         finish();
-    }
-
-    @Override
-    public void onUpToServer() {
-
-    }
-
-    private void showDialogPickAccount() {
-        DialogPickAccount dialogPickAccount = new DialogPickAccount();
-        dialogPickAccount.show(getFragmentManager(), TAG);
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
-            @Override
-            public void onResultAccount(Account account) {
-                mExchange.setIdAccount(account.getId());
-                tvAccountName.setText(account.getName());
-            }
-        });
     }
 
     private void showDialogPickAccountReceive() {
@@ -382,24 +320,13 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
                     Toast.makeText(ActivityAddExchange.this, "Vui lòng chọn một tài khoản khác", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                nameAccountTransfer = account.getName();
-                tvCategoryName.setText(nameAccountTransfer);
+                mNameAccountTransfer = account.getName();
+                tvCategoryName.setText(mNameAccountTransfer);
                 mExchange.setIdAccountTransfer(account.getId());
             }
         });
     }
 
-    private void showDialogPickCurrency() {
-        DialogPickCurrency dialogPickCurrency = new DialogPickCurrency();
-        dialogPickCurrency.show(getFragmentManager(), TAG);
-        dialogPickCurrency.registerResultListener(new DialogPickCurrency.ResultListener() {
-            @Override
-            public void onResultCurrencyCode(String code) {
-                tvCurrency.setText(code);
-                mExchange.setCurrencyCode(code);
-            }
-        });
-    }
 
     private void showActivityPickCategory() {
         startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
@@ -411,9 +338,9 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
         switch (resultCode) {
             case ResultCode.PICK_CATEGORY:
                 Category category = data.getParcelableExtra(getString(R.string.extra_category));
-                idCategory = category.getId();
-                nameCategory = category.getName();
-                tvCategoryName.setText(nameCategory);
+                mIdCategory = category.getId();
+                mNameCategory = category.getName();
+                tvCategoryName.setText(mNameCategory);
                 break;
             case ResultCode.MORE_ADD:
                 mExchange = data.getParcelableExtra(getString(R.string.extra_more_add));
@@ -422,7 +349,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
     }
 
     private void onSetValueAmount(String chart) {
-        stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(tvAmount.getText().toString());
         stringBuilder.append(chart);
         if (CurrencyExpression.getInstance().isValidateTypeMoney(stringBuilder.toString())) {
@@ -481,7 +408,7 @@ public class ActivityAddExchange extends AppCompatActivity implements View.OnCli
             Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (TextUtils.isEmpty(idCategory)) {
+        if (TextUtils.isEmpty(mIdCategory)) {
             Toast.makeText(this, "Please pick category", Toast.LENGTH_SHORT).show();
             return false;
         }

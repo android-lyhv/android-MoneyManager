@@ -60,10 +60,10 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
     void init() {
         switch (mChartType) {
             case PieChartType.INCOME:
-                mTvTitle.setText(getString(R.string.piechart_income));
+                mTvTitle.setText(getString(R.string.income_name));
                 break;
             case PieChartType.EXPENSES:
-                mTvTitle.setText(getString(R.string.piechart_expense));
+                mTvTitle.setText(getString(R.string.expense_name));
                 break;
         }
         changeDateLabel();
@@ -109,10 +109,10 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
     }
 
     @Override
-    public void onResultMutilMoney(String minMoney, String averageMoney, String maxMoney) {
-        mTvMinMoney.setText(CurrencyUtils.getInstance().getStringMoneyType(minMoney, "VND"));
-        mTvAverageMoney.setText(CurrencyUtils.getInstance().getStringMoneyType(averageMoney, "VND"));
-        mTvMaxMoney.setText(CurrencyUtils.getInstance().getStringMoneyType(maxMoney, "VND"));
+    public void onResultMultiMoney(String minMoney, String averageMoney, String maxMoney) {
+        mTvMinMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(minMoney, "VND"));
+        mTvAverageMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(averageMoney, "VND"));
+        mTvMaxMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(maxMoney, "VND"));
     }
 
     @Override

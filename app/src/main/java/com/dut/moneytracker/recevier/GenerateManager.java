@@ -8,8 +8,9 @@ import android.content.Intent;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.objects.ExchangeLooper;
+import com.dut.moneytracker.utils.DateTimeUtils;
 
-import java.util.Calendar;
+import java.util.Date;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -19,7 +20,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 
 public class GenerateManager {
-    private static final long PENDING_DAY = 24 * 24 * 60 * 1000L;
+    private static final long PENDING_DAY = 24 * 60 * 60 * 1000L;
     private static final long PENDING_WEEK = 7 * PENDING_DAY;
     private static final long PENDING_MONTH = 30 * PENDING_DAY;
     private static final long PENDING_YEAH = 365 * PENDING_DAY;
@@ -38,10 +39,13 @@ public class GenerateManager {
      * @param mExchangeLooper
      */
     public void pendingGenerateExchange(ExchangeLooper mExchangeLooper) {
+        if (!mExchangeLooper.isLoop()) {
+            return;
+        }
         Intent intent = new Intent(mContext, ReceiveGenerateExchange.class);
         intent.putExtra(mContext.getString(R.string.id_exchange_looper), mExchangeLooper.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, mExchangeLooper.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long step = Calendar.getInstance().getTimeInMillis();
+        long step = getStepTime(mExchangeLooper.getCreated());
         switch (mExchangeLooper.getTypeLoop()) {
             case LoopType.DAY:
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_DAY + step, PENDING_DAY, pendingIntent);
@@ -63,5 +67,22 @@ public class GenerateManager {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, idLoopExchange, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         pendingIntent.cancel();
         mAlarmManager.cancel(pendingIntent);
+    }
+
+    /**
+     * start date is now date if date created < now Date()
+     *
+     * @param created
+     * @return
+     */
+    private long getStepTime(Date created) {
+        Date nowDate = new Date();
+        if (DateTimeUtils.getInstance().isSameDate(created, nowDate)) {
+            return created.getTime();
+        }
+        if (created.before(nowDate)) {
+            return nowDate.getTime();
+        }
+        return created.getTime();
     }
 }

@@ -9,10 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class GroupCategoryAdapter extends BaseRecyclerAdapter {
 
-    public GroupCategoryAdapter(Context context, List objects) {
+    public GroupCategoryAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 

@@ -8,7 +8,6 @@ import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.recevier.GenerateManager;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import io.realm.RealmResults;
@@ -34,13 +33,11 @@ public class ExchangeLoopManager extends RealmHelper {
         mGenerateManager = new GenerateManager(context);
     }
 
-    public List<ExchangeLooper> getListLoopExchange() {
+    public RealmResults<ExchangeLooper> getListLoopExchange() {
         realm.beginTransaction();
-        RealmResults<ExchangeLooper> realmResults = realm.where(ExchangeLooper.class).findAll();
-        realmResults.sort("created", Sort.ASCENDING);
-        List<ExchangeLooper> exchangeLoopers = realmResults.subList(0, realmResults.size());
+        RealmResults<ExchangeLooper> realmResults = realm.where(ExchangeLooper.class).findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
-        return exchangeLoopers;
+        return realmResults;
     }
 
     public void deleteExchangeLoopById(int id) {
@@ -49,25 +46,6 @@ public class ExchangeLoopManager extends RealmHelper {
         exchangeLooper.deleteFromRealm();
         realm.commitTransaction();
         mGenerateManager.removePendingLoopExchange(id);
-    }
-
-    /**
-     * enable and disable loop exchange;
-     *
-     * @param id
-     * @param status
-     */
-    public void updateCheckLoopExchange(int id, boolean status) {
-        realm.beginTransaction();
-        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
-        exchangeLooper.setLoop(status);
-        realm.commitTransaction();
-        if (status) {
-            ExchangeLooper newExchangeLooper = getExchangeLooperById(id);
-            mGenerateManager.pendingGenerateExchange(newExchangeLooper);
-        } else {
-            mGenerateManager.removePendingLoopExchange(id);
-        }
     }
 
     public ExchangeLooper getExchangeLooperById(int id) {
@@ -103,7 +81,7 @@ public class ExchangeLoopManager extends RealmHelper {
         return exchange;
     }
 
-    public void upDateIfTypeLoopChanged(ExchangeLooper exchangeLooper) {
+    public void upDatePendingExchange(ExchangeLooper exchangeLooper) {
         insertOrUpdate(exchangeLooper);
         mGenerateManager.pendingGenerateExchange(exchangeLooper);
     }

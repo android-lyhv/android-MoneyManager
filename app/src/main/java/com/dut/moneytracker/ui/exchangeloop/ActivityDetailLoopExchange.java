@@ -3,7 +3,6 @@ package com.dut.moneytracker.ui.exchangeloop;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.ui.category.ActivityPickCategory;
-import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
@@ -39,6 +36,9 @@ import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.objects.Place;
+import com.dut.moneytracker.recevier.GenerateManager;
+import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
+import com.dut.moneytracker.ui.category.ActivityPickCategory;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.view.DayPicker;
@@ -48,8 +48,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -84,7 +84,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     TextView tvCategoryName;
     @ViewById(R.id.tvAmount)
     TextView mTvAmount;
-    @ViewById(R.id.tvDescription)
+    @ViewById(R.id.tvAccountName)
     TextView tvDescription;
     @ViewById(R.id.tvDate)
     TextView tvDate;
@@ -92,27 +92,31 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     TextView tvAccount;
     @ViewById(R.id.spinnerTypeLoop)
     AppCompatSpinner mAppCompatSpinner;
-    @ViewById(R.id.mapView)
-    MapView mapView;
     @ViewById(R.id.switchLoop)
     SwitchCompat switchCompat;
     @Extra
     ExchangeLooper mExchangeLoop;
+    private GenerateManager mGenerateManager;
     private GoogleMap mGoogleMap;
     private Place mPlace;
     private int mTypeExchange;
-    private int currentTypeLoop = -1;
+    private int lastTypeLoop = -1;
+    private Date lastDate;
+    private boolean lastStatus;
 
     @AfterViews
     void init() {
         initToolbar();
         initSpinner();
         onShowData();
-        initMapView();
+        initMap();
     }
 
     private void onShowData() {
-        currentTypeLoop = mExchangeLoop.getTypeLoop();
+        mGenerateManager = new GenerateManager(this);
+        lastTypeLoop = mExchangeLoop.getTypeLoop();
+        lastDate = mExchangeLoop.getCreated();
+        lastStatus = mExchangeLoop.isLoop();
         mPlace = mExchangeLoop.getPlace();
         mTypeExchange = mExchangeLoop.getTypeExchange();
         switchCompat.setChecked(mExchangeLoop.isLoop());
@@ -121,7 +125,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
             tvCategoryName.setText(category.getName());
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), mExchangeLoop.getCurrencyCode()));
         switch (mExchangeLoop.getTypeExchange()) {
             case ExchangeType.INCOME:
                 onClickTabIncome();
@@ -154,9 +158,9 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         });
     }
 
-    private void initMapView() {
-        mapView.onCreate(new Bundle());
-        mapView.getMapAsync(this);
+    private void initMap() {
+        SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
     }
 
     private void initToolbar() {
@@ -186,15 +190,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         mExchangeLoop.setPlace(mPlace);
         mExchangeLoop.setTypeExchange(mTypeExchange);
         onSaveDataBase();
-    }
-
-    private void onSaveDataBase() {
-        if (currentTypeLoop != mExchangeLoop.getTypeLoop()) {
-            ExchangeLoopManager.getInstance(getApplicationContext()).upDateIfTypeLoopChanged(mExchangeLoop);
-        } else {
-            ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(mExchangeLoop);
-        }
-        setResult(ResultCode.ADD_LOOP_EXCHANGE);
         finish();
     }
 
@@ -214,6 +209,26 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         dialogConfirm.show(getSupportFragmentManager(), null);
     }
 
+    /**
+     * Handler pending loop exchange and save database
+     */
+    private void onSaveDataBase() {
+        if ((lastTypeLoop != mExchangeLoop.getTypeLoop() || !DateTimeUtils.getInstance().isSameDate(lastDate, mExchangeLoop.getCreated()))) {
+            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
+            return;
+        }
+        if (!lastStatus && mExchangeLoop.isLoop()) {
+            Log.d(TAG, "onSaveDataBase: 1");
+            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
+            return;
+        }
+        if (lastStatus && !mExchangeLoop.isLoop()) {
+            Log.d(TAG, "onSaveDataBase: 2");
+            mGenerateManager.removePendingLoopExchange(mExchangeLoop.getId());
+        }
+        ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(mExchangeLoop);
+    }
+
     @Click(R.id.tvTabIncome)
     void onClickTabIncome() {
         mTypeExchange = ExchangeType.INCOME;
@@ -227,7 +242,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         if (mExchangeLoop.getAmount().startsWith("-")) {
             mExchangeLoop.setAmount(mExchangeLoop.getAmount().substring(1));
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabExpense)
@@ -244,7 +259,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             mExchangeLoop.setAmount(String.format(Locale.US, "-%s", mExchangeLoop.getAmount()));
         }
         Log.d(TAG, "onClickTabExpense: " + mExchangeLoop.getAmount());
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.tvTabTransfer)
@@ -261,7 +276,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             mExchangeLoop.setAmount(String.format(Locale.US, "-%s", mExchangeLoop.getAmount()));
         }
         Log.d(TAG, "onClickTabExpense: " + mExchangeLoop.getAmount());
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
     }
 
     @Click(R.id.rlCategory)
@@ -286,7 +301,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 } else {
                     mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
                 }
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchangeLoop.getAmount(), "VND"));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
             }
         });
     }
@@ -399,16 +414,19 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private void updateMap() {
         mGoogleMap.clear();
         onTargetLocationExchange();
-        mapView.refreshDrawableState();
     }
 
     private void onTargetLocationExchange() {
+        if (mPlace == null) {
+            return;
+        }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
+        mPlace = new Place();
         if (place.getName() != null) {
             mPlace.setName(place.getName().toString());
         }
@@ -419,28 +437,9 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         mPlace.setLongitude(place.getLatLng().longitude);
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         onTargetLocationExchange();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
     }
 }

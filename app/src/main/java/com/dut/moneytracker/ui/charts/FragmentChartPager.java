@@ -52,12 +52,11 @@ public class FragmentChartPager extends BaseFragment implements PagerFragmentLis
     @Override
     public void onStart() {
         super.onStart();
-        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
+        ((MainActivity_) getActivity()).loadMenuItemFragmentChart();
     }
-
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -86,13 +85,13 @@ public class FragmentChartPager extends BaseFragment implements PagerFragmentLis
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity_) getActivity()).loadMenuItemFragmentChart();
+        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getContext().getString(R.string.broadcast_filter)));
     }
 
     public void onReloadFragmentPager() {
         if (viewType != mFilter.getViewType()) {
             viewType = mFilter.getViewType();
-            mPagerAdapter.centerPager();
+            mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();
     }

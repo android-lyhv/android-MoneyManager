@@ -13,13 +13,10 @@ import com.dut.moneytracker.models.AppPreferences;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.CurrencyManager;
-import com.dut.moneytracker.models.realms.PaymentManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
 import com.google.firebase.auth.FirebaseAuth;
-
-import io.realm.RealmList;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -41,7 +38,6 @@ public class ActivityLoadData extends AppCompatActivity {
         onLoadDataServer();
         // After then
         onLoadCategory();
-        onCreatePaymentType();
         onCreateDefaultAccount();
         onCreateCurrency();
         // The end start main
@@ -55,10 +51,7 @@ public class ActivityLoadData extends AppCompatActivity {
         mProgressBar.setProgress(50);
     }
 
-    private void onCreatePaymentType() {
-        String[] payMenType = getResources().getStringArray(R.array.payment_type);
-        PaymentManager.getInstance().createPaymentType(payMenType);
-    }
+
 
     private void onLoadDataServer() {
         //TODO
@@ -145,7 +138,6 @@ public class ActivityLoadData extends AppCompatActivity {
     private void setListChildCategory(GroupCategory groupCategory, int idListName, int idListPath) {
         String[] name = getResources().getStringArray(idListName);
         String[] path = getResources().getStringArray(idListPath);
-        RealmList<Category> realmList = new RealmList<>();
         int size = name.length;
         for (int i = 0; i < size; i++) {
             idCategory += 1;
@@ -154,9 +146,8 @@ public class ActivityLoadData extends AppCompatActivity {
             category.setId(String.valueOf(idCategory));
             category.setName(name[i]);
             category.setByteImage(loadByteBitmap(path[i]));
-            realmList.add(category);
+            CategoryManager.getInstance().insertOrUpdate(category);
         }
-        groupCategory.setCategories(realmList);
     }
 
     private byte[] loadByteBitmap(String path) {

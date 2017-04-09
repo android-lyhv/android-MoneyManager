@@ -88,7 +88,7 @@ public class PieChartMoney implements OnChartValueSelectedListener {
 
     public void updateTotal(String amount) {
         mTotal = amount;
-        String title = String.format(Locale.US, "Tổng\n%s", CurrencyUtils.getInstance().getStringMoneyType(mTotal, "VND"));
+        String title = String.format(Locale.US, "Tổng\n%s", CurrencyUtils.getInstance().getStringMoneyFormat(mTotal, "VND"));
         mChart.setCenterText(title);
     }
 
@@ -100,12 +100,12 @@ public class PieChartMoney implements OnChartValueSelectedListener {
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         int index = (int) h.getX();
-        String title = String.format(Locale.US, "%s\n%s", mValuePieCharts.get(index).getNameGroup(), CurrencyUtils.getInstance().getStringMoneyType(mValuePieCharts.get(index).getAmountString(), "VND"));
+        String title = String.format(Locale.US, "%s\n%s", mValuePieCharts.get(index).getNameGroup(), CurrencyUtils.getInstance().getStringMoneyFormat(mValuePieCharts.get(index).getAmountString(), "VND"));
         mChart.setCenterText(title);
     }
 
     @Override
     public void onNothingSelected() {
-        mChart.setCenterText("Tổng\n" + CurrencyUtils.getInstance().getStringMoneyType(mTotal, "VND"));
+        mChart.setCenterText("Tổng\n" + CurrencyUtils.getInstance().getStringMoneyFormat(mTotal, "VND"));
     }
 }

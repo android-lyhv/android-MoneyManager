@@ -15,7 +15,7 @@ import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.objects.Category;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -25,14 +25,14 @@ import java.util.List;
 public class FragmentChildCategory extends Fragment implements ClickItemListener {
     private RecyclerView mRecyclerCategory;
     private ChildCategoryAdapter childCategoryRecyclerAdapter;
-    private List<Category> categories;
+    private RealmResults<Category> categories;
     private PickCategoryListener pickCategoryListener;
 
     public interface PickCategoryListener {
         void onResultCategory(Category category);
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(RealmResults<Category> categories) {
         this.categories = categories;
     }
 

@@ -1,8 +1,8 @@
-package com.dut.moneytracker.adapter;
+package com.dut.moneytracker.adapter.base;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
  * Created by ly.ho on 06/03/2017.
  */
 
-public class BaseViewPagerAdapter extends FragmentPagerAdapter {
+public class BaseViewPagerAdapter extends FragmentStatePagerAdapter {
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> mStringTitleList = new ArrayList<>();
 

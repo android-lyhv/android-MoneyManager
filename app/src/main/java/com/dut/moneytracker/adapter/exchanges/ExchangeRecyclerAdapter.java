@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.BaseRecyclerAdapter;
+import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.objects.Exchange;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class ExchangeRecyclerAdapter extends BaseRecyclerAdapter {
-    public ExchangeRecyclerAdapter(Context context, List objects) {
+    public ExchangeRecyclerAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 

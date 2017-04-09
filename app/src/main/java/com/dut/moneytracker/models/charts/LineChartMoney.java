@@ -1,8 +1,10 @@
 package com.dut.moneytracker.models.charts;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.dut.moneytracker.R;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -21,106 +23,44 @@ import java.util.List;
  */
 public class LineChartMoney {
     private static final String TAG = LineChartMoney.class.getSimpleName();
-    private List<ValueLineChart> valueLineCharts;
+    private List<ValueLineChart> mValueLineCharts = new ArrayList<>();
     private LineData mLineData;
-    private LineDataSet mDataSet;
-    private String colorCode = "#FF028761";
-    private int stokeCircle;
-    private String label;
+    private LineDataSet mLineDataSet;
     private LineChart mChart;
+    private String mColorChart;
+    private Context mContext;
 
-    public LineChart getmChart() {
-        return mChart;
+    public LineChartMoney(Context context, LineChart chart) {
+        mChart = chart;
+        mContext = context;
+        onSetupChart();
     }
 
-    public void setChart(LineChart mChart) {
-        this.mChart = mChart;
+    public void setColorChart(String mColorChart) {
+        this.mColorChart = mColorChart;
     }
 
-    public void setStokeCircle(int stokeCircle) {
-        this.stokeCircle = stokeCircle;
-    }
-
-
-    public void setValueLineCharts(List<ValueLineChart> valueLineCharts) {
-        this.valueLineCharts = valueLineCharts;
-    }
-
-    public String getColorCode() {
-        return colorCode;
-    }
-
-    public void setColorCode(String colorCode) {
-        this.colorCode = colorCode;
-    }
-
-    public int getStokeCircle() {
-        return stokeCircle;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public static class Builder {
-
-        LineChartMoney lineChartMoney;
-
-        public Builder(LineChart lineChart) {
-            lineChartMoney = new LineChartMoney();
-            lineChartMoney.setChart(lineChart);
-        }
-
-        public Builder setValueChartAmounts(List<ValueLineChart> valueLineCharts) {
-            lineChartMoney.setValueLineCharts(valueLineCharts);
-            return this;
-        }
-
-        public Builder setColorLine(String color) {
-            lineChartMoney.setColorCode(color);
-            return this;
-        }
-
-        public Builder setCirleStokce(int stoke) {
-            lineChartMoney.setStokeCircle(stoke);
-            return this;
-        }
-
-        public Builder setLabel(String label) {
-            lineChartMoney.setLabel(label);
-            return this;
-        }
-
-        public LineChartMoney build() {
-            return lineChartMoney;
-        }
-
-    }
-
-    private List<Entry> getListEntry() {
+    public void updateNewValueLineChart(List<ValueLineChart> valueLineCharts) {
+        mValueLineCharts.clear();
+        mValueLineCharts.addAll(valueLineCharts);
+        int size = mValueLineCharts.size();
+        Log.d(TAG, "updateNewValueLineChart: "+ mValueLineCharts.size());
         List<Entry> entries = new ArrayList<>();
-        int size = valueLineCharts.size();
         for (int i = 0; i < size; i++) {
-            Log.d(TAG, "getListEntry: " + valueLineCharts.get(i).getAmount());
             Entry entry = new Entry();
             entry.setX(i);
-            entry.setY(CurrencyUtils.getInstance().getFloatMoney(valueLineCharts.get(i).getAmount()));
+            entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(i).getAmount()));
             entries.add(entry);
         }
-        return entries;
+        mLineDataSet = new LineDataSet(entries, mContext.getString(R.string.label_linechart));
+        mLineDataSet.setCircleColor(Color.parseColor(mColorChart));
+        mLineDataSet.setColor(Color.parseColor(mColorChart));
+        mLineDataSet.setDrawValues(false);
+        mLineData = new LineData(mLineDataSet);
+        mChart.setData(mLineData);
     }
 
     private void onSetupChart() {
-        mDataSet = new LineDataSet(getListEntry(), getLabel());
-        mDataSet.setCircleColor(Color.parseColor(getColorCode()));
-        mDataSet.setColor(Color.parseColor(getColorCode()));
-        mDataSet.setDrawValues(false);
-        mLineData = new LineData(mDataSet);
-        mChart.setData(mLineData);
         mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisRight().setEnabled(false);
         mChart.setDragEnabled(false);
@@ -131,15 +71,15 @@ public class LineChartMoney {
         mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
     }
 
-    public void onDraw() {
-        onSetupChart();
+    public void notifyDataSetChanged() {
+        mChart.notifyDataSetChanged();
         mChart.invalidate();
     }
 
     private class MyXAxisValueFormatter implements IAxisValueFormatter {
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            return valueLineCharts.get((int) value).getLabel();
+            return mValueLineCharts.get((int) value).getLabel();
         }
     }
 }

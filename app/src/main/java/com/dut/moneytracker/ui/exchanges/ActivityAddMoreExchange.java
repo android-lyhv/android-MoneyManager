@@ -3,19 +3,14 @@ package com.dut.moneytracker.ui.exchanges;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
@@ -32,10 +27,18 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 
@@ -43,70 +46,60 @@ import java.util.Date;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 17/03/2017.
  */
-
-public class ActivityAddMoreExchange extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
+@EActivity(R.layout.activity_detail_add_exchange)
+@OptionsMenu(R.menu.menu_add_exchange)
+public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = ActivityAddMoreExchange.class.getSimpleName();
-    private EditText mEditDescription;
-    private TextView mTvDate;
-    private TextView mTvTime;
-    private RelativeLayout rlLocation;
-    private TextView tvAmount;
-    private DayPicker mDayPicker;
-    private TimePicker mTimePicker;
-    private Exchange mExchange;
+    @ViewById(R.id.toolbar)
+    Toolbar toolbar;
+    @ViewById(R.id.edtDescription)
+    EditText editDescription;
+    @ViewById(R.id.tvDate)
+    TextView tvDate;
+    @ViewById(R.id.tvTime)
+    TextView tvTime;
+    @ViewById(R.id.tvAmount)
+    TextView tvAmount;
+    DayPicker mDayPicker;
+    TimePicker mTimePicker;
+    @Extra
+    Exchange mExchange;
     private Place mPlace;
     private Date mDate;
-    private MapView mapView;
     //Google Map
+    private SupportMapFragment mMapFragment;
     GoogleMap mGoogleMap;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    @AfterViews
+    void init() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setContentView(R.layout.fragment_detail_add);
-        setInData();
+        initData();
         initView();
-        //Init Map
-        mapView = (MapView) findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        initMap();
     }
 
-    private void setInData() {
-        mExchange = getIntent().getParcelableExtra(getString(R.string.extra_more_add));
-        mDate = new Date();
+    private void initMap() {
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.getMapAsync(this);
+    }
+
+    private void initData() {
         if (null != mExchange.getCreated()) {
             mDate = mExchange.getCreated();
-        }
-        if (null != mExchange.getPlace()) {
-            mPlace = mExchange.getPlace();
         } else {
-            mPlace = new Place();
+            mDate = new Date();
         }
+        mPlace = mExchange.getPlace();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_exchange, menu);
-        return super.onCreateOptionsMenu(menu);
+    @OptionsItem(android.R.id.home)
+    void onClose() {
+        finish();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.actionAdd:
-                onSaveAddMoreExchange();
-                break;
-            case android.R.id.home:
-                finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void onSaveAddMoreExchange() {
-        String description = mEditDescription.getText().toString();
-        mExchange.setDescription(String.valueOf(description));
+    @OptionsItem(R.id.actionAdd)
+    void onSave() {
+        mExchange.setDescription(editDescription.getText().toString());
         mExchange.setPlace(mPlace);
         mExchange.setCreated(mDate);
         Intent intent = new Intent();
@@ -116,31 +109,22 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
     }
 
     void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (null != getSupportActionBar()) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mEditDescription = (EditText) findViewById(R.id.tvDescription);
-        tvAmount = (TextView) findViewById(R.id.tvAmount);
-        mTvDate = (TextView) findViewById(R.id.tvDate);
-        mTvDate.setOnClickListener(this);
-        mTvTime = (TextView) findViewById(R.id.tvTime);
-        mTvTime.setOnClickListener(this);
-        rlLocation = (RelativeLayout) findViewById(R.id.rlLocation);
-        rlLocation.setOnClickListener(this);
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyType(mExchange.getAmount(), "VND"));
-        mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
-        mTvTime.setText(DateTimeUtils.getInstance().getStringTime(mDate));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), "VND"));
+        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
+        tvTime.setText(DateTimeUtils.getInstance().getStringTime(mDate));
         mDayPicker = new DayPicker();
-        mEditDescription.setText(null == mExchange.getDescription() ? "" : mExchange.getDescription());
+        editDescription.setText(null == mExchange.getDescription() ? "" : mExchange.getDescription());
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
 
             @Override
             public void onResultDate(Date date) {
                 mDate = date;
-                mTvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
+                tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
             }
         });
         mTimePicker = new TimePicker();
@@ -157,27 +141,26 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
 
             @Override
             public void onResultStringTime(String time) {
-                mTvTime.setText(time);
+                tvTime.setText(time);
             }
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tvDescription:
-                break;
-            case R.id.tvDate:
-                mDayPicker.show(getSupportFragmentManager(), TAG);
-                break;
-            case R.id.tvTime:
-                mTimePicker.show(getSupportFragmentManager(), TAG);
-                break;
-            case R.id.rlLocation:
-                onRequestPermissionMap();
-                break;
-        }
+    @Click(R.id.tvDate)
+    void onClickPickDay() {
+        mDayPicker.show(getSupportFragmentManager(), TAG);
     }
+
+    @Click(R.id.tvTime)
+    void onClickPickTime() {
+        mTimePicker.show(getSupportFragmentManager(), TAG);
+    }
+
+    @Click(R.id.rlLocation)
+    void onCLickPickPlace() {
+        onRequestPermissionMap();
+    }
+
 
     public void onRequestPermissionMap() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -225,12 +208,13 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
             if (resultCode == RESULT_OK) {
                 com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);
                 onSetExchangePlace(place);
-                updateMap();
+                onLoadMaker();
             }
         }
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
+        mPlace = new Place();
         if (place.getName() != null) {
             mPlace.setName(place.getName().toString());
         }
@@ -241,39 +225,23 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements View.O
         mPlace.setLongitude(place.getLatLng().longitude);
     }
 
-    private void updateMap() {
+    private void onLoadMaker() {
         mGoogleMap.clear();
-        onTargetLocationExchange();
-        mapView.refreshDrawableState();
+        onTargetLocation();
     }
 
-    private void onTargetLocationExchange() {
+    private void onTargetLocation() {
+        if (mPlace == null) {
+            return;
+        }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mapView.onResume();
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-        onTargetLocationExchange();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
+        onTargetLocation();
     }
 }

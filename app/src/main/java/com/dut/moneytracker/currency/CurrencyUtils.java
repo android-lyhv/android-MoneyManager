@@ -9,6 +9,8 @@ import java.util.Currency;
  * Created by ly.ho on 05/03/2017.
  */
 public class CurrencyUtils {
+    public static final String DEFAULT_CURRENCY_CODE = "VND";
+
     private static CurrencyUtils ourInstance;
 
     public static CurrencyUtils getInstance() {
@@ -21,7 +23,7 @@ public class CurrencyUtils {
     private CurrencyUtils() {
     }
 
-    public String getStringMoneyType(String amount, String currencyCode) {
+    public String getStringMoneyFormat(String amount, String currencyCode) {
         BigDecimal bigDecimal = new BigDecimal(amount);
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
         numberFormat.setMinimumFractionDigits(0);
@@ -38,8 +40,7 @@ public class CurrencyUtils {
     }
 
     public String convertMoney(String amount, String fromCode, String toCode) {
-        BigDecimal bigDecimal = new BigDecimal(amount);
-        return bigDecimal.toString();
+        return amount;
     }
 
     public float getFloatMoney(String amount) {
