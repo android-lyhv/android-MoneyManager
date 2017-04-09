@@ -26,7 +26,6 @@ import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Place;
@@ -109,6 +108,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         onShowDetailExchange();
         initMap();
     }
+
     private void initMap() {
         mMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -116,13 +116,13 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
     @OptionsItem(android.R.id.home)
-    void onClickHomeBack() {
+    void onClose() {
         finish();
     }
 
     @OptionsItem(R.id.actionSave)
     void onClickSave() {
-        onChangeExchange();
+        onSaveChangeExchange();
         finish();
     }
 
@@ -135,8 +135,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    ExchangeManger.getInstance().deleteExchangeById(mExchange.getId());
-                    setResult(ResultCode.DELETE_EXCHANGE);
+                    setResult(ResultCode.DELETE_EXCHANGE, new Intent());
                     finish();
                 }
             }
@@ -340,10 +339,11 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
     @Override
-    public void onChangeExchange() {
+    public void onSaveChangeExchange() {
         mExchange.setPlace(mPlace);
-        ExchangeManger.getInstance().insertOrUpdate(mExchange);
-        setResult(ResultCode.DETAIL_EXCHANGE);
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.extra_edit_exchange), mExchange);
+        setResult(ResultCode.EDIT_EXCHANGE, intent);
     }
 
     private void showDetailTypeIncomeAndExpenses() {
