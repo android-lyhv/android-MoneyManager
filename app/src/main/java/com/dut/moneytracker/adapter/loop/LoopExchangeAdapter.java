@@ -25,7 +25,7 @@ import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.ResourceUtils;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -45,7 +45,7 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
         this.clickItemListener = clickItemListener;
     }
 
-    public LoopExchangeAdapter(Context context, List objects) {
+    public LoopExchangeAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 

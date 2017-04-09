@@ -13,7 +13,7 @@ import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.utils.ResourceUtils;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class ChildCategoryAdapter extends BaseRecyclerAdapter {
 
-    public ChildCategoryAdapter(Context context, List objects) {
+    public ChildCategoryAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 

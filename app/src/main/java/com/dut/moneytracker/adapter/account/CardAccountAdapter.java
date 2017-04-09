@@ -14,7 +14,7 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -23,9 +23,9 @@ import java.util.List;
 
 public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.CardHolder> {
     private final Context mContext;
-    private final List<Account> mAccounts;
+    private RealmResults<Account> mAccounts;
 
-    public CardAccountAdapter(Context context, List<Account> accounts) {
+    public CardAccountAdapter(Context context, RealmResults<Account> accounts) {
         mContext = context;
         mAccounts = accounts;
     }
@@ -39,6 +39,10 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
     @Override
     public void onBindViewHolder(CardHolder holder, int position) {
         holder.setView(mAccounts.get(position));
+    }
+
+    public void setAccounts(RealmResults<Account> mAccounts) {
+        this.mAccounts = mAccounts;
     }
 
     @Override

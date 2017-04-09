@@ -63,31 +63,31 @@ public class ExchangeManger extends RealmHelper {
         return exchanges;
     }
 
-    public List<Exchange> getExchangesLimit(int limit) {
+    public RealmResults<Exchange> getExchangesLimit(int limit) {
         realm.beginTransaction();
         List<Exchange> exchanges;
-        RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAll();
-        realmResults = realmResults.sort("created", Sort.DESCENDING);
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAllSorted("created", Sort.DESCENDING);
+       /*
         if (limit >= realmResults.size()) {
             exchanges = realmResults.subList(0, realmResults.size());
         } else {
             exchanges = realmResults.subList(0, limit);
-        }
+        }*/
         realm.commitTransaction();
-        return exchanges;
+        return realmResults;
     }
 
-    public List<Exchange> getExchangesLimitByAccount(String accountID, int limit) {
+    public RealmResults<Exchange> getExchangesLimitByAccount(String accountID, int limit) {
         realm.beginTransaction();
         List<Exchange> exchanges;
-        RealmResults<Exchange> realmList = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
-        if (limit >= realmList.size()) {
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
+        /*if (limit >= realmList.size()) {
             exchanges = realmList.subList(0, realmList.size());
         } else {
             exchanges = realmList.subList(0, limit);
-        }
+        }*/
         realm.commitTransaction();
-        return exchanges;
+        return realmResults;
     }
 
     public List<ValueLineChart> getValueChartByDailyDay(int limitDay) {

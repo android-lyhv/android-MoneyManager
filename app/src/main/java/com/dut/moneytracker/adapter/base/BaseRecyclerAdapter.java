@@ -3,43 +3,42 @@ package com.dut.moneytracker.adapter.base;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+import io.realm.RealmResults;
 
-public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
+public abstract class BaseRecyclerAdapter<T extends RealmModel, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private Context context;
-    private List<T> mObjects;
+    private RealmResults<T> mObjects;
+    private Realm mRealm;
 
-    public BaseRecyclerAdapter(Context context, final List<T> objects) {
-        if (objects == null) {
-            mObjects = new ArrayList<>();
-        } else {
-            mObjects = objects;
-        }
+    public BaseRecyclerAdapter(final Context context, final RealmResults<T> objects) {
+        mObjects = objects;
         this.context = context;
-    }
-
-    /**
-     * Adds the specified object at the end of the array.
-     *
-     * @param object The object to add at the end of the array.
-     */
-    public void add(final T object) {
-        mObjects.add(object);
-        notifyItemInserted(getItemCount() - 1);
+        mRealm = Realm.getDefaultInstance();
+        mObjects.addChangeListener(new RealmChangeListener<RealmResults<T>>() {
+            @Override
+            public void onChange(RealmResults<T> element) {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     /**
      * Remove all elements from the list.
      */
     public void clear() {
-        if (mObjects == null) {
-            mObjects = new ArrayList<>();
-        }
-        final int size = getItemCount();
-        mObjects.clear();
-        notifyItemRangeRemoved(0, size);
+        mRealm.beginTransaction();
+        mObjects.deleteAllFromRealm();
+        mRealm.commitTransaction();
+    }
+
+    public void removeItem(final int position) {
+        mRealm.beginTransaction();
+        mObjects.deleteFromRealm(position);
+        mRealm.commitTransaction();
     }
 
     @Override
@@ -49,11 +48,6 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public T getItem(final int position) {
         return mObjects.get(position);
-    }
-
-    public void removeItem(final int position) {
-        mObjects.remove(position);
-        notifyItemRemoved(position);
     }
 
     /**
@@ -66,39 +60,22 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         return mObjects.indexOf(item);
     }
 
-    /**
-     * Inserts the specified object at the specified index in the array.
-     *
-     * @param object The object to insert into the array.
-     * @param index  The index at which the object must be inserted.
-     */
-    public void insert(final T object, int index) {
-        mObjects.add(index, object);
-        notifyItemInserted(index);
-    }
-
-    public void addItems(final List<T> objects) {
-        mObjects.clear();
-        mObjects.addAll(objects);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * Removes the specified object from the array.
-     *
-     * @param object The object to removeItem.
-     */
-    public void removeItem(T object) {
-        final int position = getPosition(object);
-        mObjects.remove(object);
-        notifyItemRemoved(position);
-    }
-
     public Context getContext() {
         return context;
     }
 
-    public void setObjects(List<T> mObjects) {
+    public void setObjects(RealmResults<T> mObjects) {
         this.mObjects = mObjects;
+    }
+
+    public int getSize() {
+        if (mObjects == null) {
+            return 0;
+        }
+        return mObjects.size();
+    }
+
+    public void removeAllChangeListeners() {
+        mObjects.removeAllChangeListeners();
     }
 }

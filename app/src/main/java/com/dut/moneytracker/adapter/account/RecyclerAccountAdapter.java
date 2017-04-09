@@ -14,7 +14,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.objects.Account;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 public class RecyclerAccountAdapter extends BaseRecyclerAdapter {
-    public RecyclerAccountAdapter(Context context, List objects) {
+    public RecyclerAccountAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 

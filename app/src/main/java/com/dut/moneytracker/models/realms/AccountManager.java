@@ -36,13 +36,11 @@ public class AccountManager extends RealmHelper implements AccountListener {
     }
 
     @Override
-    public List<Account> getAccounts() {
+    public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).findAll();
-        realmResults.sort("created", Sort.ASCENDING);
-        List<Account> accounts = realmResults.subList(0, realmResults.size());
+        RealmResults<Account> realmResults = realm.where(Account.class).findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
-        return accounts;
+        return realmResults;
     }
 
     @Override

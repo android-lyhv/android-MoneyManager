@@ -1,20 +1,26 @@
 package com.dut.moneytracker.ui.dashboard;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.account.CardAccountAdapter;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
+import com.dut.moneytracker.adapter.account.CardAccountAdapter;
+import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
-import com.dut.moneytracker.models.AppPreferences;
 import com.dut.moneytracker.models.charts.LineChartMoney;
 import com.dut.moneytracker.models.charts.ValueLineChart;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -35,6 +41,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
+import io.realm.RealmResults;
+
 
 /**
  * Copyright@ AsianTech.Inc
@@ -42,18 +50,13 @@ import java.util.List;
  */
 @EFragment(R.layout.fragment_tab_account)
 public class FragmentParentTab extends BaseFragment implements TabAccountListener {
-    private static final String TAG = FragmentParentTab.class.getSimpleName();
+    private int positionItem;
 
     public interface CardAccountListener {
         void onClickCardAccount(int position);
     }
 
     CardAccountListener cardAccountListener;
-    NotificationListener notificationListener;
-
-    public void registerNotification(NotificationListener notificationListner) {
-        this.notificationListener = notificationListner;
-    }
 
     public void registerCardAccountListener(CardAccountListener cardAccountListener) {
         this.cardAccountListener = cardAccountListener;
@@ -68,15 +71,26 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     LineChart mLineChart;
     @ViewById(R.id.recyclerViewCardAccount)
     RecyclerView mRecyclerViewCardAccount;
-    private List<Account> mAccounts;
-    private CardAccountAdapter mCardAccountAdapter;
+    CardAccountAdapter mCardAccountAdapter;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
     private List<ValueLineChart> mValueLineCharts;
     private LineChartMoney mLineChartMoney;
+    private Handler mHandler;
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null) {
+                return;
+            }
+            if (TextUtils.equals(intent.getAction(), context.getString(R.string.action_reload_tab_account))) {
+                onReloadData();
+            }
+        }
+    };
 
     @AfterViews
     public void init() {
-        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
+        mHandler = new Handler();
         onShowAmount();
         onLoadCardAccount();
         onLoadExchanges();
@@ -84,7 +98,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     private void onLoadCardAccount() {
-        mAccounts = AccountManager.getInstance().getAccounts();
+        RealmResults<Account> mAccounts = AccountManager.getInstance().getAccounts();
         mCardAccountAdapter = new CardAccountAdapter(getContext(), mAccounts);
         mRecyclerViewCardAccount.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mRecyclerViewCardAccount.setNestedScrollingEnabled(false);
@@ -99,26 +113,50 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onLoadChart() {
-        mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
-        mLineChartMoney.setColorChart(getString(R.string.color_account_default));
-        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
-        mLineChartMoney.notifyDataSetChanged();
+        mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
+                mLineChartMoney.setColorChart(getString(R.string.color_account_default));
+                mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+                mLineChartMoney.notifyDataSetChanged();
+            }
+        }, FragmentDashboard.DELAY);
     }
 
     @Override
     public void onLoadExchanges() {
-        int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
-        final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimit(limit);
-        mExchangeAdapter = new ExchangeRecyclerViewTabAdapter(getContext(), exchanges);
-        mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerExchange.setNestedScrollingEnabled(false);
-        mRecyclerExchange.setAdapter(mExchangeAdapter);
-        mRecyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
+        mHandler.postDelayed(new Runnable() {
             @Override
-            public void onClick(View view, int position) {
-                onShowDetailExchange(exchanges.get(position));
+            public void run() {
+                final RealmResults<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimit(FragmentDashboard.LIMIT_ITEM);
+                mExchangeAdapter = new ExchangeRecyclerViewTabAdapter(getContext(), exchanges);
+                mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
+                mRecyclerExchange.setNestedScrollingEnabled(false);
+                mRecyclerExchange.setAdapter(mExchangeAdapter);
+                mRecyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        positionItem = position;
+                        onShowDetailExchange(exchanges.get(position));
+                    }
+                }));
             }
-        }));
+        }, FragmentDashboard.DELAY);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getString(R.string.action_reload_tab_account)));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -131,25 +169,52 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onShowDetailExchange(Exchange exchange) {
-        ActivityDetailExchange_.intent(FragmentParentTab.this).mExchange(exchange).startForResult(ResultCode.DETAIL_EXCHANGE);
+        ActivityDetailExchange_.intent(FragmentParentTab.this).mExchange(exchange).startForResult(RequestCode.DETAIL_EXCHANGE);
     }
 
-    @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
-    void onResult(int resultCode) {
-       /* if (resultCode == ResultCode.DELETE_EXCHANGE) {
-            int limit = AppPreferences.getInstance().getLimitViewExchange(getContext());
-            final List<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimit(limit);
-            mExchangeAdapter.setObjects(exchanges);
-            mExchangeAdapter.notifyDataSetChanged();
-        } else {
-            mExchangeAdapter.notifyDataSetChanged();
-        }*/
-        notificationListener.onNotification();
+    @OnActivityResult(RequestCode.DETAIL_EXCHANGE)
+    void onResult(int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
+        switch (resultCode) {
+            case ResultCode.EDIT_EXCHANGE:
+                ExchangeManger.getInstance().insertOrUpdate(exchange);
+                break;
+            case ResultCode.DELETE_EXCHANGE:
+                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
+        }
+        getContext().sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
     }
-
 
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
         ((MainActivity) getActivity()).onLoadFragmentExchanges();
+    }
+
+    public void onReloadData() {
+        reloadChartExchange();
+        reloadTvAmount();
+        reloadCardAccount();
+    }
+
+    private void reloadTvAmount() {
+        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
+                CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
+        mTvAmount.setText(money);
+    }
+
+    private void reloadCardAccount() {
+        RealmResults<Account> mAccounts = AccountManager.getInstance().getAccounts();
+        mCardAccountAdapter.setAccounts(mAccounts);
+        mCardAccountAdapter.notifyDataSetChanged();
+    }
+
+    private void reloadChartExchange() {
+        mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
+        mLineChartMoney.setColorChart(getString(R.string.color_account_default));
+        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+        mLineChartMoney.notifyDataSetChanged();
     }
 }

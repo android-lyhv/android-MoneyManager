@@ -7,5 +7,5 @@ package com.dut.moneytracker.ui.interfaces;
 
 public interface DetailExchangeListener {
     void onShowDetailExchange();
-    void onChangeExchange();
+    void onSaveChangeExchange();
 }

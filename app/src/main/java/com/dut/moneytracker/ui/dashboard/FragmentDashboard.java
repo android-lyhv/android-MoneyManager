@@ -1,12 +1,11 @@
 package com.dut.moneytracker.ui.dashboard;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.BaseViewPagerAdapter;
+import com.dut.moneytracker.adapter.base.BaseViewPagerAdapter;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
@@ -20,36 +19,35 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 14/03/2017.
  */
 @EFragment(R.layout.fragment_dashboard)
-public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener, NotificationListener {
+public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener
+        , RealmChangeListener<RealmResults<Account>> {
+    public static final long DELAY = 0L;
+    public static final int LIMIT_ITEM = 5;
     @ViewById(R.id.tabLayout)
     TabLayout mTabLayout;
     @ViewById(R.id.viewpager)
     ViewPager mViewPager;
-    private List<Account> mAccounts;
+    private RealmResults<Account> mAccounts;
     private int targetAccount;
     private BaseViewPagerAdapter mViewPagerTabAccountAdapter;
 
     @AfterViews
     void init() {
-        setUpViewpager();
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                mAccounts = AccountManager.getInstance().getAccounts();
-                initLoadListFragmentAccount();
-            }
-        });
-
+        mAccounts = AccountManager.getInstance().getAccounts();
+        mAccounts.addChangeListener(this);
+        initViewpager();
+        initLoadListFragmentAccounts();
     }
 
-    private void setUpViewpager() {
+    private void initViewpager() {
         mViewPagerTabAccountAdapter = new BaseViewPagerAdapter(getChildFragmentManager());
         mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(mViewPagerTabAccountAdapter);
@@ -57,24 +55,17 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
         mTabLayout.addOnTabSelectedListener(this);
     }
 
-    private void initLoadListFragmentAccount() {
-        mViewPagerTabAccountAdapter.clearFragment();
+    private void initLoadListFragmentAccounts() {
         int size = mAccounts.size();
         if (size > 1) {
             FragmentParentTab mFragmentParentTab = FragmentParentTab_.builder().build();
             mFragmentParentTab.registerCardAccountListener(this);
-            mFragmentParentTab.registerNotification(this);
-            mViewPagerTabAccountAdapter.addFragment(mFragmentParentTab, getString(R.string.tablyout_text_all_account));
+            mViewPagerTabAccountAdapter.addFragment(mFragmentParentTab, getString(R.string.title_all_account));
         }
         for (int i = 0; i < size; i++) {
             FragmentChildTab mFragmentChildTab = FragmentChildTab_.builder().mAccount(mAccounts.get(i)).build();
             mViewPagerTabAccountAdapter.addFragment(mFragmentChildTab, mAccounts.get(i).getName());
-            mFragmentChildTab.registerNotification(this);
         }
-        mViewPagerTabAccountAdapter.notifyDataSetChanged();
-    }
-
-    public void notifyDataSetChanged() {
         mViewPagerTabAccountAdapter.notifyDataSetChanged();
     }
 
@@ -107,19 +98,25 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Click(R.id.fab)
     void onClickAddExchange() {
-        ActivityAddExchange_.intent(this).mAccount(mAccounts.get(targetAccount)).startForResult(RequestCode.ADD_EXCHANGE);
+        ActivityAddExchange_.intent(this).mAccount(mAccounts.get(targetAccount)).startForResult(RequestCode.ADD_NEW_EXCHANGE);
     }
 
-    @OnActivityResult(RequestCode.ADD_EXCHANGE)
-    void onResultAddNewExchange(Intent data) {
-       /* if (data == null) {
+    @OnActivityResult(RequestCode.ADD_NEW_EXCHANGE)
+    void onResult(Intent intent) {
+        if (intent == null) {
             return;
-        }*/
-        notifyDataSetChanged();
+        }
+        getContext().sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
     }
 
     @Override
-    public void onNotification() {
-        notifyDataSetChanged();
+    public void onChange(RealmResults<Account> element) {
+        mViewPagerTabAccountAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAccounts.removeAllChangeListeners();
     }
 }

@@ -15,7 +15,7 @@ import com.dut.moneytracker.adapter.LoadCategoryListener;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.objects.Category;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -75,7 +75,7 @@ public class ActivityPickCategory extends AppCompatActivity implements LoadCateg
     }
 
     @Override
-    public void onLoadChildCategory(final List<Category> categories) {
+    public void onLoadChildCategory(final RealmResults<Category> categories) {
         isViewChildCategory = true;
         mToolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left);
         final FragmentChildCategory fragmentChildCategory = new FragmentChildCategory();

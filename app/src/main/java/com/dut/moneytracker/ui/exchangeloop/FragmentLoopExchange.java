@@ -19,8 +19,7 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -38,21 +37,15 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     void init() {
         mGnerateManager = new GenerateManager(getActivity().getApplicationContext());
         initLoopAdapter();
-        loadListLoopExchange();
     }
 
     private void initLoopAdapter() {
-        mAdapter = new LoopExchangeAdapter(getContext(), new ArrayList());
+        RealmResults<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance(getActivity().getApplicationContext()).getListLoopExchange();
+        mAdapter = new LoopExchangeAdapter(getContext(), exchangeLoopers);
         mAdapter.registerItemClick(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
     }
-
-    private void loadListLoopExchange() {
-        List<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance(getActivity().getApplicationContext()).getListLoopExchange();
-        mAdapter.addItems(exchangeLoopers);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -71,13 +64,13 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
         }
         ExchangeLooper exchangeLooper = data.getParcelableExtra(getString(R.string.extra_loop_exchange));
         if (exchangeLooper != null) {
-            mAdapter.add(exchangeLooper);
+         //   mAdapter.add(exchangeLooper);
         }
     }
 
     @OnActivityResult(RequestCode.DETAIL_LOOP_EXCHANGE)
     void onResultDetail() {
-        List<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance(getActivity().getApplicationContext()).getListLoopExchange();
+        RealmResults<ExchangeLooper> exchangeLoopers = ExchangeLoopManager.getInstance(getActivity().getApplicationContext()).getListLoopExchange();
         mAdapter.setObjects(exchangeLoopers);
         mAdapter.notifyDataSetChanged();
     }

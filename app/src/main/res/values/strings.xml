@@ -25,6 +25,7 @@
     <string name="toast.text.connection_internet">Vui lòng kết nối internet!</string>
     <string name="name_default_account">Tiền Mặt</string>
     <string name="id_default_account">moneytracker</string>
+    <string name="action_reload_tab_account">action_reload_tab_account</string>
     <!--Currency-->
     <string name="current_api_id">bd8e8fc3b2bd4af58a7617bc9ce3651f</string>
     <!--FIREBASE-->
@@ -37,7 +38,7 @@
     <string name="fragment_account.textview.chartlist">30 ngày gần nhất</string>
     <string name="fragment_account.textview.exchange">Giao dịch gần đây</string>
     <string name="fragment_account.textview.showmore">Hiển thị thêm</string>
-    <string name="tablyout.text.all_account">Tài khoản của tôi</string>
+    <string name="title_all_account">Tài khoản của tôi</string>
     <string name="extra.account">Account</string>
     <string name="broadcast_filter">broadcast_filter</string>
     <string name="broadcast_objects_filter">broadcast_objects_filter</string>
@@ -76,7 +77,8 @@
     <string name="delete_exchange">Xoa giao dich nay</string>
     <string name="id_exchange_looper">extra_id_looper</string>
     <string name="unknown">Chưa biết</string>
-    <integer name="zoom_map">10</integer>
+    <integer name="zoom_map">12</integer>
+    <string name="extra_edit_exchange">extra_edit_exchange</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Thu Nhập</item>

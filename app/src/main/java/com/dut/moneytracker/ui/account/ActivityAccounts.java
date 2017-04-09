@@ -22,7 +22,7 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -50,7 +50,7 @@ public class ActivityAccounts extends AppCompatActivity {
     }
 
     private void onLoadAccounts() {
-        List<Account> accounts = AccountManager.getInstance().getAccounts();
+        RealmResults<Account> accounts = AccountManager.getInstance().getAccounts();
         mAdapter = new RecyclerAccountAdapter(this, accounts);
         mRecyclerViewAccounts.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewAccounts.setAdapter(mAdapter);
@@ -88,8 +88,8 @@ public class ActivityAccounts extends AppCompatActivity {
     }
 
     private void onLoadNewAccounts() {
-        List<Account> accounts = AccountManager.getInstance().getAccounts();
+       /* List<Account> accounts = AccountManager.getInstance().getAccounts();
         mAdapter.setObjects(accounts);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();*/
     }
 }

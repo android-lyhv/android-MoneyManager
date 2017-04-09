@@ -291,7 +291,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     void onResultEditAccount(Intent data) {
         Account account = data.getParcelableExtra(getString(R.string.extra_account));
         AccountManager.getInstance().insertOrUpdate(account);
-        mFragmentDashboard.notifyDataSetChanged();
     }
 
     void onResultLogout() {

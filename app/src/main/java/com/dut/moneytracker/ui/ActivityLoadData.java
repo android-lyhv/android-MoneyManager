@@ -18,8 +18,6 @@ import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
-import io.realm.RealmList;
-
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 04/03/2017.
@@ -140,7 +138,6 @@ public class ActivityLoadData extends AppCompatActivity {
     private void setListChildCategory(GroupCategory groupCategory, int idListName, int idListPath) {
         String[] name = getResources().getStringArray(idListName);
         String[] path = getResources().getStringArray(idListPath);
-        RealmList<Category> realmList = new RealmList<>();
         int size = name.length;
         for (int i = 0; i < size; i++) {
             idCategory += 1;
@@ -149,9 +146,8 @@ public class ActivityLoadData extends AppCompatActivity {
             category.setId(String.valueOf(idCategory));
             category.setName(name[i]);
             category.setByteImage(loadByteBitmap(path[i]));
-            realmList.add(category);
+            CategoryManager.getInstance().insertOrUpdate(category);
         }
-        groupCategory.setCategories(realmList);
     }
 
     private byte[] loadByteBitmap(String path) {

@@ -19,7 +19,7 @@ import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.ResourceUtils;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -27,9 +27,8 @@ import java.util.List;
  */
 
 public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
-    private static final String TAG = ExchangeRecyclerViewTabAdapter.class.getSimpleName();
 
-    public ExchangeRecyclerViewTabAdapter(Context context, List objects) {
+    public ExchangeRecyclerViewTabAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 
@@ -37,6 +36,11 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_exchange_dashboard, parent, false);
         return new ExchangeHolder(view);
+    }
+
+    @Override
+    public int getItemCount() {
+        return getSize() > 5 ? 5 : getSize();
     }
 
     @Override
