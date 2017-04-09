@@ -1,6 +1,7 @@
 package com.dut.moneytracker.utils;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.dut.moneytracker.constant.FilterType;
 
@@ -95,7 +96,6 @@ public class DateTimeUtils {
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             dates.add(calendar.getTime());
         }
-        //Collections.reverse(dates);
         return dates;
     }
 
@@ -118,23 +118,8 @@ public class DateTimeUtils {
             case FilterType.YEAR:
                 calendar.add(Calendar.YEAR, step);
                 break;
-            case FilterType.WEAK:
-                break;
-
         }
         return calendar.getTime();
-    }
-
-    public List<Date> getCurrentDaysOfWeek(Calendar calendar) {
-        List<Date> dates = new ArrayList<>();
-        int index = calendar.get(GregorianCalendar.DAY_OF_WEEK);
-        int step = index == 1 ? 7 : index - 1;
-        calendar.add(Calendar.DAY_OF_MONTH, -step);
-        for (int i = 0; i < 7; i++) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            dates.add(calendar.getTime());
-        }
-        return dates;
     }
 
     public Date getDate(int year, int month, int day) {
@@ -165,5 +150,72 @@ public class DateTimeUtils {
         calendar.setTime(date);
         calendar.set(Calendar.MINUTE, minute);
         return calendar.getTime();
+    }
+
+    public Date[] geStartDateAndEndDate(Date date, int typeFilter) {
+        Date[] dates = new Date[2];
+        Date dateStart = new Date();
+        Date dateEnd = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        switch (typeFilter) {
+            case FilterType.DAY:
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                dateStart = calendar.getTime();
+                dateEnd = getEndDate(dateStart, typeFilter);
+                break;
+            case FilterType.MONTH:
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                dateStart = calendar.getTime();
+                dateEnd = getEndDate(dateStart, typeFilter);
+                break;
+            case FilterType.YEAR:
+                calendar.set(Calendar.MONTH, 1);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                dateStart = calendar.getTime();
+                dateEnd = getEndDate(dateStart, typeFilter);
+                break;
+        }
+        Log.d(TAG, "StartDate: " + dateStart);
+        Log.d(TAG, "EndDate: " + dateEnd);
+        dates[0] = dateStart;
+        dates[1] = dateEnd;
+        return dates;
+    }
+
+    private Date getEndDate(Date startDate, int typeFilter) {
+        Calendar gregorianCalendar = new GregorianCalendar();
+        switch (typeFilter) {
+            case FilterType.DAY:
+                gregorianCalendar.setTime(startDate);
+                gregorianCalendar.add(Calendar.HOUR_OF_DAY, 24);
+                return new Date(gregorianCalendar.getTimeInMillis() - 1);
+            case FilterType.MONTH:
+                gregorianCalendar.setTime(startDate);
+                gregorianCalendar.add(Calendar.DAY_OF_MONTH, getMaxDaysOfMonth(startDate));
+                return new Date(gregorianCalendar.getTimeInMillis() - 1);
+            case FilterType.YEAR:
+                gregorianCalendar.setTime(startDate);
+                gregorianCalendar.add(Calendar.MONTH, 11);
+                return new Date(gregorianCalendar.getTimeInMillis() - 1);
+        }
+        return new Date();
+    }
+
+    public int getMaxDaysOfMonth(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 }

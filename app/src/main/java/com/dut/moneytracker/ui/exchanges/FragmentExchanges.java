@@ -12,12 +12,13 @@ import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecyclerAdapter;
 import com.dut.moneytracker.constant.FilterType;
+import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
-import com.dut.moneytracker.ui.base.BaseFragment;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
+import com.dut.moneytracker.ui.base.BaseFragment;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -26,8 +27,7 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -46,33 +46,44 @@ public class FragmentExchanges extends BaseFragment {
     @FragmentArg
     Filter mFilter;
     private ExchangeRecyclerAdapter mAdapter;
-    private List<Exchange> mExchanges;
+    private RealmResults<Exchange> mExchanges;
+    private int positionItem;
 
     @AfterViews
     void init() {
         mExchanges = ExchangeManger.getInstance().getExchanges(mFilter);
         initRecyclerView();
-        updateExchangeRecyclerView();
+        changeDateLabel();
     }
 
 
     private void initRecyclerView() {
-        mAdapter = new ExchangeRecyclerAdapter(getContext(), new ArrayList());
+        mAdapter = new ExchangeRecyclerAdapter(getContext(), mExchanges);
         recyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerExchange.setAdapter(mAdapter);
         recyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
             @Override
             public void onClick(View view, int position) {
-                ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(ResultCode.DETAIL_EXCHANGE);
+                positionItem = position;
+                ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(RequestCode.DETAIL_EXCHANGE);
             }
         }));
     }
 
-    @OnActivityResult(ResultCode.DETAIL_EXCHANGE)
-    void onResult() {
-        mExchanges = ExchangeManger.getInstance().getExchanges(mFilter);
-        mAdapter.setObjects(mExchanges);
-        mAdapter.notifyDataSetChanged();
+
+    @OnActivityResult(RequestCode.DETAIL_EXCHANGE)
+    void onResult(int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
+        switch (resultCode) {
+            case ResultCode.EDIT_EXCHANGE:
+                ExchangeManger.getInstance().insertOrUpdate(exchange);
+                break;
+            case ResultCode.DELETE_EXCHANGE:
+                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mAdapter.getItem(positionItem)).getId());
+        }
     }
 
     @Click(R.id.llNext)
@@ -85,10 +96,6 @@ public class FragmentExchanges extends BaseFragment {
         sendBroadcastFilter(-1);
     }
 
-    private void updateExchangeRecyclerView() {
-        mAdapter.addItems(mExchanges);
-        changeDateLabel();
-    }
 
     public void changeDateLabel() {
         String label = FilterManager.getInstance().getLabel(mFilter, mExchanges);

@@ -111,7 +111,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Override
     public void onChange(RealmResults<Account> element) {
-        mViewPagerTabAccountAdapter.notifyDataSetChanged();
+        getContext().sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
     }
 
     @Override

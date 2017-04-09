@@ -73,7 +73,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     @AfterViews
     void init() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setInData();
+        initData();
         initView();
         initMap();
     }
@@ -83,17 +83,13 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
         mMapFragment.getMapAsync(this);
     }
 
-    private void setInData() {
+    private void initData() {
         if (null != mExchange.getCreated()) {
             mDate = mExchange.getCreated();
         } else {
             mDate = new Date();
         }
-        if (null != mExchange.getPlace()) {
-            mPlace = mExchange.getPlace();
-        } else {
-            mPlace = new Place();
-        }
+        mPlace = mExchange.getPlace();
     }
 
     @OptionsItem(android.R.id.home)
@@ -212,12 +208,13 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
             if (resultCode == RESULT_OK) {
                 com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);
                 onSetExchangePlace(place);
-                updateMap();
+                onLoadMaker();
             }
         }
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
+        mPlace = new Place();
         if (place.getName() != null) {
             mPlace.setName(place.getName().toString());
         }
@@ -228,12 +225,15 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
         mPlace.setLongitude(place.getLatLng().longitude);
     }
 
-    private void updateMap() {
+    private void onLoadMaker() {
         mGoogleMap.clear();
-        onTargetLocationExchange();
+        onTargetLocation();
     }
 
-    private void onTargetLocationExchange() {
+    private void onTargetLocation() {
+        if (mPlace == null) {
+            return;
+        }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
@@ -242,6 +242,6 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-        onTargetLocationExchange();
+        onTargetLocation();
     }
 }
