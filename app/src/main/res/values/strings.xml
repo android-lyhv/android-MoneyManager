@@ -241,4 +241,5 @@
     <string name="manger_accounts">Quản lý tài khoản</string>
     <string name="loop_status_ok">Mở</string>
     <string name="loop_status_close">Đóng</string>
+    <string name="account_other">Khác</string>
 </resources>

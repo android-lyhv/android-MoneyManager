@@ -49,16 +49,20 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
 
     void onBind(Context context, Exchange exchange) {
         tvDescription.setText(exchange.getDescription());
-        tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
+        if (TextUtils.isEmpty(exchange.getDescription())) {
+            llNote.setVisibility(View.GONE);
+        } else {
+            llNote.setVisibility(View.VISIBLE);
+        }
         String amount = exchange.getAmount();
         if (!amount.startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
+        } else {
+            tvAmount.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light));
         }
+        tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
         tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
-        if (TextUtils.isEmpty(exchange.getDescription())) {
-            llNote.setVisibility(View.GONE);
-        }
         if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
             Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
             imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));

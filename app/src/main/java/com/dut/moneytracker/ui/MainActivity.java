@@ -301,8 +301,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      * @param typeChart
      */
     public void onLoadFragmentChart(int typeChart) {
-        mFilter = FilterManager.getInstance().getFilterDefault();
-        mSpinnerAccount.setSelectItem(null);
+        if (AccountManager.getInstance().getAccountSize() > 1) {
+            mFilter = FilterManager.getInstance().getFilterDefault();
+            mSpinnerAccount.setSelectItem(null);
+        } else {
+            mFilter = FilterManager.getInstance().getFilterDefaultAccount(AccountManager.getInstance().getIdFirstAccount());
+        }
         mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
         onReplaceFragment(mFragmentChartPager, null);
     }
