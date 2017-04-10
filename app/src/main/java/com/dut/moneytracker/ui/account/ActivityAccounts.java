@@ -14,6 +14,7 @@ import com.dut.moneytracker.adapter.account.RecyclerAccountAdapter;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
+import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -69,7 +70,7 @@ public class ActivityAccounts extends AppCompatActivity {
         }
         Account account = data.getParcelableExtra(getString(R.string.extra_account));
         AccountManager.getInstance().insertOrUpdate(account);
-        sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
+        sendBroadcast(new Intent(FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT));
     }
 
     @OnActivityResult(RequestCode.ADD_NEW_ACCOUNT)
@@ -77,7 +78,9 @@ public class ActivityAccounts extends AppCompatActivity {
         if (data == null) {
             return;
         }
-        sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
+        Account account = data.getParcelableExtra(getString(R.string.extra_account));
+        AccountManager.getInstance().insertOrUpdate(account);
+        sendBroadcast(new Intent(FragmentDashboard.RECEIVER_ADD_DELETE_ACCOUNT));
     }
 
     @Click(R.id.fab)

@@ -6,11 +6,11 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.PieChartType;
-import com.dut.moneytracker.ui.charts.objects.ValueLineChart;
-import com.dut.moneytracker.ui.charts.objects.ValuePieChart;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.objects.GroupCategory;
+import com.dut.moneytracker.ui.charts.objects.ValueLineChart;
+import com.dut.moneytracker.ui.charts.objects.ValuePieChart;
 import com.dut.moneytracker.utils.DateTimeUtils;
 
 import java.math.BigDecimal;
@@ -60,31 +60,13 @@ public class ExchangeManger extends RealmHelper {
         return realmResults;
     }
 
-    public RealmResults<Exchange> getExchangesLimit(int limit) {
-        realm.beginTransaction();
-        List<Exchange> exchanges;
-        RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAllSorted("created", Sort.DESCENDING);
-       /*
-        if (limit >= realmResults.size()) {
-            exchanges = realmResults.subList(0, realmResults.size());
-        } else {
-            exchanges = realmResults.subList(0, limit);
-        }*/
-        realm.commitTransaction();
-        return realmResults;
+    public RealmResults<Exchange> onLoadExchangeAsync(int limit) {
+        return realm.where(Exchange.class).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
-    public RealmResults<Exchange> getExchangesLimitByAccount(String accountID, int limit) {
-        realm.beginTransaction();
-        List<Exchange> exchanges;
-        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
-        /*if (limit >= realmList.size()) {
-            exchanges = realmList.subList(0, realmList.size());
-        } else {
-            exchanges = realmList.subList(0, limit);
-        }*/
-        realm.commitTransaction();
-        return realmResults;
+
+    public RealmResults<Exchange> onLoadExchangeAsyncByAccount(String accountID, int limit) {
+        return realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
     public List<ValueLineChart> getValueChartByDailyDay(int limitDay) {

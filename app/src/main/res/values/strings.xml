@@ -25,7 +25,6 @@
     <string name="toast.text.connection_internet">Vui lòng kết nối internet!</string>
     <string name="name_default_account">Tiền Mặt</string>
     <string name="id_default_account">moneytracker</string>
-    <string name="action_reload_tab_account">action_reload_tab_account</string>
     <!--Currency-->
     <string name="current_api_id">bd8e8fc3b2bd4af58a7617bc9ce3651f</string>
     <!--FIREBASE-->
@@ -241,4 +240,5 @@
     <string name="manger_accounts">Quản lý tài khoản</string>
     <string name="loop_status_ok">Mở</string>
     <string name="loop_status_close">Đóng</string>
+    <string name="receiver_add_delete_account">receiver_add_or_delete_account</string>
 </resources>

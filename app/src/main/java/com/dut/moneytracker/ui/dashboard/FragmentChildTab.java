@@ -10,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,7 +41,10 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -48,7 +52,7 @@ import io.realm.RealmResults;
  * Created by ly.ho on 06/03/2017.
  */
 @EFragment(R.layout.fragment_tab_account)
-public class FragmentChildTab extends BaseFragment implements TabAccountListener {
+public class FragmentChildTab extends BaseFragment implements TabAccountListener, RealmChangeListener<RealmResults<Exchange>> {
     //View
     @ViewById(R.id.recyclerExchange)
     RecyclerView mRecyclerExchange;
@@ -60,8 +64,8 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     LineChart mLineChart;
     @FragmentArg
     Account mAccount;
+    private RealmResults<Exchange> mExchanges;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
-    private List<ValueLineChart> mValueLineCharts;
     private LineChartMoney mLineChartMoney;
     private Handler mHandler;
     private int positionItem;
@@ -71,11 +75,22 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
             if (intent == null) {
                 return;
             }
-            if (TextUtils.equals(intent.getAction(), context.getString(R.string.action_reload_tab_account))) {
-                onReloadData();
+            if (TextUtils.equals(intent.getAction(), FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT)) {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onReloadData();
+                    }
+                }, FragmentDashboard.DELAY);
             }
         }
     };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT));
+    }
 
     @AfterViews
     void init() {
@@ -83,20 +98,8 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         mCardView.setVisibility(View.GONE);
         onShowAmount();
-        onLoadExchanges();
         onLoadChart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getString(R.string.action_reload_tab_account)));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getContext().unregisterReceiver(mBroadcastReceiver);
+        onLoadExchanges();
     }
 
     @Override
@@ -111,23 +114,26 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadExchanges() {
-        mHandler.postDelayed(new Runnable() {
+        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsyncByAccount(mAccount.getId(), FragmentDashboard.LIMIT_ITEM);
+        mExchangeAdapter = new ExchangeRecyclerViewTabAdapter(getContext(), mExchanges);
+        mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerExchange.setNestedScrollingEnabled(false);
+        mRecyclerExchange.setAdapter(mExchangeAdapter);
+        mRecyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
             @Override
-            public void run() {
-                final RealmResults<Exchange> exchanges = ExchangeManger.getInstance().getExchangesLimitByAccount(mAccount.getId(), FragmentDashboard.LIMIT_ITEM);
-                mExchangeAdapter = new ExchangeRecyclerViewTabAdapter(getContext(), exchanges);
-                mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
-                mRecyclerExchange.setNestedScrollingEnabled(false);
-                mRecyclerExchange.setAdapter(mExchangeAdapter);
-                mRecyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        positionItem = position;
-                        onShowDetailExchange(exchanges.get(position));
-                    }
-                }));
+            public void onClick(View view, int position) {
+                positionItem = position;
+                onShowDetailExchange(mExchanges.get(position));
             }
-        }, FragmentDashboard.DELAY);
+        }));
+        mExchanges.addChangeListener(this);
+    }
+
+    @Override
+    public void onChange(RealmResults<Exchange> element) {
+        if (mExchangeAdapter != null) {
+            mExchangeAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -148,7 +154,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
             case ResultCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
-        getContext().sendBroadcast(new Intent(getString(R.string.action_reload_tab_account)));
+        getContext().sendBroadcast(new Intent(FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT));
     }
 
     @Override
@@ -168,6 +174,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     public void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
+        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     public void onReloadData() {
@@ -176,9 +183,11 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     }
 
     private void reloadChartExchange() {
-        mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
+        long old = System.currentTimeMillis();
+        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
         mLineChartMoney.setColorChart(mAccount.getColorHex());
         mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
         mLineChartMoney.notifyDataSetChanged();
+        Log.d(TAG, "reloadChartExchange: " + String.valueOf(System.currentTimeMillis() - old));
     }
 }

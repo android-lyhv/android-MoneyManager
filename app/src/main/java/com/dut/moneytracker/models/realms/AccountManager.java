@@ -43,6 +43,10 @@ public class AccountManager extends RealmHelper implements AccountListener {
         return realmResults;
     }
 
+    public RealmResults<Account> loadAccountsAsync() {
+        return realm.where(Account.class).findAllSortedAsync("created", Sort.DESCENDING);
+    }
+
     @Override
     public String getAmountAvailableByAccount(String idAccount) {
         BigDecimal bigDecimal = new BigDecimal(getInitAmountByAccount(idAccount));
