@@ -21,15 +21,14 @@ import com.dut.moneytracker.adapter.account.CardAccountAdapter;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
-import com.dut.moneytracker.ui.charts.objects.LineChartMoney;
-import com.dut.moneytracker.ui.charts.objects.ValueLineChart;
 import com.dut.moneytracker.models.realms.AccountManager;
-import com.dut.moneytracker.models.realms.CurrencyManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.ui.MainActivity;
 import com.dut.moneytracker.ui.base.BaseFragment;
+import com.dut.moneytracker.ui.charts.objects.LineChartMoney;
+import com.dut.moneytracker.ui.charts.objects.ValueLineChart;
 import com.dut.moneytracker.ui.exchanges.ActivityDetailExchange_;
 import com.github.mikephil.charting.charts.LineChart;
 
@@ -165,7 +164,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     public void onShowAmount() {
         mTvAmount.setTextColor(Color.parseColor(getString(R.string.color_account_default)));
         String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
-                CurrencyManager.getInstance().getCurrentCodeCurrencyDefault());
+                CurrencyUtils.DEFAULT_CURRENCY_CODE);
         mTvAmount.setText(money);
     }
 

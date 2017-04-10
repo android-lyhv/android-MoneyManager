@@ -1,6 +1,7 @@
 package com.dut.moneytracker.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,13 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
         }
 
         public void onBind(Exchange exchange) {
+            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
+            if (exchange.getAmount().startsWith("-")) {
+                tvAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_light));
+            } else {
+                tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            }
+            tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
             if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
                 Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
                 if (category != null) {
@@ -73,21 +81,11 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
                     tvCategoryName.setText(category.getName());
                 }
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
-                tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
-                if (exchange.getTypeExchange() == ExchangeType.INCOME) {
-                    tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                }
             }
             if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
                 imgCategory.setImageResource(R.drawable.ic_transfer);
                 tvCategoryName.setText(getContext().getResources().getString(R.string.transfer));
-                tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
-                if (CurrencyUtils.getInstance().getFloatMoney(exchange.getAmount()) > 0) {
-                    tvAmount.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                }
             }
         }
     }
