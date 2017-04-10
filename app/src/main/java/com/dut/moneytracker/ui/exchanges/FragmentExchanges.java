@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
-import com.dut.moneytracker.adapter.exchanges.ExchangeRecyclerAdapter;
+import com.dut.moneytracker.adapter.exchanges.ExchangeRecodesAdapter;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
@@ -45,7 +45,7 @@ public class FragmentExchanges extends BaseFragment {
     RecyclerView recyclerExchange;
     @FragmentArg
     Filter mFilter;
-    private ExchangeRecyclerAdapter mAdapter;
+    private ExchangeRecodesAdapter mAdapter;
     private RealmResults<Exchange> mExchanges;
     private int positionItem;
 
@@ -58,7 +58,7 @@ public class FragmentExchanges extends BaseFragment {
 
 
     private void initRecyclerView() {
-        mAdapter = new ExchangeRecyclerAdapter(getContext(), mExchanges);
+        mAdapter = new ExchangeRecodesAdapter(getContext(), mExchanges);
         recyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerExchange.setAdapter(mAdapter);
         recyclerExchange.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {

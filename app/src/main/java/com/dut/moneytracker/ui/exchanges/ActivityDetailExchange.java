@@ -389,6 +389,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        } else {
+            tvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         }
     }
 
