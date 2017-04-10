@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -376,8 +377,12 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         if (amount.startsWith("-")) {
             String accountSend = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
             tvCategoryName.setText(accountSend);
-            String accountReceiver = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccountTransfer());
-            tvAccount.setText(accountReceiver);
+            if (!TextUtils.isEmpty(mExchange.getIdAccountTransfer())) {
+                String accountReceiver = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccountTransfer());
+                tvAccount.setText(accountReceiver);
+            } else {
+                tvAccount.setText(getString(R.string.account_other));
+            }
         } else {
             String accountSend = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccountTransfer());
             tvCategoryName.setText(accountSend);
@@ -389,9 +394,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        } else {
+            tvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         }
     }
-
 
     void onTargetLocationExchange() {
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
