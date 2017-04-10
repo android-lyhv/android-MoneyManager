@@ -1,6 +1,7 @@
 package com.dut.moneytracker.ui.account;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -27,7 +28,6 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
-import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
 import org.androidannotations.annotations.AfterViews;
@@ -102,15 +102,18 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
     void onSaveAccount() {
         String accountName = mEdtNameAccount.getText().toString();
         if (TextUtils.isEmpty(accountName)) {
-            Toast.makeText(this, "Fill the name account!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nhập tên tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(mAccount.getInitAmount())){
+        if (TextUtils.isEmpty(mAccount.getInitAmount())) {
             Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
+            return;
         }
         mAccount.setName(accountName);
-        AccountManager.getInstance().insertOrUpdate(mAccount);
-        setResult(ResultCode.ADD_NEW_ACCOUNT);
+        //Sending
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.extra_account), mAccount);
+        setResult(ResultCode.ADD_NEW_ACCOUNT, intent);
         finish();
     }
 

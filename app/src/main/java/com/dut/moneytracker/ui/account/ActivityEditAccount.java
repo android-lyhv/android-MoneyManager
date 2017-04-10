@@ -97,10 +97,15 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     void onSaveAccount() {
         String accountName = mEdtNameAccount.getText().toString();
         if (TextUtils.isEmpty(accountName)) {
-            Toast.makeText(this, "Fill the name account!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nhập tên tài khoản", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(mAccount.getInitAmount())) {
+            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
             return;
         }
         mAccount.setName(accountName);
+        // Sending
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_account), mAccount);
         setResult(ResultCode.EDIT_ACCOUNT, intent);
