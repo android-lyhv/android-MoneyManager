@@ -1,4 +1,4 @@
-package com.dut.moneytracker.ui.charts;
+package com.dut.moneytracker.ui.charts.exchange;
 
 import android.content.Intent;
 import android.view.View;

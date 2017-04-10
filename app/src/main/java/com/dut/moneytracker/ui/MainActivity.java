@@ -35,8 +35,8 @@ import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.account.ActivityAccounts_;
 import com.dut.moneytracker.ui.account.ActivityEditAccount_;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
-import com.dut.moneytracker.ui.charts.FragmentChartPager;
-import com.dut.moneytracker.ui.charts.FragmentChartPager_;
+import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager;
+import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager_;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
 import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentDashboard mFragmentDashboard;
     FragmentLoopExchange mFragmentLoopExchange;
     FragmentExchangesPager mFragmentExchangesPager;
-    FragmentChartPager mFragmentChartPager;
+    FragmentChartExchangePager mFragmentChartExchangePager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
     private Filter mFilter;
@@ -304,8 +304,8 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     public void onLoadFragmentChart(int typeChart) {
         mFilter = FilterManager.getInstance().getFilterDefault();
         mSpinnerAccount.setSelectItem(null);
-        mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
-        onReplaceFragment(mFragmentChartPager, null);
+        mFragmentChartExchangePager = FragmentChartExchangePager_.builder().mFilter(mFilter).mChartType(typeChart).build();
+        onReplaceFragment(mFragmentChartExchangePager, null);
     }
 
     /**
@@ -405,8 +405,8 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
     private void reloadFragmentFilter() {
-        if (mFragmentChartPager != null) {
-            mFragmentChartPager.onReloadFragmentPager();
+        if (mFragmentChartExchangePager != null) {
+            mFragmentChartExchangePager.onReloadFragmentPager();
         }
         if (mFragmentExchangesPager != null) {
             mFragmentExchangesPager.onReloadFragmentPager();
