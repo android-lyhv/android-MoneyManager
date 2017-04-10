@@ -27,6 +27,7 @@ import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
+import com.dut.moneytracker.dialogs.DialogPickFilter_;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @AfterViews
     void init() {
-        mDialogPickFilter = new DialogPickFilter();
+        mDialogPickFilter = DialogPickFilter_.builder().build();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
         initView();
         onLoadProfile();
@@ -172,22 +173,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         });
     }
 
-    private void onShowDialogPickFilterDate() {
-        mDialogPickFilter.show(getFragmentManager(), TAG);
-        mDialogPickFilter.registerFilter(mFilter.getViewType(), new DialogPickFilter.FilterListener() {
-            @Override
-            public void onResult(int filterType) {
-                if (filterType == FilterType.CUSTOM) {
-                    onChangeFilterCustom();
-                } else {
-                    mFilter.setViewType(filterType);
-                    mFilter.setDateFilter(new Date());
-                    reloadFragmentFilter();
-                }
-
-            }
-        });
-    }
 
     public void registerAccount(Account account) {
         mAccount = account;
@@ -219,7 +204,20 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Click(R.id.imgDateFilter)
     void onClickFilter() {
-        onShowDialogPickFilterDate();
+        mDialogPickFilter.show(getFragmentManager(), TAG);
+        mDialogPickFilter.registerFilter(mFilter.getViewType(), new DialogPickFilter.FilterListener() {
+            @Override
+            public void onResult(int filterType) {
+                if (filterType == FilterType.CUSTOM) {
+                    onChangeFilterCustom();
+                } else {
+                    mFilter.setViewType(filterType);
+                    mFilter.setDateFilter(new Date());
+                    reloadFragmentFilter();
+                }
+
+            }
+        });
     }
 
     @Click(R.id.rlProfile)

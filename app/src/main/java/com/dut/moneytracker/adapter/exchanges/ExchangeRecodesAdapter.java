@@ -17,8 +17,8 @@ import io.realm.RealmResults;
  * Created by ly.ho on 14/03/2017.
  */
 
-public class ExchangeRecyclerAdapter extends BaseRecyclerAdapter {
-    public ExchangeRecyclerAdapter(Context context, RealmResults objects) {
+public class ExchangeRecodesAdapter extends BaseRecyclerAdapter {
+    public ExchangeRecodesAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 
