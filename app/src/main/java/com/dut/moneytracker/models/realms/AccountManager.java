@@ -43,6 +43,20 @@ public class AccountManager extends RealmHelper implements AccountListener {
         return realmResults;
     }
 
+    public String getIdFirstAccount() {
+        realm.beginTransaction();
+        String id = realm.where(Account.class).findFirst().getId();
+        realm.commitTransaction();
+        return id;
+    }
+
+    public long getAccountSize() {
+        realm.beginTransaction();
+        long result = realm.where(Account.class).count();
+        realm.commitTransaction();
+        return result;
+    }
+
     @Override
     public String getAmountAvailableByAccount(String idAccount) {
         BigDecimal bigDecimal = new BigDecimal(getInitAmountByAccount(idAccount));

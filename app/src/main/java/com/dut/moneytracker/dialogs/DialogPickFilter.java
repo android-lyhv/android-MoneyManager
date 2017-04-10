@@ -8,11 +8,13 @@ import android.os.Bundle;
 
 import com.dut.moneytracker.constant.FilterType;
 
+import org.androidannotations.annotations.EFragment;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 07/03/2017.
  */
-
+@EFragment
 public class DialogPickFilter extends DialogFragment {
     private String[] filter = new String[]{"Tất cả", "Ngày", "Tháng", "Năm", "Khoảng thời gian"};
     private int[] id = new int[]{FilterType.ALL, FilterType.DAY, FilterType.MONTH, FilterType.YEAR, FilterType.CUSTOM};

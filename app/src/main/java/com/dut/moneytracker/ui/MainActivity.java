@@ -27,6 +27,7 @@ import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
+import com.dut.moneytracker.dialogs.DialogPickFilter_;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
@@ -93,27 +94,28 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     @ViewById(R.id.imgSettingAccount)
     ImageView imgSettingAccount;
     private DialogPickFilter mDialogPickFilter;
+    private SpinnerAccountManger mSpinnerAccount;
     private DialogCustomFilter mDialogCustomFilter;
-    //model
-    FragmentManager mFragmentManager = getSupportFragmentManager();
-    FragmentDashboard mFragmentDashboard;
-    FragmentLoopExchange mFragmentLoopExchange;
-    FragmentExchangesPager mFragmentExchangesPager;
-    FragmentChartPager mFragmentChartPager;
-    SpinnerAccountManger mSpinnerAccount;
-    private Account mAccount;
+    private FragmentManager mFragmentManager = getSupportFragmentManager();
+    private FragmentExchangesPager mFragmentExchangesPager;
+    private FragmentChartPager mFragmentChartPager;
     private Filter mFilter;
+    private Account mAccount;
 
     @AfterViews
     void init() {
-        mDialogPickFilter = new DialogPickFilter();
+        mDialogPickFilter = DialogPickFilter_.builder().build();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
         initView();
         onLoadProfile();
         onLoadFragmentDashboard();
     }
 
-    void initView() {
+    public void registerAccount(Account account) {
+        mAccount = account;
+    }
+
+    private void initView() {
         setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -172,28 +174,10 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         });
     }
 
-    private void onShowDialogPickFilterDate() {
-        mDialogPickFilter.show(getFragmentManager(), TAG);
-        mDialogPickFilter.registerFilter(mFilter.getViewType(), new DialogPickFilter.FilterListener() {
-            @Override
-            public void onResult(int filterType) {
-                if (filterType == FilterType.CUSTOM) {
-                    onChangeFilterCustom();
-                } else {
-                    mFilter.setViewType(filterType);
-                    mFilter.setDateFilter(new Date());
-                    reloadFragmentFilter();
-                }
-
-            }
-        });
-    }
-
-    public void registerAccount(Account account) {
-        mAccount = account;
-    }
-
-    void onLoadProfile() {
+    /**
+     * information of user
+     */
+    private void onLoadProfile() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         Glide.with(this).load(firebaseAuth.getCurrentUser().getPhotoUrl())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -219,7 +203,20 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Click(R.id.imgDateFilter)
     void onClickFilter() {
-        onShowDialogPickFilterDate();
+        mDialogPickFilter.show(getFragmentManager(), TAG);
+        mDialogPickFilter.registerFilter(mFilter.getViewType(), new DialogPickFilter.FilterListener() {
+            @Override
+            public void onResult(int filterType) {
+                if (filterType == FilterType.CUSTOM) {
+                    onChangeFilterCustom();
+                } else {
+                    mFilter.setViewType(filterType);
+                    mFilter.setDateFilter(new Date());
+                    reloadFragmentFilter();
+                }
+
+            }
+        });
     }
 
     @Click(R.id.rlProfile)
@@ -304,8 +301,12 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      * @param typeChart
      */
     public void onLoadFragmentChart(int typeChart) {
-        mFilter = FilterManager.getInstance().getFilterDefault();
-        mSpinnerAccount.setSelectItem(null);
+        if (AccountManager.getInstance().getAccountSize() > 1) {
+            mFilter = FilterManager.getInstance().getFilterDefault();
+            mSpinnerAccount.setSelectItem(null);
+        } else {
+            mFilter = FilterManager.getInstance().getFilterDefaultAccount(AccountManager.getInstance().getIdFirstAccount());
+        }
         mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
         onReplaceFragment(mFragmentChartPager, null);
     }
@@ -314,9 +315,13 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      * Load all records Exchange
      */
     public void onLoadFragmentExchanges() {
-        mFilter = FilterManager.getInstance().getFilterDefault();
-        mSpinnerAccount.setSelectItem(null);
-        onLoadFragmentExchange(mFilter);
+        if (AccountManager.getInstance().getAccountSize() > 1) {
+            mFilter = FilterManager.getInstance().getFilterDefault();
+            mSpinnerAccount.setSelectItem(null);
+            onLoadFragmentExchange(mFilter);
+        } else {
+            onLoadFragmentExchangesByAccount(AccountManager.getInstance().getIdFirstAccount());
+        }
     }
 
     /**
@@ -342,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      * Load fragment dashboard account
      */
     public void onLoadFragmentDashboard() {
-        mFragmentDashboard = FragmentDashboard_.builder().build();
+        FragmentDashboard mFragmentDashboard = FragmentDashboard_.builder().build();
         onReplaceFragment(mFragmentDashboard, DASHBOARD);
     }
 
@@ -350,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      * load fragment list exchanges loop
      */
     public void onLoadFragmentLoopExchange() {
-        mFragmentLoopExchange = FragmentLoopExchange_.builder().build();
+        FragmentLoopExchange mFragmentLoopExchange = FragmentLoopExchange_.builder().build();
         onReplaceFragment(mFragmentLoopExchange, null);
     }
 

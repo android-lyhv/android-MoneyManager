@@ -2,7 +2,6 @@ package com.dut.moneytracker.models.realms;
 
 
 import android.content.Context;
-import android.util.Log;
 
 import com.dut.moneytracker.objects.Currency;
 import com.dut.moneytracker.utils.ResourceUtils;
@@ -71,7 +70,6 @@ public class CurrencyManager extends RealmHelper {
         realm.beginTransaction();
         RealmResults<Currency> realmResults = realm.where(Currency.class).findAll();
         List<Currency> currencies = realmResults.subList(0, realmResults.size());
-        Log.d(TAG, "getCurrencyCodes: "+ currencies.size());
         realm.commitTransaction();
         return currencies;
     }

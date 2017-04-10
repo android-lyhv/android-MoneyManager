@@ -18,6 +18,8 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
+import com.dut.moneytracker.dialogs.DialogPickAccountReceive;
+import com.dut.moneytracker.dialogs.DialogPickAccountReceive_;
 import com.dut.moneytracker.maps.GoogleLocation;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
@@ -251,7 +253,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         mExchange.setTypeExchange(ExchangeType.TRANSFER);
         tvStatus.setVisibility(View.GONE);
         tvTitleFromAccount.setText(getString(R.string.account_send));
-        tvTitleToAccount.setText(getString(R.string.expense_name));
+        tvTitleToAccount.setText(getString(R.string.account_receive));
         tvCategoryName.setText(mNameAccountTransfer);
         btnExpenses.setAlpha(0.5f);
         btnIncome.setAlpha(0.5f);
@@ -296,13 +298,14 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             AccountManager.getInstance().insertOrUpdate(mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
-            String idAccount = mExchange.getIdAccount();
-            mExchange.setId(UUID.randomUUID().toString());
-            mExchange.setAmount(tvAmount.getText().toString());
-            mExchange.setIdAccount(idTransfer);
-            mExchange.setIdAccountTransfer(idAccount);
-            mExchange.setCodeTransfer(codeTransfer);
-            AccountManager.getInstance().insertOrUpdate(mExchange);
+            if (idTransfer != null) {
+                mExchange.setId(UUID.randomUUID().toString());
+                mExchange.setAmount(tvAmount.getText().toString());
+                mExchange.setIdAccount(idTransfer);
+                mExchange.setIdAccountTransfer(mExchange.getIdAccount());
+                mExchange.setCodeTransfer(codeTransfer);
+                AccountManager.getInstance().insertOrUpdate(mExchange);
+            }
         } else {
             AccountManager.getInstance().insertOrUpdate(mExchange);
         }
@@ -311,18 +314,25 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     }
 
     private void showDialogPickAccountReceive() {
-        DialogPickAccount dialogPickAccount = new DialogPickAccount();
+        DialogPickAccountReceive dialogPickAccount = DialogPickAccountReceive_.builder().build();
         dialogPickAccount.show(getFragmentManager(), TAG);
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        dialogPickAccount.registerPickAccount(new DialogPickAccountReceive.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
-                if (TextUtils.equals(mExchange.getIdAccount(), account.getId())) {
-                    Toast.makeText(ActivityAddExchange.this, "Vui lòng chọn một tài khoản khác", Toast.LENGTH_SHORT).show();
-                    return;
+                if (account != null) {
+                    if (TextUtils.equals(mExchange.getIdAccount(), account.getId())) {
+                        Toast.makeText(ActivityAddExchange.this, "Vui lòng chọn một tài khoản khác", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    mNameAccountTransfer = account.getName();
+                    tvCategoryName.setText(mNameAccountTransfer);
+                    mExchange.setIdAccountTransfer(account.getId());
+                } else {
+                    mNameAccountTransfer = getString(R.string.account_other);
+                    tvCategoryName.setText(mNameAccountTransfer);
+                    mExchange.setIdAccountTransfer(null);
                 }
-                mNameAccountTransfer = account.getName();
-                tvCategoryName.setText(mNameAccountTransfer);
-                mExchange.setIdAccountTransfer(account.getId());
+
             }
         });
     }
@@ -405,11 +415,11 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     public boolean isAvailableIncomeAndExpense() {
         String textAmount = tvAmount.getText().toString().trim();
         if (TextUtils.isEmpty(textAmount)) {
-            Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (TextUtils.isEmpty(mIdCategory)) {
-            Toast.makeText(this, "Please pick category", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chọn thể loại giao dịch", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
