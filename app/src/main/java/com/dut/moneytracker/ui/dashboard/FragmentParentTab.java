@@ -144,16 +144,21 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getString(R.string.action_reload_tab_account)));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
-        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override

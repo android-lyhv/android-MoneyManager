@@ -10,7 +10,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,14 +20,14 @@ import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
 import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
-import com.dut.moneytracker.ui.charts.objects.LineChartMoney;
-import com.dut.moneytracker.ui.charts.objects.ValueLineChart;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.ui.MainActivity;
 import com.dut.moneytracker.ui.base.BaseFragment;
+import com.dut.moneytracker.ui.charts.objects.LineChartMoney;
+import com.dut.moneytracker.ui.charts.objects.ValueLineChart;
 import com.dut.moneytracker.ui.exchanges.ActivityDetailExchange_;
 import com.github.mikephil.charting.charts.LineChart;
 
@@ -75,7 +74,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
             if (TextUtils.equals(intent.getAction(), context.getString(R.string.action_reload_tab_account))) {
                 onReloadData();
             }
-            Log.d("onReceive: ", "aaaaaaaa");
         }
     };
 
@@ -90,9 +88,15 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(getString(R.string.action_reload_tab_account)));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -164,7 +168,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     public void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
-        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     public void onReloadData() {
