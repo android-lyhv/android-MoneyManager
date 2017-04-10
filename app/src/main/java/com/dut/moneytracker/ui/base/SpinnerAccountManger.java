@@ -12,7 +12,6 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,19 +37,12 @@ public class SpinnerAccountManger implements Spinner.OnItemSelectedListener {
     public SpinnerAccountManger(Context context, AppCompatSpinner spinner) {
         mSpinner = spinner;
         mContext = context;
-        initAccounts();
         onLoadItemSpinner();
     }
 
-    private void initAccounts() {
-        mAccounts = AccountManager.getInstance().getAccounts();
-        if (mAccounts == null) {
-            mAccounts = new ArrayList<>();
-        }
-    }
-
     private void onLoadItemSpinner() {
-        String[] items = getListItemSpinner(mAccounts);
+        mAccounts = AccountManager.getInstance().getAccounts();
+        String[] items = getLabelsSpinner(mAccounts);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, R.layout.item_selected_spiner, items);
         arrayAdapter.setDropDownViewResource(R.layout.item_list_spiner);
         mSpinner.setAdapter(arrayAdapter);
@@ -75,13 +67,18 @@ public class SpinnerAccountManger implements Spinner.OnItemSelectedListener {
         mSpinner.setSelection(getPosition(accountId));
     }
 
-    private String[] getListItemSpinner(List<Account> accounts) {
+    private String[] getLabelsSpinner(List<Account> accounts) {
         int size = accounts.size();
-        String[] strings = new String[size + 1];
+        String[] strings;
+        if (size > 1) {
+            strings = new String[size + 1];
+            strings[size] = mContext.getString(R.string.all_account);
+        } else {
+            strings = new String[size];
+        }
         for (int i = 0; i < size; i++) {
             strings[i] = accounts.get(i).getName();
         }
-        strings[size] = mContext.getString(R.string.all_account);
         return strings;
     }
 
