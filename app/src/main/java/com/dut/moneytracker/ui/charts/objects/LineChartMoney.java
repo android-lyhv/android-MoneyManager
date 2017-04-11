@@ -21,7 +21,6 @@ import java.util.List;
  * Created by ly.ho on 10/03/2017.
  */
 public class LineChartMoney {
-    private static final String TAG = LineChartMoney.class.getSimpleName();
     private List<ValueLineChart> mValueLineCharts = new ArrayList<>();
     private LineData mLineData;
     private LineDataSet mLineDataSet;

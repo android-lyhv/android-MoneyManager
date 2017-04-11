@@ -36,6 +36,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -102,6 +103,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
             return;
         }
         mAccount.setName(accountName);
+        mAccount.setCreated(new Date());
         //Sending
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_account), mAccount);

@@ -4,10 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,11 +51,9 @@ import io.realm.RealmResults;
  */
 @EFragment(R.layout.fragment_tab_account)
 public class FragmentParentTab extends BaseFragment implements TabAccountListener, RealmChangeListener<RealmResults<Account>> {
-    public FragmentParentTab() {
-    }
+    private static final int MAX_DAY = 30;
 
     public interface CardAccountListener {
-
         void onClickCardAccount(int position);
     }
 
@@ -65,14 +63,11 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
         this.cardAccountListener = cardAccountListener;
     }
 
-    private static String BASE_COLOR = "#03a879";
-
     private int positionItem;
 
     //View
     @ViewById(R.id.recyclerExchange)
     RecyclerView mRecyclerExchange;
-
     @ViewById(R.id.tvAmount)
     TextView mTvAmount;
     @ViewById(R.id.pieChart)
@@ -137,7 +132,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onShowAmount() {
-        mTvAmount.setTextColor(Color.parseColor(BASE_COLOR));
+        mTvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -221,8 +216,8 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     private void reloadChartExchange() {
-        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
-        mLineChartMoney.setColorChart(BASE_COLOR);
+        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(MAX_DAY);
+        mLineChartMoney.setColorChart(getString(R.string.color_account_default));
         mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
         mLineChartMoney.notifyDataSetChanged();
     }
