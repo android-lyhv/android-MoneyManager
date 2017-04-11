@@ -1,13 +1,7 @@
 package com.dut.moneytracker.ui.dashboard;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseViewPagerAdapter;
@@ -21,10 +15,8 @@ import com.dut.moneytracker.ui.exchanges.ActivityAddExchange_;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -32,10 +24,7 @@ import io.realm.RealmResults;
  * Created by ly.ho on 14/03/2017.
  */
 @EFragment(R.layout.fragment_dashboard)
-public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener
-        , RealmChangeListener<RealmResults<Account>> {
-    public static final String RECEIVER_ADD_DELETE_ACCOUNT = "RECEIVER_ADD_DELETE_ACCOUNT";
-    public static final String RECEIVER_RELOAD_TAB_ACCOUNT = "RECEIVER_RELOAD_TAB_ACCOUNT";
+public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener {
     public static final long DELAY = 0L;
     public static final int LIMIT_ITEM = 5;
     @ViewById(R.id.tabLayout)
@@ -45,34 +34,10 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     private RealmResults<Account> mAccounts;
     private BaseViewPagerAdapter mTabAdapter;
     private int targetAccount;
-    private Handler mHandler = new Handler();
-    private BroadcastReceiver mReceiverAddDeleteAccount = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent == null) {
-                return;
-            }
-            if (TextUtils.equals(intent.getAction(), RECEIVER_ADD_DELETE_ACCOUNT)) {
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTabAdapter.notifyDataSetChanged();
-                    }
-                }, DELAY);
-            }
-        }
-    };
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        getContext().registerReceiver(mReceiverAddDeleteAccount, new IntentFilter(RECEIVER_ADD_DELETE_ACCOUNT));
-    }
 
     @AfterViews
     void init() {
         mAccounts = AccountManager.getInstance().getAccounts();
-        mAccounts.addChangeListener(this);
         initViewpager();
         initLoadListFragmentAccounts();
     }
@@ -101,9 +66,9 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        mViewPager.setCurrentItem(tab.getPosition(),false);
+        mViewPager.setCurrentItem(tab.getPosition(), false);
         targetAccount = tab.getPosition() == 0 ? 0 : tab.getPosition() - 1;
-        ((MainActivity_) getActivity()).registerAccount(mAccounts.get(targetAccount));
+        ((MainActivity_) getActivity()).registerAccount(mAccounts.get(targetAccount), targetAccount);
     }
 
 
@@ -133,23 +98,26 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
         ActivityAddExchange_.intent(this).mAccount(mAccounts.get(targetAccount)).startForResult(RequestCode.ADD_NEW_EXCHANGE);
     }
 
-    @OnActivityResult(RequestCode.ADD_NEW_EXCHANGE)
-    void onResult(Intent intent) {
-        if (intent == null) {
-            return;
+    public void deleteFragmentAccount(int position) {
+        mTabAdapter.removeFragment(++position);
+        if (mTabAdapter.getCount() == 2) {
+            mTabAdapter.removeFragment(0);
         }
-        getContext().sendBroadcast(new Intent(RECEIVER_RELOAD_TAB_ACCOUNT));
+        mTabAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onChange(RealmResults<Account> element) {
-        getContext().sendBroadcast(new Intent(RECEIVER_RELOAD_TAB_ACCOUNT));
+    public void addFragmentAccount(Account account) {
+        if (mTabAdapter.getCount() == 1) {
+            FragmentParentTab mFragmentParentTab = FragmentParentTab_.builder().build();
+            mFragmentParentTab.registerCardAccountListener(this);
+            mTabAdapter.addPositionFragment(0, mFragmentParentTab, getString(R.string.title_all_account));
+        }
+        FragmentChildTab mFragmentChildTab = FragmentChildTab_.builder().mAccount(account).build();
+        mTabAdapter.addFragment(mFragmentChildTab, account.getName());
+        mTabAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mAccounts.removeAllChangeListeners();
-        mHandler.removeCallbacksAndMessages(null);
+    public void notifyDataSetChanged() {
+        mTabAdapter.notifyDataSetChanged();
     }
 }

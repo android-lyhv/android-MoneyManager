@@ -26,8 +26,11 @@ import com.dut.moneytracker.constant.RequestCode;
 import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogConfirm;
+import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
 import org.androidannotations.annotations.AfterViews;
@@ -114,7 +117,23 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
 
     @OptionsItem(R.id.actionDelete)
     void onDeleteAccount() {
-        //TODO
+        if (mAccount.isDefault()) {
+            Toast.makeText(this, R.string.account_default, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
+        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+            @Override
+            public void onClickResult(boolean value) {
+                if (value) {
+                    AccountManager.getInstance().onDeleteAccount(getApplicationContext(), mAccount.getId());
+                    setResult(ResultCode.DELETE_ACCOUNT);
+                    finish();
+                }
+            }
+        });
+        dialogConfirm.setMessage(getString(R.string.message_delete_account));
+        dialogConfirm.show(getSupportFragmentManager(), null);
     }
 
     @OptionsItem(android.R.id.home)

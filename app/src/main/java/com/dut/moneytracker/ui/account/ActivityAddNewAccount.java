@@ -66,7 +66,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
         setTitle(getString(R.string.new_account));
         initToolbar();
         initBaseAccount();
-        initDialogPickColor();
     }
 
     private void initBaseAccount() {
@@ -84,11 +83,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
         GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
         shapeDrawable.setColor(Color.parseColor(mAccount.getColorHex()));
         imgColor.setBackground(shapeDrawable);
-    }
-
-    private void initDialogPickColor() {
-        mDialogPickColor = DialogPickColor_.builder().build();
-        mDialogPickColor.register(this);
     }
 
     private void initToolbar() {
@@ -140,6 +134,8 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     @Click(R.id.imgColor)
     void onClickImgColor() {
+        mDialogPickColor = DialogPickColor_.builder().build();
+        mDialogPickColor.register(this);
         mDialogPickColor.show(getSupportFragmentManager(), null);
     }
 

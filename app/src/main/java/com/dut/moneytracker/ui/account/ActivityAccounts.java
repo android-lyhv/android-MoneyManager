@@ -12,9 +12,10 @@ import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.account.RecyclerAccountAdapter;
 import com.dut.moneytracker.constant.RequestCode;
+import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
-import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
+import com.dut.moneytracker.ui.MainActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -37,6 +38,7 @@ public class ActivityAccounts extends AppCompatActivity {
     @ViewById(R.id.recyclerViewAccount)
     RecyclerView mRecyclerViewAccounts;
     private RecyclerAccountAdapter mAdapter;
+    private int positionAccount = -1;
 
     @AfterViews
     void init() {
@@ -59,7 +61,8 @@ public class ActivityAccounts extends AppCompatActivity {
         mRecyclerViewAccounts.addOnItemTouchListener(new ClickItemRecyclerView(this, new ClickItemListener() {
             @Override
             public void onClick(View view, int position) {
-                ActivityEditAccount_.intent(ActivityAccounts.this).mAccount((Account) mAdapter.getItem(position)).startForResult(RequestCode.EDIT_ACCOUNT);
+                positionAccount = position;
+                ActivityEditAccount_.intent(ActivityAccounts.this).mAccount((Account) mAdapter.getItem(position)).startForResult(RequestCode.DETAIL_ACCOUNT);
             }
         }));
         accounts.addChangeListener(new RealmChangeListener<RealmResults<Account>>() {
@@ -70,14 +73,21 @@ public class ActivityAccounts extends AppCompatActivity {
         });
     }
 
-    @OnActivityResult(RequestCode.EDIT_ACCOUNT)
-    void onResultEditAccount(Intent data) {
-        if (data == null) {
-            return;
+    @OnActivityResult(RequestCode.DETAIL_ACCOUNT)
+    void onResultEditAccount(int resultCode, Intent data) {
+        if (resultCode == ResultCode.DELETE_ACCOUNT) {
+            Intent intent = new Intent(MainActivity.RECEIVER_DELETE_ACCOUNT);
+            intent.putExtra(getString(R.string.position_account_delete), positionAccount);
+            sendBroadcast(intent);
         }
-        Account account = data.getParcelableExtra(getString(R.string.extra_account));
-        AccountManager.getInstance().insertOrUpdate(account);
-        sendBroadcast(new Intent(FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT));
+        if (resultCode == ResultCode.EDIT_ACCOUNT) {
+            if (data == null) {
+                return;
+            }
+            Account account = data.getParcelableExtra(getString(R.string.extra_account));
+            AccountManager.getInstance().insertOrUpdate(account);
+            sendBroadcast(new Intent(MainActivity.RECEIVER_RELOAD_TAB_ACCOUNT));
+        }
     }
 
     @OnActivityResult(RequestCode.ADD_NEW_ACCOUNT)
@@ -87,7 +97,10 @@ public class ActivityAccounts extends AppCompatActivity {
         }
         Account account = data.getParcelableExtra(getString(R.string.extra_account));
         AccountManager.getInstance().insertOrUpdate(account);
-        sendBroadcast(new Intent(FragmentDashboard.RECEIVER_ADD_DELETE_ACCOUNT));
+        // send broadcast
+        Intent intent = new Intent(MainActivity.RECEIVER_ADD_ACCOUNT);
+        intent.putExtra(getString(R.string.extra_account), account);
+        sendBroadcast(intent);
     }
 
     @Click(R.id.fab)
@@ -98,5 +111,11 @@ public class ActivityAccounts extends AppCompatActivity {
     @OptionsItem(android.R.id.home)
     void onClose() {
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 }

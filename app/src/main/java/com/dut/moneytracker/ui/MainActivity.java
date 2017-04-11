@@ -1,6 +1,10 @@
 package com.dut.moneytracker.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -52,6 +56,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
@@ -60,6 +65,9 @@ import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener {
+    public static final String RECEIVER_DELETE_ACCOUNT = "RECEIVER_DELETE_ACCOUNT";
+    public static final String RECEIVER_ADD_ACCOUNT = "RECEIVER_ADD_ACCOUNT";
+    public static final String RECEIVER_RELOAD_TAB_ACCOUNT = "RECEIVER_RELOAD_TAB_ACCOUNT";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
 
@@ -103,7 +111,55 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentChartExchangePager mFragmentChartExchangePager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
+    private int positionAccount;
     private Filter mFilter;
+    private Handler mHandler = new Handler();
+    private BroadcastReceiver mReceiverAddDeleteAccount = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null || !isFragmentDashboard() || mFragmentDashboard == null) {
+                return;
+            }
+            if (TextUtils.equals(intent.getAction(), RECEIVER_DELETE_ACCOUNT)) {
+                int positionDelete = intent.getIntExtra(getString(R.string.position_account_delete), -1);
+                reloadTabAccount(positionDelete);
+            }
+            if (TextUtils.equals(intent.getAction(), RECEIVER_ADD_ACCOUNT)) {
+                Account account = intent.getParcelableExtra(getString(R.string.extra_account));
+                reloadTabAccount(account);
+            }
+            if (TextUtils.equals(intent.getAction(), RECEIVER_RELOAD_TAB_ACCOUNT)) {
+                reloadTabAccount();
+            }
+        }
+
+        private void reloadTabAccount(int positionDelete) {
+            mFragmentDashboard.deleteFragmentAccount(positionDelete);
+        }
+
+        private void reloadTabAccount(Account account) {
+            mFragmentDashboard.addFragmentAccount(account);
+        }
+
+        private void reloadTabAccount() {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFragmentDashboard.notifyDataSetChanged();
+                }
+            }, FragmentDashboard.DELAY);
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVER_ADD_ACCOUNT);
+        intentFilter.addAction(RECEIVER_DELETE_ACCOUNT);
+        intentFilter.addAction(RECEIVER_RELOAD_TAB_ACCOUNT);
+        registerReceiver(mReceiverAddDeleteAccount, intentFilter);
+    }
 
     @AfterViews
     void init() {
@@ -174,8 +230,9 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
 
-    public void registerAccount(Account account) {
+    public void registerAccount(Account account, int position) {
         mAccount = account;
+        positionAccount = position;
     }
 
     void onLoadProfile() {
@@ -193,13 +250,17 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
-            if (fragment != null) {
+            if (isFragmentDashboard()) {
                 super.onBackPressed();
             } else {
                 onLoadFragmentDashboard();
             }
         }
+    }
+
+    public boolean isFragmentDashboard() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
+        return null != fragment;
     }
 
     @Click(R.id.imgDateFilter)
@@ -252,7 +313,24 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
-        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.EDIT_ACCOUNT);
+        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.DETAIL_ACCOUNT);
+    }
+
+    @OnActivityResult(RequestCode.DETAIL_ACCOUNT)
+    void onResultEditAccount(int resultCode, Intent data) {
+        if (resultCode == ResultCode.DELETE_ACCOUNT) {
+            Intent intent = new Intent(MainActivity.RECEIVER_DELETE_ACCOUNT);
+            intent.putExtra(getString(R.string.position_account_delete), positionAccount);
+            sendBroadcast(intent);
+        }
+        if (resultCode == ResultCode.EDIT_ACCOUNT) {
+            if (data == null) {
+                return;
+            }
+            Account account = data.getParcelableExtra(getString(R.string.extra_account));
+            AccountManager.getInstance().insertOrUpdate(account);
+            sendBroadcast(new Intent(RECEIVER_RELOAD_TAB_ACCOUNT));
+        }
     }
 
     @Click(R.id.llChartIncome)
@@ -280,15 +358,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             case ResultCode.PROFILE:
                 onResultLogout();
                 break;
-            case ResultCode.EDIT_ACCOUNT:
-                onResultEditAccount(data);
-                break;
         }
-    }
-
-    void onResultEditAccount(Intent data) {
-        Account account = data.getParcelableExtra(getString(R.string.extra_account));
-        AccountManager.getInstance().insertOrUpdate(account);
     }
 
     void onResultLogout() {
@@ -411,5 +481,14 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mFragmentExchangesPager != null) {
             mFragmentExchangesPager.onReloadFragmentPager();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAccount != null) {
+            mAccount.removeAllChangeListeners();
+        }
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

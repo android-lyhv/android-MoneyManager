@@ -1,16 +1,11 @@
 package com.dut.moneytracker.ui.dashboard;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -43,8 +38,6 @@ import java.util.List;
 
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-
-import static android.content.ContentValues.TAG;
 
 
 /**
@@ -87,25 +80,6 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     private Handler mHandler;
     private RealmResults<Exchange> mExchanges;
     private RealmResults<Account> mAccounts;
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent == null) {
-                return;
-            }
-            if (TextUtils.equals(intent.getAction(), FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT)) {
-                onLoadChart();
-                onShowAmount();
-                mAccounts = AccountManager.getInstance().loadAccountsAsync();
-            }
-        }
-    };
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT));
-    }
 
     @AfterViews
     public void init() {
@@ -147,10 +121,8 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                long old = System.currentTimeMillis();
                 String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
                         CurrencyUtils.DEFAULT_CURRENCY_CODE);
-                Log.d(TAG, "loadAmount: " + String.valueOf(System.currentTimeMillis() - old));
                 mTvAmount.setText(money);
             }
         }, FragmentDashboard.DELAY);
@@ -192,7 +164,6 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     public void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
-        getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
@@ -213,7 +184,9 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
             case ResultCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
-        getContext().sendBroadcast(new Intent(FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT));
+        onLoadCardAccount();
+        onLoadChart();
+        onShowAmount();
     }
 
     @Click(R.id.tvMoreExchange)
@@ -222,11 +195,9 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     private void reloadChartExchange() {
-        long old = System.currentTimeMillis();
         List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(30);
         mLineChartMoney.setColorChart(BASE_COLOR);
         mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
         mLineChartMoney.notifyDataSetChanged();
-        Log.d(TAG, "reloadChartExchange: " + String.valueOf(System.currentTimeMillis() - old));
     }
 }

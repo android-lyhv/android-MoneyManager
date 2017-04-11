@@ -33,6 +33,16 @@ public class ExchangeLoopManager extends RealmHelper {
         mGenerateManager = new GenerateManager(context);
     }
 
+    public void deleteExchangeLoopByAccount(String idAccount) {
+        realm.beginTransaction();
+        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("idAccount", idAccount).findFirst();
+        if (exchangeLooper != null) {
+            mGenerateManager.removePendingLoopExchange(exchangeLooper.getId());
+            exchangeLooper.deleteFromRealm();
+        }
+        realm.commitTransaction();
+    }
+
     public RealmResults<ExchangeLooper> getListLoopExchange() {
         realm.beginTransaction();
         RealmResults<ExchangeLooper> realmResults = realm.where(ExchangeLooper.class).findAllSorted("created", Sort.ASCENDING);

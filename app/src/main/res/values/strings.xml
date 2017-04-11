@@ -242,4 +242,7 @@
     <string name="loop_status_close">Đóng</string>
     <string name="receiver_add_delete_account">receiver_add_or_delete_account</string>
     <string name="new_account">Tài khoản mới</string>
+    <string name="account_default">Không thể xóa tài khoản mặc định!</string>
+    <string name="message_delete_account">Xóa tài khoản này!</string>
+    <string name="position_account_delete">position_account_delete</string>
 </resources>
