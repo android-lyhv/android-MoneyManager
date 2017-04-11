@@ -28,7 +28,11 @@ public class ExchangeLoopManager extends RealmHelper {
         }
         return exchangeLoopManager;
     }
-
+    public void insertOrUpdate(ExchangeLooper object) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+    }
     private ExchangeLoopManager(Context context) {
         mGenerateManager = new GenerateManager(context);
     }

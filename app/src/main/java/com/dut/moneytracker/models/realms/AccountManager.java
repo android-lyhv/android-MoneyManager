@@ -35,6 +35,12 @@ public class AccountManager extends RealmHelper implements AccountListener {
 
     }
 
+    public void insertOrUpdate(Account object) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+    }
+
     @Override
     public RealmResults<Account> getAccounts() {
         realm.beginTransaction();

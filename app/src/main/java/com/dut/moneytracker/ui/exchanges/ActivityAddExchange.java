@@ -19,7 +19,7 @@ import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.maps.GoogleLocation;
-import com.dut.moneytracker.models.realms.AccountManager;
+import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
@@ -293,7 +293,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             String amount = String.format(Locale.US, "-%s", tvAmount.getText().toString());
             mExchange.setAmount(amount);
             mExchange.setCodeTransfer(codeTransfer);
-            AccountManager.getInstance().insertOrUpdate(mExchange);
+            ExchangeManger.getInstance().insertOrUpdate(mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
             String idAccount = mExchange.getIdAccount();
@@ -302,9 +302,9 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             mExchange.setIdAccount(idTransfer);
             mExchange.setIdAccountTransfer(idAccount);
             mExchange.setCodeTransfer(codeTransfer);
-            AccountManager.getInstance().insertOrUpdate(mExchange);
+            ExchangeManger.getInstance().insertOrUpdate(mExchange);
         } else {
-            AccountManager.getInstance().insertOrUpdate(mExchange);
+            ExchangeManger.getInstance().insertOrUpdate(mExchange);
         }
         setResult(ResultCode.ADD_NEW_EXCHANGE, new Intent());
         finish();

@@ -42,8 +42,8 @@ public class BaseViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void addPositionFragment(int position, Fragment fragment, String title) {
-        mFragments.add(0, fragment);
-        mTitles.add(0, title);
+        mFragments.add(position, fragment);
+        mTitles.add(position, title);
     }
 
     public int getSizeFragment() {
@@ -61,6 +61,13 @@ public class BaseViewPagerAdapter extends FragmentStatePagerAdapter {
         }
         mFragments.remove(position);
         mTitles.remove(position);
+    }
+
+    public void setTittlePosition(int position, String name) {
+        if (position > getSizeFragment() - 1 || position < 0) {
+            return;
+        }
+        mTitles.set(position, name);
     }
 
     @Override

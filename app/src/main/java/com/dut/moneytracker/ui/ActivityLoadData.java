@@ -52,7 +52,6 @@ public class ActivityLoadData extends AppCompatActivity {
     }
 
 
-
     private void onLoadDataServer() {
         //TODO
     }

@@ -128,7 +128,9 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
         mTabAdapter.notifyDataSetChanged();
     }
 
-    public void notifyDataSetChanged() {
+    public void notifyDataSetChanged(int position) {
+        mTabAdapter.setTittlePosition(position + 1, mAccounts.get(position).getName());
         mTabAdapter.notifyDataSetChanged();
+        mViewPager.invalidate();
     }
 }

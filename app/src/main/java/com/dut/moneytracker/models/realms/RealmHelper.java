@@ -1,7 +1,6 @@
 package com.dut.moneytracker.models.realms;
 
 import io.realm.Realm;
-import io.realm.RealmObject;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -13,17 +12,5 @@ abstract class RealmHelper {
 
     RealmHelper() {
         realm = Realm.getDefaultInstance();
-    }
-
-    public void insertOrUpdate(RealmObject object) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(object);
-        realm.commitTransaction();
-    }
-
-    public void delete(RealmObject object) {
-        realm.beginTransaction();
-        object.deleteFromRealm();
-        realm.insertOrUpdate(object);
     }
 }

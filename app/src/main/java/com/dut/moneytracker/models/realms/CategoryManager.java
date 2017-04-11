@@ -23,6 +23,17 @@ public class CategoryManager extends RealmHelper {
     private CategoryManager() {
 
     }
+    public void insertOrUpdate(Category object) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+    }
+    public void insertOrUpdate(GroupCategory object) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+    }
+
 
     public RealmResults<GroupCategory> getGroupCategory() {
         realm.beginTransaction();

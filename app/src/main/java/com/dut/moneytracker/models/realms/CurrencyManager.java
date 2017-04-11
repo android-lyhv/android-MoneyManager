@@ -36,7 +36,11 @@ public class CurrencyManager extends RealmHelper {
     private CurrencyManager() {
 
     }
-
+    public void insertOrUpdate(Currency object) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+    }
     public void createDefaultCurrency(Context context) {
         String json = ResourceUtils.getInstance().getStringJsonCurrencyAssets(context, FILE_NAME_JSON);
         try {

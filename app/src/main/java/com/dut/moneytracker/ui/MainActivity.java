@@ -123,30 +123,31 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             }
             if (TextUtils.equals(intent.getAction(), RECEIVER_DELETE_ACCOUNT)) {
                 int positionDelete = intent.getIntExtra(getString(R.string.position_account_delete), -1);
-                reloadTabAccount(positionDelete);
+                reloadDeleteTabAccount(positionDelete);
             }
             if (TextUtils.equals(intent.getAction(), RECEIVER_ADD_ACCOUNT)) {
                 Account account = intent.getParcelableExtra(getString(R.string.extra_account));
-                reloadTabAccount(account);
+                reloadAddTabAccount(account);
             }
             if (TextUtils.equals(intent.getAction(), RECEIVER_EDIT_ACCOUNT)) {
-                reloadTabAccount();
+                int positionEdit = intent.getIntExtra(getString(R.string.position_account_edit), -1);
+                reloadEditTabAccount(positionEdit);
             }
         }
 
-        private void reloadTabAccount(int positionDelete) {
+        private void reloadDeleteTabAccount(int positionDelete) {
             mFragmentDashboard.deleteFragmentAccount(positionDelete);
         }
 
-        private void reloadTabAccount(Account account) {
+        private void reloadAddTabAccount(Account account) {
             mFragmentDashboard.addFragmentAccount(account);
         }
 
-        private void reloadTabAccount() {
+        private void reloadEditTabAccount(final int positionEdit) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mFragmentDashboard.notifyDataSetChanged();
+                    mFragmentDashboard.notifyDataSetChanged(positionEdit);
                 }
             }, FragmentDashboard.DELAY);
         }
@@ -330,7 +331,10 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             }
             Account account = data.getParcelableExtra(getString(R.string.extra_account));
             AccountManager.getInstance().insertOrUpdate(account);
-            sendBroadcast(new Intent(RECEIVER_EDIT_ACCOUNT));
+            // Send broadcast;
+            Intent intent = new Intent(RECEIVER_EDIT_ACCOUNT);
+            intent.putExtra(getString(R.string.position_account_edit),positionAccount);
+            sendBroadcast(intent);
         }
     }
 
