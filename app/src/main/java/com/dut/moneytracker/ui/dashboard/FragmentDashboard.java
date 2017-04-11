@@ -1,5 +1,6 @@
 package com.dut.moneytracker.ui.dashboard;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
@@ -15,6 +16,7 @@ import com.dut.moneytracker.ui.exchanges.ActivityAddExchange_;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import io.realm.RealmResults;
@@ -96,6 +98,15 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     @Click(R.id.fab)
     void onClickAddExchange() {
         ActivityAddExchange_.intent(this).mAccount(mAccounts.get(targetAccount)).startForResult(RequestCode.ADD_NEW_EXCHANGE);
+    }
+
+    @OnActivityResult(RequestCode.ADD_NEW_EXCHANGE)
+    void onResultAddNewExchange(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        intent.setAction(getString(R.string.receiver_add_new_exchange));
+        getContext().sendBroadcast(intent);
     }
 
     public void deleteFragmentAccount(int position) {

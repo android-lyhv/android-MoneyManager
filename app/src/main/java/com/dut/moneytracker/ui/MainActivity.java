@@ -67,7 +67,7 @@ import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
 public class MainActivity extends AppCompatActivity implements MainListener {
     public static final String RECEIVER_DELETE_ACCOUNT = "RECEIVER_DELETE_ACCOUNT";
     public static final String RECEIVER_ADD_ACCOUNT = "RECEIVER_ADD_ACCOUNT";
-    public static final String RECEIVER_RELOAD_TAB_ACCOUNT = "RECEIVER_RELOAD_TAB_ACCOUNT";
+    public static final String RECEIVER_EDIT_ACCOUNT = "RECEIVER_EDIT_ACCOUNT";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
 
@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     private BroadcastReceiver mReceiverAddDeleteAccount = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            initSpinnerAccount();
             if (intent == null || !isFragmentDashboard() || mFragmentDashboard == null) {
                 return;
             }
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                 Account account = intent.getParcelableExtra(getString(R.string.extra_account));
                 reloadTabAccount(account);
             }
-            if (TextUtils.equals(intent.getAction(), RECEIVER_RELOAD_TAB_ACCOUNT)) {
+            if (TextUtils.equals(intent.getAction(), RECEIVER_EDIT_ACCOUNT)) {
                 reloadTabAccount();
             }
         }
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(RECEIVER_ADD_ACCOUNT);
         intentFilter.addAction(RECEIVER_DELETE_ACCOUNT);
-        intentFilter.addAction(RECEIVER_RELOAD_TAB_ACCOUNT);
+        intentFilter.addAction(RECEIVER_EDIT_ACCOUNT);
         registerReceiver(mReceiverAddDeleteAccount, intentFilter);
     }
 
@@ -209,11 +210,11 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         };
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-        initSpinnerFilter();
+        initSpinnerAccount();
     }
 
     // Change filer
-    private void initSpinnerFilter() {
+    private void initSpinnerAccount() {
         mSpinnerAccount = new SpinnerAccountManger(this, spinner);
         mSpinnerAccount.registerSelectedItem(new SpinnerAccountManger.ItemSelectedListener() {
             @Override
@@ -329,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             }
             Account account = data.getParcelableExtra(getString(R.string.extra_account));
             AccountManager.getInstance().insertOrUpdate(account);
-            sendBroadcast(new Intent(RECEIVER_RELOAD_TAB_ACCOUNT));
+            sendBroadcast(new Intent(RECEIVER_EDIT_ACCOUNT));
         }
     }
 

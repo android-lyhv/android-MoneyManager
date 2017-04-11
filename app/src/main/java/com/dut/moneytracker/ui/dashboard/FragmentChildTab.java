@@ -1,8 +1,13 @@
 package com.dut.moneytracker.ui.dashboard;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,6 +67,34 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     private LineChartMoney mLineChartMoney;
     private Handler mHandler;
     private int positionItem;
+    private boolean isViewCreated;
+    private BroadcastReceiver mReceiverAddNewExchange = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isViewCreated) {
+                onLoadChart();
+                onShowAmount();
+            }
+        }
+    };
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        isViewCreated = true;
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        isViewCreated = false;
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onStart() {
+        getContext().registerReceiver(mReceiverAddNewExchange, new IntentFilter(getString(R.string.receiver_add_new_exchange)));
+        super.onStart();
+    }
 
     @AfterViews
     void init() {
@@ -144,12 +177,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
         ((MainActivity) getActivity()).onLoadFragmentExchangesByAccount(mAccount.getId());
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mHandler.removeCallbacksAndMessages(null);
     }
 
     private void reloadChartExchange() {

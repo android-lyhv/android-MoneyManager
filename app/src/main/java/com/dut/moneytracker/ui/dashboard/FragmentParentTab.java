@@ -1,8 +1,13 @@
 package com.dut.moneytracker.ui.dashboard;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -74,12 +79,28 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     LineChart mLineChart;
     @ViewById(R.id.recyclerViewCardAccount)
     RecyclerView mRecyclerViewCardAccount;
+    private Handler mHandler;
     private CardAccountAdapter mCardAccountAdapter;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
     private LineChartMoney mLineChartMoney;
-    private Handler mHandler;
     private RealmResults<Exchange> mExchanges;
-    private RealmResults<Account> mAccounts;
+    private boolean isViewCreated;
+    private BroadcastReceiver mReceiverAddNewExchange = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isViewCreated) {
+                onLoadCardAccount();
+                onLoadChart();
+                onShowAmount();
+            }
+        }
+    };
+
+    @Override
+    public void onStart() {
+        getContext().registerReceiver(mReceiverAddNewExchange, new IntentFilter(getString(R.string.receiver_add_new_exchange)));
+        super.onStart();
+    }
 
     @AfterViews
     public void init() {
@@ -91,9 +112,8 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
         onLoadExchanges();
     }
 
-
     private void onLoadCardAccount() {
-        mAccounts = AccountManager.getInstance().loadAccountsAsync();
+        RealmResults<Account> mAccounts = AccountManager.getInstance().loadAccountsAsync();
         mCardAccountAdapter = new CardAccountAdapter(getContext(), mAccounts);
         mRecyclerViewCardAccount.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mRecyclerViewCardAccount.setNestedScrollingEnabled(false);
@@ -161,9 +181,15 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mHandler.removeCallbacksAndMessages(null);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        isViewCreated = true;
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        isViewCreated = false;
+        super.onDestroyView();
     }
 
     @Override

@@ -50,6 +50,7 @@ public class LineChartMoney {
             entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(size - i - 1).getAmount()));
             entries.add(entry);
         }
+
         mLineDataSet = new LineDataSet(entries, mContext.getString(R.string.label_linechart));
         mLineDataSet.setCircleColor(Color.parseColor(mColorChart));
         mLineDataSet.setColor(Color.parseColor(mColorChart));
@@ -77,7 +78,7 @@ public class LineChartMoney {
     private class MyXAxisValueFormatter implements IAxisValueFormatter {
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            return mValueLineCharts.get((int) value).getLabel();
+            return mValueLineCharts.get((int) (axis.getAxisMaximum() - (int) value)).getLabel();
         }
     }
 }

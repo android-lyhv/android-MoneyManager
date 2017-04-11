@@ -86,7 +86,7 @@ public class ActivityAccounts extends AppCompatActivity {
             }
             Account account = data.getParcelableExtra(getString(R.string.extra_account));
             AccountManager.getInstance().insertOrUpdate(account);
-            sendBroadcast(new Intent(MainActivity.RECEIVER_RELOAD_TAB_ACCOUNT));
+            sendBroadcast(new Intent(MainActivity.RECEIVER_EDIT_ACCOUNT));
         }
     }
 
