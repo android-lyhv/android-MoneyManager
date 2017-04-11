@@ -241,4 +241,5 @@
     <string name="loop_status_ok">Mở</string>
     <string name="loop_status_close">Đóng</string>
     <string name="receiver_add_delete_account">receiver_add_or_delete_account</string>
+    <string name="new_account">Tài khoản mới</string>
 </resources>

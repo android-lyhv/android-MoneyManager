@@ -27,6 +27,7 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -51,13 +52,13 @@ public class FragmentExchanges extends BaseFragment {
 
     @AfterViews
     void init() {
-        mExchanges = ExchangeManger.getInstance().getExchanges(mFilter);
         initRecyclerView();
         changeDateLabel();
     }
 
 
     private void initRecyclerView() {
+        mExchanges = ExchangeManger.getInstance().getExchanges(mFilter);
         mAdapter = new ExchangeRecodesAdapter(getContext(), mExchanges);
         recyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerExchange.setAdapter(mAdapter);
@@ -68,6 +69,12 @@ public class FragmentExchanges extends BaseFragment {
                 ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(RequestCode.DETAIL_EXCHANGE);
             }
         }));
+        mExchanges.addChangeListener(new RealmChangeListener<RealmResults<Exchange>>() {
+            @Override
+            public void onChange(RealmResults<Exchange> element) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 

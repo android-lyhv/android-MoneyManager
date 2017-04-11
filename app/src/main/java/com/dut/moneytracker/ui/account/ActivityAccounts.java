@@ -23,6 +23,7 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.ViewById;
 
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -51,7 +52,7 @@ public class ActivityAccounts extends AppCompatActivity {
     }
 
     private void onLoadAccounts() {
-        RealmResults<Account> accounts = AccountManager.getInstance().getAccounts();
+        RealmResults<Account> accounts = AccountManager.getInstance().loadAccountsAsync();
         mAdapter = new RecyclerAccountAdapter(this, accounts);
         mRecyclerViewAccounts.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewAccounts.setAdapter(mAdapter);
@@ -61,6 +62,12 @@ public class ActivityAccounts extends AppCompatActivity {
                 ActivityEditAccount_.intent(ActivityAccounts.this).mAccount((Account) mAdapter.getItem(position)).startForResult(RequestCode.EDIT_ACCOUNT);
             }
         }));
+        accounts.addChangeListener(new RealmChangeListener<RealmResults<Account>>() {
+            @Override
+            public void onChange(RealmResults<Account> element) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @OnActivityResult(RequestCode.EDIT_ACCOUNT)

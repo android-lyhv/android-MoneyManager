@@ -2,7 +2,6 @@ package com.dut.moneytracker.ui.charts.objects;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -44,7 +43,6 @@ public class LineChartMoney {
         mValueLineCharts.clear();
         mValueLineCharts.addAll(valueLineCharts);
         int size = mValueLineCharts.size();
-        Log.d(TAG, "updateNewValueLineChart: "+ mValueLineCharts.size());
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             Entry entry = new Entry();

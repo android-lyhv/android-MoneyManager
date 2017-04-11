@@ -14,7 +14,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,7 +63,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     @AfterViews
     void init() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setTitle(getString(R.string.new_account));
         initToolbar();
         initBaseAccount();
         initDialogPickColor();
@@ -74,7 +73,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
         mAccount = new Account();
         mAccount.setId(UUID.randomUUID().toString());
         mAccount.setColorHex(getString(R.string.color_account_default));
-        mAccount.setCurrencyCode("VND");
         mAccount.setName("");
         onLoadData();
     }

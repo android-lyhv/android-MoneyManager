@@ -76,12 +76,8 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
                 return;
             }
             if (TextUtils.equals(intent.getAction(), FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT)) {
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        onReloadData();
-                    }
-                }, FragmentDashboard.DELAY);
+                onLoadChart();
+                onShowAmount();
             }
         }
     };
@@ -108,6 +104,18 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
             @Override
             public void run() {
                 reloadChartExchange();
+            }
+        }, FragmentDashboard.DELAY);
+    }
+
+    @Override
+    public void onShowAmount() {
+        mTvAmount.setTextColor(Color.parseColor(mAccount.getColorHex()));
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), mAccount.getCurrencyCode());
+                mTvAmount.setText(money);
             }
         }, FragmentDashboard.DELAY);
     }
@@ -157,14 +165,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         getContext().sendBroadcast(new Intent(FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT));
     }
 
-    @Override
-    public void onShowAmount() {
-        mTvAmount.setTextColor(Color.parseColor(mAccount.getColorHex()));
-        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), mAccount.getCurrencyCode());
-        mTvAmount.setText(money);
-    }
-
-
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
         ((MainActivity) getActivity()).onLoadFragmentExchangesByAccount(mAccount.getId());
@@ -175,11 +175,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
         getContext().unregisterReceiver(mBroadcastReceiver);
-    }
-
-    public void onReloadData() {
-        onLoadChart();
-        onShowAmount();
     }
 
     private void reloadChartExchange() {

@@ -34,7 +34,9 @@ import com.dut.moneytracker.ui.interfaces.DetailExchangeListener;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.view.DayPicker;
+import com.dut.moneytracker.view.DayPicker_;
 import com.dut.moneytracker.view.TimePicker;
+import com.dut.moneytracker.view.TimePicker_;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -93,6 +95,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     ImageView imgEditAccount;
     @Extra
     Exchange mExchange;
+    private TimePicker mTimePicker;
+    private DayPicker mDayPicker;
     //GoogleMap
     Place mPlace;
     GoogleMap mGoogleMap;
@@ -101,6 +105,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @AfterViews
     void init() {
+        mTimePicker = TimePicker_.builder().build();
+        mDayPicker = DayPicker_.builder().build();
         setSupportActionBar(toolbar);
         setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
@@ -192,21 +198,19 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlDate)
     void onClickDate() {
-        DayPicker dayPicker = new DayPicker();
-        dayPicker.registerPicker(new DayPicker.DatePickerListener() {
+        mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultDate(Date date) {
                 tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
                 mExchange.setCreated(date);
             }
         });
-        dayPicker.show(getSupportFragmentManager(), null);
+        mDayPicker.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlTime)
     void onClickTime() {
-        TimePicker timePicker = new TimePicker();
-        timePicker.registerPicker(new TimePicker.TimePickerListener() {
+        mTimePicker.registerPicker(new TimePicker.TimePickerListener() {
             @Override
             public void onResultHour(int hour) {
                 Date date = mExchange.getCreated();
@@ -226,7 +230,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
                 tvTime.setText(time);
             }
         });
-        timePicker.show(getSupportFragmentManager(), null);
+        mTimePicker.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAccount)

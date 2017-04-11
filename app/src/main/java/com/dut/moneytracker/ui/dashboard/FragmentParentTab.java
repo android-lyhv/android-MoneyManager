@@ -81,7 +81,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     LineChart mLineChart;
     @ViewById(R.id.recyclerViewCardAccount)
     RecyclerView mRecyclerViewCardAccount;
-    CardAccountAdapter mCardAccountAdapter;
+    private CardAccountAdapter mCardAccountAdapter;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
     private LineChartMoney mLineChartMoney;
     private Handler mHandler;
@@ -94,12 +94,9 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
                 return;
             }
             if (TextUtils.equals(intent.getAction(), FragmentDashboard.RECEIVER_RELOAD_TAB_ACCOUNT)) {
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        onReloadData();
-                    }
-                }, FragmentDashboard.DELAY);
+                onLoadChart();
+                onShowAmount();
+                mAccounts = AccountManager.getInstance().loadAccountsAsync();
             }
         }
     };
@@ -145,6 +142,21 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     @Override
+    public void onShowAmount() {
+        mTvAmount.setTextColor(Color.parseColor(BASE_COLOR));
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                long old = System.currentTimeMillis();
+                String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
+                        CurrencyUtils.DEFAULT_CURRENCY_CODE);
+                Log.d(TAG, "loadAmount: " + String.valueOf(System.currentTimeMillis() - old));
+                mTvAmount.setText(money);
+            }
+        }, FragmentDashboard.DELAY);
+    }
+
+    @Override
     public void onLoadChart() {
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -184,16 +196,6 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     @Override
-    public void onShowAmount() {
-        long old = System.currentTimeMillis();
-        mTvAmount.setTextColor(Color.parseColor(BASE_COLOR));
-        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
-                CurrencyUtils.DEFAULT_CURRENCY_CODE);
-        Log.d(TAG, "loadAmount: " + String.valueOf(System.currentTimeMillis() - old));
-        mTvAmount.setText(money);
-    }
-
-    @Override
     public void onShowDetailExchange(Exchange exchange) {
         ActivityDetailExchange_.intent(FragmentParentTab.this).mExchange(exchange).startForResult(RequestCode.DETAIL_EXCHANGE);
     }
@@ -217,18 +219,6 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
         ((MainActivity) getActivity()).onLoadFragmentExchanges();
-    }
-
-    public void onReloadData() {
-        onLoadChart();
-        onShowAmount();
-        reloadCardAccount();
-    }
-
-    private void reloadCardAccount() {
-        RealmResults<Account> mAccounts = AccountManager.getInstance().getAccounts();
-        mCardAccountAdapter.setAccounts(mAccounts);
-        mCardAccountAdapter.notifyDataSetChanged();
     }
 
     private void reloadChartExchange() {
