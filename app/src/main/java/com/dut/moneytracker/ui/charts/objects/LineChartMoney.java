@@ -47,7 +47,7 @@ public class LineChartMoney {
         for (int i = 0; i < size; i++) {
             Entry entry = new Entry();
             entry.setX(i);
-            entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(i).getAmount()));
+            entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(size - i - 1).getAmount()));
             entries.add(entry);
         }
         mLineDataSet = new LineDataSet(entries, mContext.getString(R.string.label_linechart));
