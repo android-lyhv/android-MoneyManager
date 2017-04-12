@@ -67,7 +67,7 @@ public class FragmentChartCategoryPager extends BaseFragment implements PagerFra
     }
 
     private void initPager() {
-        viewType = mFilter.getViewType();
+        viewType = mFilter.getTypeFilter();
         mPagerAdapter = new ChartCategoryPagerAdapter(getChildFragmentManager());
         mPagerAdapter.init(viewPager, mFilter);
     }
@@ -89,8 +89,8 @@ public class FragmentChartCategoryPager extends BaseFragment implements PagerFra
     }
 
     public void onReloadFragmentPager() {
-        if (viewType != mFilter.getViewType()) {
-            viewType = mFilter.getViewType();
+        if (viewType != mFilter.getTypeFilter()) {
+            viewType = mFilter.getTypeFilter();
             mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();

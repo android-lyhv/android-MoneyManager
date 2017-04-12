@@ -12,11 +12,14 @@ import com.dut.moneytracker.adapter.exchanges.ExchangePagerAdapter;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.ui.base.BaseFragment;
+import com.dut.moneytracker.utils.DateTimeUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.Date;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -29,7 +32,7 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     ViewPager viewPager;
     @FragmentArg
     Filter mFilter;
-    private int viewType;
+    private int lastFilterType;
     private ExchangePagerAdapter mPagerAdapter;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -53,8 +56,8 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         getContext().unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -70,7 +73,7 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     }
 
     private void initPager() {
-        viewType = mFilter.getViewType();
+        lastFilterType = mFilter.getTypeFilter();
         mPagerAdapter = new ExchangePagerAdapter(getChildFragmentManager());
         mPagerAdapter.init(viewPager, mFilter);
     }
@@ -86,8 +89,8 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
     }
 
     public void onReloadFragmentPager() {
-        if (viewType != mFilter.getViewType()) {
-            viewType = mFilter.getViewType();
+        if (lastFilterType != mFilter.getTypeFilter() || DateTimeUtils.getInstance().isSameDate(mFilter.getDateFilter(), new Date())) {
+            lastFilterType = mFilter.getTypeFilter();
             mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();

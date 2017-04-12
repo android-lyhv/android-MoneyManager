@@ -6,7 +6,9 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.FilterType;
+import com.dut.moneytracker.objects.Filter;
 
 import org.androidannotations.annotations.EFragment;
 
@@ -16,42 +18,55 @@ import org.androidannotations.annotations.EFragment;
  */
 @EFragment
 public class DialogPickFilter extends DialogFragment {
-    private String[] filter = new String[]{"Tất cả", "Ngày", "Tháng", "Năm", "Khoảng thời gian"};
+    private String[] mTitle = new String[]{"Tất cả", "Ngày", "Tháng", "Năm", "Khoảng thời gian"};
     private int[] id = new int[]{FilterType.ALL, FilterType.DAY, FilterType.MONTH, FilterType.YEAR, FilterType.CUSTOM};
-    private int mIdFilter = 0;
-    private FilterListener filterListener;
+    private Filter mFilter;
+    private FilterListener mFilterListener;
 
     public interface FilterListener {
-        void onResult(int idFilter);
+        void onResult(Filter filter);
     }
 
-    public void registerFilter(int idFilter, FilterListener filterListener) {
-        mIdFilter = idFilter;
-        this.filterListener = filterListener;
+    public void registerFilter(Filter filter, FilterListener filterListener) {
+        mFilter = filter;
+        mFilterListener = filterListener;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Chọn hiển thị!")
-                .setSingleChoiceItems(filter, mIdFilter, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.dialog_filter_title)
+                .setSingleChoiceItems(mTitle, mFilter.getTypeFilter(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mIdFilter = id[which];
-                        filterListener.onResult(mIdFilter);
+                        mFilter.setTypeFilter(id[which]);
+                        mFilterListener.onResult(mFilter);
                         dismiss();
                     }
-                }).setPositiveButton("Bây giờ", new DialogInterface.OnClickListener() {
+                }).setPositiveButton(R.string.dialog_filter_now_time, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                filterListener.onResult(mIdFilter);
+                mFilterListener.onResult(mFilter);
             }
-        }).setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.dialog_filter_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dismiss();
             }
         });
-        return builder.create();
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                if (mFilter.getTypeFilter() == FilterType.CUSTOM) {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setAlpha(0.5f);
+                } else {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setAlpha(1f);
+                }
+            }
+        });
+        return alertDialog;
     }
 }

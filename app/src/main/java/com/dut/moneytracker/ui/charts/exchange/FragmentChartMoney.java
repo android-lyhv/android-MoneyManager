@@ -92,7 +92,7 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
 
     public void changeDateLabel() {
         String label = FilterManager.getInstance().getLabel(mFilter, null);
-        if (mFilter.getViewType() == FilterType.CUSTOM || mFilter.getViewType() == FilterType.ALL) {
+        if (mFilter.getTypeFilter() == FilterType.CUSTOM || mFilter.getTypeFilter() == FilterType.ALL) {
             llNext.setVisibility(View.GONE);
             llPrevious.setVisibility(View.GONE);
         } else {

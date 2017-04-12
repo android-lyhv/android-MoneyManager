@@ -247,4 +247,7 @@
     <string name="position_account_delete">position_account_delete</string>
     <string name="position_account_edit">position_account_edit</string>
     <string name="receiver_add_new_exchange">ADD_NEW_EXCHANGE</string>
+    <string name="dialog_filter_title">Chọn hiển thị!</string>
+    <string name="dialog_filter_now_time">Bây giờ</string>
+    <string name="dialog_filter_cancel">Hủy</string>
 </resources>

@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     LinearLayout llDefaultExchange;
     @ViewById(R.id.imgSettingAccount)
     ImageView imgSettingAccount;
-    private DialogPickFilter mDialogPickFilter;
+    private DialogPickFilter mDialogPickFilterTime;
     private DialogCustomFilter mDialogCustomFilter;
     //model
     FragmentManager mFragmentManager = getSupportFragmentManager();
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @AfterViews
     void init() {
-        mDialogPickFilter = DialogPickFilter_.builder().build();
+        mDialogPickFilterTime = DialogPickFilter_.builder().build();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
         initView();
         onLoadProfile();
@@ -267,18 +267,17 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Click(R.id.imgDateFilter)
     void onClickFilter() {
-        mDialogPickFilter.show(getFragmentManager(), TAG);
-        mDialogPickFilter.registerFilter(mFilter.getViewType(), new DialogPickFilter.FilterListener() {
+        mDialogPickFilterTime.show(getFragmentManager(), TAG);
+        mDialogPickFilterTime.registerFilter(mFilter, new DialogPickFilter.FilterListener() {
             @Override
-            public void onResult(int filterType) {
-                if (filterType == FilterType.CUSTOM) {
+            public void onResult(Filter filter) {
+                mFilter = filter;
+                if (mFilter.getTypeFilter() == FilterType.CUSTOM) {
                     onChangeFilterCustom();
                 } else {
-                    mFilter.setViewType(filterType);
                     mFilter.setDateFilter(new Date());
                     reloadFragmentFilter();
                 }
-
             }
         });
     }
@@ -333,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             AccountManager.getInstance().insertOrUpdate(account);
             // Send broadcast;
             Intent intent = new Intent(RECEIVER_EDIT_ACCOUNT);
-            intent.putExtra(getString(R.string.position_account_edit),positionAccount);
+            intent.putExtra(getString(R.string.position_account_edit), positionAccount);
             sendBroadcast(intent);
         }
     }
@@ -473,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             public void onResultDate(Date fromDate, Date toDate) {
                 mFilter.setFormDate(fromDate);
                 mFilter.setToDate(toDate);
-                mFilter.setViewType(FilterType.CUSTOM);
+                mFilter.setTypeFilter(FilterType.CUSTOM);
                 reloadFragmentFilter();
             }
         });
