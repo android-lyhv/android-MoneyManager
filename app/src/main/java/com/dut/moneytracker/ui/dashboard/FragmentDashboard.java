@@ -76,7 +76,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
+      //  tab.getCustomView().setAlpha(0.5f);
     }
 
     @Override

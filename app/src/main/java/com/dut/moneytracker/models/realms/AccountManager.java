@@ -1,6 +1,7 @@
 package com.dut.moneytracker.models.realms;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.interfaces.AccountListener;
@@ -44,13 +45,13 @@ public class AccountManager extends RealmHelper implements AccountListener {
     @Override
     public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).findAllSorted("created", Sort.DESCENDING);
+        RealmResults<Account> realmResults = realm.where(Account.class).findAll();
         realm.commitTransaction();
         return realmResults;
     }
 
     public RealmResults<Account> loadAccountsAsync() {
-        return realm.where(Account.class).findAllSortedAsync("created", Sort.DESCENDING);
+        return realm.where(Account.class).findAllAsync();
     }
 
     @Override
@@ -170,5 +171,17 @@ public class AccountManager extends RealmHelper implements AccountListener {
             account.deleteFromRealm();
         }
         realm.commitTransaction();
+    }
+
+    public boolean isNameAccountAvailable(String newName, String nowIdAccount) {
+        realm.beginTransaction();
+        RealmResults<Account> accounts = realm.where(Account.class).notEqualTo("id", nowIdAccount).findAll();
+        realm.commitTransaction();
+        for (Account account : accounts) {
+            if (TextUtils.equals(account.getName(), newName)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -27,6 +27,7 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
 import org.androidannotations.annotations.AfterViews;
@@ -100,6 +101,10 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
         }
         if (TextUtils.isEmpty(mAccount.getInitAmount())) {
             Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!AccountManager.getInstance().isNameAccountAvailable(accountName, null)) {
+            Toast.makeText(this, "Tên tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
             return;
         }
         mAccount.setName(accountName);
