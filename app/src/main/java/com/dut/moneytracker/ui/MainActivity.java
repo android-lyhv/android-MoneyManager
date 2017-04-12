@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mNavigationView.setCheckedItem(0);
                 mFragmentTag = FragmentTag.PROFILE;
                 onCloseNavigation();
             }
