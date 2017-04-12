@@ -30,6 +30,7 @@ import io.realm.RealmResults;
 public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener {
     public static final long DELAY = 0L;
     public static final int LIMIT_ITEM = 5;
+    public static final int MAX_DAY = 30;
     @ViewById(R.id.tabLayout)
     TabLayout mTabLayout;
     @ViewById(R.id.viewpager)

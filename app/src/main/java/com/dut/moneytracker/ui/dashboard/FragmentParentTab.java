@@ -49,7 +49,6 @@ import io.realm.RealmResults;
  */
 @EFragment(R.layout.fragment_tab_account)
 public class FragmentParentTab extends BaseFragment implements TabAccountListener, RealmChangeListener<RealmResults<Account>> {
-    private static final int MAX_DAY = 30;
 
     public interface CardAccountListener {
         void onClickCardAccount(int position);
@@ -136,10 +135,15 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onLoadChart() {
-        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(MAX_DAY);
         mLineChartMoney.setColorChart(getString(R.string.color_account_default));
-        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
-        mLineChartMoney.notifyDataSetChanged();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(FragmentDashboard.MAX_DAY);
+                mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+                mLineChartMoney.notifyDataSetChanged();
+            }
+        }, FragmentDashboard.DELAY);
     }
 
     @Override

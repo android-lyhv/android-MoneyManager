@@ -92,10 +92,15 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadChart() {
-        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
         mLineChartMoney.setColorChart(mAccount.getColorHex());
-        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
-        mLineChartMoney.notifyDataSetChanged();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), FragmentDashboard.MAX_DAY);
+                mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+                mLineChartMoney.notifyDataSetChanged();
+            }
+        }, FragmentDashboard.DELAY);
     }
 
     @Override
