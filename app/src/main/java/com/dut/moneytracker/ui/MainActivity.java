@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     public static final String RECEIVER_EDIT_ACCOUNT = "RECEIVER_EDIT_ACCOUNT";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
+    private static final String CHART = "CHART";
+    private static final String EXCHAGE_RECORDS = "EXCHANGE";
 
     public enum FragmentTag {
         DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, ACCOUNT
@@ -260,11 +262,6 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         }
     }
 
-    public boolean isFragmentDashboard() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
-        return null != fragment;
-    }
-
     @Click(R.id.imgDateFilter)
     void onClickFilter() {
         mDialogPickFilterTime.show(getFragmentManager(), TAG);
@@ -379,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         mFilter = FilterManager.getInstance().getFilterDefault();
         mSpinnerAccount.setSelectItem(null);
         mFragmentChartExchangePager = FragmentChartExchangePager_.builder().mFilter(mFilter).mChartType(typeChart).build();
-        onReplaceFragment(mFragmentChartExchangePager, null);
+        onReplaceFragment(mFragmentChartExchangePager, CHART);
     }
 
     /**
@@ -407,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     private void onLoadFragmentExchange(Filter filter) {
         mFragmentExchangesPager = FragmentExchangesPager_.builder().mFilter(filter).build();
-        onReplaceFragment(mFragmentExchangesPager, null);
+        onReplaceFragment(mFragmentExchangesPager, EXCHAGE_RECORDS);
     }
 
     /**
@@ -475,14 +472,14 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                 mFilter.setTypeFilter(FilterType.CUSTOM);
                 reloadFragmentFilter();
             }
-        });
+        }, mFilter.getFormDate(), mFilter.getToDate());
     }
 
     private void reloadFragmentFilter() {
-        if (mFragmentChartExchangePager != null) {
+        if (isFragmentChart()) {
             mFragmentChartExchangePager.onReloadFragmentPager();
         }
-        if (mFragmentExchangesPager != null) {
+        if (isFragmentExchangeRecord()) {
             mFragmentExchangesPager.onReloadFragmentPager();
         }
     }
@@ -494,5 +491,20 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             mAccount.removeAllChangeListeners();
         }
         mHandler.removeCallbacksAndMessages(null);
+    }
+
+    public boolean isFragmentDashboard() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
+        return null != fragment;
+    }
+
+    public boolean isFragmentChart() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(CHART);
+        return null != fragment;
+    }
+
+    public boolean isFragmentExchangeRecord() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(EXCHAGE_RECORDS);
+        return null != fragment;
     }
 }

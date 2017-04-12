@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.ViewGroup;
 
 import com.dut.moneytracker.objects.Filter;
 
@@ -17,8 +15,8 @@ import com.dut.moneytracker.objects.Filter;
 public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
     private final int MAX_PAGE = 100000;
     private final int CENTER = MAX_PAGE / 2;
-    private ViewPager mViewPager;
     private int positionSelected;
+    private ViewPager mViewPager;
     private Filter mFilter;
 
     public BasePagerLoopAdapter(FragmentManager fm) {
@@ -80,14 +78,5 @@ public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements V
 
     public Filter getFilter() {
         return mFilter;
-    }
-
-    @Override
-    public void finishUpdate(ViewGroup container) {
-        try {
-            super.finishUpdate(container);
-        } catch (NullPointerException nullPointerException) {
-            Log.d("finishUpdate: ", nullPointerException.getLocalizedMessage());
-        }
     }
 }

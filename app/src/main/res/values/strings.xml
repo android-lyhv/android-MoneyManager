@@ -67,16 +67,16 @@
     <string name="input_money">Nhap so tien!</string>
     <string name="input_account">Chon tai khoan</string>
     <string name="input_category">Chon the loai</string>
-    <string name="loop_week">"Tuần"</string>
-    <string name="loop_day">"Ngày"</string>
-    <string name="loop_month">"Tháng"</string>
-    <string name="loop_year">"Năm"</string>
+    <string name="loop_week">"Hàng Tuần"</string>
+    <string name="loop_day">"Hàng Ngày"</string>
+    <string name="loop_month">"Hàng Tháng"</string>
+    <string name="loop_year">"Hàng Năm"</string>
     <string name="exchange_all">Tất cả</string>
     <string name="extra_loop_exchange">extra_loop_exchange</string>
     <string name="delete_exchange">Xoa giao dich nay</string>
     <string name="id_exchange_looper">extra_id_looper</string>
     <string name="unknown">Chưa biết</string>
-    <integer name="zoom_map">12</integer>
+    <integer name="zoom_map">10</integer>
     <string name="extra_edit_exchange">extra_edit_exchange</string>
     <!--GROUP-->
     <string-array name="group_name">

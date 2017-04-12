@@ -65,6 +65,9 @@ public class DateTimeUtils {
     }
 
     public String getStringDateUs(Date date) {
+        if (date == null) {
+            return "";
+        }
         DateFormat formatFullDate = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         return formatFullDate.format(date);
     }
@@ -97,6 +100,13 @@ public class DateTimeUtils {
             dates.add(calendar.getTime());
         }
         return dates;
+    }
+
+    public Date getNextDate(Date currentDate, int step) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_MONTH, step);
+        return calendar.getTime();
     }
 
     /**
