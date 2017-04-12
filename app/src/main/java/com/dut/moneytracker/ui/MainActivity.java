@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    // Navigation
     @ViewById(R.id.nav_view)
     NavigationView mNavigationView;
     private CircleImageView mImgUserLogo;
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         });
     }
 
-    void initView() {
+    private void initView() {
         mNavigationView.setNavigationItemSelectedListener(this);
         setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -225,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         initSpinnerAccount();
     }
 
-    // Change filer
+    // Change filter account
     private void initSpinnerAccount() {
         mSpinnerAccount = new SpinnerAccountManger(this, spinner);
         mSpinnerAccount.registerSelectedItem(new SpinnerAccountManger.ItemSelectedListener() {
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
             public void onResult(Filter filter) {
                 mFilter = filter;
                 if (mFilter.getTypeFilter() == FilterType.CUSTOM) {
-                    onChangeFilterCustom();
+                    onShowDialogFilterCustom();
                 } else {
                     mFilter.setDateFilter(new Date());
                     reloadFragmentFilter();
@@ -463,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         imgSettingAccount.setVisibility(View.GONE);
     }
 
-    public void onChangeFilterCustom() {
+    public void onShowDialogFilterCustom() {
         mDialogCustomFilter.show(mFragmentManager, TAG);
         mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
             @Override

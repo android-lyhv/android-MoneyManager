@@ -35,9 +35,9 @@ public class DialogCustomFilter extends DialogFragment {
     @AfterViews
     void init() {
         if (mFromDate == null || mToDate == null) {
-            mToDate = DateTimeUtils.getInstance().getStartTimeOfDay(new Date());
+            mToDate = DateTimeUtils.getInstance().getEndTimeOfDay(new Date());
             Date nextDate = DateTimeUtils.getInstance().getNextDate(mToDate, -1);
-            mFromDate = DateTimeUtils.getInstance().getEndTimeOfDay(nextDate);
+            mFromDate = DateTimeUtils.getInstance().getStartTimeOfDay(nextDate);
         }
         mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(mFromDate));
         mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(mToDate));
