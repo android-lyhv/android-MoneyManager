@@ -24,7 +24,7 @@
                     android:title="Giao dịch mặc định" />
                 <item
                     android:id="@+id/nav_debit"
-                    android:icon="@drawable/ic_debit"
+                    android:icon="@drawable/ic_nav_debit"
                     android:title="Sổ nợ" />
                 <item
                     android:id="@+id/nav_location"
