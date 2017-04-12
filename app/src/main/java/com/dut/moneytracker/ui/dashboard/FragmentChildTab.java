@@ -78,32 +78,33 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         }
     };
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        isViewCreated = true;
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onDestroyView() {
-        isViewCreated = false;
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onResume() {
-        getContext().registerReceiver(mReceiverAddNewExchange, new IntentFilter(getString(R.string.receiver_add_new_exchange)));
-        super.onResume();
-    }
-
     @AfterViews
     void init() {
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        isViewCreated = true;
         mHandler = new Handler();
         mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         mCardView.setVisibility(View.GONE);
         onShowAmount();
         onLoadChart();
         onLoadExchanges();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isViewCreated = false;
+    }
+
+    @Override
+    public void onResume() {
+        getContext().registerReceiver(mReceiverAddNewExchange, new IntentFilter(getString(R.string.receiver_add_new_exchange)));
+        super.onResume();
     }
 
     @Override

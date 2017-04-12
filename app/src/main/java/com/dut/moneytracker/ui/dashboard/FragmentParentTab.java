@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ import java.util.List;
 
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -99,6 +102,15 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @AfterViews
     public void init() {
+        Log.d(TAG, "init: aaaaaaaa");
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: aaaaaaaa");
+        isViewCreated = true;
         mHandler = new Handler();
         mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         onLoadCardAccount();
@@ -176,15 +188,9 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        isViewCreated = true;
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onDestroyView() {
-        isViewCreated = false;
         super.onDestroyView();
+        isViewCreated = false;
     }
 
     @Override

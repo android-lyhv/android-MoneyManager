@@ -1,6 +1,8 @@
 package com.dut.moneytracker.ui.dashboard;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
@@ -37,9 +39,20 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     private BaseViewPagerAdapter mTabAdapter;
     private int targetAccount;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAccounts = AccountManager.getInstance().getAccounts();
+    }
+
     @AfterViews
     void init() {
-        mAccounts = AccountManager.getInstance().getAccounts();
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initViewpager();
         initLoadListFragmentAccounts();
     }
@@ -76,7 +89,6 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-      //  tab.getCustomView().setAlpha(0.5f);
     }
 
     @Override
