@@ -198,7 +198,7 @@ public class ExchangeManger extends RealmHelper {
     }
 
     public RealmResults<Exchange> getExchangesFilterByAccount(Filter filter) {
-        int filterType = filter.getViewType();
+        int filterType = filter.getTypeFilter();
         String accountID = filter.getAccountId();
         Date date = filter.getDateFilter();
         switch (filterType) {
@@ -217,7 +217,7 @@ public class ExchangeManger extends RealmHelper {
     }
 
     public RealmResults<Exchange> getExchangesFilter(Filter filter) {
-        int filterType = filter.getViewType();
+        int filterType = filter.getTypeFilter();
         Date date = filter.getDateFilter();
         switch (filterType) {
             case FilterType.ALL:

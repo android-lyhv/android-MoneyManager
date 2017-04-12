@@ -29,21 +29,28 @@ public class DialogCustomFilter extends DialogFragment {
     TextView mTvFromDate;
     FilterListener mFilterListener;
     private DayPicker mDayPicker;
-    private Date fromDate = new Date();
-    private Date toDate = new Date();
+    private Date mFromDate = new Date();
+    private Date mToDate = new Date();
 
     @AfterViews
     void init() {
-        mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(new Date()));
-        mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(new Date()));
+        if (mFromDate == null || mToDate == null) {
+            mToDate = DateTimeUtils.getInstance().getStartTimeOfDay(new Date());
+            Date nextDate = DateTimeUtils.getInstance().getNextDate(mToDate, -1);
+            mFromDate = DateTimeUtils.getInstance().getEndTimeOfDay(nextDate);
+        }
+        mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(mFromDate));
+        mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(mToDate));
     }
 
     public interface FilterListener {
         void onResultDate(Date fromDate, Date toDate);
     }
 
-    public void registerFilterListener(FilterListener mFilterListener) {
-        this.mFilterListener = mFilterListener;
+    public void registerFilterListener(FilterListener filterListener, Date lastFromDate, Date lastToDate) {
+        mFilterListener = filterListener;
+        mFromDate = lastFromDate;
+        mToDate = lastToDate;
     }
 
     @Click(R.id.tvFromDate)
@@ -53,8 +60,8 @@ public class DialogCustomFilter extends DialogFragment {
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultDate(Date date) {
-                fromDate = date;
-                mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(fromDate));
+                mFromDate = DateTimeUtils.getInstance().getStartTimeOfDay(date);
+                mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(mFromDate));
             }
         });
 
@@ -67,19 +74,19 @@ public class DialogCustomFilter extends DialogFragment {
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultDate(Date date) {
-                toDate = date;
-                mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(toDate));
+                mToDate = DateTimeUtils.getInstance().getEndTimeOfDay(date);
+                mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(mToDate));
             }
         });
     }
 
     @Click(R.id.tvConfirm)
     void onClickConfirm() {
-        if (!DateTimeUtils.getInstance().isValidateFromDateToDate(fromDate, toDate)) {
+        if (!DateTimeUtils.getInstance().isValidateFromDateToDate(mFromDate, mToDate)) {
             Toast.makeText(getContext(), "Date not validate!", Toast.LENGTH_SHORT).show();
             return;
         }
-        mFilterListener.onResultDate(fromDate, toDate);
+        mFilterListener.onResultDate(mFromDate, mToDate);
         dismiss();
     }
 

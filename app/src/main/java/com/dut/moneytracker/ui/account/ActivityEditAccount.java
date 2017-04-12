@@ -107,6 +107,10 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
             Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (!AccountManager.getInstance().isNameAccountAvailable(accountName, mAccount.getId())) {
+            Toast.makeText(this, "Tên tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mAccount.setName(accountName);
         // Sending
         Intent intent = new Intent();

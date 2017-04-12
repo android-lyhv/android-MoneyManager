@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -48,7 +47,7 @@ import java.util.Date;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 17/03/2017.
  */
-@EActivity(R.layout.activity_detail_add_exchange)
+@EActivity(R.layout.activity_add_more_exchange)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = ActivityAddMoreExchange.class.getSimpleName();
@@ -74,7 +73,6 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
 
     @AfterViews
     void init() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initData();
         initView();
         initMap();

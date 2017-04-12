@@ -65,6 +65,9 @@ public class DateTimeUtils {
     }
 
     public String getStringDateUs(Date date) {
+        if (date == null) {
+            return "";
+        }
         DateFormat formatFullDate = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         return formatFullDate.format(date);
     }
@@ -97,6 +100,13 @@ public class DateTimeUtils {
             dates.add(calendar.getTime());
         }
         return dates;
+    }
+
+    public Date getNextDate(Date currentDate, int step) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_MONTH, step);
+        return calendar.getTime();
     }
 
     /**
@@ -135,7 +145,7 @@ public class DateTimeUtils {
     }
 
     public boolean isValidateFromDateToDate(Date fromDate, Date toDate) {
-        return !isSameDate(fromDate, toDate) && fromDate.getTime() < toDate.getTime();
+        return !isSameDate(fromDate, toDate) && fromDate.before(toDate);
     }
 
     public Date setHours(Date date, int hours) {
@@ -217,5 +227,27 @@ public class DateTimeUtils {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+    public Date getEndTimeOfDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Log.d(TAG, "getEndTimeOfDay: " + calendar.getTime());
+        return calendar.getTime();
+    }
+
+    public Date getStartTimeOfDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Log.d(TAG, "getEndTimeOfDay: " + calendar.getTime());
+        return calendar.getTime();
     }
 }

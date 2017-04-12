@@ -13,11 +13,14 @@ import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.ui.base.BaseFragment;
 import com.dut.moneytracker.ui.exchanges.PagerFragmentListener;
+import com.dut.moneytracker.utils.DateTimeUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.Date;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -54,6 +57,7 @@ public class FragmentChartExchangePager extends BaseFragment implements PagerFra
         super.onStart();
         ((MainActivity_) getActivity()).loadMenuItemFragmentChart();
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -66,7 +70,7 @@ public class FragmentChartExchangePager extends BaseFragment implements PagerFra
     }
 
     private void initPager() {
-        viewType = mFilter.getViewType();
+        viewType = mFilter.getTypeFilter();
         mPagerAdapter = new ChartExchangePagerAdapter(getChildFragmentManager());
         mPagerAdapter.init(viewPager, mFilter);
         mPagerAdapter.setTypePieChart(mChartType);
@@ -89,8 +93,8 @@ public class FragmentChartExchangePager extends BaseFragment implements PagerFra
     }
 
     public void onReloadFragmentPager() {
-        if (viewType != mFilter.getViewType()) {
-            viewType = mFilter.getViewType();
+        if (viewType != mFilter.getTypeFilter() || DateTimeUtils.getInstance().isSameDate(mFilter.getDateFilter(), new Date())) {
+            viewType = mFilter.getTypeFilter();
             mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();

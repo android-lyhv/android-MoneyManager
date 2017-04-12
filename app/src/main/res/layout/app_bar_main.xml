@@ -35,7 +35,7 @@
                 android:layout_toEndOf="@id/spinner"
                 android:clickable="true"
                 android:padding="15dp"
-                android:src="@drawable/ic_date" />
+                android:src="@drawable/ic_calandar" />
 
             <ImageView
                 android:id="@+id/imgSettingAccount"

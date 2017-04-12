@@ -15,9 +15,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Filter implements Parcelable {
+    private int typeFilter;
     private Date dateFilter;
     private String accountId;
-    private int viewType;
     private Date formDate;
     private Date toDate;
     private boolean isRequestByAccount;
@@ -34,7 +34,7 @@ public class Filter implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.dateFilter != null ? this.dateFilter.getTime() : -1);
         dest.writeString(this.accountId);
-        dest.writeInt(this.viewType);
+        dest.writeInt(this.typeFilter);
         dest.writeLong(this.formDate != null ? this.formDate.getTime() : -1);
         dest.writeLong(this.toDate != null ? this.toDate.getTime() : -1);
         dest.writeByte(this.isRequestByAccount ? (byte) 1 : (byte) 0);
@@ -44,7 +44,7 @@ public class Filter implements Parcelable {
         long tmpDateFilter = in.readLong();
         this.dateFilter = tmpDateFilter == -1 ? null : new Date(tmpDateFilter);
         this.accountId = in.readString();
-        this.viewType = in.readInt();
+        this.typeFilter = in.readInt();
         long tmpStartDate = in.readLong();
         this.formDate = tmpStartDate == -1 ? null : new Date(tmpStartDate);
         long tmpEndDate = in.readLong();
