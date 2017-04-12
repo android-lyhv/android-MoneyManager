@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,10 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -64,43 +65,34 @@ import java.util.Date;
 import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
 
 @EActivity(R.layout.activity_main)
-public class MainActivity extends AppCompatActivity implements MainListener {
+public class MainActivity extends AppCompatActivity implements MainListener, NavigationView.OnNavigationItemSelectedListener {
     public static final String RECEIVER_DELETE_ACCOUNT = "RECEIVER_DELETE_ACCOUNT";
     public static final String RECEIVER_ADD_ACCOUNT = "RECEIVER_ADD_ACCOUNT";
     public static final String RECEIVER_EDIT_ACCOUNT = "RECEIVER_EDIT_ACCOUNT";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
     private static final String CHART = "CHART";
-    private static final String EXCHAGE_RECORDS = "EXCHANGE";
+    private static final String EXCHANGE_RECORDS = "EXCHANGE";
 
     public enum FragmentTag {
-        DEFAULT, DASHBOARD, EXCHANGES, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, ACCOUNT
+        DEFAULT, DASHBOARD, RECORDS, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, ACCOUNT;
     }
 
     FragmentTag mFragmentTag = DEFAULT;
+
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @ViewById(R.id.imgUserLogo)
-    CircleImageView imgUserLogo;
-    @ViewById(R.id.tvUserName)
-    TextView tvUserName;
-    @ViewById(R.id.tvEmail)
-    TextView tvEmail;
+    @ViewById(R.id.nav_view)
+    NavigationView mNavigationView;
+    private CircleImageView mImgUserLogo;
+    private TextView mTvUserName;
+    private TextView mTvEmail;
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.spinner)
     AppCompatSpinner spinner;
     @ViewById(R.id.imgDateFilter)
     ImageView imgDateFilter;
-    // Navigation
-    @ViewById(R.id.llDashBoard)
-    LinearLayout llDashboard;
-    @ViewById(R.id.rlProfile)
-    RelativeLayout mRlProfile;
-    @ViewById(R.id.llRecode)
-    LinearLayout llRecode;
-    @ViewById(R.id.llDefaultExchange)
-    LinearLayout llDefaultExchange;
     @ViewById(R.id.imgSettingAccount)
     ImageView imgSettingAccount;
     private DialogPickFilter mDialogPickFilterTime;
@@ -170,11 +162,28 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         mDialogPickFilterTime = DialogPickFilter_.builder().build();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
         initView();
+        initHeaderView();
         onLoadProfile();
         onLoadFragmentDashboard();
     }
 
-    void initView() {
+    private void initHeaderView() {
+        View header = mNavigationView.getHeaderView(0);
+        mTvUserName = (TextView) header.findViewById(R.id.tvUserName);
+        mTvEmail = (TextView) header.findViewById(R.id.tvEmail);
+        mImgUserLogo = (CircleImageView) header.findViewById(R.id.imgProfile);
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNavigationView.setCheckedItem(0);
+                mFragmentTag = FragmentTag.PROFILE;
+                onCloseNavigation();
+            }
+        });
+    }
+
+    private void initView() {
+        mNavigationView.setNavigationItemSelectedListener(this);
         setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -187,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
                     case DASHBOARD:
                         onLoadFragmentDashboard();
                         break;
-                    case EXCHANGES:
+                    case RECORDS:
                         onLoadFragmentExchanges();
                         break;
                     case EXCHANGE_LOOPS:
@@ -216,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         initSpinnerAccount();
     }
 
-    // Change filer
+    // Change filter account
     private void initSpinnerAccount() {
         mSpinnerAccount = new SpinnerAccountManger(this, spinner);
         mSpinnerAccount.registerSelectedItem(new SpinnerAccountManger.ItemSelectedListener() {
@@ -233,20 +242,20 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         });
     }
 
-
     public void registerAccount(Account account, int position) {
         mAccount = account;
         positionAccount = position;
     }
 
-    void onLoadProfile() {
+
+    private void onLoadProfile() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         Glide.with(this).load(firebaseAuth.getCurrentUser().getPhotoUrl())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .skipMemoryCache(true)
-                .into(imgUserLogo);
-        tvUserName.setText(String.valueOf(firebaseAuth.getCurrentUser().getDisplayName()));
-        tvEmail.setText(String.valueOf(firebaseAuth.getCurrentUser().getEmail()));
+                .into(mImgUserLogo);
+        mTvUserName.setText(String.valueOf(firebaseAuth.getCurrentUser().getDisplayName()));
+        mTvEmail.setText(String.valueOf(firebaseAuth.getCurrentUser().getEmail()));
     }
 
     @Override
@@ -270,43 +279,13 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             public void onResult(Filter filter) {
                 mFilter = filter;
                 if (mFilter.getTypeFilter() == FilterType.CUSTOM) {
-                    onChangeFilterCustom();
+                    onShowDialogFilterCustom();
                 } else {
                     mFilter.setDateFilter(new Date());
                     reloadFragmentFilter();
                 }
             }
         });
-    }
-
-    @Click(R.id.rlProfile)
-    void onCLickProfile() {
-        mFragmentTag = FragmentTag.PROFILE;
-        onCloseNavigation();
-    }
-
-    @Click(R.id.llAccount)
-    void onClickAccount() {
-        mFragmentTag = FragmentTag.ACCOUNT;
-        onCloseNavigation();
-    }
-
-    @Click(R.id.llDashBoard)
-    void onClickDashBoard() {
-        mFragmentTag = FragmentTag.DASHBOARD;
-        onCloseNavigation();
-    }
-
-    @Click(R.id.llRecode)
-    void onClickRecodes() {
-        mFragmentTag = FragmentTag.EXCHANGES;
-        onCloseNavigation();
-    }
-
-    @Click(R.id.llDefaultExchange)
-    void onClickDefault() {
-        mFragmentTag = FragmentTag.EXCHANGE_LOOPS;
-        onCloseNavigation();
     }
 
     @Click(R.id.imgSettingAccount)
@@ -334,22 +313,44 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         }
     }
 
-    @Click(R.id.llChartIncome)
-    void onClickChartIncome() {
-        mFragmentTag = FragmentTag.CHART_INCOME;
-        onCloseNavigation();
-    }
-
-    @Click(R.id.llChartExpense)
-    void onClickChartExpense() {
-        mFragmentTag = FragmentTag.CHART_EXPENSES;
-        onCloseNavigation();
-    }
-
     private void onCloseNavigation() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_account:
+                mFragmentTag = FragmentTag.ACCOUNT;
+                break;
+            case R.id.nav_dashboard:
+                mFragmentTag = FragmentTag.DASHBOARD;
+                break;
+            case R.id.nav_record:
+                mFragmentTag = FragmentTag.RECORDS;
+                break;
+            case R.id.nav_exchange_loop:
+                mFragmentTag = FragmentTag.EXCHANGE_LOOPS;
+                break;
+            case R.id.nav_chart_income:
+                mFragmentTag = FragmentTag.CHART_INCOME;
+                break;
+            case R.id.nav_chart_expense:
+                mFragmentTag = FragmentTag.CHART_EXPENSES;
+                break;
+            case R.id.nav_chart_category:
+                break;
+            case R.id.nav_debit:
+                break;
+            case R.id.nav_location:
+                break;
+            case R.id.nav_setting:
+                break;
+        }
+        onCloseNavigation();
+        return true;
     }
 
     @Override
@@ -404,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
      */
     private void onLoadFragmentExchange(Filter filter) {
         mFragmentExchangesPager = FragmentExchangesPager_.builder().mFilter(filter).build();
-        onReplaceFragment(mFragmentExchangesPager, EXCHAGE_RECORDS);
+        onReplaceFragment(mFragmentExchangesPager, EXCHANGE_RECORDS);
     }
 
     /**
@@ -462,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         imgSettingAccount.setVisibility(View.GONE);
     }
 
-    public void onChangeFilterCustom() {
+    public void onShowDialogFilterCustom() {
         mDialogCustomFilter.show(mFragmentManager, TAG);
         mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
             @Override
@@ -504,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
     public boolean isFragmentExchangeRecord() {
-        Fragment fragment = mFragmentManager.findFragmentByTag(EXCHAGE_RECORDS);
+        Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGE_RECORDS);
         return null != fragment;
     }
 }

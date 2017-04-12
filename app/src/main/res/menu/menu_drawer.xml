@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_account"
+            android:checkableBehavior="single"
+            android:icon="@drawable/ic_account"
+            android:title="Tài khoản" />
+    </group>
+    <item android:title="Giao dịch">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_dashboard"
+                    android:icon="@drawable/ic_home"
+                    android:title="Home" />
+                <item
+                    android:id="@+id/nav_record"
+                    android:icon="@drawable/ic_record"
+                    android:title="Bảng ghi" />
+                <item
+                    android:id="@+id/nav_exchange_loop"
+                    android:icon="@drawable/ic_echange_loop"
+                    android:title="Giao dịch mặc định" />
+                <item
+                    android:id="@+id/nav_debit"
+                    android:icon="@drawable/ic_nav_debit"
+                    android:title="Sổ nợ" />
+                <item
+                    android:id="@+id/nav_location"
+                    android:icon="@drawable/ic_location"
+                    android:title="Vị trí" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Biểu đồ">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_chart_income"
+                    android:icon="@drawable/ic_chart"
+                    android:title="Thu nhập" />
+                <item
+                    android:id="@+id/nav_chart_expense"
+                    android:icon="@drawable/ic_chart"
+                    android:title="Chi tiêu" />
+                <item
+                    android:id="@+id/nav_chart_category"
+                    android:icon="@drawable/ic_chart_category"
+                    android:title="Thể loại" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Quản lý">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_setting"
+                    android:icon="@drawable/ic_settings"
+                    android:title="Cài đặt" />
+            </group>
+        </menu>
+    </item>
+</menu>
