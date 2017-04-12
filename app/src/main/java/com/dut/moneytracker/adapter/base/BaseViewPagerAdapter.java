@@ -14,8 +14,8 @@ import java.util.List;
  */
 
 public class BaseViewPagerAdapter extends FragmentStatePagerAdapter {
-    private final List<Fragment> fragmentList = new ArrayList<>();
-    private final List<String> mStringTitleList = new ArrayList<>();
+    private final List<Fragment> mFragments = new ArrayList<>();
+    private final List<String> mTitles = new ArrayList<>();
 
     public BaseViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -23,29 +23,55 @@ public class BaseViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentList.get(position);
+        return mFragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return fragmentList != null ? fragmentList.size() : 0;
+        return mFragments != null ? mFragments.size() : 0;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mStringTitleList.get(position);
+        return mTitles.get(position);
     }
 
     public void addFragment(Fragment fragment, String title) {
-        fragmentList.add(fragment);
-        mStringTitleList.add(title);
+        mFragments.add(fragment);
+        mTitles.add(title);
     }
-    public void clearFragment(){
-        fragmentList.clear();
-        mStringTitleList.clear();
+
+    public void addPositionFragment(int position, Fragment fragment, String title) {
+        mFragments.add(position, fragment);
+        mTitles.add(position, title);
     }
+
+    public int getSizeFragment() {
+        return mFragments.size();
+    }
+
+    public void clearFragment() {
+        mFragments.clear();
+        mTitles.clear();
+    }
+
+    public void removeFragment(int position) {
+        if (position > getSizeFragment() - 1 || position < 0) {
+            return;
+        }
+        mFragments.remove(position);
+        mTitles.remove(position);
+    }
+
+    public void setTittlePosition(int position, String name) {
+        if (position > getSizeFragment() - 1 || position < 0) {
+            return;
+        }
+        mTitles.set(position, name);
+    }
+
     @Override
-    public int getItemPosition(Object object){
+    public int getItemPosition(Object object) {
         return PagerAdapter.POSITION_NONE;
     }
 }

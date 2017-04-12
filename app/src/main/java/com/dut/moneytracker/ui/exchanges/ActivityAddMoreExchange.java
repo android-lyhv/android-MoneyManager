@@ -21,7 +21,9 @@ import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.view.DayPicker;
+import com.dut.moneytracker.view.DayPicker_;
 import com.dut.moneytracker.view.TimePicker;
+import com.dut.moneytracker.view.TimePicker_;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -117,8 +119,8 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), "VND"));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mDate));
-        mDayPicker = new DayPicker();
         editDescription.setText(null == mExchange.getDescription() ? "" : mExchange.getDescription());
+        mDayPicker = DayPicker_.builder().build();
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
 
             @Override
@@ -127,7 +129,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
                 tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mDate));
             }
         });
-        mTimePicker = new TimePicker();
+        mTimePicker = TimePicker_.builder().build();
         mTimePicker.registerPicker(new TimePicker.TimePickerListener() {
             @Override
             public void onResultHour(int hour) {

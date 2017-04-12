@@ -1,6 +1,10 @@
 package com.dut.moneytracker.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -35,8 +39,8 @@ import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.account.ActivityAccounts_;
 import com.dut.moneytracker.ui.account.ActivityEditAccount_;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
-import com.dut.moneytracker.ui.charts.FragmentChartPager;
-import com.dut.moneytracker.ui.charts.FragmentChartPager_;
+import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager;
+import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager_;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
 import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
@@ -52,6 +56,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
@@ -60,6 +65,9 @@ import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener {
+    public static final String RECEIVER_DELETE_ACCOUNT = "RECEIVER_DELETE_ACCOUNT";
+    public static final String RECEIVER_ADD_ACCOUNT = "RECEIVER_ADD_ACCOUNT";
+    public static final String RECEIVER_EDIT_ACCOUNT = "RECEIVER_EDIT_ACCOUNT";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
 
@@ -100,10 +108,60 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     FragmentDashboard mFragmentDashboard;
     FragmentLoopExchange mFragmentLoopExchange;
     FragmentExchangesPager mFragmentExchangesPager;
-    FragmentChartPager mFragmentChartPager;
+    FragmentChartExchangePager mFragmentChartExchangePager;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
+    private int positionAccount;
     private Filter mFilter;
+    private Handler mHandler = new Handler();
+    private BroadcastReceiver mReceiverAddDeleteAccount = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initSpinnerAccount();
+            if (intent == null || !isFragmentDashboard() || mFragmentDashboard == null) {
+                return;
+            }
+            if (TextUtils.equals(intent.getAction(), RECEIVER_DELETE_ACCOUNT)) {
+                int positionDelete = intent.getIntExtra(getString(R.string.position_account_delete), -1);
+                reloadDeleteTabAccount(positionDelete);
+            }
+            if (TextUtils.equals(intent.getAction(), RECEIVER_ADD_ACCOUNT)) {
+                Account account = intent.getParcelableExtra(getString(R.string.extra_account));
+                reloadAddTabAccount(account);
+            }
+            if (TextUtils.equals(intent.getAction(), RECEIVER_EDIT_ACCOUNT)) {
+                int positionEdit = intent.getIntExtra(getString(R.string.position_account_edit), -1);
+                reloadEditTabAccount(positionEdit);
+            }
+        }
+
+        private void reloadDeleteTabAccount(int positionDelete) {
+            mFragmentDashboard.deleteFragmentAccount(positionDelete);
+        }
+
+        private void reloadAddTabAccount(Account account) {
+            mFragmentDashboard.addFragmentAccount(account);
+        }
+
+        private void reloadEditTabAccount(final int positionEdit) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFragmentDashboard.notifyDataSetChanged(positionEdit);
+                }
+            }, FragmentDashboard.DELAY);
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVER_ADD_ACCOUNT);
+        intentFilter.addAction(RECEIVER_DELETE_ACCOUNT);
+        intentFilter.addAction(RECEIVER_EDIT_ACCOUNT);
+        registerReceiver(mReceiverAddDeleteAccount, intentFilter);
+    }
 
     @AfterViews
     void init() {
@@ -153,11 +211,11 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         };
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-        initSpinnerFilter();
+        initSpinnerAccount();
     }
 
     // Change filer
-    private void initSpinnerFilter() {
+    private void initSpinnerAccount() {
         mSpinnerAccount = new SpinnerAccountManger(this, spinner);
         mSpinnerAccount.registerSelectedItem(new SpinnerAccountManger.ItemSelectedListener() {
             @Override
@@ -174,8 +232,9 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
 
-    public void registerAccount(Account account) {
+    public void registerAccount(Account account, int position) {
         mAccount = account;
+        positionAccount = position;
     }
 
     void onLoadProfile() {
@@ -193,13 +252,17 @@ public class MainActivity extends AppCompatActivity implements MainListener {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
-            if (fragment != null) {
+            if (isFragmentDashboard()) {
                 super.onBackPressed();
             } else {
                 onLoadFragmentDashboard();
             }
         }
+    }
+
+    public boolean isFragmentDashboard() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(DASHBOARD);
+        return null != fragment;
     }
 
     @Click(R.id.imgDateFilter)
@@ -252,7 +315,27 @@ public class MainActivity extends AppCompatActivity implements MainListener {
 
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
-        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.EDIT_ACCOUNT);
+        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.DETAIL_ACCOUNT);
+    }
+
+    @OnActivityResult(RequestCode.DETAIL_ACCOUNT)
+    void onResultEditAccount(int resultCode, Intent data) {
+        if (resultCode == ResultCode.DELETE_ACCOUNT) {
+            Intent intent = new Intent(MainActivity.RECEIVER_DELETE_ACCOUNT);
+            intent.putExtra(getString(R.string.position_account_delete), positionAccount);
+            sendBroadcast(intent);
+        }
+        if (resultCode == ResultCode.EDIT_ACCOUNT) {
+            if (data == null) {
+                return;
+            }
+            Account account = data.getParcelableExtra(getString(R.string.extra_account));
+            AccountManager.getInstance().insertOrUpdate(account);
+            // Send broadcast;
+            Intent intent = new Intent(RECEIVER_EDIT_ACCOUNT);
+            intent.putExtra(getString(R.string.position_account_edit),positionAccount);
+            sendBroadcast(intent);
+        }
     }
 
     @Click(R.id.llChartIncome)
@@ -280,15 +363,7 @@ public class MainActivity extends AppCompatActivity implements MainListener {
             case ResultCode.PROFILE:
                 onResultLogout();
                 break;
-            case ResultCode.EDIT_ACCOUNT:
-                onResultEditAccount(data);
-                break;
         }
-    }
-
-    void onResultEditAccount(Intent data) {
-        Account account = data.getParcelableExtra(getString(R.string.extra_account));
-        AccountManager.getInstance().insertOrUpdate(account);
     }
 
     void onResultLogout() {
@@ -304,8 +379,8 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     public void onLoadFragmentChart(int typeChart) {
         mFilter = FilterManager.getInstance().getFilterDefault();
         mSpinnerAccount.setSelectItem(null);
-        mFragmentChartPager = FragmentChartPager_.builder().mFilter(mFilter).mChartType(typeChart).build();
-        onReplaceFragment(mFragmentChartPager, null);
+        mFragmentChartExchangePager = FragmentChartExchangePager_.builder().mFilter(mFilter).mChartType(typeChart).build();
+        onReplaceFragment(mFragmentChartExchangePager, null);
     }
 
     /**
@@ -405,11 +480,20 @@ public class MainActivity extends AppCompatActivity implements MainListener {
     }
 
     private void reloadFragmentFilter() {
-        if (mFragmentChartPager != null) {
-            mFragmentChartPager.onReloadFragmentPager();
+        if (mFragmentChartExchangePager != null) {
+            mFragmentChartExchangePager.onReloadFragmentPager();
         }
         if (mFragmentExchangesPager != null) {
             mFragmentExchangesPager.onReloadFragmentPager();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAccount != null) {
+            mAccount.removeAllChangeListeners();
+        }
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

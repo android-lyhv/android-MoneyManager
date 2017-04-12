@@ -18,7 +18,7 @@ public abstract class BaseRecyclerAdapter<T extends RealmModel, VH extends Recyc
         mObjects = objects;
         mContext = context;
         mRealm = Realm.getDefaultInstance();
-        registerDataChangeListener();
+        //registerDataChangeListener();
     }
 
     /**

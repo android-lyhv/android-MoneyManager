@@ -1,4 +1,4 @@
-package com.dut.moneytracker.ui.charts;
+package com.dut.moneytracker.ui.charts.exchange;
 
 /**
  * Copyright@ AsianTech.Inc

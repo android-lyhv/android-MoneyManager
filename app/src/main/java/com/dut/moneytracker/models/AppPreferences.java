@@ -15,9 +15,6 @@ public class AppPreferences {
     private static final String SHARED_PREF_NAME = "MoneyTracker";
     private static final String KEY_REFERENCE_DATABASE = "KEY_REFERENCE_DATABASE";
     private static final String KEY_USER_ID = "KEY_USER_ID";
-    private static final String KEY_DEFAULT_CODE_CURRENCY = "KEY_DEFAULT_CODE_CURRENCY";
-
-    private static final String KEY_LIMIT_VIEW = "KEY_LIMIT_VIEW";
 
     public static AppPreferences getInstance() {
         if (ourInstance == null) {
@@ -28,6 +25,7 @@ public class AppPreferences {
 
     private AppPreferences() {
     }
+
     public boolean isInitCategory(Context context) {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return pref.getBoolean(FIRST_INIT, false);

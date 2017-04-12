@@ -1,8 +1,7 @@
-package com.dut.moneytracker.models.charts;
+package com.dut.moneytracker.ui.charts.objects;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -22,7 +21,6 @@ import java.util.List;
  * Created by ly.ho on 10/03/2017.
  */
 public class LineChartMoney {
-    private static final String TAG = LineChartMoney.class.getSimpleName();
     private List<ValueLineChart> mValueLineCharts = new ArrayList<>();
     private LineData mLineData;
     private LineDataSet mLineDataSet;
@@ -44,14 +42,14 @@ public class LineChartMoney {
         mValueLineCharts.clear();
         mValueLineCharts.addAll(valueLineCharts);
         int size = mValueLineCharts.size();
-        Log.d(TAG, "updateNewValueLineChart: "+ mValueLineCharts.size());
         List<Entry> entries = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             Entry entry = new Entry();
             entry.setX(i);
-            entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(i).getAmount()));
+            entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(size - i - 1).getAmount()));
             entries.add(entry);
         }
+
         mLineDataSet = new LineDataSet(entries, mContext.getString(R.string.label_linechart));
         mLineDataSet.setCircleColor(Color.parseColor(mColorChart));
         mLineDataSet.setColor(Color.parseColor(mColorChart));
@@ -79,7 +77,7 @@ public class LineChartMoney {
     private class MyXAxisValueFormatter implements IAxisValueFormatter {
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            return mValueLineCharts.get((int) value).getLabel();
+            return mValueLineCharts.get((int) (axis.getAxisMaximum() - (int) value)).getLabel();
         }
     }
 }

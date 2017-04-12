@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
+import org.androidannotations.annotations.EFragment;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -13,6 +15,7 @@ import java.util.Locale;
  * Copyright @2016 AsianTech Inc.
  * Created by HaloSumiu on 4/23/2016.
  */
+@EFragment
 public class TimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
     public interface TimePickerListener {
         void onResultHour(int hour);

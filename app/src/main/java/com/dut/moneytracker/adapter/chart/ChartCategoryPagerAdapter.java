@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import com.dut.moneytracker.adapter.base.BasePagerLoopAdapter;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.objects.Filter;
-import com.dut.moneytracker.ui.charts.FragmentChartMoney_;
+import com.dut.moneytracker.ui.charts.category.FragmentChartCategory_;
 
 
 /**
@@ -14,20 +14,15 @@ import com.dut.moneytracker.ui.charts.FragmentChartMoney_;
  * Created by ly.ho on 05/04/2017.
  */
 
-public class ChartPagerAdapter extends BasePagerLoopAdapter {
-    private int typePieChart;
+public class ChartCategoryPagerAdapter extends BasePagerLoopAdapter {
 
-    public void setTypePieChart(int typePieChart) {
-        this.typePieChart = typePieChart;
-    }
-
-    public ChartPagerAdapter(FragmentManager fm) {
+    public ChartCategoryPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
         Filter filter = FilterManager.getInstance().changeFilter(getFilter(), position - getCenter());
-        return FragmentChartMoney_.builder().mFilter(filter).mChartType(typePieChart).build();
+        return FragmentChartCategory_.builder().mFilter(filter).build();
     }
 }

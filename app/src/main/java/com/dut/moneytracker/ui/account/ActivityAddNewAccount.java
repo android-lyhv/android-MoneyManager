@@ -1,6 +1,7 @@
 package com.dut.moneytracker.ui.account;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -13,7 +14,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,7 +27,6 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
-import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 
 import org.androidannotations.annotations.AfterViews;
@@ -37,6 +36,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -64,17 +64,15 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     @AfterViews
     void init() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setTitle(getString(R.string.new_account));
         initToolbar();
         initBaseAccount();
-        initDialogPickColor();
     }
 
     private void initBaseAccount() {
         mAccount = new Account();
         mAccount.setId(UUID.randomUUID().toString());
         mAccount.setColorHex(getString(R.string.color_account_default));
-        mAccount.setCurrencyCode("VND");
         mAccount.setName("");
         onLoadData();
     }
@@ -88,11 +86,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
         imgColor.setBackground(shapeDrawable);
     }
 
-    private void initDialogPickColor() {
-        mDialogPickColor = DialogPickColor_.builder().build();
-        mDialogPickColor.register(this);
-    }
-
     private void initToolbar() {
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_close_white);
@@ -102,15 +95,19 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
     void onSaveAccount() {
         String accountName = mEdtNameAccount.getText().toString();
         if (TextUtils.isEmpty(accountName)) {
-            Toast.makeText(this, "Fill the name account!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nhập tên tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(mAccount.getInitAmount())){
+        if (TextUtils.isEmpty(mAccount.getInitAmount())) {
             Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
+            return;
         }
         mAccount.setName(accountName);
-        AccountManager.getInstance().insertOrUpdate(mAccount);
-        setResult(ResultCode.ADD_NEW_ACCOUNT);
+        mAccount.setCreated(new Date());
+        //Sending
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.extra_account), mAccount);
+        setResult(ResultCode.ADD_NEW_ACCOUNT, intent);
         finish();
     }
 
@@ -139,6 +136,8 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     @Click(R.id.imgColor)
     void onClickImgColor() {
+        mDialogPickColor = DialogPickColor_.builder().build();
+        mDialogPickColor.register(this);
         mDialogPickColor.show(getSupportFragmentManager(), null);
     }
 

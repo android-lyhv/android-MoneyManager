@@ -15,6 +15,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -40,6 +41,12 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
         mAdapter.registerItemClick(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mExchangeLoops.addChangeListener(new RealmChangeListener<RealmResults<ExchangeLooper>>() {
+            @Override
+            public void onChange(RealmResults<ExchangeLooper> element) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

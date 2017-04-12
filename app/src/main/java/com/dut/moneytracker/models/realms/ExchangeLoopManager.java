@@ -28,9 +28,23 @@ public class ExchangeLoopManager extends RealmHelper {
         }
         return exchangeLoopManager;
     }
-
+    public void insertOrUpdate(ExchangeLooper object) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+    }
     private ExchangeLoopManager(Context context) {
         mGenerateManager = new GenerateManager(context);
+    }
+
+    public void deleteExchangeLoopByAccount(String idAccount) {
+        realm.beginTransaction();
+        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("idAccount", idAccount).findFirst();
+        if (exchangeLooper != null) {
+            mGenerateManager.removePendingLoopExchange(exchangeLooper.getId());
+            exchangeLooper.deleteFromRealm();
+        }
+        realm.commitTransaction();
     }
 
     public RealmResults<ExchangeLooper> getListLoopExchange() {

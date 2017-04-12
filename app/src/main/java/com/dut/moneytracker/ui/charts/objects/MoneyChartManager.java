@@ -1,6 +1,6 @@
-package com.dut.moneytracker.models.charts;
+package com.dut.moneytracker.ui.charts.objects;
 
-import com.dut.moneytracker.ui.charts.ChartMoneyListener;
+import com.dut.moneytracker.ui.charts.exchange.ChartMoneyListener;
 
 import java.math.BigDecimal;
 import java.util.List;

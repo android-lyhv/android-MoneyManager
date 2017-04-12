@@ -35,12 +35,22 @@ public class AccountManager extends RealmHelper implements AccountListener {
 
     }
 
+    public void insertOrUpdate(Account object) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(object);
+        realm.commitTransaction();
+    }
+
     @Override
     public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
         RealmResults<Account> realmResults = realm.where(Account.class).findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
+    }
+
+    public RealmResults<Account> loadAccountsAsync() {
+        return realm.where(Account.class).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
     @Override
@@ -147,5 +157,18 @@ public class AccountManager extends RealmHelper implements AccountListener {
         account.setCreated(new Date());
         account.setInitAmount("0");
         insertOrUpdate(account);
+    }
+
+    public void onDeleteAccount(Context context, String idAccount) {
+        // Delete FormServer
+        ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
+        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
+        DebitManager.getInstance().deleteDebitByAccount(idAccount);
+        realm.beginTransaction();
+        final Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
+        if (account != null) {
+            account.deleteFromRealm();
+        }
+        realm.commitTransaction();
     }
 }
