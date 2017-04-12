@@ -68,7 +68,7 @@
                     android:id="@+id/tvAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/title"
+                    android:layout_below="@+id/title"
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="10dp"
                     android:maxLines="2"

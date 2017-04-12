@@ -1,8 +1,7 @@
 package com.dut.moneytracker.ui.dashboard;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
@@ -38,21 +37,11 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     private RealmResults<Account> mAccounts;
     private BaseViewPagerAdapter mTabAdapter;
     private int targetAccount;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mAccounts = AccountManager.getInstance().getAccounts();
-    }
+    private Handler mHandler = new Handler();
 
     @AfterViews
     void init() {
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        mAccounts = AccountManager.getInstance().getAccounts();
         initViewpager();
         initLoadListFragmentAccounts();
     }
@@ -113,12 +102,17 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     }
 
     @OnActivityResult(RequestCode.ADD_NEW_EXCHANGE)
-    void onResultAddNewExchange(Intent intent) {
+    void onResultAddNewExchange(final Intent intent) {
         if (intent == null) {
             return;
         }
         intent.setAction(getString(R.string.receiver_add_new_exchange));
-        getContext().sendBroadcast(intent);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getContext().sendBroadcast(intent);
+            }
+        }, DELAY);
     }
 
     public void deleteFragmentAccount(int position) {

@@ -4,14 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -45,8 +42,6 @@ import java.util.List;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-import static android.content.ContentValues.TAG;
-
 
 /**
  * Copyright@ AsianTech.Inc
@@ -77,16 +72,15 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     LineChart mLineChart;
     @ViewById(R.id.recyclerViewCardAccount)
     RecyclerView mRecyclerViewCardAccount;
-    private Handler mHandler;
     private CardAccountAdapter mCardAccountAdapter;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
     private LineChartMoney mLineChartMoney;
     private RealmResults<Exchange> mExchanges;
-    private boolean isViewCreated;
+    private Handler mHandler = new Handler();
     private BroadcastReceiver mReceiverAddNewExchange = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isViewCreated) {
+            if (isAdded()) {
                 onLoadCardAccount();
                 onLoadChart();
                 onShowAmount();
@@ -102,16 +96,6 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @AfterViews
     public void init() {
-        Log.d(TAG, "init: aaaaaaaa");
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated: aaaaaaaa");
-        isViewCreated = true;
-        mHandler = new Handler();
         mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         onLoadCardAccount();
         onLoadChart();
@@ -145,24 +129,17 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @Override
     public void onShowAmount() {
         mTvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
-                        CurrencyUtils.DEFAULT_CURRENCY_CODE);
-                mTvAmount.setText(money);
-            }
-        }, FragmentDashboard.DELAY);
+        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getTotalAmountAvailable(),
+                CurrencyUtils.DEFAULT_CURRENCY_CODE);
+        mTvAmount.setText(money);
     }
 
     @Override
     public void onLoadChart() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                reloadChartExchange();
-            }
-        }, FragmentDashboard.DELAY);
+        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(MAX_DAY);
+        mLineChartMoney.setColorChart(getString(R.string.color_account_default));
+        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+        mLineChartMoney.notifyDataSetChanged();
     }
 
     @Override
@@ -188,12 +165,6 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        isViewCreated = false;
-    }
-
-    @Override
     public void onShowDetailExchange(Exchange exchange) {
         ActivityDetailExchange_.intent(FragmentParentTab.this).mExchange(exchange).startForResult(RequestCode.DETAIL_EXCHANGE);
     }
@@ -211,20 +182,19 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
             case ResultCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
-        onLoadCardAccount();
-        onLoadChart();
-        onShowAmount();
+        //Reload tab account
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onLoadCardAccount();
+                onLoadChart();
+                onShowAmount();
+            }
+        }, FragmentDashboard.DELAY);
     }
 
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
         ((MainActivity) getActivity()).onLoadFragmentExchanges();
-    }
-
-    private void reloadChartExchange() {
-        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(MAX_DAY);
-        mLineChartMoney.setColorChart(getString(R.string.color_account_default));
-        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
-        mLineChartMoney.notifyDataSetChanged();
     }
 }

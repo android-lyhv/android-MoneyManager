@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,16 +60,15 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     LineChart mLineChart;
     @FragmentArg
     Account mAccount;
+    private Handler mHandler = new Handler();
     private RealmResults<Exchange> mExchanges;
     private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
     private LineChartMoney mLineChartMoney;
-    private Handler mHandler;
     private int positionItem;
-    private boolean isViewCreated;
     private BroadcastReceiver mReceiverAddNewExchange = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isViewCreated) {
+            if (isAdded()) {
                 onLoadChart();
                 onShowAmount();
             }
@@ -80,25 +77,11 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @AfterViews
     void init() {
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        isViewCreated = true;
-        mHandler = new Handler();
         mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         mCardView.setVisibility(View.GONE);
         onShowAmount();
         onLoadChart();
         onLoadExchanges();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        isViewCreated = false;
     }
 
     @Override
@@ -109,24 +92,17 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadChart() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                reloadChartExchange();
-            }
-        }, FragmentDashboard.DELAY);
+        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
+        mLineChartMoney.setColorChart(mAccount.getColorHex());
+        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
+        mLineChartMoney.notifyDataSetChanged();
     }
 
     @Override
     public void onShowAmount() {
         mTvAmount.setTextColor(Color.parseColor(mAccount.getColorHex()));
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), mAccount.getCurrencyCode());
-                mTvAmount.setText(money);
-            }
-        }, FragmentDashboard.DELAY);
+        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), mAccount.getCurrencyCode());
+        mTvAmount.setText(money);
     }
 
     @Override
@@ -171,19 +147,18 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
             case ResultCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
-        onLoadChart();
-        onShowAmount();
+        //Reload tab account
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onLoadChart();
+                onShowAmount();
+            }
+        }, FragmentDashboard.DELAY);
     }
 
     @Click(R.id.tvMoreExchange)
     void onClickMoreExchange() {
         ((MainActivity) getActivity()).onLoadFragmentExchangesByAccount(mAccount.getId());
-    }
-
-    private void reloadChartExchange() {
-        List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), 30);
-        mLineChartMoney.setColorChart(mAccount.getColorHex());
-        mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
-        mLineChartMoney.notifyDataSetChanged();
     }
 }
