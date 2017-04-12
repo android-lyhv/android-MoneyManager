@@ -41,7 +41,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white">
 
                 <TextView
                     android:id="@+id/tvTitleDescription"
@@ -68,14 +69,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_below="@id/edtDescription"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/colorBackgroundLine" />
+                    android:background="@color/colorBackgroundLine"
+                    android:paddingTop="10dp" />
             </RelativeLayout>
 
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:clickable="true"
                 android:paddingTop="10dp">
 
                 <TextView
@@ -136,17 +139,17 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_bg_white"
                 android:clickable="true"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp"
                 android:paddingTop="10dp">
 
                 <TextView
+                    android:layout_marginStart="10dp"
                     android:id="@+id/tvTitlePosition"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Vị trí" />
 
                 <ImageView
+                    android:layout_marginEnd="10dp"
                     android:id="@+id/imgLocation"
                     android:layout_width="@dimen/activity_detail_exchange.image.with"
                     android:layout_height="@dimen/activity_detail_exchange.image.height"
