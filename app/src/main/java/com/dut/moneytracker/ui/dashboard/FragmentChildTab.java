@@ -91,9 +91,9 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     }
 
     @Override
-    public void onStart() {
+    public void onResume() {
         getContext().registerReceiver(mReceiverAddNewExchange, new IntentFilter(getString(R.string.receiver_add_new_exchange)));
-        super.onStart();
+        super.onResume();
     }
 
     @AfterViews

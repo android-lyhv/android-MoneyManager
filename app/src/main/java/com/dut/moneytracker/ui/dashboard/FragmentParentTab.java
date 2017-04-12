@@ -92,9 +92,9 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     };
 
     @Override
-    public void onStart() {
+    public void onResume() {
         getContext().registerReceiver(mReceiverAddNewExchange, new IntentFilter(getString(R.string.receiver_add_new_exchange)));
-        super.onStart();
+        super.onResume();
     }
 
     @AfterViews
