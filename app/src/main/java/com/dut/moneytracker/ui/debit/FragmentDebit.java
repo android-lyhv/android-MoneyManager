@@ -50,7 +50,7 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
         mRecyclerViewDebit.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
             @Override
             public void onClick(View view, int position) {
-                // TODO detail debit
+                ActivityDetailDebit_.intent(FragmentDebit.this).mDebit((Debit) mDebitAdapter.getItem(position)).start();
             }
         }));
         mDebits.addChangeListener(this);

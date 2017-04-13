@@ -48,7 +48,9 @@ public class SpinnerTypeDebitManager implements Spinner.OnItemSelectedListener {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         itemSelected = position;
-        itemSelectedListener.onResultTypeDebit(listId[itemSelected]);
+        if (itemSelectedListener != null) {
+            itemSelectedListener.onResultTypeDebit(listId[itemSelected]);
+        }
     }
 
     @Override

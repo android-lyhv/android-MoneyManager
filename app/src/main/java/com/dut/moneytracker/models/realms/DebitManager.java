@@ -39,4 +39,13 @@ public class DebitManager extends RealmHelper {
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
     }
+
+    public void deleteDebitById(String id) {
+        //TODO
+        realm.beginTransaction();
+        Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
+        debit.deleteFromRealm();
+        realm.commitTransaction();
+
+    }
 }

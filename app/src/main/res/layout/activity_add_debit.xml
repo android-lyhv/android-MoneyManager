@@ -38,6 +38,16 @@
                     android:src="@drawable/ic_edit"
                     android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/tvType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/tvTitleTypeExchange"
+                    android:layout_below="@+id/tvTitleTypeExchange"
+                    android:textColor="@android:color/black"
+                    android:textSize="20dp"
+                    android:visibility="gone" />
+
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spinnerDebit"
                     android:layout_width="match_parent"
