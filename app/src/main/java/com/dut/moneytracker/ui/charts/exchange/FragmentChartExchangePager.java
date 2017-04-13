@@ -58,12 +58,6 @@ public class FragmentChartExchangePager extends BaseFragment implements PagerFra
         ((MainActivity_) getActivity()).loadMenuItemFragmentChart();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        getContext().unregisterReceiver(mBroadcastReceiver);
-    }
-
     @AfterViews
     void init() {
         initPager();
