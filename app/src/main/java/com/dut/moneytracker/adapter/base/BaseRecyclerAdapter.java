@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
@@ -18,7 +17,6 @@ public abstract class BaseRecyclerAdapter<T extends RealmModel, VH extends Recyc
         mObjects = objects;
         mContext = context;
         mRealm = Realm.getDefaultInstance();
-        //registerDataChangeListener();
     }
 
     /**
@@ -68,18 +66,5 @@ public abstract class BaseRecyclerAdapter<T extends RealmModel, VH extends Recyc
             return 0;
         }
         return mObjects.size();
-    }
-
-    public void removeAllChangeListeners() {
-        mObjects.removeAllChangeListeners();
-    }
-
-    private void registerDataChangeListener() {
-        mObjects.addChangeListener(new RealmChangeListener<RealmResults<T>>() {
-            @Override
-            public void onChange(RealmResults<T> element) {
-                notifyDataSetChanged();
-            }
-        });
     }
 }

@@ -33,4 +33,10 @@ public class DebitManager extends RealmHelper {
         }
         realm.commitTransaction();
     }
+
+    public void insertOrUpdateDebit(Debit debit) {
+        realm.beginTransaction();
+        realm.insertOrUpdate(debit);
+        realm.commitTransaction();
+    }
 }

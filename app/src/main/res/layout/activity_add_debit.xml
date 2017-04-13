@@ -3,15 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <include layout="@layout/base_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:fillViewport="true">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +39,7 @@
                     android:visibility="gone" />
 
                 <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/spinnerTypeExchange"
+                    android:id="@+id/spinnerDebit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@+id/tvTitleTypeExchange"
@@ -76,7 +75,7 @@
                     android:src="@drawable/ic_edit" />
 
                 <TextView
-                    android:id="@+id/tvCategoryName"
+                    android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleCategory"
@@ -84,9 +83,9 @@
                     android:background="@android:color/transparent"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
-                    android:text="Ho Van Ly"
                     android:textColor="@android:color/black"
-                    android:textSize="17dp" />
+                    android:textSize="17dp"
+                    tools:text="Ho Van Ly" />
             </RelativeLayout>
 
             <View
@@ -124,9 +123,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:background="@android:color/transparent"
-                    android:text="-100.000"
                     android:textColor="@android:color/holo_red_light"
-                    android:textSize="17dp" />
+                    android:textSize="17dp"
+                    tools:text="-100.000" />
 
             </RelativeLayout>
 
@@ -157,16 +156,16 @@
                     android:src="@drawable/ic_edit" />
 
                 <TextView
-                    android:id="@+id/tvAccountName"
+                    android:id="@+id/tvDescriptionDebit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleDescription"
                     android:layout_below="@+id/tvTitleDescription"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="abc"
                     android:textColor="@android:color/black"
-                    android:textSize="17dp" />
+                    android:textSize="17dp"
+                    tools:text="abc" />
 
             </RelativeLayout>
 
@@ -188,7 +187,7 @@
                     android:id="@+id/tvTitleAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Tài khoản" />
+                    tools:text="Tài khoản" />
 
                 <ImageView
                     android:id="@+id/imgEditAccount"
@@ -205,9 +204,9 @@
                     android:layout_below="@+id/tvTitleAccount"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="Cash"
                     android:textColor="@android:color/black"
-                    android:textSize="17dp" />
+                    android:textSize="17dp"
+                    tools:text="Cash" />
 
             </RelativeLayout>
 
@@ -238,7 +237,7 @@
                     android:src="@drawable/ic_edit" />
 
                 <TextView
-                    android:id="@+id/tvDate"
+                    android:id="@+id/tvStartDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/tvTitleDate"
@@ -262,12 +261,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_bg_white"
+                android:clickable="true"
                 android:padding="10dp">
 
                 <TextView
                     android:id="@+id/tvTitleTime"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Hết hạn" />
 
                 <ImageView
@@ -289,6 +289,12 @@
                     android:textSize="17dp"
                     tools:text="17/02/2013" />
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#c4c4c4"
+                android:paddingTop="10dp" />
         </LinearLayout>
     </ScrollView>
 

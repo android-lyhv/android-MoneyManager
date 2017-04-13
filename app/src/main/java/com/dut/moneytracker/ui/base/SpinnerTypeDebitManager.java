@@ -8,21 +8,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.constant.LoopType;
+import com.dut.moneytracker.constant.DebitType;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 16/03/2017.
  */
 
-public class SpinnerTypeLoopManger implements Spinner.OnItemSelectedListener {
+public class SpinnerTypeDebitManager implements Spinner.OnItemSelectedListener {
     private AppCompatSpinner mSpinner;
     private Context mContext;
-    private String[] items = new String[]{"Ngày", "Tuần", "Tháng", "Năm"};
-    private int[] listId = new int[]{LoopType.DAY, LoopType.DAY, LoopType.MONTH, LoopType.YEAR};
+    private String[] items = new String[]{"Cho Vay", "Đi Vay"};
+    private int[] listId = new int[]{DebitType.LEND, DebitType.BORROWED};
+    private int itemSelected;
 
     public interface ItemSelectedListener {
-        void onResultTypeLoop(int type);
+        void onResultTypeDebit(int type);
     }
 
     private ItemSelectedListener itemSelectedListener;
@@ -31,7 +32,7 @@ public class SpinnerTypeLoopManger implements Spinner.OnItemSelectedListener {
         this.itemSelectedListener = itemSelectedListener;
     }
 
-    public SpinnerTypeLoopManger(Context context, AppCompatSpinner spinner) {
+    public SpinnerTypeDebitManager(Context context, AppCompatSpinner spinner) {
         mSpinner = spinner;
         mContext = context;
         onLoadItemSpinner();
@@ -46,7 +47,8 @@ public class SpinnerTypeLoopManger implements Spinner.OnItemSelectedListener {
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        itemSelectedListener.onResultTypeLoop(listId[position]);
+        itemSelected = position;
+        itemSelectedListener.onResultTypeDebit(listId[itemSelected]);
     }
 
     @Override
@@ -54,15 +56,19 @@ public class SpinnerTypeLoopManger implements Spinner.OnItemSelectedListener {
 
     }
 
-    public void setSelectItem(int type) {
+    public void setSelectItem(int typeDebit) {
         int index = 0;
         int length = listId.length;
         for (int i = 0; i < length; i++) {
-            if (type == listId[i]) {
+            if (typeDebit == listId[i]) {
                 index = i;
                 break;
             }
         }
         mSpinner.setSelection(index);
+    }
+
+    public int getTypeItemSelected() {
+        return listId[itemSelected];
     }
 }

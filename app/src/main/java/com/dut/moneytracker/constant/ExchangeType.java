@@ -9,6 +9,4 @@ public class ExchangeType {
     public static final int INCOME = 0;
     public static final int EXPENSES = 1;
     public static final int TRANSFER = 2;
-    public static final int LEND = 3;
-    public static final int BORROWED = 4;
 }

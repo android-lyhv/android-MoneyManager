@@ -6,18 +6,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/selector_bg_white"
+        android:clickable="true"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:paddingTop="20dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp">
 
             <TextView
                 android:id="@+id/tvTitleDebit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ho Van ly -> aaa" />
+                android:text="Ho Van ly -> aaa"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/tvDescriptionDebit"
@@ -38,7 +43,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp">
 
             <ProgressBar
                 android:id="@+id/chartAmount"
@@ -74,6 +81,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp">
 
             <TextView
@@ -89,5 +98,11 @@
                 android:layout_alignParentEnd="true"
                 android:text="Ngay het han: 12/2/2018" />
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorBackgroundLine" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

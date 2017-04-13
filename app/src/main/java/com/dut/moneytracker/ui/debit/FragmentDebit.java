@@ -27,15 +27,14 @@ import io.realm.RealmResults;
  */
 @EFragment(R.layout.fragment_debit)
 public class FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<Debit>> {
+    private static final String TAG = FragmentDebit.class.getSimpleName();
     @ViewById(R.id.recyclerDebit)
     RecyclerView mRecyclerViewDebit;
     private DebitAdapter mDebitAdapter;
-    private RealmResults<Debit> mDebits;
 
     @AfterViews
     void init() {
         initRecyclerDebit();
-        intLoadDebits();
     }
 
     @Click(R.id.fab)
@@ -44,6 +43,7 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
     }
 
     private void initRecyclerDebit() {
+        RealmResults<Debit> mDebits = DebitManager.getInstance().onLoadDebitAsync();
         mDebitAdapter = new DebitAdapter(getContext(), mDebits);
         mRecyclerViewDebit.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerViewDebit.setAdapter(mDebitAdapter);
@@ -53,10 +53,6 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
                 // TODO detail debit
             }
         }));
-    }
-
-    private void intLoadDebits() {
-        mDebits = DebitManager.getInstance().onLoadDebitAsync();
         mDebits.addChangeListener(this);
     }
 
