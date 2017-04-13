@@ -55,12 +55,6 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
         ((MainActivity_) getActivity()).loadMenuItemFragmentExchanges();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getContext().unregisterReceiver(mBroadcastReceiver);
-    }
-
     @AfterViews
     void init() {
         initPager();
