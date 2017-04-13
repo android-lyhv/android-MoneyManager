@@ -1,6 +1,7 @@
 package com.dut.moneytracker.dialogs;
 
 import android.support.v4.app.DialogFragment;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.dut.moneytracker.R;
@@ -21,7 +22,7 @@ public class DialogInput extends DialogFragment {
 
     @AfterViews
     void init() {
-      // no-of
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     public interface DescriptionListener {
