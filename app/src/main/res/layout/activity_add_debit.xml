@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rlTypeDebit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_white"
+                android:clickable="true"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvTitleTypeExchange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Loại" />
+
+                <ImageView
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_edit"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/spinnerTypeExchange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/tvTitleTypeExchange"
+                    android:layout_below="@+id/tvTitleTypeExchange" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#c4c4c4"
+                android:paddingTop="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/rlName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_white"
+                android:clickable="true"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvTitleCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Tên" />
+
+                <ImageView
+                    android:id="@+id/imgEditCategory"
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_edit" />
+
+                <TextView
+                    android:id="@+id/tvCategoryName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/tvTitleCategory"
+                    android:layout_below="@+id/tvTitleCategory"
+                    android:background="@android:color/transparent"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="Ho Van Ly"
+                    android:textColor="@android:color/black"
+                    android:textSize="17dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#c4c4c4"
+                android:paddingTop="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/rlAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_white"
+                android:clickable="true"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvTitleMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Giá trị" />
+
+                <ImageView
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_edit" />
+
+                <TextView
+                    android:id="@+id/tvAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/tvTitleMoney"
+                    android:layout_below="@+id/tvTitleMoney"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:text="-100.000"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="17dp" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#c4c4c4"
+                android:paddingTop="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/rlDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_white"
+                android:clickable="true"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvTitleDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Chú thích" />
+
+                <ImageView
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_edit" />
+
+                <TextView
+                    android:id="@+id/tvAccountName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/tvTitleDescription"
+                    android:layout_below="@+id/tvTitleDescription"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="abc"
+                    android:textColor="@android:color/black"
+                    android:textSize="17dp" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#c4c4c4"
+                android:paddingTop="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/rlAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_white"
+                android:clickable="true"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvTitleAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Tài khoản" />
+
+                <ImageView
+                    android:id="@+id/imgEditAccount"
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_edit" />
+
+                <TextView
+                    android:id="@+id/tvAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/tvTitleAccount"
+                    android:layout_below="@+id/tvTitleAccount"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Cash"
+                    android:textColor="@android:color/black"
+                    android:textSize="17dp" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#c4c4c4"
+                android:paddingTop="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/rlStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_white"
+                android:clickable="true"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvTitleDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Bắt đầu" />
+
+                <ImageView
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_edit" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/tvTitleDate"
+                    android:layout_below="@+id/tvTitleDate"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/black"
+                    android:textSize="17dp"
+                    tools:text="17/02/2013" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#c4c4c4"
+                android:paddingTop="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/rlEndDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_white"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvTitleTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Hết hạn" />
+
+                <ImageView
+                    android:layout_width="@dimen/activity_detail_exchange.image.with"
+                    android:layout_height="@dimen/activity_detail_exchange.image.height"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_edit" />
+
+                <TextView
+                    android:id="@+id/tvEndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/tvTitleTime"
+                    android:layout_below="@+id/tvTitleTime"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@android:color/black"
+                    android:textSize="17dp"
+                    tools:text="17/02/2013" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

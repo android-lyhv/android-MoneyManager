@@ -250,4 +250,6 @@
     <string name="dialog_filter_title">Chọn hiển thị!</string>
     <string name="dialog_filter_now_time">Bây giờ</string>
     <string name="dialog_filter_cancel">Hủy</string>
+    <string name="toobar_title_debit">Danh sách sổ nợ</string>
+    <string name="toobar_tilte_new_debit">Sổ nợ mới</string>
 </resources>

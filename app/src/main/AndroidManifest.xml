@@ -28,6 +28,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.debit.ActivityAddDebit_"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.account.ActivityAccounts_"
             android:screenOrientation="portrait" />
         <activity
