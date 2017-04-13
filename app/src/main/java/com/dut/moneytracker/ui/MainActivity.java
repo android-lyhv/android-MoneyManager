@@ -108,25 +108,30 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     private int positionAccount;
     private Filter mFilter;
     private Handler mHandler = new Handler();
-    private BroadcastReceiver mReceiverAddDeleteAccount = new BroadcastReceiver() {
+    private BroadcastReceiver mReceiverAccountsChange = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, final Intent intent) {
             initSpinnerAccount();
             if (intent == null || !isFragmentDashboard() || mFragmentDashboard == null) {
                 return;
             }
-            if (TextUtils.equals(intent.getAction(), RECEIVER_DELETE_ACCOUNT)) {
-                int positionDelete = intent.getIntExtra(getString(R.string.position_account_delete), -1);
-                reloadDeleteTabAccount(positionDelete);
-            }
-            if (TextUtils.equals(intent.getAction(), RECEIVER_ADD_ACCOUNT)) {
-                Account account = intent.getParcelableExtra(getString(R.string.extra_account));
-                reloadAddTabAccount(account);
-            }
-            if (TextUtils.equals(intent.getAction(), RECEIVER_EDIT_ACCOUNT)) {
-                int positionEdit = intent.getIntExtra(getString(R.string.position_account_edit), -1);
-                reloadEditTabAccount(positionEdit);
-            }
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (TextUtils.equals(intent.getAction(), RECEIVER_DELETE_ACCOUNT)) {
+                        int positionDelete = intent.getIntExtra(getString(R.string.position_account_delete), -1);
+                        reloadDeleteTabAccount(positionDelete);
+                    }
+                    if (TextUtils.equals(intent.getAction(), RECEIVER_ADD_ACCOUNT)) {
+                        Account account = intent.getParcelableExtra(getString(R.string.extra_account));
+                        reloadAddTabAccount(account);
+                    }
+                    if (TextUtils.equals(intent.getAction(), RECEIVER_EDIT_ACCOUNT)) {
+                        int positionEdit = intent.getIntExtra(getString(R.string.position_account_edit), -1);
+                        reloadEditTabAccount(positionEdit);
+                    }
+                }
+            }, FragmentDashboard.DELAY);
         }
 
         private void reloadDeleteTabAccount(int positionDelete) {
@@ -138,12 +143,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         }
 
         private void reloadEditTabAccount(final int positionEdit) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mFragmentDashboard.notifyDataSetChanged(positionEdit);
-                }
-            }, FragmentDashboard.DELAY);
+            mFragmentDashboard.notifyDataSetChanged(positionEdit);
         }
     };
 
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         intentFilter.addAction(RECEIVER_ADD_ACCOUNT);
         intentFilter.addAction(RECEIVER_DELETE_ACCOUNT);
         intentFilter.addAction(RECEIVER_EDIT_ACCOUNT);
-        registerReceiver(mReceiverAddDeleteAccount, intentFilter);
+        registerReceiver(mReceiverAccountsChange, intentFilter);
     }
 
     @AfterViews

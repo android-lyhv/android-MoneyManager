@@ -1,6 +1,7 @@
 package com.dut.moneytracker.ui.dashboard;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
@@ -29,6 +30,7 @@ import io.realm.RealmResults;
 public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener {
     public static final long DELAY = 0L;
     public static final int LIMIT_ITEM = 5;
+    public static final int MAX_DAY = 30;
     @ViewById(R.id.tabLayout)
     TabLayout mTabLayout;
     @ViewById(R.id.viewpager)
@@ -36,6 +38,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     private RealmResults<Account> mAccounts;
     private BaseViewPagerAdapter mTabAdapter;
     private int targetAccount;
+    private Handler mHandler = new Handler();
 
     @AfterViews
     void init() {
@@ -76,7 +79,6 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-      //  tab.getCustomView().setAlpha(0.5f);
     }
 
     @Override
@@ -101,12 +103,17 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     }
 
     @OnActivityResult(RequestCode.ADD_NEW_EXCHANGE)
-    void onResultAddNewExchange(Intent intent) {
+    void onResultAddNewExchange(final Intent intent) {
         if (intent == null) {
             return;
         }
         intent.setAction(getString(R.string.receiver_add_new_exchange));
-        getContext().sendBroadcast(intent);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getContext().sendBroadcast(intent);
+            }
+        }, DELAY);
     }
 
     public void deleteFragmentAccount(int position) {
