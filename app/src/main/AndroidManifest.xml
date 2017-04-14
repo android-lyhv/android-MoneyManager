@@ -67,7 +67,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity_"
-            android:label="@string/title_activity_main_navigation"
             android:screenOrientation="portrait" />
         <!-- End List -->
         <meta-data

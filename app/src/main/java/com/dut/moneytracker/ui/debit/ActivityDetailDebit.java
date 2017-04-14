@@ -75,6 +75,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
     private void initToolbar() {
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_close_white);
+        setTitle(getString(R.string.toobar_detail_debit));
     }
 
     private void loadView() {

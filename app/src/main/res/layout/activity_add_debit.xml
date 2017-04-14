@@ -197,7 +197,7 @@
                     android:id="@+id/tvTitleAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    tools:text="Tài khoản" />
+                    android:text="Tài khoản" />
 
                 <ImageView
                     android:id="@+id/imgEditAccount"

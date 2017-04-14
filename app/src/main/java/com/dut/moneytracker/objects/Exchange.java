@@ -37,21 +37,6 @@ public class Exchange extends RealmObject implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("id:").append(id).append("\n")
-                .append("typeExchange: ").append(typeExchange).append("\n")
-                .append("idAccount: ").append(idAccount).append("\n")
-                .append("idCategory: ").append(idCategory).append("\n")
-                .append("amount: ").append(amount).append("\n")
-                .append("idAccountTransfer: ").append(idAccountTransfer).append("\n")
-                .append("created: ").append(created).append("\n")
-                .append("currencyCode: ").append(currencyCode).append("\n")
-                .append("place: ").append(place).append("\n");
-        return stringBuilder.toString();
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
