@@ -420,6 +420,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     void onTargetLocationExchange() {
         if (mPlace == null) {
+            mPlace = new Place();
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
