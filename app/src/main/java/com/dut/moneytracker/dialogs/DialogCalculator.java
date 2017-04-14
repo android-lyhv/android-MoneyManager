@@ -93,6 +93,9 @@ public class DialogCalculator extends DialogFragment implements View.OnClickList
         tvCalDot.setOnClickListener(this);
         tvAmount = (TextView) view.findViewById(R.id.tvAmount);
         tvAmount.setOnClickListener(this);
+        if (TextUtils.isEmpty(amount) || TextUtils.equals("0", amount)) {
+            amount = "";
+        }
         tvAmount.setText(String.format(Locale.US, "%s", amount));
     }
 
