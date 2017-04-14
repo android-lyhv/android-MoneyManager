@@ -83,6 +83,10 @@ public class ExchangeManger extends RealmHelper {
         return realmResults;
     }
 
+    public RealmResults<Exchange> onLoadExchangeByDebit(String idDebit) {
+        return realm.where(Exchange.class).equalTo("idDebit",idDebit).findAllSortedAsync("created", Sort.DESCENDING);
+    }
+
     public RealmResults<Exchange> getExchangesByAccount(String accountID) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).or().isNotNull("idDebit").findAllSorted("created", Sort.DESCENDING);

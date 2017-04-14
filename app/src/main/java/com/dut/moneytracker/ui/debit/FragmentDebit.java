@@ -66,7 +66,7 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
 
     @Override
     public void onClickViewExchange(Debit debit) {
-
+        ActivityExchangeDebits_.intent(this).mDebit(debit).start();
     }
 
     @Override
