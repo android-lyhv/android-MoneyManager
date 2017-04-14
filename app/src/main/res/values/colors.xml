@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorNormal">#14000000</color>
     <color name="colorPrimary">#03a879</color>
     <color name="colorPrimaryDark">#FF028761</color>
     <color name="colorAccent">#03a879</color>
@@ -10,7 +11,6 @@
     <color name="grey_500">#9E9E9E</color>
     <color name="color_main_select">#c4baa8</color>
     <color name="color_main">#BFAC8A</color>
-    <color name="color_normal">#B9B9B9</color>
     <color name="color_background_tab_unselect">#ededed</color>
     <color name="color_title_chart">#6d6d6d</color>
     <color name="color_income">#fbc02d</color>

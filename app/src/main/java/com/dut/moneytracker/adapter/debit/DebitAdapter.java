@@ -14,9 +14,11 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
+import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.utils.DateTimeUtils;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import io.realm.RealmResults;
@@ -62,7 +64,6 @@ public class DebitAdapter extends BaseRecyclerAdapter {
         TextView tvDescriptionDebit;
         TextView tvStartDebit;
         TextView tvEndDate;
-        TextView tvInitAmount;
         TextView tvRemindAmount;
         ImageView imgViewExchangeDebit;
         ImageView imgCheckDebit;
@@ -76,7 +77,6 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             tvDescriptionDebit = (TextView) itemView.findViewById(R.id.tvDescriptionDebit);
             tvStartDebit = (TextView) itemView.findViewById(R.id.tvStartDebit);
             tvEndDate = (TextView) itemView.findViewById(R.id.tvEndDebit);
-            tvInitAmount = (TextView) itemView.findViewById(R.id.tvInitDebitAmount);
             tvRemindAmount = (TextView) itemView.findViewById(R.id.tvRemindAmount);
             imgViewExchangeDebit = (ImageView) itemView.findViewById(R.id.imgViewExchangeDebit);
             imgCheckDebit = (ImageView) itemView.findViewById(R.id.imgCheckDebit);
@@ -94,7 +94,6 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             tvDescriptionDebit.setText(debit.getDescription());
             tvStartDebit.setText(DateTimeUtils.getInstance().getStringDateUs(debit.getStartDate()));
             tvEndDate.setText(String.format(Locale.US, "Hết hạn %s", DateTimeUtils.getInstance().getStringDateUs(debit.getEndDate())));
-            tvInitAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(debit.getAmount(), debit.getCurrencyCode()));
             onLoadRemindAmount(debit);
         }
 
@@ -113,7 +112,25 @@ public class DebitAdapter extends BaseRecyclerAdapter {
         }
 
         private void onLoadRemindAmount(Debit debit) {
+            String amount = ExchangeManger.getInstance().getAmountExchangeByDebit(debit.getId());
+            BigDecimal bigDecimal = new BigDecimal(debit.getAmount());
+            bigDecimal = bigDecimal.add(new BigDecimal(amount));
+            String value = CurrencyUtils.getInstance().getStringMoneyFormat(bigDecimal.toString(), debit.getCurrencyCode());
+            if (value.startsWith("-")) {
+                value = value.substring(1);
+            }
+            tvRemindAmount.setText(String.format(Locale.US, "Còn lại: %s", value));
+            loadProgressBar(amount, debit.getAmount());
+        }
 
+        private void loadProgressBar(String amountPairtal, String amountDebit) {
+            float amount = CurrencyUtils.getInstance().getFloatMoney(amountPairtal);
+            float amountTotal = CurrencyUtils.getInstance().getFloatMoney(amountDebit);
+            int distance = (int) (Math.abs(amount / amountTotal) * 100);
+            if (amount != 0 && distance == 0) {
+                distance = 1;
+            }
+            progressBarPartial.setProgress(distance);
         }
 
     }

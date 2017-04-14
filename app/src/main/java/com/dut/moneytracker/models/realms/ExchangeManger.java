@@ -53,6 +53,15 @@ public class ExchangeManger extends RealmHelper {
         realm.commitTransaction();
     }
 
+    public String getAmountExchangeByDebit(String idDebit) {
+        BigDecimal bigDecimal = new BigDecimal("0");
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).notEqualTo("id", idDebit).findAll();
+        for (Exchange exchange : realmResults) {
+            bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
+        }
+        return bigDecimal.toString();
+    }
+
     public void deleteExchangeById(String id) {
         realm.beginTransaction();
         Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();
