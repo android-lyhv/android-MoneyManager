@@ -5,10 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
+import com.dut.moneytracker.constant.DebitType;
+import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.objects.Debit;
+import com.dut.moneytracker.utils.DateTimeUtils;
+
+import java.util.Locale;
 
 import io.realm.RealmResults;
 
@@ -18,6 +27,20 @@ import io.realm.RealmResults;
  */
 
 public class DebitAdapter extends BaseRecyclerAdapter {
+    public interface ClickDebitListener {
+        void onClickDetail(Debit debit);
+
+        void onClickViewExchange(Debit debit);
+
+        void onClickCheckDebit(Debit debit);
+    }
+
+    private ClickDebitListener mClickDebitListener;
+
+    public void registerClickDebit(ClickDebitListener clickDebitListener) {
+        mClickDebitListener = clickDebitListener;
+    }
+
     public DebitAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
@@ -33,14 +56,65 @@ public class DebitAdapter extends BaseRecyclerAdapter {
         ((ItemDebitViewHolder) holder).onBind((Debit) getItem(position));
     }
 
-    public class ItemDebitViewHolder extends RecyclerView.ViewHolder {
+    class ItemDebitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        LinearLayout llDebit;
+        TextView tvTitleDebit;
+        TextView tvDescriptionDebit;
+        TextView tvStartDebit;
+        TextView tvEndDate;
+        TextView tvInitAmount;
+        TextView tvRemindAmount;
+        ImageView imgViewExchangeDebit;
+        ImageView imgCheckDebit;
+        ProgressBar progressBarPartial;
 
         public ItemDebitViewHolder(View itemView) {
             super(itemView);
+            llDebit = (LinearLayout) itemView.findViewById(R.id.llDebit);
+            llDebit.setOnClickListener(this);
+            tvTitleDebit = (TextView) itemView.findViewById(R.id.tvTitleDebit);
+            tvDescriptionDebit = (TextView) itemView.findViewById(R.id.tvDescriptionDebit);
+            tvStartDebit = (TextView) itemView.findViewById(R.id.tvStartDebit);
+            tvEndDate = (TextView) itemView.findViewById(R.id.tvEndDebit);
+            tvInitAmount = (TextView) itemView.findViewById(R.id.tvInitDebitAmount);
+            tvRemindAmount = (TextView) itemView.findViewById(R.id.tvRemindAmount);
+            imgViewExchangeDebit = (ImageView) itemView.findViewById(R.id.imgViewExchangeDebit);
+            imgCheckDebit = (ImageView) itemView.findViewById(R.id.imgCheckDebit);
+            progressBarPartial = (ProgressBar) itemView.findViewById(R.id.progressBarPartial);
+            imgViewExchangeDebit.setOnClickListener(this);
+            imgCheckDebit.setOnClickListener(this);
         }
 
         private void onBind(Debit debit) {
+            if (debit.getTypeDebit() == DebitType.LEND) {
+                tvTitleDebit.setText(String.format(Locale.US, "%s -> Tôi", debit.getName()));
+            } else {
+                tvTitleDebit.setText(String.format(Locale.US, "Tôi -> %s", debit.getName()));
+            }
+            tvDescriptionDebit.setText(debit.getDescription());
+            tvStartDebit.setText(DateTimeUtils.getInstance().getStringDateUs(debit.getStartDate()));
+            tvEndDate.setText(String.format(Locale.US, "Hết hạn %s", DateTimeUtils.getInstance().getStringDateUs(debit.getEndDate())));
+            tvInitAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(debit.getAmount(), debit.getCurrencyCode()));
+            onLoadRemindAmount(debit);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.imgViewExchangeDebit:
+                    mClickDebitListener.onClickViewExchange((Debit) getItem(getAdapterPosition()));
+                    break;
+                case R.id.imgCheckDebit:
+                    mClickDebitListener.onClickCheckDebit((Debit) getItem(getAdapterPosition()));
+                    break;
+                case R.id.llDebit:
+                    mClickDebitListener.onClickDetail((Debit) getItem(getAdapterPosition()));
+            }
+        }
+
+        private void onLoadRemindAmount(Debit debit) {
 
         }
+
     }
 }

@@ -60,6 +60,13 @@ public class ExchangeManger extends RealmHelper {
         realm.commitTransaction();
     }
 
+    public void deleteExchangeByDebitId(String idDebit) {
+        realm.beginTransaction();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
+        realmResults.deleteAllFromRealm();
+        realm.commitTransaction();
+    }
+
     public RealmResults<Exchange> getExchanges() {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAllSorted("created", Sort.DESCENDING);

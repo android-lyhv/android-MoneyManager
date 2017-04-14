@@ -2,11 +2,8 @@ package com.dut.moneytracker.ui.debit;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.adapter.ClickItemListener;
-import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.debit.DebitAdapter;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Debit;
@@ -26,7 +23,7 @@ import io.realm.RealmResults;
  * Created by ly.ho on 13/04/2017.
  */
 @EFragment(R.layout.fragment_debit)
-public class FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<Debit>> {
+public class FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<Debit>>, DebitAdapter.ClickDebitListener {
     private static final String TAG = FragmentDebit.class.getSimpleName();
     @ViewById(R.id.recyclerDebit)
     RecyclerView mRecyclerViewDebit;
@@ -45,14 +42,9 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
     private void initRecyclerDebit() {
         RealmResults<Debit> mDebits = DebitManager.getInstance().onLoadDebitAsync();
         mDebitAdapter = new DebitAdapter(getContext(), mDebits);
+        mDebitAdapter.registerClickDebit(this);
         mRecyclerViewDebit.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerViewDebit.setAdapter(mDebitAdapter);
-        mRecyclerViewDebit.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
-            @Override
-            public void onClick(View view, int position) {
-                ActivityDetailDebit_.intent(FragmentDebit.this).mDebit((Debit) mDebitAdapter.getItem(position)).start();
-            }
-        }));
         mDebits.addChangeListener(this);
     }
 
@@ -65,5 +57,20 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
     public void onResume() {
         super.onResume();
         ((MainActivity_) getActivity()).loadMenuItemFragmentDebit();
+    }
+
+    @Override
+    public void onClickDetail(Debit debit) {
+        ActivityDetailDebit_.intent(FragmentDebit.this).mDebit(debit).start();
+    }
+
+    @Override
+    public void onClickViewExchange(Debit debit) {
+
+    }
+
+    @Override
+    public void onClickCheckDebit(Debit debit) {
+
     }
 }
