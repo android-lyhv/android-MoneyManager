@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
+import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Place;
@@ -100,7 +102,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     //GoogleMap
     Place mPlace;
     GoogleMap mGoogleMap;
-    private SupportMapFragment mMapFragment;
 
 
     @AfterViews
@@ -110,13 +111,13 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         setSupportActionBar(toolbar);
         setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
-        mPlace = mExchange.getPlace() != null ? mExchange.getPlace() : new Place();
         onShowDetailExchange();
         initMap();
     }
 
     private void initMap() {
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mPlace = mExchange.getPlace();
+        SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
     }
@@ -331,6 +332,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onShowDetailExchange() {
+        if (!TextUtils.isEmpty(mExchange.getIdDebit())) {
+            showDetailExchangeDebit();
+            return;
+        }
         switch (mExchange.getTypeExchange()) {
             case ExchangeType.INCOME:
             case ExchangeType.EXPENSES:
@@ -348,6 +353,20 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_edit_exchange), mExchange);
         setResult(ResultCode.EDIT_EXCHANGE, intent);
+    }
+
+    private void showDetailExchangeDebit() {
+        rlCategory.setVisibility(View.GONE);
+        tvCategoryName.setText(getString(R.string.debit_name));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        mTvDescription.setText(mExchange.getDescription());
+        tvAccount.setText(DebitManager.getInstance().getAccountNameByDebitId(mExchange.getIdDebit()));
+        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+        tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
+        if (!mExchange.getAmount().startsWith("-")) {
+            tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
+        tvExchangeName.setText(getString(R.string.debit_name));
     }
 
     private void showDetailTypeIncomeAndExpenses() {
@@ -400,6 +419,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
 
     void onTargetLocationExchange() {
+        if (mPlace == null) {
+            return;
+        }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));

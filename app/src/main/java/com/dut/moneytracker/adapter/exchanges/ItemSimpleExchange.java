@@ -14,6 +14,7 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
+import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -48,6 +49,12 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
     }
 
     void onBind(Context context, Exchange exchange) {
+        // Chung
+        if (TextUtils.isEmpty(exchange.getDescription())) {
+            llNote.setVisibility(View.GONE);
+        } else {
+            llNote.setVisibility(View.VISIBLE);
+        }
         tvDescription.setText(exchange.getDescription());
         tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
         String amount = exchange.getAmount();
@@ -57,12 +64,20 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             tvAmount.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light));
         }
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
-        tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
-        if (TextUtils.isEmpty(exchange.getDescription())) {
-            llNote.setVisibility(View.GONE);
+        if (exchange.getPlace() == null) {
+            imgLocation.setVisibility(View.GONE);
         } else {
-            llNote.setVisibility(View.VISIBLE);
+            imgLocation.setVisibility(View.VISIBLE);
         }
+        // if debit exchange
+        if (!TextUtils.isEmpty(exchange.getIdDebit())) {
+            tvCategoryName.setText(R.string.debit_name);
+            imgCategory.setImageResource(R.drawable.ic_debit);
+            tvAccountName.setText(DebitManager.getInstance().getAccountNameByDebitId(exchange.getIdDebit()));
+            return;
+        }
+        // not debit exchange
+        tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
         if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
             Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
             imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
@@ -71,11 +86,6 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
         if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
             imgCategory.setImageResource(R.drawable.ic_transfer);
             tvCategoryName.setText(context.getResources().getString(R.string.transfer));
-        }
-        if (exchange.getPlace() == null) {
-            imgLocation.setVisibility(View.GONE);
-        } else {
-            imgLocation.setVisibility(View.VISIBLE);
         }
     }
 }

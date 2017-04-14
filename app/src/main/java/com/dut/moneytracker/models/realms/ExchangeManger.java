@@ -85,7 +85,7 @@ public class ExchangeManger extends RealmHelper {
 
     public RealmResults<Exchange> getExchangesByAccount(String accountID) {
         realm.beginTransaction();
-        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).or().isNotNull("idDebit").findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -96,7 +96,7 @@ public class ExchangeManger extends RealmHelper {
 
 
     public RealmResults<Exchange> onLoadExchangeAsyncByAccount(String accountID, int limit) {
-        return realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSortedAsync("created", Sort.DESCENDING);
+        return realm.where(Exchange.class).equalTo("idAccount", accountID).or().isNotNull("idDebit").findAllSortedAsync("created", Sort.DESCENDING);
     }
 
     public List<ValueLineChart> getValueChartByDailyDay(int limitDay) {

@@ -249,4 +249,5 @@
     <string name="debit_lend">Cho Vay</string>
     <string name="debit_broved">Đi Vay</string>
     <string name="toobar_detail_debit">Chi tiết sổ nợ</string>
+    <string name="debit_name">Vay Nợ</string>
 </resources>

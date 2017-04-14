@@ -1,6 +1,12 @@
 package com.dut.moneytracker.models.realms;
 
+import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.objects.Debit;
+import com.dut.moneytracker.objects.Exchange;
+
+import java.util.Date;
+import java.util.Locale;
+import java.util.UUID;
 
 import io.realm.RealmResults;
 
@@ -52,9 +58,16 @@ public class DebitManager extends RealmHelper {
         realm.commitTransaction();
     }
 
+    public String getAccountNameByDebitId(String id) {
+        realm.beginTransaction();
+        String accountId = realm.where(Debit.class).equalTo("id", id).findFirst().getIdAccount();
+        realm.commitTransaction();
+        return AccountManager.getInstance().getAccountNameById(accountId);
+    }
+
     public void genExchangeFromDebit(Debit debit, String amount) {
         //TODO here
-       /* Exchange exchange = new Exchange();
+        Exchange exchange = new Exchange();
         if (null == amount) {
             // This for first debit exchange
             exchange.setId(debit.getId());
@@ -70,6 +83,6 @@ public class DebitManager extends RealmHelper {
         } else {
             exchange.setDescription(String.format(Locale.US, "Tôi -> %s", debit.getName()));
         }
-        ExchangeManger.getInstance().insertOrUpdate(exchange);*/
+        ExchangeManger.getInstance().insertOrUpdate(exchange);
     }
 }
