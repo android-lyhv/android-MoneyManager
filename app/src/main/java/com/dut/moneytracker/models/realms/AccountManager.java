@@ -144,9 +144,11 @@ public class AccountManager extends RealmHelper implements AccountListener {
     public String getAccountNameById(String id) {
         realm.beginTransaction();
         Account account = realm.where(Account.class).equalTo("id", id).findFirst();
-        String name = account.getName();
         realm.commitTransaction();
-        return name;
+        if (account == null) {
+            return "";
+        }
+        return account.getName();
     }
 
     public void createDefaultAccount(Context context) {
