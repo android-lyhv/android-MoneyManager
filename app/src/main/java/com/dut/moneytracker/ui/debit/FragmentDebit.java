@@ -102,6 +102,8 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
             @Override
             public void onClickFinishDebit() {
                 DebitManager.getInstance().setStatusDebit(debit.getId(), true);
+                String remindAmount = DebitManager.getInstance().getRemindAmountDebit(debit);
+                DebitManager.getInstance().genExchangeFromDebit(debit, remindAmount);
             }
         });
     }

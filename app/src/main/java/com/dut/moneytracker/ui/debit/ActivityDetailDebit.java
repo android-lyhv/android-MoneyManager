@@ -143,6 +143,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlName)
     void onClickName() {
+        if (mDebit.isClose()){
+            return;
+        }
         DialogInput dialogInput = DialogInput_.builder().build();
         dialogInput.register(new DialogInput.DescriptionListener() {
             @Override
@@ -156,6 +159,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlAmount)
     void onCLickAmount() {
+        if (mDebit.isClose()){
+            return;
+        }
         String amount = mDebit.getAmount();
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
@@ -196,6 +202,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlDescription)
     void onCLickDescription() {
+        if (mDebit.isClose()){
+            return;
+        }
         DialogInput dialogInput = DialogInput_.builder().build();
         dialogInput.register(new DialogInput.DescriptionListener() {
             @Override
@@ -209,6 +218,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
+        if (mDebit.isClose()){
+            return;
+        }
         DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
         dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
@@ -222,6 +234,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlStartDate)
     void onClickDate() {
+        if (mDebit.isClose()){
+            return;
+        }
         DayPicker dayPicker = DayPicker_.builder().build();
         dayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
@@ -235,6 +250,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlEndDate)
     void onClickEndDate() {
+        if (mDebit.isClose()){
+            return;
+        }
         DayPicker dayPicker = DayPicker_.builder().build();
         dayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override

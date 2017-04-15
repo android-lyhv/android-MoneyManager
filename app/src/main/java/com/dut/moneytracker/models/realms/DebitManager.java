@@ -84,23 +84,27 @@ public class DebitManager extends RealmHelper {
     public void genExchangeFromDebit(Debit debit, String amount) {
         Exchange exchange = new Exchange();
         if (null == amount) {
-            // This for first debit exchange
             exchange.setId(debit.getId());
             exchange.setAmount(debit.getAmount());
+            if (debit.getTypeDebit() == DebitType.LEND) {
+                exchange.setDescription(String.format(Locale.US, "%s -> Tôi", debit.getName()));
+            } else {
+                exchange.setDescription(String.format(Locale.US, "Tôi -> %s", debit.getName()));
+            }
         } else {
             if (debit.getTypeDebit() == DebitType.BORROWED) {
                 amount = String.format(Locale.US, "-%s", amount);
             }
             exchange.setId(UUID.randomUUID().toString());
             exchange.setAmount(amount);
+            if (debit.getTypeDebit() == DebitType.LEND) {
+                exchange.setDescription(String.format(Locale.US, "%s -> Tôi (một phần)", debit.getName()));
+            } else {
+                exchange.setDescription(String.format(Locale.US, "Tôi -> %s (một phần)", debit.getName()));
+            }
         }
         exchange.setCreated(new Date());
         exchange.setIdDebit(debit.getId());
-        if (debit.getTypeDebit() == DebitType.LEND) {
-            exchange.setDescription(String.format(Locale.US, "%s -> Tôi", debit.getName()));
-        } else {
-            exchange.setDescription(String.format(Locale.US, "Tôi -> %s", debit.getName()));
-        }
         ExchangeManger.getInstance().insertOrUpdate(exchange);
     }
 }
