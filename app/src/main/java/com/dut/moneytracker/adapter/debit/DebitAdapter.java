@@ -1,6 +1,7 @@
 package com.dut.moneytracker.adapter.debit;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,7 +105,11 @@ public class DebitAdapter extends BaseRecyclerAdapter {
                     mClickDebitListener.onClickViewExchange((Debit) getItem(getAdapterPosition()));
                     break;
                 case R.id.imgCheckDebit:
-                    mClickDebitListener.onClickCheckDebit((Debit) getItem(getAdapterPosition()));
+                    Debit debit = (Debit) getItem(getAdapterPosition());
+                    if (debit.isClose()) {
+                        imgCheckDebit.setEnabled(false);
+                    }
+                    mClickDebitListener.onClickCheckDebit(debit);
                     break;
                 case R.id.llDebit:
                     mClickDebitListener.onClickDetail((Debit) getItem(getAdapterPosition()));
@@ -120,15 +125,26 @@ public class DebitAdapter extends BaseRecyclerAdapter {
                 value = value.substring(1);
             }
             tvRemindAmount.setText(String.format(Locale.US, "Còn lại: %s", value));
-            loadProgressBar(amount, debit.getAmount());
+            if (debit.isClose()) {
+                tvRemindAmount.setText(R.string.debit_colse);
+                tvRemindAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                progressBarPartial.setProgress(progressBarPartial.getMax());
+            } else {
+                loadProgressBar(amount, debit.getAmount());
+            }
         }
 
-        private void loadProgressBar(String amountPairtal, String amountDebit) {
-            float amount = CurrencyUtils.getInstance().getFloatMoney(amountPairtal);
+        private void loadProgressBar(String amountPartial, String amountDebit) {
+            float amount = CurrencyUtils.getInstance().getFloatMoney(amountPartial);
             float amountTotal = CurrencyUtils.getInstance().getFloatMoney(amountDebit);
             int distance = (int) (Math.abs(amount / amountTotal) * 100);
             if (amount != 0 && distance == 0) {
                 distance = 1;
+            }
+            if (distance == progressBarPartial.getMax()) {
+                tvRemindAmount.setText(R.string.debit_colse);
+                tvRemindAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                imgCheckDebit.setEnabled(false);
             }
             progressBarPartial.setProgress(distance);
         }

@@ -60,9 +60,11 @@ public class ActivityAddDebit extends AppCompatActivity {
     AppCompatSpinner mSpinnerDebit;
     private SpinnerTypeDebitManager mSpinnerTypeDebitManager;
     private Debit mNewDebit;
+    private DialogCalculator mCalculator;
 
     @AfterViews
     void init() {
+        mCalculator = new DialogCalculator();
         mSpinnerTypeDebitManager = new SpinnerTypeDebitManager(this, mSpinnerDebit);
         initBaseDebit();
         initView();
@@ -87,10 +89,8 @@ public class ActivityAddDebit extends AppCompatActivity {
         mNewDebit = new Debit();
         mNewDebit.setId(UUID.randomUUID().toString());
         mNewDebit.setTypeDebit(mSpinnerTypeDebitManager.getTypeItemSelected());
-        mNewDebit.setAmount("");
         mNewDebit.setStartDate(new Date());
         mNewDebit.setEndDate(new Date());
-        onChangeAmount(mNewDebit.getTypeDebit());
     }
 
     @OptionsItem(android.R.id.home)
@@ -138,13 +138,15 @@ public class ActivityAddDebit extends AppCompatActivity {
     @Click(R.id.rlAmount)
     void onCLickAmount() {
         String amount = mNewDebit.getAmount();
+        if (TextUtils.isEmpty(amount)) {
+            amount = "0";
+        }
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
         }
-        DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.show(getFragmentManager(), null);
-        dialogCalculator.setAmount(amount);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mCalculator.show(getFragmentManager(), null);
+        mCalculator.setAmount(amount);
+        mCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 if (mNewDebit.getTypeDebit() == DebitType.BORROWED) {

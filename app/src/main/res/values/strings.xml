@@ -250,4 +250,6 @@
     <string name="debit_broved">Đi Vay</string>
     <string name="toobar_detail_debit">Chi tiết sổ nợ</string>
     <string name="debit_name">Vay Nợ</string>
+    <string name="debit_colse">Đã đóng</string>
+    <string name="messger_remind_amount">Số tiền nhập vào phải bé hơn hoặc bằng số tiền còn lại</string>
 </resources>

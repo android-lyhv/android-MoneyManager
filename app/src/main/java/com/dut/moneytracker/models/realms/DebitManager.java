@@ -4,6 +4,7 @@ import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -65,14 +66,31 @@ public class DebitManager extends RealmHelper {
         return AccountManager.getInstance().getAccountNameById(accountId);
     }
 
+    public void setStatusDebit(String id, boolean isClose) {
+        realm.beginTransaction();
+        Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
+        debit.setClose(isClose);
+        realm.insertOrUpdate(debit);
+        realm.commitTransaction();
+    }
+
+    public String getRemindAmountDebit(Debit debit) {
+        String amount = ExchangeManger.getInstance().getAmountExchangeByDebit(debit.getId());
+        BigDecimal bigDecimal = new BigDecimal(debit.getAmount());
+        bigDecimal = bigDecimal.add(new BigDecimal(amount));
+        return bigDecimal.toString();
+    }
+
     public void genExchangeFromDebit(Debit debit, String amount) {
-        //TODO here
         Exchange exchange = new Exchange();
         if (null == amount) {
             // This for first debit exchange
             exchange.setId(debit.getId());
             exchange.setAmount(debit.getAmount());
         } else {
+            if (debit.getTypeDebit() == DebitType.BORROWED) {
+                amount = String.format(Locale.US, "-%s", amount);
+            }
             exchange.setId(UUID.randomUUID().toString());
             exchange.setAmount(amount);
         }
