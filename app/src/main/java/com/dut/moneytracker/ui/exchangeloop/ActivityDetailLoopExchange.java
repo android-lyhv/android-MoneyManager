@@ -19,10 +19,10 @@ import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -104,9 +104,11 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private Date lastDate;
     private boolean lastStatus;
     private SpinnerTypeLoopManger mSpinnerTypeLoopManger;
+    private DialogCalculator mDialogCalculator;
 
     @AfterViews
     void init() {
+        mDialogCalculator = DialogCalculator_.builder().build();
         initToolbar();
         initSpinner();
         onShowData();
@@ -282,7 +284,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
 
     @Click(R.id.rlCategory)
     void onClickCategory() {
-        startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
+        startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
     }
 
     @Click(R.id.rlAmount)
@@ -291,10 +293,9 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
         }
-        DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.show(getFragmentManager(), null);
-        dialogCalculator.setAmount(amount);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), null);
+        mDialogCalculator.setAmount(amount);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 if (mTypeExchange == ExchangeType.INCOME) {
@@ -329,7 +330,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        },false);
+        }, false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 
@@ -365,14 +366,14 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                                 ActivityCompat.requestPermissions(ActivityDetailLoopExchange.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
-                                        RequestCode.PERMISSION_LOCATION);
+                                        IntentCode.PERMISSION_LOCATION);
                             }
                         }).show();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        RequestCode.PERMISSION_LOCATION);
+                        IntentCode.PERMISSION_LOCATION);
             }
         } else {
             showDialogPickPlace();
@@ -382,7 +383,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private void showDialogPickPlace() {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
-            startActivityForResult(builder.build(this), RequestCode.PICK_PLACE);
+            startActivityForResult(builder.build(this), IntentCode.PICK_PLACE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
@@ -393,8 +394,8 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RequestCode.PICK_CATEGORY) {
-            if (resultCode == ResultCode.PICK_CATEGORY) {
+        if (requestCode == IntentCode.PICK_CATEGORY) {
+            if (resultCode == IntentCode.PICK_CATEGORY) {
                 Category category = data.getParcelableExtra(getString(R.string.extra_category));
                 String idCategory = category.getId();
                 String nameCategory = category.getName();
@@ -402,7 +403,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 mExchangeLoop.setIdCategory(idCategory);
             }
         }
-        if (requestCode == RequestCode.PICK_PLACE) {
+        if (requestCode == IntentCode.PICK_PLACE) {
             DialogUtils.getInstance().dismissProgressDialog();
             if (resultCode == RESULT_OK) {
                 com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);
@@ -422,7 +423,8 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
+        String title = String.format(Locale.US, "%s,%s", mPlace.getName(), mPlace.getName());
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 

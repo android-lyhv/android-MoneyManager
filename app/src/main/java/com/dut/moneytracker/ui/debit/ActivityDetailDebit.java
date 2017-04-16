@@ -13,6 +13,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -67,9 +68,11 @@ public class ActivityDetailDebit extends AppCompatActivity {
     @Extra
     Debit mDebit;
     private int idLastDebit;
+    private DialogCalculator mDialogCalculator;
 
     @AfterViews
     void init() {
+        mDialogCalculator = DialogCalculator_.builder().build();
         idLastDebit = mDebit.getId();
         initToolbar();
         loadView();
@@ -174,10 +177,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
         }
-        DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.show(getFragmentManager(), null);
-        dialogCalculator.setAmount(amount);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), null);
+        mDialogCalculator.setAmount(amount);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 if (mDebit.getTypeDebit() == DebitType.BORROWED) {

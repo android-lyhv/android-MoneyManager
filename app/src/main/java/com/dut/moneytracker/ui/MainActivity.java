@@ -26,9 +26,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.FilterType;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.constant.PieChartType;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
@@ -217,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                         onLoadFragmentDebit();
                         break;
                     case PROFILE:
-                        startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), RequestCode.PROFILE);
+                        startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), IntentCode.PROFILE);
                         break;
                 }
             }
@@ -299,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
-        ActivityDetailAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.DETAIL_ACCOUNT);
+        ActivityDetailAccount_.intent(this).mAccount(mAccount).startForResult(IntentCode.DETAIL_ACCOUNT);
     }
 
     @Click(R.id.imgSortingDebit)
@@ -307,14 +306,14 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         //TODO short
     }
 
-    @OnActivityResult(RequestCode.DETAIL_ACCOUNT)
+    @OnActivityResult(IntentCode.DETAIL_ACCOUNT)
     void onResultEditAccount(int resultCode, Intent data) {
-        if (resultCode == ResultCode.DELETE_ACCOUNT) {
+        if (resultCode == IntentCode.DELETE_ACCOUNT) {
             Intent intent = new Intent(MainActivity.RECEIVER_DELETE_ACCOUNT);
             intent.putExtra(getString(R.string.position_account_delete), positionAccount);
             sendBroadcast(intent);
         }
-        if (resultCode == ResultCode.EDIT_ACCOUNT) {
+        if (resultCode == IntentCode.EDIT_ACCOUNT) {
             if (data == null) {
                 return;
             }
@@ -359,8 +358,6 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
             case R.id.nav_debit:
                 mFragmentTag = FragmentTag.DEBIT;
                 break;
-            case R.id.nav_location:
-                break;
             case R.id.nav_setting:
                 break;
         }
@@ -372,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case ResultCode.PROFILE:
+            case IntentCode.PROFILE:
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
                 break;
@@ -470,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @Override
     public void loadMenuItemFragmentLoop() {
-        setTitle(null);
+        setTitle(getString(R.string.toolbar_titile_exchange_loop));
         spinner.setVisibility(View.GONE);
         imgDateFilter.setVisibility(View.GONE);
         imgSettingAccount.setVisibility(View.GONE);

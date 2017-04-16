@@ -21,10 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -62,12 +62,19 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
     SwitchCompat mSwitchLocation;
     Account mAccount;
     private DialogPickColor mDialogPickColor;
+    private DialogCalculator mDialogCalculator;
 
     @AfterViews
     void init() {
         setTitle(getString(R.string.new_account));
+        initDialog();
         initToolbar();
         initBaseAccount();
+    }
+
+    private void initDialog() {
+        mDialogPickColor = DialogPickColor_.builder().build();
+        mDialogCalculator = DialogCalculator_.builder().build();
     }
 
     private void initBaseAccount() {
@@ -112,7 +119,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
         //Sending
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_account), mAccount);
-        setResult(ResultCode.ADD_NEW_ACCOUNT, intent);
+        setResult(IntentCode.ADD_NEW_ACCOUNT, intent);
         finish();
     }
 
@@ -123,14 +130,13 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     @Click(R.id.tvInitAmount)
     void onClickInitAmount() {
-        DialogCalculator dialogCalculator = new DialogCalculator();
         if (!TextUtils.isEmpty(mAccount.getInitAmount())) {
-            dialogCalculator.setAmount(mAccount.getInitAmount());
+            mDialogCalculator.setAmount(mAccount.getInitAmount());
         } else {
-            dialogCalculator.setAmount("");
+            mDialogCalculator.setAmount("");
         }
-        dialogCalculator.show(getFragmentManager(), TAG);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), TAG);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 mAccount.setInitAmount(amount);
@@ -141,7 +147,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     @Click(R.id.imgColor)
     void onClickImgColor() {
-        mDialogPickColor = DialogPickColor_.builder().build();
         mDialogPickColor.register(this);
         mDialogPickColor.show(getSupportFragmentManager(), null);
     }
@@ -158,7 +163,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case RequestCode.PERMISSION_LOCATION: {
+            case IntentCode.PERMISSION_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mAccount.setSaveLocation(true);
                 }
@@ -181,14 +186,14 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
                                 ActivityCompat.requestPermissions(ActivityAddNewAccount.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
-                                        RequestCode.PERMISSION_LOCATION);
+                                        IntentCode.PERMISSION_LOCATION);
                             }
                         }).show();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        RequestCode.PERMISSION_LOCATION);
+                        IntentCode.PERMISSION_LOCATION);
             }
         } else {
             mAccount.setSaveLocation(true);

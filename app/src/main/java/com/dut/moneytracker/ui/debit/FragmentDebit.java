@@ -8,6 +8,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.debit.DebitAdapter;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogPayDebit;
 import com.dut.moneytracker.dialogs.DialogPayDebit_;
 import com.dut.moneytracker.models.realms.DebitManager;
@@ -38,7 +39,7 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
     @AfterViews
     void init() {
         mDialogPayDebit = DialogPayDebit_.builder().build();
-        mDialogCalculator = new DialogCalculator();
+        mDialogCalculator = DialogCalculator_.builder().build();
         initRecyclerDebit();
     }
 

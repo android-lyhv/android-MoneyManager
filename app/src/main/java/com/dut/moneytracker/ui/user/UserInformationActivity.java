@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.view.CircleImageView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -59,7 +59,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                 if (mFireBaseAuth.getCurrentUser() != null) {
                     mFireBaseAuth.signOut();
                     logOutFacebook();
-                    setResult(ResultCode.PROFILE);
+                    setResult(IntentCode.PROFILE);
                     finish();
                 }
                 break;
