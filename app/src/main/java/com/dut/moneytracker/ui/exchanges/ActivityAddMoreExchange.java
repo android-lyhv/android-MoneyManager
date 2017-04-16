@@ -67,7 +67,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     Exchange mExchange;
     private Place mPlace;
     private Date mDate;
-    GoogleMap mGoogleMap;
+    private GoogleMap mGoogleMap;
 
     @AfterViews
     void init() {
