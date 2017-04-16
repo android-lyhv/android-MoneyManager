@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.LoadCategoryListener;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.objects.Category;
 
 import io.realm.RealmResults;
@@ -96,6 +96,6 @@ public class ActivityPickCategory extends AppCompatActivity implements LoadCateg
     private void sentBackCategory(Category category) {
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_category), category);
-        setResult(ResultCode.PICK_CATEGORY, intent);
+        setResult(IntentCode.PICK_CATEGORY, intent);
     }
 }

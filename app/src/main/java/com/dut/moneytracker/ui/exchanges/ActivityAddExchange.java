@@ -14,8 +14,7 @@ import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.maps.GoogleLocation;
@@ -218,7 +217,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         } else {
             mExchange.setAmount(textAmount);
         }
-        ActivityAddMoreExchange_.intent(this).mExchange(mExchange).startForResult(RequestCode.MORE_ADD);
+        ActivityAddMoreExchange_.intent(this).mExchange(mExchange).startForResult(IntentCode.MORE_ADD);
     }
 
     @Click(R.id.btnIncome)
@@ -309,7 +308,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         } else {
             ExchangeManger.getInstance().insertOrUpdate(mExchange);
         }
-        setResult(ResultCode.ADD_NEW_EXCHANGE, new Intent());
+        setResult(IntentCode.ADD_NEW_EXCHANGE, new Intent());
         finish();
     }
 
@@ -332,20 +331,20 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
 
     private void showActivityPickCategory() {
-        startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
+        startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case ResultCode.PICK_CATEGORY:
+            case IntentCode.PICK_CATEGORY:
                 Category category = data.getParcelableExtra(getString(R.string.extra_category));
                 mIdCategory = category.getId();
                 mNameCategory = category.getName();
                 tvCategoryName.setText(mNameCategory);
                 break;
-            case ResultCode.MORE_ADD:
+            case IntentCode.MORE_ADD:
                 mExchange = data.getParcelableExtra(getString(R.string.extra_more_add));
                 break;
         }

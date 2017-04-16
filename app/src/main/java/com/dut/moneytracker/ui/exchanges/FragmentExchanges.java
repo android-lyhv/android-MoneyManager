@@ -12,8 +12,7 @@ import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecodesAdapter;
 import com.dut.moneytracker.constant.FilterType;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;
@@ -66,7 +65,7 @@ public class FragmentExchanges extends BaseFragment {
             @Override
             public void onClick(View view, int position) {
                 positionItem = position;
-                ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(RequestCode.DETAIL_EXCHANGE);
+                ActivityDetailExchange_.intent(FragmentExchanges.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(IntentCode.DETAIL_EXCHANGE);
             }
         }));
         mExchanges.addChangeListener(new RealmChangeListener<RealmResults<Exchange>>() {
@@ -78,17 +77,17 @@ public class FragmentExchanges extends BaseFragment {
     }
 
 
-    @OnActivityResult(RequestCode.DETAIL_EXCHANGE)
+    @OnActivityResult(IntentCode.DETAIL_EXCHANGE)
     void onResult(int resultCode, Intent data) {
         if (data == null) {
             return;
         }
         Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
-            case ResultCode.EDIT_EXCHANGE:
+            case IntentCode.EDIT_EXCHANGE:
                 ExchangeManger.getInstance().insertOrUpdate(exchange);
                 break;
-            case ResultCode.DELETE_EXCHANGE:
+            case IntentCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mAdapter.getItem(positionItem)).getId());
         }
     }

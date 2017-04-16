@@ -19,8 +19,7 @@ import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
@@ -282,7 +281,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
 
     @Click(R.id.rlCategory)
     void onClickCategory() {
-        startActivityForResult(new Intent(this, ActivityPickCategory.class), RequestCode.PICK_CATEGORY);
+        startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
     }
 
     @Click(R.id.rlAmount)
@@ -365,14 +364,14 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                                 ActivityCompat.requestPermissions(ActivityDetailLoopExchange.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
-                                        RequestCode.PERMISSION_LOCATION);
+                                        IntentCode.PERMISSION_LOCATION);
                             }
                         }).show();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        RequestCode.PERMISSION_LOCATION);
+                        IntentCode.PERMISSION_LOCATION);
             }
         } else {
             showDialogPickPlace();
@@ -382,7 +381,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private void showDialogPickPlace() {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
-            startActivityForResult(builder.build(this), RequestCode.PICK_PLACE);
+            startActivityForResult(builder.build(this), IntentCode.PICK_PLACE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
@@ -393,8 +392,8 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RequestCode.PICK_CATEGORY) {
-            if (resultCode == ResultCode.PICK_CATEGORY) {
+        if (requestCode == IntentCode.PICK_CATEGORY) {
+            if (resultCode == IntentCode.PICK_CATEGORY) {
                 Category category = data.getParcelableExtra(getString(R.string.extra_category));
                 String idCategory = category.getId();
                 String nameCategory = category.getName();
@@ -402,7 +401,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 mExchangeLoop.setIdCategory(idCategory);
             }
         }
-        if (requestCode == RequestCode.PICK_PLACE) {
+        if (requestCode == IntentCode.PICK_PLACE) {
             DialogUtils.getInstance().dismissProgressDialog();
             if (resultCode == RESULT_OK) {
                 com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);

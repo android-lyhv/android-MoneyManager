@@ -11,8 +11,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.account.RecyclerAccountAdapter;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.ui.MainActivity;
@@ -62,7 +61,7 @@ public class ActivityAccounts extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 positionAccount = position;
-                ActivityDetailAccount_.intent(ActivityAccounts.this).mAccount((Account) mAdapter.getItem(position)).startForResult(RequestCode.DETAIL_ACCOUNT);
+                ActivityDetailAccount_.intent(ActivityAccounts.this).mAccount((Account) mAdapter.getItem(position)).startForResult(IntentCode.DETAIL_ACCOUNT);
             }
         }));
         accounts.addChangeListener(new RealmChangeListener<RealmResults<Account>>() {
@@ -73,14 +72,14 @@ public class ActivityAccounts extends AppCompatActivity {
         });
     }
 
-    @OnActivityResult(RequestCode.DETAIL_ACCOUNT)
+    @OnActivityResult(IntentCode.DETAIL_ACCOUNT)
     void onResultEditAccount(int resultCode, Intent data) {
-        if (resultCode == ResultCode.DELETE_ACCOUNT) {
+        if (resultCode == IntentCode.DELETE_ACCOUNT) {
             Intent intent = new Intent(MainActivity.RECEIVER_DELETE_ACCOUNT);
             intent.putExtra(getString(R.string.position_account_delete), positionAccount);
             sendBroadcast(intent);
         }
-        if (resultCode == ResultCode.EDIT_ACCOUNT) {
+        if (resultCode == IntentCode.EDIT_ACCOUNT) {
             if (data == null) {
                 return;
             }
@@ -93,7 +92,7 @@ public class ActivityAccounts extends AppCompatActivity {
         }
     }
 
-    @OnActivityResult(RequestCode.ADD_NEW_ACCOUNT)
+    @OnActivityResult(IntentCode.ADD_NEW_ACCOUNT)
     void onResultAddNewAccount(Intent data) {
         if (data == null) {
             return;
@@ -108,7 +107,7 @@ public class ActivityAccounts extends AppCompatActivity {
 
     @Click(R.id.fab)
     void onClickAddNewAccount() {
-        ActivityAddNewAccount_.intent(ActivityAccounts.this).startForResult(RequestCode.ADD_NEW_ACCOUNT);
+        ActivityAddNewAccount_.intent(ActivityAccounts.this).startForResult(IntentCode.ADD_NEW_ACCOUNT);
     }
 
     @OptionsItem(android.R.id.home)

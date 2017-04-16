@@ -22,8 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
@@ -116,7 +115,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
         // Sending
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_account), mAccount);
-        setResult(ResultCode.EDIT_ACCOUNT, intent);
+        setResult(IntentCode.EDIT_ACCOUNT, intent);
         finish();
     }
 
@@ -132,7 +131,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
             public void onClickResult(boolean value) {
                 if (value) {
                     AccountManager.getInstance().onDeleteAccount(getApplicationContext(), mAccount.getId());
-                    setResult(ResultCode.DELETE_ACCOUNT);
+                    setResult(IntentCode.DELETE_ACCOUNT);
                     finish();
                 }
             }
@@ -181,7 +180,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case RequestCode.PERMISSION_LOCATION: {
+            case IntentCode.PERMISSION_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mAccount.setSaveLocation(true);
                 }
@@ -204,14 +203,14 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
                                 ActivityCompat.requestPermissions(ActivityDetailAccount.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
-                                        RequestCode.PERMISSION_LOCATION);
+                                        IntentCode.PERMISSION_LOCATION);
                             }
                         }).show();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        RequestCode.PERMISSION_LOCATION);
+                        IntentCode.PERMISSION_LOCATION);
             }
         } else {
             mAccount.setSaveLocation(true);

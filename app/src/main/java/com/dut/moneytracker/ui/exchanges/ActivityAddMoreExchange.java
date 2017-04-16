@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.constant.RequestCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Place;
@@ -104,7 +104,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
         mExchange.setCreated(mDate);
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_more_add), mExchange);
-        setResult(RequestCode.MORE_ADD, intent);
+        setResult(IntentCode.MORE_ADD, intent);
         finish();
     }
 
@@ -176,14 +176,14 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
                                 ActivityCompat.requestPermissions(ActivityAddMoreExchange.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
-                                        RequestCode.PERMISSION_LOCATION);
+                                        IntentCode.PERMISSION_LOCATION);
                             }
                         }).show();
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        RequestCode.PERMISSION_LOCATION);
+                        IntentCode.PERMISSION_LOCATION);
             }
         } else {
             showDialogPickPlace();
@@ -193,7 +193,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     private void showDialogPickPlace() {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
-            startActivityForResult(builder.build(this), RequestCode.PICK_PLACE);
+            startActivityForResult(builder.build(this), IntentCode.PICK_PLACE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
@@ -203,7 +203,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RequestCode.PICK_PLACE) {
+        if (requestCode == IntentCode.PICK_PLACE) {
             DialogUtils.getInstance().dismissProgressDialog();
             if (resultCode == RESULT_OK) {
                 com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, this);

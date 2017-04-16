@@ -17,8 +17,7 @@ import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
 import com.dut.moneytracker.adapter.account.CardAccountAdapter;
-import com.dut.moneytracker.constant.RequestCode;
-import com.dut.moneytracker.constant.ResultCode;
+import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
@@ -170,20 +169,20 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onShowDetailExchange(Exchange exchange) {
-        ActivityDetailExchange_.intent(FragmentParentTab.this).mExchange(exchange).startForResult(RequestCode.DETAIL_EXCHANGE);
+        ActivityDetailExchange_.intent(FragmentParentTab.this).mExchange(exchange).startForResult(IntentCode.DETAIL_EXCHANGE);
     }
 
-    @OnActivityResult(RequestCode.DETAIL_EXCHANGE)
+    @OnActivityResult(IntentCode.DETAIL_EXCHANGE)
     void onResult(int resultCode, Intent data) {
         if (data == null) {
             return;
         }
         Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
-            case ResultCode.EDIT_EXCHANGE:
+            case IntentCode.EDIT_EXCHANGE:
                 ExchangeManger.getInstance().insertOrUpdate(exchange);
                 break;
-            case ResultCode.DELETE_EXCHANGE:
+            case IntentCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
         //Reload tab account

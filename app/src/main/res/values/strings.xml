@@ -99,6 +99,8 @@
     <string name="title_debit_notitication">Sổ nợ hết hạn</string>
     <string name="alarm_debit_action">alarm_debit</string>
     <string name="alarm_debit_id">alarm_debit_id</string>
+    <string name="toolbar_titile_exchange_loop">Giao dịch mặc định</string>
+    <string name="toobar_title_exchange_debit">Giao dịch sổ nợ</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>
