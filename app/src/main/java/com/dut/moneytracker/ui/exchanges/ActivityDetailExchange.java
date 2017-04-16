@@ -57,6 +57,7 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -100,8 +101,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     private DayPicker mDayPicker;
     private DialogCalculator mDialogCalculator;
     //GoogleMap
-    Place mPlace;
-    GoogleMap mGoogleMap;
+    private Place mPlace;
+    private GoogleMap mGoogleMap;
 
 
     @AfterViews
@@ -424,7 +425,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
+        String title = String.format(Locale.US, "%s,%s", mPlace.getName(), mPlace.getName());
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 

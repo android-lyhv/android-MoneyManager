@@ -42,6 +42,7 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -233,7 +234,8 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(mPlace.getAddress()));
+        String title = String.format(Locale.US, "%s,%s", mPlace.getName(), mPlace.getName());
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }
 
