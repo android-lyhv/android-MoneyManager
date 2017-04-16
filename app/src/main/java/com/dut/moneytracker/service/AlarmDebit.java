@@ -1,4 +1,4 @@
-package com.dut.moneytracker.recevier;
+package com.dut.moneytracker.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -39,7 +39,7 @@ public class AlarmDebit {
         Intent intent = new Intent(mContext, ReceiveAlarmDebit.class);
         intent.setAction(mContext.getString(R.string.alarm_debit_action));
         intent.putExtra(mContext.getString(R.string.alarm_debit_id), debit.getId());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, debit.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, debit.getEndDate().getTime(), REPEAT_TIME, pendingIntent);
     }
 

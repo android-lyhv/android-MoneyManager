@@ -5,7 +5,7 @@ import android.content.Context;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.ExchangeLooper;
-import com.dut.moneytracker.recevier.GenerateManager;
+import com.dut.moneytracker.service.GenerateManager;
 
 import java.util.Date;
 import java.util.UUID;

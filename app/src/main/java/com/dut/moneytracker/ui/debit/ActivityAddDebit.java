@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +20,7 @@ import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
-import com.dut.moneytracker.recevier.AlarmDebit;
+import com.dut.moneytracker.service.AlarmDebit;
 import com.dut.moneytracker.ui.base.SpinnerTypeDebitManager;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.view.DayPicker;
@@ -42,6 +43,7 @@ import java.util.Locale;
 @EActivity(R.layout.activity_add_debit)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddDebit extends AppCompatActivity {
+    private static final String TAG = ActivityAddDebit.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvName)
@@ -87,7 +89,8 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     private void initBaseDebit() {
         mNewDebit = new Debit();
-        mNewDebit.setId(DebitManager.getInstance().getNewIdDebt());
+        Log.d(TAG, "initBaseDebit: " + DebitManager.getInstance().getNewIdDebit());
+        mNewDebit.setId(DebitManager.getInstance().getNewIdDebit());
         mNewDebit.setTypeDebit(mSpinnerTypeDebitManager.getTypeItemSelected());
         mNewDebit.setStartDate(new Date());
         mNewDebit.setEndDate(new Date());

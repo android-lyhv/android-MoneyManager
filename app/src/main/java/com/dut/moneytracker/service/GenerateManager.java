@@ -1,4 +1,4 @@
-package com.dut.moneytracker.recevier;
+package com.dut.moneytracker.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

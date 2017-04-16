@@ -36,7 +36,7 @@ import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.objects.Place;
-import com.dut.moneytracker.recevier.GenerateManager;
+import com.dut.moneytracker.service.GenerateManager;
 import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
 import com.dut.moneytracker.utils.DateTimeUtils;

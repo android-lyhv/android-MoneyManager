@@ -102,8 +102,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".recevier.ReceiveGenerateExchange" />
-        <receiver android:name=".recevier.ReceiveGenerateExchange" />
+        <receiver android:name=".service.ReceiveGenerateExchange" />
+        <receiver android:name=".service.ReceiveAlarmDebit" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

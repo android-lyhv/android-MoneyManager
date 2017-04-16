@@ -3,7 +3,6 @@ package com.dut.moneytracker.models.realms;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.objects.ExchangeLooper;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -124,8 +123,8 @@ public class DebitManager extends RealmHelper {
         ExchangeManger.getInstance().insertOrUpdate(exchange);
     }
 
-    public int getNewIdDebt() {
-        Number number = realm.where(ExchangeLooper.class).max("id");
+    public int getNewIdDebit() {
+        Number number = realm.where(Debit.class).max("id");
         int nextId;
         if (number == null) {
             nextId = 1;

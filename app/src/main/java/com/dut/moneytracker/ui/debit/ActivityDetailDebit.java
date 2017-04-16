@@ -23,7 +23,7 @@ import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
-import com.dut.moneytracker.recevier.AlarmDebit;
+import com.dut.moneytracker.service.AlarmDebit;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.view.DayPicker;
 import com.dut.moneytracker.view.DayPicker_;

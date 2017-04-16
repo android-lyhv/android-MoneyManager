@@ -17,7 +17,7 @@ import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Debit;
-import com.dut.moneytracker.recevier.AlarmDebit;
+import com.dut.moneytracker.service.AlarmDebit;
 import com.dut.moneytracker.utils.DateTimeUtils;
 
 import java.math.BigDecimal;
