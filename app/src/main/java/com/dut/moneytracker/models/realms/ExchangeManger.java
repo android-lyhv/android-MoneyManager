@@ -130,11 +130,11 @@ public class ExchangeManger extends RealmHelper {
      *
      * @param filter
      */
-    public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int type) {
+    public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int chartType) {
         List<Exchange> exchanges = getExchanges(filter);
         List<ValuePieChart> valuePieCharts = new ArrayList<>();
         List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategory();
-        if (type == PieChartType.INCOME) {
+        if (chartType == PieChartType.INCOME) {
             for (GroupCategory groupCategory : groupCategories) {
                 ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.INCOME);
                 if (valuePieChart != null) {
@@ -142,17 +142,13 @@ public class ExchangeManger extends RealmHelper {
                 }
             }
         }
-        if (type == PieChartType.EXPENSES) {
+        if (chartType == PieChartType.EXPENSES) {
             for (GroupCategory groupCategory : groupCategories) {
                 ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.EXPENSES);
                 if (valuePieChart != null) {
                     valuePieCharts.add(valuePieChart);
                 }
             }
-        }
-        ValuePieChart valuePieChart = getValePieChartTransfer(exchanges, type);
-        if (valuePieChart != null) {
-            valuePieCharts.add(valuePieChart);
         }
         return valuePieCharts;
     }
