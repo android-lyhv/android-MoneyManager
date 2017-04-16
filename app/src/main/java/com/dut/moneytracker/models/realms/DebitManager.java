@@ -41,7 +41,7 @@ public class DebitManager extends RealmHelper {
             debit.deleteFromRealm();
         }
         realm.commitTransaction();
-        ExchangeManger.getInstance().deleteExchangeByDebitId(idDebit);
+        ExchangeManger.getInstance().deleteExchangeByDebit(idDebit);
     }
 
     public void insertOrUpdateDebit(Debit debit) {
@@ -51,8 +51,15 @@ public class DebitManager extends RealmHelper {
         genExchangeFromDebit(debit, null);
     }
 
+    public void updateDebitIfAccountChange(Debit debit) {
+        realm.beginTransaction();
+        realm.insertOrUpdate(debit);
+        realm.commitTransaction();
+        ExchangeManger.getInstance().updateExchangeByDebit(debit.getId(), debit.getIdAccount());
+    }
+
     public void deleteDebitById(String id) {
-        ExchangeManger.getInstance().deleteExchangeByDebitId(id);
+        ExchangeManger.getInstance().deleteExchangeByDebit(id);
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
         debit.deleteFromRealm();
@@ -103,6 +110,7 @@ public class DebitManager extends RealmHelper {
                 exchange.setDescription(String.format(Locale.US, "Tôi -> %s (một phần)", debit.getName()));
             }
         }
+        exchange.setIdAccount(debit.getIdAccount());
         exchange.setCreated(new Date());
         exchange.setIdDebit(debit.getId());
         ExchangeManger.getInstance().insertOrUpdate(exchange);

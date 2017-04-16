@@ -40,7 +40,31 @@ public class ExchangeManger extends RealmHelper {
 
     public void insertOrUpdate(Exchange object) {
         realm.beginTransaction();
-        realm.copyToRealmOrUpdate(object);
+        realm.insertOrUpdate(object);
+        realm.commitTransaction();
+    }
+
+    public void updateExchangeByDebit(String idDebit, String newIdAccount) {
+        realm.beginTransaction();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
+        realm.commitTransaction();
+        for (Exchange exchange : realmResults) {
+            exchange.setIdAccount(newIdAccount);
+            insertOrUpdate(exchange);
+        }
+    }
+
+    public void deleteExchangeById(String id) {
+        realm.beginTransaction();
+        Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();
+        exchange.deleteFromRealm();
+        realm.commitTransaction();
+    }
+
+    public void deleteExchangeByDebit(String idDebit) {
+        realm.beginTransaction();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
+        realmResults.deleteAllFromRealm();
         realm.commitTransaction();
     }
 
@@ -62,20 +86,6 @@ public class ExchangeManger extends RealmHelper {
         return bigDecimal.toString();
     }
 
-    public void deleteExchangeById(String id) {
-        realm.beginTransaction();
-        Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();
-        exchange.deleteFromRealm();
-        realm.commitTransaction();
-    }
-
-    public void deleteExchangeByDebitId(String idDebit) {
-        realm.beginTransaction();
-        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
-        realmResults.deleteAllFromRealm();
-        realm.commitTransaction();
-    }
-
     public RealmResults<Exchange> getExchanges() {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAllSorted("created", Sort.DESCENDING);
@@ -84,12 +94,12 @@ public class ExchangeManger extends RealmHelper {
     }
 
     public RealmResults<Exchange> onLoadExchangeByDebit(String idDebit) {
-        return realm.where(Exchange.class).equalTo("idDebit",idDebit).findAllSortedAsync("created", Sort.DESCENDING);
+        return realm.where(Exchange.class).equalTo("idDebit", idDebit).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
     public RealmResults<Exchange> getExchangesByAccount(String accountID) {
         realm.beginTransaction();
-        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).or().isNotNull("idDebit").findAllSorted("created", Sort.DESCENDING);
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -100,7 +110,7 @@ public class ExchangeManger extends RealmHelper {
 
 
     public RealmResults<Exchange> onLoadExchangeAsyncByAccount(String accountID, int limit) {
-        return realm.where(Exchange.class).equalTo("idAccount", accountID).or().isNotNull("idDebit").findAllSortedAsync("created", Sort.DESCENDING);
+        return realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
     public List<ValueLineChart> getValueChartByDailyDay(int limitDay) {

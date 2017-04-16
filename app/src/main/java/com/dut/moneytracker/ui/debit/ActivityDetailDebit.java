@@ -61,13 +61,15 @@ public class ActivityDetailDebit extends AppCompatActivity {
     TextView mTvEndDate;
     @ViewById(R.id.spinnerDebit)
     AppCompatSpinner mSpinnerDebit;
-    @Extra
-    Debit mDebit;
     @ViewById(R.id.tvType)
     TextView mTvTypeDebit;
+    @Extra
+    Debit mDebit;
+    private String idLastDebit;
 
     @AfterViews
     void init() {
+        idLastDebit = mDebit.getId();
         initToolbar();
         loadView();
     }
@@ -137,13 +139,17 @@ public class ActivityDetailDebit extends AppCompatActivity {
             }
         }
         //Debit
-        DebitManager.getInstance().insertOrUpdateDebit(mDebit);
+        if (!TextUtils.equals(idLastDebit, mDebit.getId())) {
+            DebitManager.getInstance().updateDebitIfAccountChange(mDebit);
+        } else {
+            DebitManager.getInstance().insertOrUpdateDebit(mDebit);
+        }
         finish();
     }
 
     @Click(R.id.rlName)
     void onClickName() {
-        if (mDebit.isClose()){
+        if (mDebit.isClose()) {
             return;
         }
         DialogInput dialogInput = DialogInput_.builder().build();
@@ -159,7 +165,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlAmount)
     void onCLickAmount() {
-        if (mDebit.isClose()){
+        if (mDebit.isClose()) {
             return;
         }
         String amount = mDebit.getAmount();
@@ -202,7 +208,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlDescription)
     void onCLickDescription() {
-        if (mDebit.isClose()){
+        if (mDebit.isClose()) {
             return;
         }
         DialogInput dialogInput = DialogInput_.builder().build();
@@ -218,7 +224,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        if (mDebit.isClose()){
+        if (mDebit.isClose()) {
             return;
         }
         DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
@@ -228,13 +234,13 @@ public class ActivityDetailDebit extends AppCompatActivity {
                 mDebit.setIdAccount(account.getId());
                 mTvAccountName.setText(account.getName());
             }
-        },false);
+        }, false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlStartDate)
     void onClickDate() {
-        if (mDebit.isClose()){
+        if (mDebit.isClose()) {
             return;
         }
         DayPicker dayPicker = DayPicker_.builder().build();
@@ -250,7 +256,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @Click(R.id.rlEndDate)
     void onClickEndDate() {
-        if (mDebit.isClose()){
+        if (mDebit.isClose()) {
             return;
         }
         DayPicker dayPicker = DayPicker_.builder().build();
