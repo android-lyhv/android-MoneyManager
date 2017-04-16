@@ -7,6 +7,7 @@ import android.content.Intent;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.objects.Debit;
+import com.dut.moneytracker.utils.DateTimeUtils;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -17,7 +18,7 @@ import static android.content.Context.ALARM_SERVICE;
 
 public class AlarmDebit {
     private static AlarmDebit alarmDebit;
-    private final long REPEAT_TIME = 10 * 1000;
+    private final long REPEAT_TIME = 10 * 60 * 1000;
     private static Context mContext;
     private static AlarmManager mAlarmManager;
 
@@ -40,7 +41,8 @@ public class AlarmDebit {
         intent.setAction(mContext.getString(R.string.alarm_debit_action));
         intent.putExtra(mContext.getString(R.string.alarm_debit_id), debit.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, debit.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, debit.getEndDate().getTime(), REPEAT_TIME, pendingIntent);
+        long time = DateTimeUtils.getInstance().getTimeNotification(debit.getEndDate(), 6).getTime();
+        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, REPEAT_TIME, pendingIntent);
     }
 
     public void removePendingAlarm(int id) {

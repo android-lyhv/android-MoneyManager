@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,7 +88,6 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     private void initBaseDebit() {
         mNewDebit = new Debit();
-        Log.d(TAG, "initBaseDebit: " + DebitManager.getInstance().getNewIdDebit());
         mNewDebit.setId(DebitManager.getInstance().getNewIdDebit());
         mNewDebit.setTypeDebit(mSpinnerTypeDebitManager.getTypeItemSelected());
         mNewDebit.setStartDate(new Date());

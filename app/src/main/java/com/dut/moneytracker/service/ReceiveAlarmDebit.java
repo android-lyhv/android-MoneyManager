@@ -8,16 +8,13 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.ui.MainActivity;
-import com.dut.moneytracker.ui.MainActivity_;
 
 import java.util.Locale;
 
@@ -34,7 +31,6 @@ public class ReceiveAlarmDebit extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive: aaaaaa");
         if (intent == null || !TextUtils.equals(intent.getAction(), context.getString(R.string.alarm_debit_action))) {
             return;
         }
@@ -44,6 +40,9 @@ public class ReceiveAlarmDebit extends BroadcastReceiver {
     }
 
     private void onNotification(Context context, Debit debit) {
+        if (debit == null) {
+            return;
+        }
         String content;
         if (debit.getTypeDebit() == DebitType.LEND) {
             content = String.format(Locale.US, "%s -> Tôi", debit.getName());
@@ -55,11 +54,9 @@ public class ReceiveAlarmDebit extends BroadcastReceiver {
                 .setContentText(content)
                 .setContentTitle(context.getString(R.string.title_debit_notitication))
                 .setAutoCancel(true);
-        Intent resultIntent = new Intent(context, MainActivity.class);
-        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
-        taskStackBuilder.addParentStack(MainActivity_.class);
-        taskStackBuilder.addNextIntent(resultIntent);
-        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(debit.getId(), PendingIntent.FLAG_CANCEL_CURRENT);
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, debit.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setSound(alarmSound);
