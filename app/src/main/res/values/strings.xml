@@ -71,9 +71,36 @@
     <string name="unknown">Chưa biết</string>
     <integer name="zoom_map">10</integer>
     <string name="extra_edit_exchange">extra_edit_exchange</string>
+    <string name="color_account_default">#03a879</string>
+    <string name="manger_accounts">Quản lý tài khoản</string>
+    <string name="loop_status_ok">Mở</string>
+    <string name="loop_status_close">Đóng</string>
+    <string name="receiver_add_delete_account">receiver_add_or_delete_account</string>
+    <string name="new_account">Tài khoản mới</string>
+    <string name="account_default">Không thể xóa tài khoản mặc định!</string>
+    <string name="message_delete_account">Xóa tài khoản này!</string>
+    <string name="position_account_delete">position_account_delete</string>
+    <string name="position_account_edit">position_account_edit</string>
+    <string name="receiver_add_new_exchange">ADD_NEW_EXCHANGE</string>
+    <string name="dialog_filter_title">Chọn hiển thị!</string>
+    <string name="dialog_filter_now_time">Bây giờ</string>
+    <string name="dialog_filter_cancel">Hủy</string>
+    <string name="toobar_title_debit">Danh sách sổ nợ</string>
+    <string name="toobar_tilte_new_debit">Sổ nợ mới</string>
+    <string name="dialog_delete_debit">Xóa sổ nợ này</string>
+    <string name="debit_lend">Cho Vay</string>
+    <string name="debit_broved">Đi Vay</string>
+    <string name="toobar_detail_debit">Chi tiết sổ nợ</string>
+    <string name="debit_name">Vay Nợ</string>
+    <string name="debit_colse">Đã đóng</string>
+    <string name="messger_remind_amount">Số tiền nhập vào phải bé hơn hoặc bằng số tiền còn lại</string>
+    <string name="out_side_account">Tài khoản khác</string>
+    <string name="toolbar_title_detail_account">Chi tiết tài khoản</string>
+    <string name="title_debit_notitication">Sổ nợ hết hạn</string>
+    <string name="alarm_debit_action">alarm_debit</string>
+    <string name="alarm_debit_id">alarm_debit_id</string>
     <!--GROUP-->
     <string-array name="group_name">
-        <item>Thu Nhập</item>
         <item>Ăn Uống</item>
         <item>Di Chuyển</item>
         <item>Giải Trí</item>
@@ -82,10 +109,10 @@
         <item>Mua Sắm</item>
         <item>Giáo Dục</item>
         <item>Tình yêu - Tình bạn</item>
+        <item>Thu Nhập</item>
         <item>Khác</item>
     </string-array>
     <string-array name="group_path">
-        <item>ic_salary</item>
         <item>ic_food_drinks_other</item>
         <item>ic_transport</item>
         <item>ic_entertainment</item>
@@ -94,6 +121,7 @@
         <item>ic_shopping</item>
         <item>ic_education</item>
         <item>ic_inlove</item>
+        <item>ic_salary</item>
         <item>ic_other</item>
     </string-array>
     // Category
@@ -214,47 +242,29 @@
         <item>ic_other</item>
     </string-array>
     <string-array name="colors_account">
-        <item>#F44336</item>
-        <item>#E91E63</item>
-        <item>#9C27B0</item>
-        <item>#673AB7</item>
-        <item>#2196F3</item>
-        <item>#009688</item>
-        <item>#4CAF50</item>
-        <item>#8BC34A</item>
-        <item>#FFEB3B</item>
-        <item>#795548</item>
-        <item>#607D8B</item>
-        <item>#64dd17</item>
-        <item>#9E9E9E</item>
+        <item>#0097a7</item>
+        <item>#0d47a1</item>
+        <item>#1565c0</item>
+        <item>#1565c0</item>
+        <item>#ff6f00</item>
+        <item>#ffa000</item>
+        <item>#ffb300</item>
+        <item>#ce9600</item>
+        <item>#6d4c41</item>
+        <item>#d32f2f</item>
+        <item>#ff1744</item>
+        <item>#f44336</item>
+        <item>#ad1457</item>
+        <item>#6a1b9a</item>
+        <item>#ab47bc</item>
+        <item>#ba68c8</item>
+        <item>#00897b</item>
+        <item>#4db6ac</item>
+        <item>#2e7d32</item>
+        <item>#43a047</item>
         <item>#212121</item>
+        <item>#5f7c8a</item>
+        <item>#90a4ae</item>
+        <item>#455a64</item>
     </string-array>
-    <string name="color_account_default">#03a879</string>
-    <string name="manger_accounts">Quản lý tài khoản</string>
-    <string name="loop_status_ok">Mở</string>
-    <string name="loop_status_close">Đóng</string>
-    <string name="receiver_add_delete_account">receiver_add_or_delete_account</string>
-    <string name="new_account">Tài khoản mới</string>
-    <string name="account_default">Không thể xóa tài khoản mặc định!</string>
-    <string name="message_delete_account">Xóa tài khoản này!</string>
-    <string name="position_account_delete">position_account_delete</string>
-    <string name="position_account_edit">position_account_edit</string>
-    <string name="receiver_add_new_exchange">ADD_NEW_EXCHANGE</string>
-    <string name="dialog_filter_title">Chọn hiển thị!</string>
-    <string name="dialog_filter_now_time">Bây giờ</string>
-    <string name="dialog_filter_cancel">Hủy</string>
-    <string name="toobar_title_debit">Danh sách sổ nợ</string>
-    <string name="toobar_tilte_new_debit">Sổ nợ mới</string>
-    <string name="dialog_delete_debit">Xóa sổ nợ này</string>
-    <string name="debit_lend">Cho Vay</string>
-    <string name="debit_broved">Đi Vay</string>
-    <string name="toobar_detail_debit">Chi tiết sổ nợ</string>
-    <string name="debit_name">Vay Nợ</string>
-    <string name="debit_colse">Đã đóng</string>
-    <string name="messger_remind_amount">Số tiền nhập vào phải bé hơn hoặc bằng số tiền còn lại</string>
-    <string name="out_side_account">Tài khoản khác</string>
-    <string name="toolbar_title_detail_account">Chi tiết tài khoản</string>
-    <string name="title_debit_notitication">Sổ nợ hết hạn</string>
-    <string name="alarm_debit_action">alarm_debit</string>
-    <string name="alarm_debit_id">alarm_debit_id</string>
 </resources>

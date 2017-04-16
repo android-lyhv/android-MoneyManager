@@ -359,8 +359,6 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
             case R.id.nav_debit:
                 mFragmentTag = FragmentTag.DEBIT;
                 break;
-            case R.id.nav_location:
-                break;
             case R.id.nav_setting:
                 break;
         }
