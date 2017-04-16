@@ -25,6 +25,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogPickColor;
@@ -63,14 +64,21 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
     @Extra
     Account mAccount;
     private DialogPickColor mDialogPickColor;
+    private DialogCalculator mDialogCalculator;
 
     @AfterViews
     void init() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setTitle(getString(R.string.toolbar_title_detail_account));
+        initDialog();
         initToolbar();
         onLoadData();
         initDialogPickColor();
+    }
+
+    private void initDialog() {
+        mDialogPickColor = DialogPickColor_.builder().build();
+        mDialogCalculator = DialogCalculator_.builder().build();
     }
 
     private void initDialogPickColor() {
@@ -147,14 +155,13 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
 
     @Click(R.id.tvInitAmount)
     void onClickInitAmount() {
-        DialogCalculator dialogCalculator = new DialogCalculator();
         if (!TextUtils.isEmpty(mAccount.getInitAmount())) {
-            dialogCalculator.setAmount(mAccount.getInitAmount());
+            mDialogCalculator.setAmount(mAccount.getInitAmount());
         } else {
-            dialogCalculator.setAmount("");
+            mDialogCalculator.setAmount("");
         }
-        dialogCalculator.show(getFragmentManager(), TAG);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), TAG);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 mAccount.setInitAmount(amount);

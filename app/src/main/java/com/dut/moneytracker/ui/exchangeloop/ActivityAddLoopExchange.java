@@ -22,6 +22,7 @@ import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
@@ -88,6 +89,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     AppCompatSpinner mAppCompatSpinner;
     @ViewById(R.id.switchLoop)
     SwitchCompat switchCompat;
+    private DialogCalculator mDialogCalculator;
     private GoogleMap mGoogleMap;
     private Place mPlace;
     private ExchangeLooper mExchangeLoop;
@@ -95,6 +97,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @AfterViews
     void init() {
+        mDialogCalculator = DialogCalculator_.builder().build();
         initBaseExchangeLoop();
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
         onClickTabExpense();
@@ -233,10 +236,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         } else {
             amount = "";
         }
-        DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.show(getFragmentManager(), null);
-        dialogCalculator.setAmount(amount);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), null);
+        mDialogCalculator.setAmount(amount);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 onChangeAmount(amount);
@@ -266,7 +268,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        },false);
+        }, false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 

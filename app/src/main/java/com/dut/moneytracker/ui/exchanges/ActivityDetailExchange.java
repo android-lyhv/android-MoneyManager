@@ -19,6 +19,7 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -97,6 +98,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     Exchange mExchange;
     private TimePicker mTimePicker;
     private DayPicker mDayPicker;
+    private DialogCalculator mDialogCalculator;
     //GoogleMap
     Place mPlace;
     GoogleMap mGoogleMap;
@@ -106,6 +108,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     void init() {
         mTimePicker = TimePicker_.builder().build();
         mDayPicker = DayPicker_.builder().build();
+        mDialogCalculator = DialogCalculator_.builder().build();
         setSupportActionBar(toolbar);
         setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
@@ -166,10 +169,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
         }
-        DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.show(getFragmentManager(), null);
-        dialogCalculator.setAmount(amount);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), null);
+        mDialogCalculator.setAmount(amount);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 if (mExchange.getAmount().startsWith("-")) {

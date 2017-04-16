@@ -67,8 +67,6 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     Exchange mExchange;
     private Place mPlace;
     private Date mDate;
-    //Google Map
-    private SupportMapFragment mMapFragment;
     GoogleMap mGoogleMap;
 
     @AfterViews
@@ -79,7 +77,7 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     }
 
     private void initMap() {
-        mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
     }
 

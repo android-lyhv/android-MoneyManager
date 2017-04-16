@@ -22,6 +22,7 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -103,9 +104,11 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private Date lastDate;
     private boolean lastStatus;
     private SpinnerTypeLoopManger mSpinnerTypeLoopManger;
+    private DialogCalculator mDialogCalculator;
 
     @AfterViews
     void init() {
+        mDialogCalculator = DialogCalculator_.builder().build();
         initToolbar();
         initSpinner();
         onShowData();
@@ -290,10 +293,9 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
         }
-        DialogCalculator dialogCalculator = new DialogCalculator();
-        dialogCalculator.show(getFragmentManager(), null);
-        dialogCalculator.setAmount(amount);
-        dialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), null);
+        mDialogCalculator.setAmount(amount);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 if (mTypeExchange == ExchangeType.INCOME) {
@@ -328,7 +330,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        },false);
+        }, false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 

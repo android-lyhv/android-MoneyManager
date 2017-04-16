@@ -16,6 +16,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
+import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.maps.GoogleLocation;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -355,6 +356,9 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         stringBuilder.append(tvAmount.getText().toString());
         stringBuilder.append(chart);
         if (CurrencyExpression.getInstance().isValidateTypeMoney(stringBuilder.toString())) {
+            if (stringBuilder.toString().length() > DialogCalculator.MAX) {
+                return;
+            }
             tvAmount.setText(stringBuilder.toString());
         }
     }
