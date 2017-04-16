@@ -106,6 +106,7 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
                     remindAmount = remindAmount.substring(1);
                 }
                 DebitManager.getInstance().genExchangeFromDebit(debit, remindAmount);
+                mDebitAdapter.notifyDataSetChanged();
             }
         });
     }

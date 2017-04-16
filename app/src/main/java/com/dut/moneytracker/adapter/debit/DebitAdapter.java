@@ -108,10 +108,10 @@ public class DebitAdapter extends BaseRecyclerAdapter {
                 case R.id.imgCheckDebit:
                     Debit debit = (Debit) getItem(getAdapterPosition());
                     if (debit.isClose()) {
-                        AlarmDebit.getInstance().removePendingAlarm(debit.getId());
-                        imgCheckDebit.setEnabled(false);
+                        AlarmDebit.getInstance().removePendingAlarm(getContext(), debit.getId());
+                    } else {
+                        mClickDebitListener.onClickCheckDebit(debit);
                     }
-                    mClickDebitListener.onClickCheckDebit(debit);
                     break;
                 case R.id.llDebit:
                     mClickDebitListener.onClickDetail((Debit) getItem(getAdapterPosition()));

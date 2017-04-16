@@ -112,7 +112,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    AlarmDebit.getInstance().removePendingAlarm(mDebit.getId());
+                    AlarmDebit.getInstance().removePendingAlarm(ActivityDetailDebit.this, mDebit.getId());
                     DebitManager.getInstance().deleteDebitById(mDebit.getId());
                     finish();
                 }
