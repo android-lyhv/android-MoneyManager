@@ -23,6 +23,7 @@ import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
+import com.dut.moneytracker.recevier.AlarmDebit;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.view.DayPicker;
 import com.dut.moneytracker.view.DayPicker_;
@@ -65,7 +66,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
     TextView mTvTypeDebit;
     @Extra
     Debit mDebit;
-    private String idLastDebit;
+    private int idLastDebit;
 
     @AfterViews
     void init() {
@@ -112,6 +113,8 @@ public class ActivityDetailDebit extends AppCompatActivity {
             public void onClickResult(boolean value) {
                 if (value) {
                     DebitManager.getInstance().deleteDebitById(mDebit.getId());
+                    AlarmDebit.getInstance().removePendingAlarm(mDebit.getId());
+
                     finish();
                 }
             }
@@ -139,7 +142,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
             }
         }
         //Debit
-        if (!TextUtils.equals(idLastDebit, mDebit.getId())) {
+        if (idLastDebit != mDebit.getId()) {
             DebitManager.getInstance().updateDebitIfAccountChange(mDebit);
         } else {
             DebitManager.getInstance().insertOrUpdateDebit(mDebit);

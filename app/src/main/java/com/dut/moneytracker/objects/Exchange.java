@@ -24,7 +24,7 @@ public class Exchange extends RealmObject implements Parcelable {
     private int typeExchange;
     private String idAccount;
     private String idCategory;
-    private String idDebit;
+    private int idDebit;
     private String idAccountTransfer;
     private String codeTransfer;
     private String currencyCode = CurrencyUtils.DEFAULT_CURRENCY_CODE;
@@ -47,7 +47,7 @@ public class Exchange extends RealmObject implements Parcelable {
         dest.writeInt(this.typeExchange);
         dest.writeString(this.idAccount);
         dest.writeString(this.idCategory);
-        dest.writeString(this.idDebit);
+        dest.writeInt(this.idDebit);
         dest.writeString(this.idAccountTransfer);
         dest.writeString(this.codeTransfer);
         dest.writeString(this.currencyCode);
@@ -62,7 +62,7 @@ public class Exchange extends RealmObject implements Parcelable {
         this.typeExchange = in.readInt();
         this.idAccount = in.readString();
         this.idCategory = in.readString();
-        this.idDebit = in.readString();
+        this.idDebit = in.readInt();
         this.idAccountTransfer = in.readString();
         this.codeTransfer = in.readString();
         this.currencyCode = in.readString();

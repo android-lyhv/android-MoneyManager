@@ -70,7 +70,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             imgLocation.setVisibility(View.VISIBLE);
         }
         // if debit exchange
-        if (!TextUtils.isEmpty(exchange.getIdDebit())) {
+        if (exchange.getIdDebit() > 0) {
             tvCategoryName.setText(R.string.debit_name);
             imgCategory.setImageResource(R.drawable.ic_debit);
             tvAccountName.setText(DebitManager.getInstance().getAccountNameByDebitId(exchange.getIdDebit()));

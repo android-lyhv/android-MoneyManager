@@ -27,8 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.debit.ActivityExchangeDebits_"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.debit.ActivityExchangeDebits_"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.debit.ActivityDetailDebit_"
             android:screenOrientation="portrait" />
@@ -101,6 +102,7 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".recevier.ReceiveGenerateExchange" />
         <receiver android:name=".recevier.ReceiveGenerateExchange" />
 
         <meta-data

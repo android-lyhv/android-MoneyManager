@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class Debit extends RealmObject implements Parcelable {
     @PrimaryKey
-    private String id;
+    private int id;
     private String amount;
     private String idAccount;
     private String currencyCode = CurrencyUtils.DEFAULT_CURRENCY_CODE;
@@ -41,7 +41,7 @@ public class Debit extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeInt(this.id);
         dest.writeString(this.amount);
         dest.writeString(this.idAccount);
         dest.writeString(this.currencyCode);
@@ -54,7 +54,7 @@ public class Debit extends RealmObject implements Parcelable {
     }
 
     protected Debit(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readInt();
         this.amount = in.readString();
         this.idAccount = in.readString();
         this.currencyCode = in.readString();

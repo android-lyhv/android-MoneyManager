@@ -17,6 +17,7 @@ import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Debit;
+import com.dut.moneytracker.recevier.AlarmDebit;
 import com.dut.moneytracker.utils.DateTimeUtils;
 
 import java.math.BigDecimal;
@@ -107,6 +108,7 @@ public class DebitAdapter extends BaseRecyclerAdapter {
                 case R.id.imgCheckDebit:
                     Debit debit = (Debit) getItem(getAdapterPosition());
                     if (debit.isClose()) {
+                        AlarmDebit.getInstance().removePendingAlarm(debit.getId());
                         imgCheckDebit.setEnabled(false);
                     }
                     mClickDebitListener.onClickCheckDebit(debit);

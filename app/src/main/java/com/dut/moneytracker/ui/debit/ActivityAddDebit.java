@@ -19,6 +19,7 @@ import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
+import com.dut.moneytracker.recevier.AlarmDebit;
 import com.dut.moneytracker.ui.base.SpinnerTypeDebitManager;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.view.DayPicker;
@@ -33,7 +34,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -87,7 +87,7 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     private void initBaseDebit() {
         mNewDebit = new Debit();
-        mNewDebit.setId(UUID.randomUUID().toString());
+        mNewDebit.setId(DebitManager.getInstance().getNewIdDebt());
         mNewDebit.setTypeDebit(mSpinnerTypeDebitManager.getTypeItemSelected());
         mNewDebit.setStartDate(new Date());
         mNewDebit.setEndDate(new Date());
@@ -119,6 +119,7 @@ public class ActivityAddDebit extends AppCompatActivity {
         }
         //Debit
         DebitManager.getInstance().insertOrUpdateDebit(mNewDebit);
+        AlarmDebit.getInstance().pendingAlarmDebit(this, mNewDebit);
         finish();
     }
 

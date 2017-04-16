@@ -9,7 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -332,7 +331,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onShowDetailExchange() {
-        if (!TextUtils.isEmpty(mExchange.getIdDebit())) {
+        if (mExchange.getIdDebit() > 0) {
             showDetailExchangeDebit();
             return;
         }

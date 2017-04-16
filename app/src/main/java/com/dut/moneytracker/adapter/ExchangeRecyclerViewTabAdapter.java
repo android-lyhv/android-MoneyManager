@@ -3,7 +3,6 @@ package com.dut.moneytracker.adapter;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
             }
             tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
             // if debit exchange
-            if (!TextUtils.isEmpty(exchange.getIdDebit())) {
+            if (exchange.getIdDebit() > 0) {
                 tvCategoryName.setText(R.string.debit_name);
                 imgCategory.setImageResource(R.drawable.ic_debit);
                 tvAccountName.setText(DebitManager.getInstance().getAccountNameByDebitId(exchange.getIdDebit()));
