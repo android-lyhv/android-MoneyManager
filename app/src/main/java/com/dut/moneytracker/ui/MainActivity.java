@@ -38,12 +38,14 @@ import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.account.ActivityAccounts_;
-import com.dut.moneytracker.ui.account.ActivityEditAccount_;
+import com.dut.moneytracker.ui.account.ActivityDetailAccount_;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
 import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager;
 import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager_;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard_;
+import com.dut.moneytracker.ui.debit.FragmentDebit;
+import com.dut.moneytracker.ui.debit.FragmentDebit_;
 import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange;
 import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange_;
 import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager;
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     private static final String EXCHANGE_RECORDS = "EXCHANGE";
 
     public enum FragmentTag {
-        DEFAULT, DASHBOARD, RECORDS, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, ACCOUNT;
+        DEFAULT, DASHBOARD, RECORDS, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, ACCOUNT, DEBIT
     }
 
     FragmentTag mFragmentTag = DEFAULT;
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     ImageView imgDateFilter;
     @ViewById(R.id.imgSettingAccount)
     ImageView imgSettingAccount;
+    @ViewById(R.id.imgSortingDebit)
+    ImageView imgSorDebit;
     private DialogPickFilter mDialogPickFilterTime;
     private DialogCustomFilter mDialogCustomFilter;
     //model
@@ -103,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     FragmentLoopExchange mFragmentLoopExchange;
     FragmentExchangesPager mFragmentExchangesPager;
     FragmentChartExchangePager mFragmentChartExchangePager;
+    FragmentDebit mFragmentDebit;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
     private int positionAccount;
@@ -208,6 +213,9 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                     case CHART_EXPENSES:
                         onLoadFragmentChart(PieChartType.EXPENSES);
                         break;
+                    case DEBIT:
+                        onLoadFragmentDebit();
+                        break;
                     case PROFILE:
                         startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), RequestCode.PROFILE);
                         break;
@@ -224,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         toggle.syncState();
         initSpinnerAccount();
     }
+
 
     // Change filter account
     private void initSpinnerAccount() {
@@ -290,7 +299,12 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
-        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.DETAIL_ACCOUNT);
+        ActivityDetailAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.DETAIL_ACCOUNT);
+    }
+
+    @Click(R.id.imgSortingDebit)
+    void onClickSortDebit() {
+        //TODO short
     }
 
     @OnActivityResult(RequestCode.DETAIL_ACCOUNT)
@@ -343,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
             case R.id.nav_chart_category:
                 break;
             case R.id.nav_debit:
+                mFragmentTag = FragmentTag.DEBIT;
                 break;
             case R.id.nav_location:
                 break;
@@ -358,14 +373,18 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case ResultCode.PROFILE:
-                onResultLogout();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
                 break;
         }
     }
 
-    void onResultLogout() {
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        finish();
+    /**
+     * onLoad Fragment Debit
+     */
+    private void onLoadFragmentDebit() {
+        mFragmentDebit = FragmentDebit_.builder().build();
+        onReplaceFragment(mFragmentDebit, null);
     }
 
     /**
@@ -437,6 +456,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         spinner.setVisibility(View.GONE);
         imgDateFilter.setVisibility(View.GONE);
         imgSettingAccount.setVisibility(View.VISIBLE);
+        imgSorDebit.setVisibility(View.GONE);
     }
 
     @Override
@@ -445,6 +465,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         spinner.setVisibility(View.VISIBLE);
         imgDateFilter.setVisibility(View.VISIBLE);
         imgSettingAccount.setVisibility(View.GONE);
+        imgSorDebit.setVisibility(View.GONE);
     }
 
     @Override
@@ -453,6 +474,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         spinner.setVisibility(View.GONE);
         imgDateFilter.setVisibility(View.GONE);
         imgSettingAccount.setVisibility(View.GONE);
+        imgSorDebit.setVisibility(View.GONE);
     }
 
     @Override
@@ -461,6 +483,16 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         spinner.setVisibility(View.VISIBLE);
         imgDateFilter.setVisibility(View.VISIBLE);
         imgSettingAccount.setVisibility(View.GONE);
+        imgSorDebit.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void loadMenuItemFragmentDebit() {
+        setTitle(getString(R.string.toobar_title_debit));
+        spinner.setVisibility(View.GONE);
+        imgDateFilter.setVisibility(View.GONE);
+        imgSettingAccount.setVisibility(View.GONE);
+        imgSorDebit.setVisibility(View.VISIBLE);
     }
 
     public void onShowDialogFilterCustom() {

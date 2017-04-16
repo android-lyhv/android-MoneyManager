@@ -36,7 +36,7 @@ import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.objects.Place;
-import com.dut.moneytracker.recevier.GenerateManager;
+import com.dut.moneytracker.service.GenerateManager;
 import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -103,6 +103,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private int lastTypeLoop = -1;
     private Date lastDate;
     private boolean lastStatus;
+    private SpinnerTypeLoopManger mSpinnerTypeLoopManger;
 
     @AfterViews
     void init() {
@@ -120,7 +121,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         mPlace = mExchangeLoop.getPlace();
         mTypeExchange = mExchangeLoop.getTypeExchange();
         switchCompat.setChecked(mExchangeLoop.isLoop());
-        mAppCompatSpinner.setSelection(mExchangeLoop.getTypeLoop());
+        mSpinnerTypeLoopManger.setSelectItem(mExchangeLoop.getTypeLoop());
         if (mExchangeLoop.getTypeExchange() == ExchangeType.INCOME || mExchangeLoop.getTypeExchange() == ExchangeType.EXPENSES) {
             Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
             tvCategoryName.setText(category.getName());
@@ -143,8 +144,8 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void initSpinner() {
-        SpinnerTypeLoopManger spinnerTypeLoopManger = new SpinnerTypeLoopManger(this, mAppCompatSpinner);
-        spinnerTypeLoopManger.registerSelectedItem(new SpinnerTypeLoopManger.ItemSelectedListener() {
+        mSpinnerTypeLoopManger = new SpinnerTypeLoopManger(this, mAppCompatSpinner);
+        mSpinnerTypeLoopManger.registerSelectedItem(new SpinnerTypeLoopManger.ItemSelectedListener() {
             @Override
             public void onResultTypeLoop(int type) {
                 mExchangeLoop.setTypeLoop(type);
@@ -328,7 +329,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        });
+        },false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 

@@ -250,4 +250,14 @@ public class DateTimeUtils {
         Log.d(TAG, "getStartTimeOfDay: " + calendar.getTime());
         return calendar.getTime();
     }
+
+    public Date getTimeNotification(Date date, int hour) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
 }

@@ -33,6 +33,18 @@ public class CurrencyUtils {
         return numberFormat.format(bigDecimal.doubleValue());
     }
 
+    public int compareAmount(String amount1, String amount2) {
+        BigDecimal bigDecimal1 = new BigDecimal(amount1);
+        BigDecimal bigDecimal2 = new BigDecimal(amount2);
+        if (Math.abs(bigDecimal1.floatValue()) == Math.abs(bigDecimal2.floatValue())) {
+            return 0;
+        }
+        if (Math.abs(bigDecimal1.floatValue()) > Math.abs(bigDecimal2.floatValue())) {
+            return 1;
+        }
+        return -1;
+    }
+
     public String getStringAddMoney(String amount1, String amount2) {
         BigDecimal bigDecimal = new BigDecimal(amount1);
         bigDecimal = bigDecimal.add(new BigDecimal(amount2));

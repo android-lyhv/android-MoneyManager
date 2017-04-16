@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.currency.CurrencyExpression;
+import com.dut.moneytracker.currency.CurrencyUtils;
 
 import java.util.Locale;
 
@@ -42,8 +43,7 @@ public class DialogCalculator extends DialogFragment implements View.OnClickList
     private ImageView imgCalBack;
     private TextView tvCalDot;
     private TextView tvAmount;
-    private StringBuilder stringBuilder = new StringBuilder();
-    private String amount;
+    private String mAmount = "";
 
 
     @Nullable
@@ -59,7 +59,10 @@ public class DialogCalculator extends DialogFragment implements View.OnClickList
     }
 
     public void setAmount(String amount) {
-        this.amount = amount;
+        if (TextUtils.isEmpty(amount) || CurrencyUtils.getInstance().getFloatMoney(amount) == 0) {
+            return;
+        }
+        mAmount = amount;
     }
 
     public void initView(View view) {
@@ -93,7 +96,7 @@ public class DialogCalculator extends DialogFragment implements View.OnClickList
         tvCalDot.setOnClickListener(this);
         tvAmount = (TextView) view.findViewById(R.id.tvAmount);
         tvAmount.setOnClickListener(this);
-        tvAmount.setText(String.format(Locale.US, "%s", amount));
+        tvAmount.setText(String.format(Locale.US, "%s", mAmount));
     }
 
     @Override
@@ -153,7 +156,7 @@ public class DialogCalculator extends DialogFragment implements View.OnClickList
     }
 
     private void setValue(String chart) {
-        stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(tvAmount.getText().toString());
         stringBuilder.append(chart);
         if (CurrencyExpression.getInstance().isValidateTypeMoney(stringBuilder.toString())) {

@@ -20,15 +20,25 @@ import java.util.List;
  */
 @EFragment
 public class DialogPickAccount extends DialogFragment {
-    private List<Account> accounts = AccountManager.getInstance().getAccounts();
-    private AccountListener accountListener;
+    private List<Account> mAccounts;
+    private AccountListener mAccountListener;
 
     public interface AccountListener {
         void onResultAccount(Account account);
     }
 
-    public void registerPickAccount(AccountListener accountListener) {
-        this.accountListener = accountListener;
+    /**
+     * @param accountListener
+     * @param status          = false - list not about account out side
+     *                        true - list with account out side
+     */
+    public void registerPickAccount(AccountListener accountListener, boolean status) {
+        if (status){
+            mAccounts = AccountManager.getInstance().getAccountsWithOutSide();
+        }else {
+            mAccounts = AccountManager.getInstance().getAccounts();
+        }
+        mAccountListener = accountListener;
     }
 
     @Override
@@ -47,7 +57,7 @@ public class DialogPickAccount extends DialogFragment {
                 }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                accountListener.onResultAccount(accounts.get(selected[0]));
+                mAccountListener.onResultAccount(mAccounts.get(selected[0]));
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -59,10 +69,10 @@ public class DialogPickAccount extends DialogFragment {
     }
 
     private String[] getListAccountName() {
-        int size = accounts.size();
+        int size = mAccounts.size();
         String[] names = new String[size];
         for (int i = 0; i < size; i++) {
-            names[i] = accounts.get(i).getName();
+            names[i] = mAccounts.get(i).getName();
         }
         return names;
     }

@@ -20,14 +20,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class Debit extends RealmObject implements Parcelable {
     @PrimaryKey
-    private String id;
+    private int id;
     private String amount;
     private String idAccount;
     private String currencyCode = CurrencyUtils.DEFAULT_CURRENCY_CODE;
     private int typeDebit;
     private boolean isClose;
-    private Date create;
-    private Date expires;
+    private Date startDate;
+    private Date endDate;
     private String name;
     private String description;
 
@@ -41,29 +41,29 @@ public class Debit extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeInt(this.id);
         dest.writeString(this.amount);
         dest.writeString(this.idAccount);
         dest.writeString(this.currencyCode);
         dest.writeInt(this.typeDebit);
         dest.writeByte(this.isClose ? (byte) 1 : (byte) 0);
-        dest.writeLong(this.create != null ? this.create.getTime() : -1);
-        dest.writeLong(this.expires != null ? this.expires.getTime() : -1);
+        dest.writeLong(this.startDate != null ? this.startDate.getTime() : -1);
+        dest.writeLong(this.endDate != null ? this.endDate.getTime() : -1);
         dest.writeString(this.name);
         dest.writeString(this.description);
     }
 
     protected Debit(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readInt();
         this.amount = in.readString();
         this.idAccount = in.readString();
         this.currencyCode = in.readString();
         this.typeDebit = in.readInt();
         this.isClose = in.readByte() != 0;
         long tmpCreate = in.readLong();
-        this.create = tmpCreate == -1 ? null : new Date(tmpCreate);
+        this.startDate = tmpCreate == -1 ? null : new Date(tmpCreate);
         long tmpExpires = in.readLong();
-        this.expires = tmpExpires == -1 ? null : new Date(tmpExpires);
+        this.endDate = tmpExpires == -1 ? null : new Date(tmpExpires);
         this.name = in.readString();
         this.description = in.readString();
     }

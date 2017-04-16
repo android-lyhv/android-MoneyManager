@@ -40,7 +40,31 @@ public class ExchangeManger extends RealmHelper {
 
     public void insertOrUpdate(Exchange object) {
         realm.beginTransaction();
-        realm.copyToRealmOrUpdate(object);
+        realm.insertOrUpdate(object);
+        realm.commitTransaction();
+    }
+
+    public void updateExchangeByDebit(int idDebit, String newIdAccount) {
+        realm.beginTransaction();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
+        realm.commitTransaction();
+        for (Exchange exchange : realmResults) {
+            exchange.setIdAccount(newIdAccount);
+            insertOrUpdate(exchange);
+        }
+    }
+
+    public void deleteExchangeById(String id) {
+        realm.beginTransaction();
+        Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();
+        exchange.deleteFromRealm();
+        realm.commitTransaction();
+    }
+
+    public void deleteExchangeByDebit(int idDebit) {
+        realm.beginTransaction();
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
+        realmResults.deleteAllFromRealm();
         realm.commitTransaction();
     }
 
@@ -53,11 +77,13 @@ public class ExchangeManger extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public void deleteExchangeById(String id) {
-        realm.beginTransaction();
-        Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();
-        exchange.deleteFromRealm();
-        realm.commitTransaction();
+    public String getAmountExchangeByDebit(int idDebit) {
+        BigDecimal bigDecimal = new BigDecimal("0");
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).notEqualTo("id", String.valueOf(idDebit)).findAll();
+        for (Exchange exchange : realmResults) {
+            bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
+        }
+        return bigDecimal.toString();
     }
 
     public RealmResults<Exchange> getExchanges() {
@@ -65,6 +91,10 @@ public class ExchangeManger extends RealmHelper {
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
+    }
+
+    public RealmResults<Exchange> onLoadExchangeByDebit(int idDebit) {
+        return realm.where(Exchange.class).equalTo("idDebit", idDebit).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
     public RealmResults<Exchange> getExchangesByAccount(String accountID) {
@@ -110,11 +140,11 @@ public class ExchangeManger extends RealmHelper {
      *
      * @param filter
      */
-    public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int type) {
+    public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int chartType) {
         List<Exchange> exchanges = getExchanges(filter);
         List<ValuePieChart> valuePieCharts = new ArrayList<>();
         List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategory();
-        if (type == PieChartType.INCOME) {
+        if (chartType == PieChartType.INCOME) {
             for (GroupCategory groupCategory : groupCategories) {
                 ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.INCOME);
                 if (valuePieChart != null) {
@@ -122,17 +152,13 @@ public class ExchangeManger extends RealmHelper {
                 }
             }
         }
-        if (type == PieChartType.EXPENSES) {
+        if (chartType == PieChartType.EXPENSES) {
             for (GroupCategory groupCategory : groupCategories) {
                 ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.EXPENSES);
                 if (valuePieChart != null) {
                     valuePieCharts.add(valuePieChart);
                 }
             }
-        }
-        ValuePieChart valuePieChart = getValePieChartTransfer(exchanges, type);
-        if (valuePieChart != null) {
-            valuePieCharts.add(valuePieChart);
         }
         return valuePieCharts;
     }

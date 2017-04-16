@@ -267,7 +267,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        });
+        },false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 

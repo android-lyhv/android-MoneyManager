@@ -15,6 +15,7 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
+import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -74,6 +75,14 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             }
             tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
+            // if debit exchange
+            if (exchange.getIdDebit() > 0) {
+                tvCategoryName.setText(R.string.debit_name);
+                imgCategory.setImageResource(R.drawable.ic_debit);
+                tvAccountName.setText(DebitManager.getInstance().getAccountNameByDebitId(exchange.getIdDebit()));
+                return;
+            }
+            // not debit exchange
             if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
                 Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
                 if (category != null) {

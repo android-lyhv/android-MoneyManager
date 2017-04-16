@@ -24,7 +24,7 @@ public class Exchange extends RealmObject implements Parcelable {
     private int typeExchange;
     private String idAccount;
     private String idCategory;
-    private String idDebit;
+    private int idDebit;
     private String idAccountTransfer;
     private String codeTransfer;
     private String currencyCode = CurrencyUtils.DEFAULT_CURRENCY_CODE;
@@ -34,21 +34,6 @@ public class Exchange extends RealmObject implements Parcelable {
     private Place place;
 
     public Exchange() {
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("id:").append(id).append("\n")
-                .append("typeExchange: ").append(typeExchange).append("\n")
-                .append("idAccount: ").append(idAccount).append("\n")
-                .append("idCategory: ").append(idCategory).append("\n")
-                .append("amount: ").append(amount).append("\n")
-                .append("idAccountTransfer: ").append(idAccountTransfer).append("\n")
-                .append("created: ").append(created).append("\n")
-                .append("currencyCode: ").append(currencyCode).append("\n")
-                .append("place: ").append(place).append("\n");
-        return stringBuilder.toString();
     }
 
     @Override
@@ -62,6 +47,7 @@ public class Exchange extends RealmObject implements Parcelable {
         dest.writeInt(this.typeExchange);
         dest.writeString(this.idAccount);
         dest.writeString(this.idCategory);
+        dest.writeInt(this.idDebit);
         dest.writeString(this.idAccountTransfer);
         dest.writeString(this.codeTransfer);
         dest.writeString(this.currencyCode);
@@ -76,6 +62,7 @@ public class Exchange extends RealmObject implements Parcelable {
         this.typeExchange = in.readInt();
         this.idAccount = in.readString();
         this.idCategory = in.readString();
+        this.idDebit = in.readInt();
         this.idAccountTransfer = in.readString();
         this.codeTransfer = in.readString();
         this.currencyCode = in.readString();

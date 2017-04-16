@@ -1,68 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    app:cardElevation="3dp">
 
     <LinearLayout
+        android:id="@+id/llDebit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/selector_bg_white"
+        android:clickable="true"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:paddingTop="20dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp">
 
             <TextView
                 android:id="@+id/tvTitleDebit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ho Van ly -> aaa" />
+                android:text="Ho Van ly -> aaa"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/tvDescriptionDebit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvTitleDebit"
+                android:ellipsize="end"
+                android:maxLength="100"
+                android:maxLines="1"
                 android:text="Vay tien mua nha" />
 
             <TextView
+                android:id="@+id/tvRemindAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="Da Thanh Toan" />
+                android:text="100.000 VND" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
-            <View
-                android:id="@+id/chartAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_toStartOf="@+id/imgViewDebit" />
+            <ProgressBar
+                android:id="@+id/progressBarPartial"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/imgViewExchangeDebit"
+                android:max="100"
+                android:paddingEnd="10dp"
+                android:progress="50"
+                android:scaleY="3" />
 
             <ImageView
-                android:id="@+id/imgViewDebit"
+                android:id="@+id/imgViewExchangeDebit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/imgAddDebit"
+                android:layout_marginStart="10dp"
+                android:layout_toStartOf="@+id/imgCheckDebit"
+                android:background="@color/colorBackgroundLine"
+                android:padding="10dp"
                 android:src="@drawable/ic_remove_red_eye_black" />
 
             <ImageView
-                android:id="@+id/imgAddDebit"
+                android:id="@+id/imgCheckDebit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:background="@color/colorBackgroundLine"
+                android:padding="10dp"
                 android:src="@drawable/ic_rotate_left_black" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp">
 
             <TextView
                 android:id="@+id/tvStartDebit"
