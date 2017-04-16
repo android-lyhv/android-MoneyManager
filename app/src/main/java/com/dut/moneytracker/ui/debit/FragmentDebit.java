@@ -29,7 +29,6 @@ import io.realm.RealmResults;
  */
 @EFragment(R.layout.fragment_debit)
 public class FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<Debit>>, DebitAdapter.ClickDebitListener {
-    private static final String TAG = FragmentDebit.class.getSimpleName();
     @ViewById(R.id.recyclerDebit)
     RecyclerView mRecyclerViewDebit;
     private DebitAdapter mDebitAdapter;
@@ -103,6 +102,9 @@ public class FragmentDebit extends BaseFragment implements RealmChangeListener<R
             public void onClickFinishDebit() {
                 DebitManager.getInstance().setStatusDebit(debit.getId(), true);
                 String remindAmount = DebitManager.getInstance().getRemindAmountDebit(debit);
+                if (remindAmount.startsWith("-")) {
+                    remindAmount = remindAmount.substring(1);
+                }
                 DebitManager.getInstance().genExchangeFromDebit(debit, remindAmount);
             }
         });

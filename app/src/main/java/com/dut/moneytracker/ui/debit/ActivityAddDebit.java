@@ -199,7 +199,7 @@ public class ActivityAddDebit extends AppCompatActivity {
                 mNewDebit.setIdAccount(account.getId());
                 mTvAccountName.setText(account.getName());
             }
-        });
+        }, false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 

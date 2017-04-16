@@ -38,7 +38,7 @@ import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.account.ActivityAccounts_;
-import com.dut.moneytracker.ui.account.ActivityEditAccount_;
+import com.dut.moneytracker.ui.account.ActivityDetailAccount_;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
 import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager;
 import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager_;
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @Click(R.id.imgSettingAccount)
     void onSettingAccount() {
-        ActivityEditAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.DETAIL_ACCOUNT);
+        ActivityDetailAccount_.intent(this).mAccount(mAccount).startForResult(RequestCode.DETAIL_ACCOUNT);
     }
 
     @Click(R.id.imgSortingDebit)

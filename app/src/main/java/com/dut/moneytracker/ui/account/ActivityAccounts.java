@@ -62,7 +62,7 @@ public class ActivityAccounts extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 positionAccount = position;
-                ActivityEditAccount_.intent(ActivityAccounts.this).mAccount((Account) mAdapter.getItem(position)).startForResult(RequestCode.DETAIL_ACCOUNT);
+                ActivityDetailAccount_.intent(ActivityAccounts.this).mAccount((Account) mAdapter.getItem(position)).startForResult(RequestCode.DETAIL_ACCOUNT);
             }
         }));
         accounts.addChangeListener(new RealmChangeListener<RealmResults<Account>>() {

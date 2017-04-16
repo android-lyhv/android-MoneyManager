@@ -329,7 +329,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        });
+        },false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 

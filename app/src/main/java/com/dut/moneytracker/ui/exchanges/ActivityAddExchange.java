@@ -19,6 +19,7 @@ import com.dut.moneytracker.constant.ResultCode;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.maps.GoogleLocation;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
@@ -194,7 +195,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
                 mExchange.setIdAccount(account.getId());
                 tvAccountName.setText(account.getName());
             }
-        });
+        }, false);
     }
 
     @Click(R.id.llCategory)
@@ -296,13 +297,15 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             ExchangeManger.getInstance().insertOrUpdate(mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
-            String idAccount = mExchange.getIdAccount();
-            mExchange.setId(UUID.randomUUID().toString());
-            mExchange.setAmount(tvAmount.getText().toString());
-            mExchange.setIdAccount(idTransfer);
-            mExchange.setIdAccountTransfer(idAccount);
-            mExchange.setCodeTransfer(codeTransfer);
-            ExchangeManger.getInstance().insertOrUpdate(mExchange);
+            if (!TextUtils.equals(idTransfer, AccountManager.OUT_SIDE)) {
+                String idAccount = mExchange.getIdAccount();
+                mExchange.setId(UUID.randomUUID().toString());
+                mExchange.setAmount(tvAmount.getText().toString());
+                mExchange.setIdAccount(idTransfer);
+                mExchange.setIdAccountTransfer(idAccount);
+                mExchange.setCodeTransfer(codeTransfer);
+                ExchangeManger.getInstance().insertOrUpdate(mExchange);
+            }
         } else {
             ExchangeManger.getInstance().insertOrUpdate(mExchange);
         }
@@ -324,7 +327,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
                 tvCategoryName.setText(mNameAccountTransfer);
                 mExchange.setIdAccountTransfer(account.getId());
             }
-        });
+        }, true);
     }
 
 

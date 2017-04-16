@@ -228,7 +228,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
                 mDebit.setIdAccount(account.getId());
                 mTvAccountName.setText(account.getName());
             }
-        });
+        },false);
         dialogPickAccount.show(getFragmentManager(), null);
     }
 

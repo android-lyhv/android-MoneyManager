@@ -252,4 +252,6 @@
     <string name="debit_name">Vay Nợ</string>
     <string name="debit_colse">Đã đóng</string>
     <string name="messger_remind_amount">Số tiền nhập vào phải bé hơn hoặc bằng số tiền còn lại</string>
+    <string name="out_side_account">Tài khoản khác</string>
+    <string name="toolbar_title_detail_account">Chi tiết tài khoản</string>
 </resources>

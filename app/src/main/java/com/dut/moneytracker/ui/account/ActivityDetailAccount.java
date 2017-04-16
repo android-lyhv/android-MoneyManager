@@ -47,8 +47,8 @@ import org.androidannotations.annotations.ViewById;
  */
 @EActivity(R.layout.activity_edit_account)
 @OptionsMenu(R.menu.menu_edit_account)
-public class ActivityEditAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
-    private static final java.lang.String TAG = ActivityEditAccount.class.getSimpleName();
+public class ActivityDetailAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
+    private static final java.lang.String TAG = ActivityDetailAccount.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvInitAmount)
@@ -68,6 +68,7 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
     @AfterViews
     void init() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        setTitle(getString(R.string.toolbar_title_detail_account));
         initToolbar();
         onLoadData();
         initDialogPickColor();
@@ -200,7 +201,7 @@ public class ActivityEditAccount extends AppCompatActivity implements CompoundBu
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ActivityCompat.requestPermissions(ActivityEditAccount.this,
+                                ActivityCompat.requestPermissions(ActivityDetailAccount.this,
                                         new String[]{Manifest.permission
                                                 .ACCESS_FINE_LOCATION},
                                         RequestCode.PERMISSION_LOCATION);

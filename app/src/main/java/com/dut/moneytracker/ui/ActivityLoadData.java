@@ -63,6 +63,7 @@ public class ActivityLoadData extends AppCompatActivity {
     private void onCreateDefaultAccount() {
         if (mAccountManager.getAccounts().isEmpty()) {
             mAccountManager.createDefaultAccount(this);
+            mAccountManager.createOutSideAccount(this);
         }
         Log.d(TAG, "onCreateDefaultAccount: " + mAccountManager.getAccounts().size());
     }
