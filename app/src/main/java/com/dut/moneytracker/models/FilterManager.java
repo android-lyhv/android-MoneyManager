@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
+import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -57,12 +58,20 @@ public class FilterManager {
         String amountFormat = "";
         if (exchanges != null) {
             String amount = AccountManager.getInstance().getTotalAmountExchanges(exchanges);
-            amountFormat = CurrencyUtils.getInstance().getStringMoneyFormat(amount, "VND");
+            amountFormat = CurrencyUtils.getInstance().getStringMoneyFormat(amount, CurrencyUtils.DEFAULT_CURRENCY_CODE);
         }
         String dateFormat = "";
         switch (filter.getTypeFilter()) {
             case FilterType.ALL:
-                dateFormat = "Tất cả";
+                Date minDate = ExchangeManger.getInstance().getMinDate();
+                Date maxDate = ExchangeManger.getInstance().getMaxDate();
+                String fromDate = DateTimeUtils.getInstance().getStringDateUs(minDate);
+                String toDate = DateTimeUtils.getInstance().getStringDateUs(maxDate);
+                if (DateTimeUtils.getInstance().isSameDate(minDate, maxDate)) {
+                    dateFormat = fromDate;
+                } else {
+                    dateFormat = String.format(Locale.US, "%s đến %s", fromDate, toDate);
+                }
                 break;
             case FilterType.DAY:
                 dateFormat = DateTimeUtils.getInstance().getStringFullDate(filter.getDateFilter());
@@ -74,9 +83,13 @@ public class FilterManager {
                 dateFormat = DateTimeUtils.getInstance().getStringYear(filter.getDateFilter());
                 break;
             case FilterType.CUSTOM:
-                String fromDate = DateTimeUtils.getInstance().getStringDateUs(filter.getFormDate());
-                String toDate = DateTimeUtils.getInstance().getStringDateUs(filter.getToDate());
-                dateFormat = String.format(Locale.US, "%s đến %s", fromDate, toDate);
+                String fromDateCustom = DateTimeUtils.getInstance().getStringDateUs(filter.getFormDate());
+                String toDateCustom = DateTimeUtils.getInstance().getStringDateUs(filter.getToDate());
+                if (DateTimeUtils.getInstance().isSameDate(filter.getFormDate(), filter.getToDate())) {
+                    dateFormat = fromDateCustom;
+                } else {
+                    dateFormat = String.format(Locale.US, "%s đến %s", fromDateCustom, toDateCustom);
+                }
                 break;
         }
         if (TextUtils.isEmpty(amountFormat)) {

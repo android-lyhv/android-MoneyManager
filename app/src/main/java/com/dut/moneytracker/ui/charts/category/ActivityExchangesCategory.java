@@ -16,7 +16,6 @@ import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
-import com.dut.moneytracker.ui.exchanges.ActivityDetailExchange_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -66,7 +65,7 @@ public class ActivityExchangesCategory extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 positionItem = position;
-                ActivityDetailExchange_.intent(ActivityExchangesCategory.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(IntentCode.DETAIL_EXCHANGE);
+               // ActivityDetailExchange_.intent(ActivityExchangesCategory.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(IntentCode.DETAIL_EXCHANGE);
             }
         }));
         mExchanges.addChangeListener(new RealmChangeListener<RealmResults<Exchange>>() {

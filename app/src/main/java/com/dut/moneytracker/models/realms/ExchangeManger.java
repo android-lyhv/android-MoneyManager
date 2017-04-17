@@ -459,4 +459,18 @@ public class ExchangeManger extends RealmHelper {
             }
         });
     }
+
+    public Date getMinDate() {
+        realm.beginTransaction();
+        long time = realm.where(Exchange.class).minimumDate("created").getTime();
+        realm.commitTransaction();
+        return new Date(time);
+    }
+
+    public Date getMaxDate() {
+        realm.beginTransaction();
+        long time = realm.where(Exchange.class).minimumDate("created").getTime();
+        realm.commitTransaction();
+        return new Date(time);
+    }
 }
