@@ -12,6 +12,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
+import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
@@ -65,7 +66,7 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     @AfterViews
     void init() {
-        mCalculator = new DialogCalculator();
+        mCalculator = DialogCalculator_.builder().build();
         mSpinnerTypeDebitManager = new SpinnerTypeDebitManager(this, mSpinnerDebit);
         initBaseDebit();
         initView();
