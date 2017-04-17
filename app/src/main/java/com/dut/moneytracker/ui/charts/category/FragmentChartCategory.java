@@ -43,23 +43,27 @@ public class FragmentChartCategory extends BaseFragment {
     @ViewById(R.id.recyclerChartCategory)
     RecyclerView mRecyclerView;
     private RecyclerCategoryChartAdapter mAdapter;
-    private Handler mHandler = new Handler();
+    private List<ValueCategoryChart> mValueCategoryCharts;
+    private Handler mHandler;
 
     @AfterViews
     void init() {
+        mHandler = new Handler();
+        changeDateLabel();
         initRecyclerView();
     }
 
     private void initRecyclerView() {
+        mAdapter = new RecyclerCategoryChartAdapter(getContext(), mValueCategoryCharts);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                List<ValueCategoryChart> valueCategoryCharts = ExchangeManger.getInstance().getValueCategoryCharts(mFilter);
-                ExchangeManger.getInstance().sortByAmountExchange(valueCategoryCharts);
-                mAdapter = new RecyclerCategoryChartAdapter(getContext(), valueCategoryCharts);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mRecyclerView.setAdapter(mAdapter);
-                changeDateLabel();
+                mValueCategoryCharts = ExchangeManger.getInstance().getValueCategoryCharts(mFilter);
+                ExchangeManger.getInstance().sortByAmountExchange(mValueCategoryCharts);
+                mAdapter.addAll(mValueCategoryCharts);
+                mAdapter.notifyDataSetChanged();
             }
         }, FragmentDashboard.DELAY);
     }
@@ -91,5 +95,11 @@ public class FragmentChartCategory extends BaseFragment {
         Intent intent = new Intent(getContext().getString(R.string.broadcast_filter));
         intent.putExtra(getContext().getString(R.string.step_filter), step);
         getContext().sendBroadcast(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

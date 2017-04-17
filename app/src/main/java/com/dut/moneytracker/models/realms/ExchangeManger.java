@@ -310,7 +310,7 @@ public class ExchangeManger extends RealmHelper {
                 ValueCategoryChart valueCategoryChart = new ValueCategoryChart();
                 valueCategoryChart.setCategory(category);
                 valueCategoryChart.setExchanges(exchanges);
-                valueCategoryChart.setAmount(AccountManager.getInstance().getTotalAmountByListExchange(exchanges));
+                valueCategoryChart.setAmount(AccountManager.getInstance().getTotalAmountExchanges(exchanges));
                 valueCategoryCharts.add(valueCategoryChart);
             }
         }

@@ -56,7 +56,7 @@ public class FilterManager {
     public String getLabel(Filter filter, List<Exchange> exchanges) {
         String amountFormat = "";
         if (exchanges != null) {
-            String amount = AccountManager.getInstance().getTotalAmountByListExchange(exchanges);
+            String amount = AccountManager.getInstance().getTotalAmountExchanges(exchanges);
             amountFormat = CurrencyUtils.getInstance().getStringMoneyFormat(amount, "VND");
         }
         String dateFormat = "";

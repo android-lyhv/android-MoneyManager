@@ -539,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         if (isFragmentExchangeRecord()) {
             mFragmentExchangesPager.onReloadFragmentPager();
         }
-        if (isFragmentChartCategory()){
+        if (isFragmentChartCategory()) {
             mFragmentChartCategoryPager.onReloadFragmentPager();
         }
     }
@@ -562,10 +562,12 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         Fragment fragment = mFragmentManager.findFragmentByTag(CHART);
         return null != fragment;
     }
+
     public boolean isFragmentChartCategory() {
         Fragment fragment = mFragmentManager.findFragmentByTag(CHART_CATEGORY);
         return null != fragment;
     }
+
     public boolean isFragmentExchangeRecord() {
         Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGE_RECORDS);
         return null != fragment;

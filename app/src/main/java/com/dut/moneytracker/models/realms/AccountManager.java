@@ -137,7 +137,7 @@ public class AccountManager extends RealmHelper {
         return bigDecimal.toString();
     }
 
-    public String getTotalAmountByListExchange(List<Exchange> exchanges) {
+    public String getTotalAmountExchanges(List<Exchange> exchanges) {
         BigDecimal bigDecimal = new BigDecimal("0");
         for (Exchange exchange : exchanges) {
             bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));

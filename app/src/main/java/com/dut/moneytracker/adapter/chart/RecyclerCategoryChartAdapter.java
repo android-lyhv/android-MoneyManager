@@ -14,6 +14,7 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.ui.charts.objects.ValueCategoryChart;
 import com.dut.moneytracker.utils.ResourceUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +44,14 @@ public class RecyclerCategoryChartAdapter extends RecyclerView.Adapter<RecyclerC
             totals = getItem(position).getAmount().substring(1);
         }
         holder.onBind(getItem(position));
+    }
+
+    public void addAll(List<ValueCategoryChart> valueCategoryCharts) {
+        if (mValueCategoryCharts == null) {
+            mValueCategoryCharts = new ArrayList<>();
+        }
+        mValueCategoryCharts.clear();
+        mValueCategoryCharts.addAll(valueCategoryCharts);
     }
 
     @Override
