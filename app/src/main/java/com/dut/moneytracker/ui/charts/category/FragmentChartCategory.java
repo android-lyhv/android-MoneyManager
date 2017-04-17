@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.adapter.ClickItemListener;
+import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.chart.RecyclerCategoryChartAdapter;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.models.FilterManager;
@@ -66,6 +68,12 @@ public class FragmentChartCategory extends BaseFragment {
                 mAdapter.notifyDataSetChanged();
             }
         }, FragmentDashboard.DELAY);
+        mRecyclerView.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
+            @Override
+            public void onClick(View view, int position) {
+                ActivityExchangesCategory_.intent(getContext()).mFilter(mFilter).mCategory(mAdapter.getItem(position).getCategory()).start();
+            }
+        }));
     }
 
     @Click(R.id.llNext)

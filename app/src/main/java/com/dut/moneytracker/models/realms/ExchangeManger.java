@@ -309,7 +309,6 @@ public class ExchangeManger extends RealmHelper {
             if (exchanges.size() > 0) {
                 ValueCategoryChart valueCategoryChart = new ValueCategoryChart();
                 valueCategoryChart.setCategory(category);
-                valueCategoryChart.setExchanges(exchanges);
                 valueCategoryChart.setAmount(AccountManager.getInstance().getTotalAmountExchanges(exchanges));
                 valueCategoryCharts.add(valueCategoryChart);
             }
@@ -317,7 +316,7 @@ public class ExchangeManger extends RealmHelper {
         return valueCategoryCharts;
     }
 
-    private RealmResults<Exchange> getExchanges(Filter filter, Category category) {
+    public RealmResults<Exchange> getExchanges(Filter filter, Category category) {
         boolean isRequestAccount = filter.isRequestByAccount();
         if (!isRequestAccount) {
             return getExchangesFilter(filter, category);
