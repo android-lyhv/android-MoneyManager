@@ -25,6 +25,7 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.ViewById;
 
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -57,7 +58,7 @@ public class ActivityExchangesCategory extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        RealmResults<Exchange> mExchanges = ExchangeManger.getInstance().getExchanges(mFilter, mCategory);
+        final RealmResults<Exchange> mExchanges = ExchangeManger.getInstance().getExchanges(mFilter, mCategory);
         mAdapter = new ExchangeRecodesAdapter(this, mExchanges);
         recyclerExchange.setLayoutManager(new LinearLayoutManager(this));
         recyclerExchange.setAdapter(mAdapter);
@@ -68,6 +69,12 @@ public class ActivityExchangesCategory extends AppCompatActivity {
                 ActivityDetailExchange_.intent(ActivityExchangesCategory.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(IntentCode.DETAIL_EXCHANGE);
             }
         }));
+        mExchanges.addChangeListener(new RealmChangeListener<RealmResults<Exchange>>() {
+            @Override
+            public void onChange(RealmResults<Exchange> element) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @OnActivityResult(IntentCode.DETAIL_EXCHANGE)
