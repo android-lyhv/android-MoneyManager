@@ -2,7 +2,6 @@ package com.dut.moneytracker.models.realms;
 
 import android.text.TextUtils;
 
-import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.PieChartType;
@@ -49,7 +48,7 @@ public class ExchangeManger extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public void updateExchangeByDebit(int idDebit, String newIdAccount) {
+    void updateExchangeByDebit(int idDebit, String newIdAccount) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
         realm.commitTransaction();
@@ -66,14 +65,14 @@ public class ExchangeManger extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public void deleteExchangeByDebit(int idDebit) {
+    void deleteExchangeByDebit(int idDebit) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
         realmResults.deleteAllFromRealm();
         realm.commitTransaction();
     }
 
-    public void deleteExchangeByAccount(String idAccount) {
+    void deleteExchangeByAccount(String idAccount) {
         realm.beginTransaction();
         Exchange exchange = realm.where(Exchange.class).equalTo("idAccount", idAccount).findFirst();
         if (exchange != null) {
@@ -102,7 +101,7 @@ public class ExchangeManger extends RealmHelper {
         return realm.where(Exchange.class).equalTo("idDebit", idDebit).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
-    public RealmResults<Exchange> getExchangesByAccount(String accountID) {
+    private RealmResults<Exchange> getExchangesByAccount(String accountID) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
@@ -192,6 +191,7 @@ public class ExchangeManger extends RealmHelper {
         return valuePieChart;
     }
 
+/*
     private ValuePieChart getValePieChartTransfer(List<Exchange> exchanges, int type) {
         ValuePieChart valuePieChart = new ValuePieChart();
         BigDecimal bigDecimal = new BigDecimal("0");
@@ -218,6 +218,7 @@ public class ExchangeManger extends RealmHelper {
         valuePieChart.setAmountString(bigDecimal.toString());
         return valuePieChart;
     }
+*/
 
     public RealmResults<Exchange> getExchanges(Filter filter) {
         boolean isRequestAccount = filter.isRequestByAccount();
@@ -228,7 +229,7 @@ public class ExchangeManger extends RealmHelper {
         }
     }
 
-    public RealmResults<Exchange> getExchangesFilterByAccount(Filter filter) {
+    private RealmResults<Exchange> getExchangesFilterByAccount(Filter filter) {
         int filterType = filter.getTypeFilter();
         String accountID = filter.getAccountId();
         Date date = filter.getDateFilter();
@@ -247,7 +248,7 @@ public class ExchangeManger extends RealmHelper {
         return getExchanges();
     }
 
-    public RealmResults<Exchange> getExchangesFilter(Filter filter) {
+    private RealmResults<Exchange> getExchangesFilter(Filter filter) {
         int filterType = filter.getTypeFilter();
         Date date = filter.getDateFilter();
         switch (filterType) {
@@ -299,11 +300,10 @@ public class ExchangeManger extends RealmHelper {
         return realmResults;
     }
 
-    // THIS FOR CATEGOROY
+    // This for category
     public List<ValueCategoryChart> getValueCategoryCharts(Filter filter) {
         RealmResults<Category> categories = CategoryManager.getInstance().getCategories();
         List<ValueCategoryChart> valueCategoryCharts = new ArrayList<>();
-        //TODO
         for (Category category : categories) {
             RealmResults<Exchange> exchanges = getExchanges(filter, category);
             if (exchanges.size() > 0) {
@@ -317,7 +317,7 @@ public class ExchangeManger extends RealmHelper {
         return valueCategoryCharts;
     }
 
-    public RealmResults<Exchange> getExchanges(Filter filter, Category category) {
+    private RealmResults<Exchange> getExchanges(Filter filter, Category category) {
         boolean isRequestAccount = filter.isRequestByAccount();
         if (!isRequestAccount) {
             return getExchangesFilter(filter, category);
@@ -326,7 +326,7 @@ public class ExchangeManger extends RealmHelper {
         }
     }
 
-    public RealmResults<Exchange> getExchangesFilterByAccount(Filter filter, Category category) {
+    private RealmResults<Exchange> getExchangesFilterByAccount(Filter filter, Category category) {
         int filterType = filter.getTypeFilter();
         String accountID = filter.getAccountId();
         Date date = filter.getDateFilter();
@@ -345,7 +345,7 @@ public class ExchangeManger extends RealmHelper {
         return getExchanges();
     }
 
-    public RealmResults<Exchange> getExchangesFilter(Filter filter, Category category) {
+    private RealmResults<Exchange> getExchangesFilter(Filter filter, Category category) {
         int filterType = filter.getTypeFilter();
         Date date = filter.getDateFilter();
         switch (filterType) {
@@ -368,7 +368,9 @@ public class ExchangeManger extends RealmHelper {
         RealmResults<Exchange> realmResults = realm.where(Exchange.class)
                 .equalTo("idCategory", category.getId())
                 .equalTo("typeExchange", ExchangeType.EXPENSES)
-                .equalTo("idAccount", idAccount).between("created", fromDate, toDate).findAllSorted("created", Sort.DESCENDING);
+                .equalTo("idAccount", idAccount)
+                .between("created", fromDate, toDate)
+                .findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -378,7 +380,8 @@ public class ExchangeManger extends RealmHelper {
         RealmResults<Exchange> realmResults = realm.where(Exchange.class)
                 .equalTo("idCategory", category.getId())
                 .equalTo("typeExchange", ExchangeType.EXPENSES)
-                .between("created", fromDate, toDate).findAllSorted("created", Sort.DESCENDING);
+                .between("created", fromDate, toDate)
+                .findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -391,7 +394,9 @@ public class ExchangeManger extends RealmHelper {
         RealmResults<Exchange> realmResults = realm.where(Exchange.class)
                 .equalTo("idCategory", category.getId())
                 .equalTo("typeExchange", ExchangeType.EXPENSES)
-                .equalTo("idAccount", accountID).between("created", startDate, endDate).findAllSorted("created", Sort.DESCENDING);
+                .equalTo("idAccount", accountID)
+                .between("created", startDate, endDate)
+                .findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -404,25 +409,29 @@ public class ExchangeManger extends RealmHelper {
         RealmResults<Exchange> realmResults = realm.where(Exchange.class)
                 .equalTo("idCategory", category.getId())
                 .equalTo("typeExchange", ExchangeType.EXPENSES)
-                .between("created", startDate, endDate).findAllSorted("created", Sort.DESCENDING);
+                .between("created", startDate, endDate)
+                .findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
 
-    public RealmResults<Exchange> getExchangesByAccount(String accountID, Category category) {
+    private RealmResults<Exchange> getExchangesByAccount(String accountID, Category category) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class)
                 .equalTo("idCategory", category.getId())
                 .equalTo("typeExchange", ExchangeType.EXPENSES)
-                .equalTo("idAccount", accountID).findAllSorted("created", Sort.DESCENDING);
+                .equalTo("idAccount", accountID)
+                .findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
 
-    public RealmResults<Exchange> getExchanges(Category category) {
+    private RealmResults<Exchange> getExchanges(Category category) {
         realm.beginTransaction();
-        RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idCategory", category.getId())
-                .equalTo("typeExchange", ExchangeType.EXPENSES).findAllSorted("created", Sort.DESCENDING);
+        RealmResults<Exchange> realmResults = realm.where(Exchange.class)
+                .equalTo("idCategory", category.getId())
+                .equalTo("typeExchange", ExchangeType.EXPENSES)
+                .findAllSorted("created", Sort.DESCENDING);
         realm.commitTransaction();
         return realmResults;
     }
