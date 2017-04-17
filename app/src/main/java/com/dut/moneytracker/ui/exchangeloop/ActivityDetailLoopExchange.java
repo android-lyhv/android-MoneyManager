@@ -423,7 +423,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        String title = String.format(Locale.US, "%s,%s", mPlace.getName(), mPlace.getName());
+        String title = String.format(Locale.US, "%s\n%s", mPlace.getName(), mPlace.getName());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
     }

@@ -127,19 +127,6 @@
         <item>ic_other</item>
     </string-array>
     // Category
-    <!--InCome-->
-    <string-array name="income_name">
-        <item>Lương</item>
-        <item>Thưởng - Quà</item>
-        <item>Buôn bán</item>
-        <item>Thu nhập khác</item>
-    </string-array>
-    <string-array name="income_path">
-        <item>ic_salary</item>
-        <item>ic_gift</item>
-        <item>ic_sale</item>
-        <item>ic_income_other</item>
-    </string-array>
     <!--Food and Drinks-->
     <string-array name="food_drink_name">
         <item>Nhà hàng</item>
@@ -236,6 +223,19 @@
     </string-array>
     <string-array name="love_path">
         <item>ic_inlove</item>
+    </string-array>
+    <!--InCome-->
+    <string-array name="income_name">
+        <item>Lương</item>
+        <item>Thưởng - Quà</item>
+        <item>Buôn bán</item>
+        <item>Thu nhập khác</item>
+    </string-array>
+    <string-array name="income_path">
+        <item>ic_salary</item>
+        <item>ic_gift</item>
+        <item>ic_sale</item>
+        <item>ic_income_other</item>
     </string-array>
     <string-array name="other_name">
         <item>Chi tiêu khác</item>
