@@ -39,6 +39,8 @@ import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.account.ActivityAccounts_;
 import com.dut.moneytracker.ui.account.ActivityDetailAccount_;
 import com.dut.moneytracker.ui.base.SpinnerAccountManger;
+import com.dut.moneytracker.ui.charts.category.FragmentChartCategoryPager;
+import com.dut.moneytracker.ui.charts.category.FragmentChartCategoryPager_;
 import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager;
 import com.dut.moneytracker.ui.charts.exchange.FragmentChartExchangePager_;
 import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
@@ -74,9 +76,10 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     private static final String DASHBOARD = "DASHBOARD";
     private static final String CHART = "CHART";
     private static final String EXCHANGE_RECORDS = "EXCHANGE";
+    private static final String CHART_CATEGORY = "CHART_CATEGORY";
 
     public enum FragmentTag {
-        DEFAULT, DASHBOARD, RECORDS, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, ACCOUNT, DEBIT
+        DEFAULT, DASHBOARD, RECORDS, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, CHART_CATEGORY, ACCOUNT, DEBIT
     }
 
     FragmentTag mFragmentTag = DEFAULT;
@@ -106,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     FragmentLoopExchange mFragmentLoopExchange;
     FragmentExchangesPager mFragmentExchangesPager;
     FragmentChartExchangePager mFragmentChartExchangePager;
+    FragmentChartCategoryPager mFragmentChartCategoryPager;
     FragmentDebit mFragmentDebit;
     SpinnerAccountManger mSpinnerAccount;
     private Account mAccount;
@@ -211,6 +215,9 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                         break;
                     case CHART_EXPENSES:
                         onLoadFragmentChart(PieChartType.EXPENSES);
+                        break;
+                    case CHART_CATEGORY:
+                        onLoadFragmentChartCategory();
                         break;
                     case DEBIT:
                         onLoadFragmentDebit();
@@ -354,6 +361,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                 mFragmentTag = FragmentTag.CHART_EXPENSES;
                 break;
             case R.id.nav_chart_category:
+                mFragmentTag = FragmentTag.CHART_CATEGORY;
                 break;
             case R.id.nav_debit:
                 mFragmentTag = FragmentTag.DEBIT;
@@ -394,6 +402,16 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         mSpinnerAccount.setSelectItem(null);
         mFragmentChartExchangePager = FragmentChartExchangePager_.builder().mFilter(mFilter).mChartType(typeChart).build();
         onReplaceFragment(mFragmentChartExchangePager, CHART);
+    }
+
+    /**
+     * fragment chart category spend
+     */
+    private void onLoadFragmentChartCategory() {
+        mFilter = FilterManager.getInstance().getFilterDefault();
+        mSpinnerAccount.setSelectItem(null);
+        mFragmentChartCategoryPager = FragmentChartCategoryPager_.builder().mFilter(mFilter).build();
+        onReplaceFragment(mFragmentChartCategoryPager, CHART_CATEGORY);
     }
 
     /**
@@ -484,6 +502,15 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     }
 
     @Override
+    public void loadMenuItemFragmentChartCategory() {
+        setTitle(null);
+        spinner.setVisibility(View.VISIBLE);
+        imgDateFilter.setVisibility(View.VISIBLE);
+        imgSettingAccount.setVisibility(View.GONE);
+        imgSorDebit.setVisibility(View.GONE);
+    }
+
+    @Override
     public void loadMenuItemFragmentDebit() {
         setTitle(getString(R.string.toobar_title_debit));
         spinner.setVisibility(View.GONE);
@@ -512,6 +539,9 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         if (isFragmentExchangeRecord()) {
             mFragmentExchangesPager.onReloadFragmentPager();
         }
+        if (isFragmentChartCategory()){
+            mFragmentChartCategoryPager.onReloadFragmentPager();
+        }
     }
 
     @Override
@@ -532,7 +562,10 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         Fragment fragment = mFragmentManager.findFragmentByTag(CHART);
         return null != fragment;
     }
-
+    public boolean isFragmentChartCategory() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(CHART_CATEGORY);
+        return null != fragment;
+    }
     public boolean isFragmentExchangeRecord() {
         Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGE_RECORDS);
         return null != fragment;

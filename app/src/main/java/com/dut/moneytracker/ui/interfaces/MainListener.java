@@ -15,5 +15,7 @@ public interface MainListener {
 
     void loadMenuItemFragmentChart();
 
+    void loadMenuItemFragmentChartCategory();
+
     void loadMenuItemFragmentDebit();
 }
