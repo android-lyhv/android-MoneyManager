@@ -53,7 +53,6 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
     Filter mFilter;
     @FragmentArg
     int mChartType;
-    private List<ValuePieChart> mValuePieCharts;
     private PieChartMoney mPieChartMoney;
 
     @AfterViews
@@ -72,8 +71,8 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
 
     void initChart() {
         mPieChartMoney = new PieChartMoney(getContext(), mPieChart);
-        mValuePieCharts = ExchangeManger.getInstance().getFilterValuePieCharts(mFilter, mChartType);
-        MoneyChartManager.getInstance().onLoadInforPieChart(mValuePieCharts, this);
+        List<ValuePieChart> mValuePieCharts = ExchangeManger.getInstance().getFilterValuePieCharts(mFilter, mChartType);
+        MoneyChartManager.getInstance().onLoadInformationPieChart(mValuePieCharts, this);
         mPieChartMoney.updateValuePieChart(mValuePieCharts);
         mPieChartMoney.notifyDataSetChanged();
     }
@@ -110,9 +109,9 @@ public class FragmentChartMoney extends BaseFragment implements ChartMoneyListen
 
     @Override
     public void onResultMultiMoney(String minMoney, String averageMoney, String maxMoney) {
-        mTvMinMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(minMoney, "VND"));
-        mTvAverageMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(averageMoney, "VND"));
-        mTvMaxMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(maxMoney, "VND"));
+        mTvMinMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(minMoney, CurrencyUtils.DEFAULT_CURRENCY_CODE));
+        mTvAverageMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(averageMoney,  CurrencyUtils.DEFAULT_CURRENCY_CODE));
+        mTvMaxMoney.setText(CurrencyUtils.getInstance().getStringMoneyFormat(maxMoney,  CurrencyUtils.DEFAULT_CURRENCY_CODE));
     }
 
     @Override

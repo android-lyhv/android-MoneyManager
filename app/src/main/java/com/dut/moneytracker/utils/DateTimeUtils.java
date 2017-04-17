@@ -145,7 +145,7 @@ public class DateTimeUtils {
     }
 
     public boolean isValidateFromDateToDate(Date fromDate, Date toDate) {
-        return !isSameDate(fromDate, toDate) && fromDate.before(toDate);
+        return fromDate.before(toDate);
     }
 
     public Date setHours(Date date, int hours) {
@@ -232,7 +232,7 @@ public class DateTimeUtils {
     public Date getEndTimeOfDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.HOUR, 23);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 0);
@@ -243,7 +243,7 @@ public class DateTimeUtils {
     public Date getStartTimeOfDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
@@ -254,7 +254,7 @@ public class DateTimeUtils {
     public Date getTimeNotification(Date date, int hour) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);

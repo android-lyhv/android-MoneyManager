@@ -38,7 +38,7 @@ public class AlarmDebit {
         intent.putExtra(context.getString(R.string.alarm_debit_id), debit.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, debit.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         long time = DateTimeUtils.getInstance().getTimeNotification(debit.getEndDate(), 6).getTime();
-        mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, REPEAT_TIME, pendingIntent);
+        mAlarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
     }
 
     public void removePendingAlarm(Context context, int id) {

@@ -29,15 +29,14 @@ public class DialogCustomFilter extends DialogFragment {
     TextView mTvFromDate;
     FilterListener mFilterListener;
     private DayPicker mDayPicker;
-    private Date mFromDate = new Date();
-    private Date mToDate = new Date();
+    private Date mFromDate;
+    private Date mToDate;
 
     @AfterViews
     void init() {
         if (mFromDate == null || mToDate == null) {
-            mToDate = DateTimeUtils.getInstance().getEndTimeOfDay(new Date());
-            Date nextDate = DateTimeUtils.getInstance().getNextDate(mToDate, -1);
-            mFromDate = DateTimeUtils.getInstance().getStartTimeOfDay(nextDate);
+            mFromDate = DateTimeUtils.getInstance().getStartTimeOfDay(new Date());
+            mToDate = DateTimeUtils.getInstance().getEndTimeOfDay(mFromDate);
         }
         mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(mFromDate));
         mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(mToDate));

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.dut.moneytracker.R;
@@ -86,7 +85,6 @@ public class ActivityPickCategory extends AppCompatActivity implements LoadCateg
         fragmentChildCategory.registerPickCategory(new FragmentChildCategory.PickCategoryListener() {
             @Override
             public void onResultCategory(Category category) {
-                Log.d(TAG, "onResultCategory: ");
                 sentBackCategory(category);
                 finish();
             }

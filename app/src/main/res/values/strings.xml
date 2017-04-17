@@ -101,6 +101,7 @@
     <string name="alarm_debit_id">alarm_debit_id</string>
     <string name="toolbar_titile_exchange_loop">Giao dịch mặc định</string>
     <string name="toobar_title_exchange_debit">Giao dịch sổ nợ</string>
+    <string name="toobar_title_exchange_cagegory">Giao dịch thể loại</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>

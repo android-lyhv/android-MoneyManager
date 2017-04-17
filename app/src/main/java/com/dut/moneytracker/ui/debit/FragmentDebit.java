@@ -29,7 +29,8 @@ import io.realm.RealmResults;
  * Created by ly.ho on 13/04/2017.
  */
 @EFragment(R.layout.fragment_debit)
-public class FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<Debit>>, DebitAdapter.ClickDebitListener {
+public class
+FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<Debit>>, DebitAdapter.ClickDebitListener {
     @ViewById(R.id.recyclerDebit)
     RecyclerView mRecyclerViewDebit;
     private DebitAdapter mDebitAdapter;
