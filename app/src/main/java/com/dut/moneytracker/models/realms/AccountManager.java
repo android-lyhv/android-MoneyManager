@@ -51,7 +51,7 @@ public class AccountManager extends RealmHelper {
 
     public RealmResults<Account> getAccountsWithOutSide() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).findAll();
+        RealmResults<Account> realmResults = realm.where(Account.class).findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -170,7 +170,7 @@ public class AccountManager extends RealmHelper {
         Account account = new Account();
         account.setId(OUT_SIDE);
         account.setName(context.getString(R.string.out_side_account));
-        account.setCreated(new Date());
+        account.setCreated(new Date(Long.MAX_VALUE));
         account.setInitAmount("0");
         insertOrUpdate(account);
     }
