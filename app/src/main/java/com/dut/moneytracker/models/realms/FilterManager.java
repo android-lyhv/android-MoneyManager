@@ -1,11 +1,9 @@
-package com.dut.moneytracker.models;
+package com.dut.moneytracker.models.realms;
 
 import android.text.TextUtils;
 
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.currency.CurrencyUtils;
-import com.dut.moneytracker.models.realms.AccountManager;
-import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.utils.DateTimeUtils;

@@ -13,7 +13,7 @@ import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecodesAdapter;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.IntentCode;
-import com.dut.moneytracker.models.FilterManager;
+import com.dut.moneytracker.models.realms.FilterManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;

@@ -1,15 +1,13 @@
 package com.dut.moneytracker.ui;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.GroupTag;
-import com.dut.moneytracker.models.AppPreferences;
+import com.dut.moneytracker.models.AppConfig;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.CurrencyManager;
@@ -18,22 +16,25 @@ import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 04/03/2017.
  */
-
+@EActivity(R.layout.acitivity_splash)
 public class ActivityLoadData extends AppCompatActivity {
     private static final String TAG = ActivityLoadData.class.getSimpleName();
+    @ViewById(R.id.progressBar)
+    ProgressBar mProgressBar;
+    private AccountManager mAccountManager;
     private int idCategory = -1;
-    private ProgressBar mProgressBar;
-    private AccountManager mAccountManager = AccountManager.getInstance();
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.acitivity_splash);
-        initView();
+    @AfterViews
+    void init() {
+        mAccountManager = AccountManager.getInstance();
         // The first load data from server
         onLoadDataServer();
         // After then
@@ -41,14 +42,9 @@ public class ActivityLoadData extends AppCompatActivity {
         onCreateDefaultAccount();
         onCreateCurrency();
         // The end start main
-        AppPreferences.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
+        AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         MainActivity_.intent(this).start();
         finish();
-    }
-
-    private void initView() {
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mProgressBar.setProgress(50);
     }
 
 
@@ -69,9 +65,9 @@ public class ActivityLoadData extends AppCompatActivity {
     }
 
     private void onLoadCategory() {
-        if (!AppPreferences.getInstance().isInitCategory(this)) {
+        if (!AppConfig.getInstance().isInitCategory(this)) {
             createGroupCategory();
-            AppPreferences.getInstance().setInitCategory(this, true);
+            AppConfig.getInstance().setInitCategory(this, true);
         }
     }
 
