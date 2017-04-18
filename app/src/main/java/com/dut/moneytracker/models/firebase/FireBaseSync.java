@@ -1,9 +1,12 @@
 package com.dut.moneytracker.models.firebase;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.dut.moneytracker.models.AppConfig;
+import com.dut.moneytracker.models.realms.AccountManager;
+import com.dut.moneytracker.models.realms.DebitManager;
+import com.dut.moneytracker.models.realms.ExchangeLoopManager;
+import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
@@ -104,15 +107,18 @@ public class FireBaseSync {
         mDatabase.child(CHILD_DEBIT).child(String.valueOf(id)).removeValue();
     }
 
-    public void onLoadDataServer(Context context) {
+    public void onLoadDataServer(final Context context, final LoadDataListener loadDataListener) {
         String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot messageSnapshot : dataSnapshot.child(CHILD_ACCOUNT).getChildren()) {
-                    Log.d(TAG, "onDataChange: " + messageSnapshot.getValue());
-                }
+                onLoadAccount(context, dataSnapshot.child(CHILD_ACCOUNT));
+                onLoadExchange(context, dataSnapshot.child(CHILD_EXCHANGE));
+                onLoadDebit(context, dataSnapshot.child(CHILD_DEBIT));
+                onLoadExchangeLoop(context, dataSnapshot.child(CHILD_EXCHANGE_LOOP));
+                mDatabase.removeEventListener(this);
+                loadDataListener.onFinish();
             }
 
             @Override
@@ -120,6 +126,38 @@ public class FireBaseSync {
 
             }
         });
+    }
+
+    private void onLoadAccount(Context context, DataSnapshot dataSnapshot) {
+        for (DataSnapshot result : dataSnapshot.getChildren()) {
+            String id = result.getKey();
+            HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
+            onSaveAccount(context, id, data);
+        }
+    }
+
+    private void onLoadExchange(Context context, DataSnapshot dataSnapshot) {
+        for (DataSnapshot result : dataSnapshot.getChildren()) {
+            String id = result.getKey();
+            HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
+            onSaveExchange(context, id, data);
+        }
+    }
+
+    private void onLoadDebit(Context context, DataSnapshot dataSnapshot) {
+        for (DataSnapshot result : dataSnapshot.getChildren()) {
+            String id = result.getKey();
+            HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
+            onSaveDebit(context, id, data);
+        }
+    }
+
+    private void onLoadExchangeLoop(Context context, DataSnapshot dataSnapshot) {
+        for (DataSnapshot result : dataSnapshot.getChildren()) {
+            String id = result.getKey();
+            HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
+            onSaveExchangeLoop(context, id, data);
+        }
     }
 
     private Map<String, Object> toMapExchange(Exchange exchange) {
@@ -179,5 +217,68 @@ public class FireBaseSync {
         result.put("isLoop", exchangeLooper.isLoop());
         result.put("typeLoop", exchangeLooper.getTypeLoop());
         return result;
+    }
+
+    private void onSaveAccount(Context context, String id, HashMap<String, Object> data) {
+        Account account = new Account();
+        account.setId(id);
+        account.setName((String) data.get("name"));
+        account.setCreated(DateTimeUtils.getInstance().getDateFormat((String) data.get("created")));
+        account.setInitAmount((String) data.get("initAmount"));
+        account.setColorHex((String) data.get("colorHex"));
+        account.setSaveLocation((Boolean) data.get("saveLocation"));
+        account.setDefault((Boolean) data.get("isDefault"));
+        AccountManager.getInstance().insertOrUpdate(context, account);
+    }
+
+    private void onSaveExchange(Context context, String id, HashMap<String, Object> data) {
+        Exchange exchange = new Exchange();
+        exchange.setId(id);
+        exchange.setTypeExchange(Integer.parseInt(String.valueOf(data.get("typeExchange"))));
+        exchange.setIdAccount((String) data.get("idAccount"));
+        exchange.setIdCategory((String) data.get("idCategory"));
+        exchange.setIdDebit(Integer.parseInt(String.valueOf(data.get("idDebit"))));
+        exchange.setIdAccountTransfer((String) data.get("idAccountTransfer"));
+        exchange.setCodeTransfer((String) data.get("codeTransfer"));
+        exchange.setAmount((String) data.get("amount"));
+        exchange.setDescription((String) data.get("description"));
+        exchange.setCreated(DateTimeUtils.getInstance().getDateFormat((String) data.get("created")));
+        exchange.setAddress((String) data.get("address"));
+        exchange.setLatitude(Double.parseDouble(String.valueOf(data.get("latitude"))));
+        exchange.setLongitude(Double.parseDouble(String.valueOf(data.get("longitude"))));
+        ExchangeManger.getInstance().insertOrUpdate(context, exchange);
+    }
+
+    private void onSaveExchangeLoop(Context context, String id, HashMap<String, Object> data) {
+        ExchangeLooper exchangeLooper = new ExchangeLooper();
+        exchangeLooper.setId(Integer.parseInt(id));
+        exchangeLooper.setTypeExchange(Integer.parseInt(String.valueOf(data.get("typeExchange"))));
+        exchangeLooper.setIdAccount((String) data.get("idAccount"));
+        exchangeLooper.setIdCategory((String) data.get("idCategory"));
+        exchangeLooper.setIdAccountTransfer((String) data.get("idAccountTransfer"));
+        exchangeLooper.setCodeTransfer((String) data.get("codeTransfer"));
+        exchangeLooper.setAmount((String) data.get("amount"));
+        exchangeLooper.setDescription((String) data.get("description"));
+        exchangeLooper.setCreated(DateTimeUtils.getInstance().getDateFormat((String) data.get("created")));
+        exchangeLooper.setAddress((String) data.get("address"));
+        exchangeLooper.setLatitude(Double.parseDouble(String.valueOf(data.get("latitude"))));
+        exchangeLooper.setLongitude(Double.parseDouble(String.valueOf(data.get("longitude"))));
+        exchangeLooper.setLoop((Boolean) data.get("isLoop"));
+        exchangeLooper.setTypeLoop(Integer.parseInt(String.valueOf(data.get("typeLoop"))));
+        ExchangeLoopManager.getInstance(context).insertOrUpdate(context, exchangeLooper);
+    }
+
+    private void onSaveDebit(Context context, String id, HashMap<String, Object> data) {
+        Debit debit = new Debit();
+        debit.setId(Integer.parseInt(id));
+        debit.setName((String) data.get("name"));
+        debit.setAmount((String) data.get("amount"));
+        debit.setIdAccount((String) data.get("idAccount"));
+        debit.setTypeDebit(Integer.parseInt(String.valueOf(data.get("typeDebit"))));
+        debit.setClose((Boolean) data.get("isClose"));
+        debit.setStartDate(DateTimeUtils.getInstance().getDateFormat((String) data.get("startDate")));
+        debit.setEndDate(DateTimeUtils.getInstance().getDateFormat((String) data.get("endDate")));
+        debit.setDescription((String) data.get("description"));
+        DebitManager.getInstance().insertOrUpdateDebit(context, debit);
     }
 }

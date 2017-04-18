@@ -75,7 +75,9 @@ public class AppConfig {
 
     private void clearDataRealm() {
         mRealm.beginTransaction();
+        mRealm.removeAllChangeListeners();
         mRealm.deleteAll();
+        mRealm.close();
         mRealm.commitTransaction();
     }
 

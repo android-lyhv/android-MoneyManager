@@ -6,6 +6,7 @@ import android.util.Log;
 import com.dut.moneytracker.constant.FilterType;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +48,15 @@ public class DateTimeUtils {
     public String getStringFullDateUs(Date date) {
         DateFormat formatFullDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         return formatFullDate.format(date);
+    }
+    public Date getDateFormat(String resource) {
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+        try {
+            return format.parse(resource);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
     }
 
     public String getStringTime(Date date) {

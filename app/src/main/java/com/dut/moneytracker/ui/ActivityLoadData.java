@@ -1,6 +1,6 @@
 package com.dut.moneytracker.ui;
 
-import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -8,12 +8,15 @@ import android.widget.ProgressBar;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.GroupTag;
 import com.dut.moneytracker.models.AppConfig;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
+import com.dut.moneytracker.models.firebase.LoadDataListener;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -24,18 +27,21 @@ import org.androidannotations.annotations.ViewById;
  * Created by ly.ho on 04/03/2017.
  */
 @EActivity(R.layout.acitivity_splash)
-public class ActivityLoadData extends AppCompatActivity {
+public class ActivityLoadData extends AppCompatActivity implements LoadDataListener {
     private static final String TAG = ActivityLoadData.class.getSimpleName();
     @ViewById(R.id.progressBar)
     ProgressBar mProgressBar;
-    private AccountManager mAccountManager;
     private int idCategory = -1;
 
     @AfterViews
     void init() {
-        configData();
-        // The first load data from server
-        onLoadDataServer();
+        SystemClock.sleep(1000L);
+        FireBaseSync.getInstance().onLoadDataServer(getApplicationContext(), this);
+    }
+
+    @Override
+    public void onFinish() {
+        AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         // After then
         onLoadCategory();
         onCreateDefaultAccount();
@@ -44,21 +50,11 @@ public class ActivityLoadData extends AppCompatActivity {
         finish();
     }
 
-    private void configData() {
-        mAccountManager = AccountManager.getInstance();
-        AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
-    }
-
-    private void onLoadDataServer() {
-        //TODO
-    }
-
     private void onCreateDefaultAccount() {
-        if (mAccountManager.getAccounts().isEmpty()) {
-            mAccountManager.createDefaultAccount(this);
-            mAccountManager.createOutSideAccount(this);
+        if (AccountManager.getInstance().getAccounts().isEmpty()) {
+            AccountManager.getInstance().createDefaultAccount(this);
+            AccountManager.getInstance().createOutSideAccount(this);
         }
-        Log.d(TAG, "onCreateDefaultAccount: " + mAccountManager.getAccounts().size());
     }
 
     private void onLoadCategory() {
@@ -146,22 +142,4 @@ public class ActivityLoadData extends AppCompatActivity {
     private byte[] loadByteBitmap(String path) {
         return ResourceUtils.getInstance().convertBitmap(getResources(), this, path);
     }
-
-    class AsyncTaskLoadData extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }
-
 }
