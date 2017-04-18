@@ -10,7 +10,6 @@ import com.dut.moneytracker.constant.GroupTag;
 import com.dut.moneytracker.models.AppConfig;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
-import com.dut.moneytracker.models.realms.CurrencyManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
@@ -40,7 +39,6 @@ public class ActivityLoadData extends AppCompatActivity {
         // After then
         onLoadCategory();
         onCreateDefaultAccount();
-        onCreateCurrency();
         // The end start main
         AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         MainActivity_.intent(this).start();
@@ -50,10 +48,6 @@ public class ActivityLoadData extends AppCompatActivity {
 
     private void onLoadDataServer() {
         //TODO
-    }
-
-    private void onCreateCurrency() {
-        CurrencyManager.getInstance().createDefaultCurrency(this);
     }
 
     private void onCreateDefaultAccount() {
