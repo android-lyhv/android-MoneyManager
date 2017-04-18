@@ -29,7 +29,6 @@ import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
 import com.dut.moneytracker.ui.interfaces.DetailExchangeListener;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -58,7 +57,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -104,7 +102,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     private DayPicker mDayPicker;
     private DialogCalculator mDialogCalculator;
     //GoogleMap
-    private Place mPlace;
     private GoogleMap mGoogleMap;
 
 
@@ -121,7 +118,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
     private void initMap() {
-        mPlace = mExchange.getPlace();
         SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
@@ -280,19 +276,13 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
     void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
-        if (mPlace == null) {
-            mPlace = new Place();
-            mPlace.setId(UUID.randomUUID().toString());
+        if (place == null) {
             return;
         }
-        if (place.getName() != null) {
-            mPlace.setName(place.getName().toString());
-        }
-        if (place.getAddress() != null) {
-            mPlace.setAddress(place.getAddress().toString());
-        }
-        mPlace.setLatitude(place.getLatLng().latitude);
-        mPlace.setLongitude(place.getLatLng().longitude);
+        String address = String.format(Locale.US, "%s\n%s", place.getName() != null ? place.getName() : "", place.getAddress() != null ? place.getAddress() : "");
+        mExchange.setAddress(address);
+        mExchange.setLatitude(place.getLatLng().latitude);
+        mExchange.setLongitude(place.getLatLng().longitude);
     }
 
     @Override
@@ -355,7 +345,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onSaveChangeExchange() {
-        mExchange.setPlace(mPlace);
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_edit_exchange), mExchange);
         setResult(IntentCode.EDIT_EXCHANGE, intent);
@@ -425,14 +414,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
 
     private void onTargetLocationExchange() {
-        if (mPlace == null) {
-            return;
-        }
-        LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
+        LatLng sydney = new LatLng(mExchange.getLatitude(), mExchange.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
-        String address = String.format(Locale.US, "%s\n%s", mPlace.getName() != null ? mPlace.getName() : "", mPlace.getAddress() != null ? mPlace.getAddress() : "");
-        tvAddress.setText(address);
+        tvAddress.setText(mExchange.getAddress());
     }
 
     private void updateMap() {

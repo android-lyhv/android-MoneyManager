@@ -3,26 +3,18 @@ package com.dut.moneytracker.maps;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
-import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.utils.NetworkUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
 
 
 /**
@@ -39,12 +31,10 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Context mContext;
-    private Geocoder mGeocoder;
-    private Place mPlace;
+    private Location mLocation;
 
     public GoogleLocation(Context context) {
         mContext = context;
-        mGeocoder = new Geocoder(mContext, Locale.getDefault());
         initApiClient();
         configLocationUpdate();
     }
@@ -111,28 +101,11 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
 
     @Override
     public void onLocationChanged(Location location) {
-        onSetExchangePlace(location);
+        mLocation = location;
     }
 
-    private void onSetExchangePlace(Location location) {
-        if (mPlace == null) {
-            mPlace = new Place();
-            mPlace.setId(UUID.randomUUID().toString());
-        }
-        try {
-            List<Address> addresses = mGeocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            String address = addresses.get(0).getAddressLine(0);
-            // update Place
-            mPlace.setAddress(address);
-            mPlace.setLatitude(location.getLatitude());
-            mPlace.setLongitude(location.getLongitude());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Place getPlace() {
-        return mPlace;
+    public Location getCurrentLocation() {
+        return mLocation;
     }
 }
 

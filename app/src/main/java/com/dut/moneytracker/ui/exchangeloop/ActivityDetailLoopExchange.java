@@ -35,7 +35,6 @@ import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
-import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.service.GenerateManager;
 import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
@@ -46,6 +45,7 @@ import com.dut.moneytracker.view.DayPicker_;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -62,7 +62,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -100,7 +99,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     ExchangeLooper mExchangeLoop;
     private GenerateManager mGenerateManager;
     private GoogleMap mGoogleMap;
-    private Place mPlace;
     private int mTypeExchange;
     private int lastTypeLoop = -1;
     private Date lastDate;
@@ -122,7 +120,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         lastTypeLoop = mExchangeLoop.getTypeLoop();
         lastDate = mExchangeLoop.getCreated();
         lastStatus = mExchangeLoop.isLoop();
-        mPlace = mExchangeLoop.getPlace();
         mTypeExchange = mExchangeLoop.getTypeExchange();
         switchCompat.setChecked(mExchangeLoop.isLoop());
         mSpinnerTypeLoopManger.setSelectItem(mExchangeLoop.getTypeLoop());
@@ -192,7 +189,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             Toast.makeText(this, getString(R.string.input_category), Toast.LENGTH_SHORT).show();
             return;
         }
-        mExchangeLoop.setPlace(mPlace);
         mExchangeLoop.setTypeExchange(mTypeExchange);
         onSaveDataBase();
         finish();
@@ -421,28 +417,20 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void onTargetLocationExchange() {
-        if (mPlace == null) {
-            return;
-        }
-        LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
+        LatLng sydney = new LatLng(mExchangeLoop.getLatitude(), mExchangeLoop.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(sydney));
-        String address = String.format(Locale.US, "%s\n%s", mPlace.getName() != null ? mPlace.getName() : "", mPlace.getAddress() != null ? mPlace.getAddress() : "");
-        tvAddress.setText(address);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
+        tvAddress.setText(mExchangeLoop.getAddress());
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
-        if (mPlace == null) {
-            mPlace = new Place();
-            mPlace.setId(UUID.randomUUID().toString());
+        if (place == null) {
+            return;
         }
-        if (place.getName() != null) {
-            mPlace.setName(place.getName().toString());
-        }
-        if (place.getAddress() != null) {
-            mPlace.setAddress(place.getAddress().toString());
-        }
-        mPlace.setLatitude(place.getLatLng().latitude);
-        mPlace.setLongitude(place.getLatLng().longitude);
+        String address = String.format(Locale.US, "%s\n%s", place.getName() != null ? place.getName() : "", place.getAddress() != null ? place.getAddress() : "");
+        mExchangeLoop.setAddress(address);
+        mExchangeLoop.setLatitude(place.getLatLng().latitude);
+        mExchangeLoop.setLongitude(place.getLatLng().longitude);
     }
 
     @Override

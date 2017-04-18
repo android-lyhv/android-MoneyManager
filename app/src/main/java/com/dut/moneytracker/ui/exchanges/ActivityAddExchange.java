@@ -1,6 +1,9 @@
 package com.dut.moneytracker.ui.exchanges;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -32,7 +35,9 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -369,10 +374,8 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             onSaveDataBase();
             return;
         }
-        mExchange.setPlace(mGoogleLocation.getPlace());
+        onSetPlaceExchange();
         onSaveDataBase();
-        mGoogleLocation.stopLocationUpDate();
-        mGoogleLocation.disConnectApiGoogle();
     }
 
     public boolean isAvailableTransfer() {
@@ -399,5 +402,21 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             return false;
         }
         return true;
+    }
+
+    private void onSetPlaceExchange() {
+        Geocoder mGeocoder = new Geocoder(this, Locale.getDefault());
+        Location location = mGoogleLocation.getCurrentLocation();
+        try {
+            List<Address> addresses = mGeocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            String address = addresses.get(0).getAddressLine(0);
+            mExchange.setAddress(address);
+            mExchange.setLatitude(location.getLatitude());
+            mExchange.setLongitude(location.getLongitude());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mGoogleLocation.stopLocationUpDate();
+        mGoogleLocation.disConnectApiGoogle();
     }
 }

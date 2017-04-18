@@ -28,11 +28,13 @@ public class ExchangeLoopManager extends RealmHelper {
         }
         return exchangeLoopManager;
     }
+
     public void insertOrUpdate(ExchangeLooper object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
     }
+
     private ExchangeLoopManager(Context context) {
         mGenerateManager = new GenerateManager(context);
     }
@@ -82,7 +84,9 @@ public class ExchangeLoopManager extends RealmHelper {
         exchange.setId(UUID.randomUUID().toString());
         exchange.setAmount(exchangeLooper.getAmount());
         exchange.setDescription(exchangeLooper.getDescription());
-        exchange.setPlace(exchangeLooper.getPlace());
+        exchange.setAddress(exchange.getAddress());
+        exchange.setLatitude(exchange.getLatitude());
+        exchange.setLongitude(exchange.getLongitude());
         exchange.setCurrencyCode(exchangeLooper.getCurrencyCode());
         exchange.setCreated(new Date());
         if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
