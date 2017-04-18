@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationServices;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 
 /**
@@ -59,7 +60,7 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
     }
 
     public void connectApiGoogle() {
-        if (NetworkUtils.getInstance().isConnectNetwork(mContext)){
+        if (NetworkUtils.getInstance().isConnectNetwork(mContext)) {
             mGoogleApiClient.connect();
         }
     }
@@ -116,6 +117,7 @@ public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, Goog
     private void onSetExchangePlace(Location location) {
         if (mPlace == null) {
             mPlace = new Place();
+            mPlace.setId(UUID.randomUUID().toString());
         }
         try {
             List<Address> addresses = mGeocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);

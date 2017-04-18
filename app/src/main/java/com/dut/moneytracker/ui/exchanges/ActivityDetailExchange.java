@@ -58,6 +58,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -95,6 +96,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     ImageView imgEditCategory;
     @ViewById(R.id.imgEditAccount)
     ImageView imgEditAccount;
+    @ViewById(R.id.tvAddress)
+    TextView tvAddress;
     @Extra
     Exchange mExchange;
     private TimePicker mTimePicker;
@@ -277,7 +280,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
     void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
-        if (place == null) {
+        if (mPlace == null) {
+            mPlace = new Place();
+            mPlace.setId(UUID.randomUUID().toString());
             return;
         }
         if (place.getName() != null) {
@@ -419,18 +424,18 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
 
-    void onTargetLocationExchange() {
+    private void onTargetLocationExchange() {
         if (mPlace == null) {
-            mPlace = new Place();
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        String title = String.format(Locale.US, "%s\n%s", mPlace.getName(), mPlace.getName());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
+        String address = String.format(Locale.US, "%s\n%s", mPlace.getName() != null ? mPlace.getName() : "", mPlace.getAddress() != null ? mPlace.getAddress() : "");
+        tvAddress.setText(address);
     }
 
-    void updateMap() {
+    private void updateMap() {
         mGoogleMap.clear();
         onTargetLocationExchange();
     }
@@ -439,5 +444,11 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         onTargetLocationExchange();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mGoogleMap.clear();
     }
 }

@@ -46,7 +46,6 @@ import com.dut.moneytracker.view.DayPicker_;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -63,6 +62,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -94,6 +94,8 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     AppCompatSpinner mAppCompatSpinner;
     @ViewById(R.id.switchLoop)
     SwitchCompat switchCompat;
+    @ViewById(R.id.tvAddress)
+    TextView tvAddress;
     @Extra
     ExchangeLooper mExchangeLoop;
     private GenerateManager mGenerateManager;
@@ -423,13 +425,16 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        String title = String.format(Locale.US, "%s\n%s", mPlace.getName(), mPlace.getName());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney));
+        String address = String.format(Locale.US, "%s\n%s", mPlace.getName() != null ? mPlace.getName() : "", mPlace.getAddress() != null ? mPlace.getAddress() : "");
+        tvAddress.setText(address);
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
-        mPlace = new Place();
+        if (mPlace == null) {
+            mPlace = new Place();
+            mPlace.setId(UUID.randomUUID().toString());
+        }
         if (place.getName() != null) {
             mPlace.setName(place.getName().toString());
         }

@@ -43,6 +43,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -62,10 +63,12 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     TextView tvTime;
     @ViewById(R.id.tvAmount)
     TextView tvAmount;
-    DayPicker mDayPicker;
-    TimePicker mTimePicker;
+    @ViewById(R.id.tvAddress)
+    TextView tvAddress;
     @Extra
     Exchange mExchange;
+    private DayPicker mDayPicker;
+    private TimePicker mTimePicker;
     private Place mPlace;
     private Date mDate;
     private GoogleMap mGoogleMap;
@@ -213,7 +216,10 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
-        mPlace = new Place();
+        if (mPlace == null) {
+            mPlace = new Place();
+            mPlace.setId(UUID.randomUUID().toString());
+        }
         if (place.getName() != null) {
             mPlace.setName(place.getName().toString());
         }
@@ -234,9 +240,10 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
             return;
         }
         LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        String title = String.format(Locale.US, "%s\n%s", mPlace.getName(), mPlace.getName());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
+        String address = String.format(Locale.US, "%s\n%s", mPlace.getName() != null ? mPlace.getName() : "", mPlace.getAddress() != null ? mPlace.getAddress() : "");
+        tvAddress.setText(address);
     }
 
     @Override
