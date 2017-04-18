@@ -9,7 +9,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.PieChartType;
 import com.dut.moneytracker.currency.CurrencyUtils;
-import com.dut.moneytracker.models.FilterManager;
+import com.dut.moneytracker.models.realms.FilterManager;
 import com.dut.moneytracker.ui.charts.objects.MoneyChartManager;
 import com.dut.moneytracker.ui.charts.objects.PieChartMoney;
 import com.dut.moneytracker.ui.charts.objects.ValuePieChart;

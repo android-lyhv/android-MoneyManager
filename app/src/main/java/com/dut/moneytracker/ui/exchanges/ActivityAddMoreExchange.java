@@ -16,7 +16,6 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.view.DayPicker;
@@ -62,11 +61,12 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     TextView tvTime;
     @ViewById(R.id.tvAmount)
     TextView tvAmount;
-    DayPicker mDayPicker;
-    TimePicker mTimePicker;
+    @ViewById(R.id.tvAddress)
+    TextView tvAddress;
     @Extra
     Exchange mExchange;
-    private Place mPlace;
+    private DayPicker mDayPicker;
+    private TimePicker mTimePicker;
     private Date mDate;
     private GoogleMap mGoogleMap;
 
@@ -88,7 +88,6 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
         } else {
             mDate = new Date();
         }
-        mPlace = mExchange.getPlace();
     }
 
     @OptionsItem(android.R.id.home)
@@ -99,7 +98,6 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     @OptionsItem(R.id.actionAdd)
     void onSave() {
         mExchange.setDescription(editDescription.getText().toString());
-        mExchange.setPlace(mPlace);
         mExchange.setCreated(mDate);
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_more_add), mExchange);
@@ -213,15 +211,13 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
-        mPlace = new Place();
-        if (place.getName() != null) {
-            mPlace.setName(place.getName().toString());
+        if (place == null) {
+            return;
         }
-        if (place.getAddress() != null) {
-            mPlace.setAddress(place.getAddress().toString());
-        }
-        mPlace.setLatitude(place.getLatLng().latitude);
-        mPlace.setLongitude(place.getLatLng().longitude);
+        String address = String.format(Locale.US, "%s\n%s", place.getName() != null ? place.getName() : "", place.getAddress() != null ? place.getAddress() : "");
+        mExchange.setAddress(address);
+        mExchange.setLatitude(place.getLatLng().latitude);
+        mExchange.setLongitude(place.getLatLng().longitude);
     }
 
     private void onLoadMaker() {
@@ -230,13 +226,10 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
     }
 
     private void onTargetLocation() {
-        if (mPlace == null) {
-            return;
-        }
-        LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        String title = String.format(Locale.US, "%s\n%s", mPlace.getName(), mPlace.getName());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
+        LatLng sydney = new LatLng(mExchange.getLatitude(), mExchange.getLongitude());
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
+        tvAddress.setText(mExchange.getAddress());
     }
 
     @Override

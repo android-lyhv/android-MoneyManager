@@ -1,18 +1,14 @@
 package com.dut.moneytracker.ui.user;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.IntentCode;
+import com.dut.moneytracker.models.AppConfig;
 import com.dut.moneytracker.view.CircleImageView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -21,57 +17,49 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.ViewById;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 03/03/2017.
  */
-
-public class UserInformationActivity extends AppCompatActivity implements View.OnClickListener {
-    private CircleImageView imgUser;
-    private TextView tvUser;
-    private TextView tvEmail;
-    private Button btnLogout;
+@EActivity(R.layout.activity_user)
+public class UserActivity extends AppCompatActivity {
+    @ViewById(R.id.toolbar)
+    Toolbar toolbar;
+    @ViewById(R.id.imgUser)
+    CircleImageView imgUser;
+    @ViewById(R.id.tvUserName)
+    TextView tvUser;
+    @ViewById(R.id.tvEmail)
+    TextView tvEmail;
     private FirebaseAuth mFireBaseAuth;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    @AfterViews
+    void init() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        initView();
         loadDataUser();
     }
 
-    private void initView() {
-        imgUser = (CircleImageView) findViewById(R.id.imgUser);
-        tvUser = (TextView) findViewById(R.id.tvUserName);
-        tvEmail = (TextView) findViewById(R.id.tvEmail);
-        btnLogout = (Button) findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnLogout:
-                if (mFireBaseAuth.getCurrentUser() != null) {
-                    mFireBaseAuth.signOut();
-                    logOutFacebook();
-                    setResult(IntentCode.PROFILE);
-                    finish();
-                }
-                break;
-        }
-
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home) {
+    @Click(R.id.btnLogout)
+    void onClickLogout() {
+        AppConfig.getInstance().clearAllData(this);
+        if (mFireBaseAuth.getCurrentUser() != null) {
+            mFireBaseAuth.signOut();
+            logOutFacebook();
+            setResult(IntentCode.PROFILE);
             finish();
         }
-        return super.onOptionsItemSelected(menuItem);
+    }
+
+    @OptionsItem(android.R.id.home)
+    void onClose() {
+        finish();
     }
 
     private void loadDataUser() {

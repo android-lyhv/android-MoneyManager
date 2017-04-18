@@ -5,25 +5,29 @@ import android.content.SharedPreferences;
 
 import java.util.Locale;
 
+import io.realm.Realm;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 01/03/2017.
  */
-public class AppPreferences {
-    private static AppPreferences ourInstance;
+public class AppConfig {
+    private static AppConfig ourInstance;
     private static final String FIRST_INIT = "first_init";
     private static final String SHARED_PREF_NAME = "MoneyTracker";
     private static final String KEY_REFERENCE_DATABASE = "KEY_REFERENCE_DATABASE";
     private static final String KEY_USER_ID = "KEY_USER_ID";
+    private static Realm mRealm;
 
-    public static AppPreferences getInstance() {
+    public static AppConfig getInstance() {
         if (ourInstance == null) {
-            ourInstance = new AppPreferences();
+            ourInstance = new AppConfig();
         }
         return ourInstance;
     }
 
-    private AppPreferences() {
+    private AppConfig() {
+        mRealm = Realm.getDefaultInstance();
     }
 
     public boolean isInitCategory(Context context) {
@@ -62,5 +66,23 @@ public class AppPreferences {
     public String getCurrentUserId(Context context) {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return pref.getString(KEY_USER_ID, "");
+    }
+
+    public void clearAllData(Context context) {
+        clearDataRealm();
+        clearSharedPreferences(context);
+    }
+
+    private void clearDataRealm() {
+        mRealm.beginTransaction();
+        mRealm.deleteAll();
+        mRealm.commitTransaction();
+    }
+
+    private void clearSharedPreferences(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.apply();
     }
 }

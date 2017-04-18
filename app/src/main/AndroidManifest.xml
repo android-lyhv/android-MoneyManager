@@ -19,7 +19,7 @@
 
         <!-- List activity -->
         <activity
-            android:name=".ui.user.LoginActivity"
+            android:name=".ui.user.LoginActivity_"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +54,7 @@
             android:name=".ui.exchanges.ActivityDetailExchange_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.UserInformationActivity"
+            android:name=".ui.user.UserActivity_"
             android:label="User"
             android:screenOrientation="portrait" />
         <activity
@@ -64,7 +64,7 @@
             android:name=".ui.exchangeloop.ActivityDetailLoopExchange_"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.ActivityLoadData"
+            android:name=".ui.ActivityLoadData_"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen" />
         <activity

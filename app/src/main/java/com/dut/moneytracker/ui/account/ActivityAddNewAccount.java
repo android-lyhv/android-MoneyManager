@@ -44,7 +44,7 @@ import java.util.UUID;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 07/04/2017.
  */
-@EActivity(R.layout.activity_edit_account)
+@EActivity(R.layout.activity_detail_account)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddNewAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
     private static final java.lang.String TAG = ActivityDetailAccount.class.getSimpleName();

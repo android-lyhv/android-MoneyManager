@@ -45,7 +45,7 @@ import org.androidannotations.annotations.ViewById;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 07/03/2017.
  */
-@EActivity(R.layout.activity_edit_account)
+@EActivity(R.layout.activity_detail_account)
 @OptionsMenu(R.menu.menu_edit_account)
 public class ActivityDetailAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
     private static final java.lang.String TAG = ActivityDetailAccount.class.getSimpleName();

@@ -1,19 +1,15 @@
 package com.dut.moneytracker.ui.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.models.AppPreferences;
-import com.dut.moneytracker.ui.ActivityLoadData;
+import com.dut.moneytracker.models.AppConfig;
+import com.dut.moneytracker.ui.ActivityLoadData_;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.utils.NetworkUtils;
@@ -38,28 +34,27 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+
 import java.util.Arrays;
 
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 21/02/2017.
  */
-
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
+@EActivity(R.layout.activity_login)
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
     private static final String[] PERMISSION_FB = {"email", "public_profile", "user_posts"};
     private static final int RC_SIGN_IN = 1;
     private static final String TAG = LoginActivity.class.getSimpleName();
-    private Button btnLoginWithGoogle;
-    private Button btnLoginWithFacebook;
     private CallbackManager mCallbackManager;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFireBaseAuth;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initView();
+    @AfterViews
+    void init() {
         configFireBase();
         configGoogleApi();
     }
@@ -68,11 +63,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mFireBaseAuth = FirebaseAuth.getInstance();
     }
 
-    private void initView() {
-        btnLoginWithGoogle = (Button) findViewById(R.id.btnLoginWithGoogle);
-        btnLoginWithGoogle.setOnClickListener(this);
-        btnLoginWithFacebook = (Button) findViewById(R.id.btnLoginWithFacebook);
-        btnLoginWithFacebook.setOnClickListener(this);
+    @Click(R.id.btnLoginWithGoogle)
+    void onClickLoginWithGoogle() {
+        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
+            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        requestLoginWithGoogle();
+    }
+
+    @Click(R.id.btnLoginWithFacebook)
+    void onClickLoginWithFacebook() {
+        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
+            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        requestLoginFacebook();
     }
 
     @Override
@@ -82,21 +88,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mFireBaseAuth.addAuthStateListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
-            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        switch (v.getId()) {
-            case R.id.btnLoginWithFacebook:
-                requestLoginFacebook();
-                break;
-            case R.id.btnLoginWithGoogle:
-                requestLoginWithGoogle();
-                break;
-        }
-    }
 
     private void onLoginFacebook() {
         mCallbackManager = CallbackManager.Factory.create();
@@ -194,6 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             logOutGoogle();
+            AppConfig.getInstance().setReferenceDatabase(this, user.getUid());
             syncDataFromServer(user);
         } else {
             Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -201,12 +193,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void syncDataFromServer(FirebaseUser firebaseUser) {
-        String currentUserId = AppPreferences.getInstance().getCurrentUserId(this);
+        String currentUserId = AppConfig.getInstance().getCurrentUserId(this);
         Log.d(TAG, "syncDataFromServer: " + currentUserId + "   " + firebaseUser.getUid());
         if (!TextUtils.equals(currentUserId, firebaseUser.getUid())) {
-            startActivity(new Intent(this, ActivityLoadData.class));
+            ActivityLoadData_.intent(this).start();
         } else {
-            startActivity(new Intent(this, MainActivity_.class));
+            MainActivity_.intent(this).start();
         }
         finish();
     }

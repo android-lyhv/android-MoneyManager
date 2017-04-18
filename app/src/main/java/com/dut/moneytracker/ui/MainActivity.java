@@ -32,8 +32,8 @@ import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
 import com.dut.moneytracker.dialogs.DialogPickFilter_;
-import com.dut.moneytracker.models.FilterManager;
 import com.dut.moneytracker.models.realms.AccountManager;
+import com.dut.moneytracker.models.realms.FilterManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.account.ActivityAccounts_;
@@ -52,8 +52,8 @@ import com.dut.moneytracker.ui.exchangeloop.FragmentLoopExchange_;
 import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager;
 import com.dut.moneytracker.ui.exchanges.FragmentExchangesPager_;
 import com.dut.moneytracker.ui.interfaces.MainListener;
-import com.dut.moneytracker.ui.user.LoginActivity;
-import com.dut.moneytracker.ui.user.UserInformationActivity;
+import com.dut.moneytracker.ui.user.LoginActivity_;
+import com.dut.moneytracker.ui.user.UserActivity_;
 import com.dut.moneytracker.view.CircleImageView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                         onLoadFragmentDebit();
                         break;
                     case PROFILE:
-                        startActivityForResult(new Intent(MainActivity.this, UserInformationActivity.class), IntentCode.PROFILE);
+                        UserActivity_.intent(MainActivity.this).startForResult(IntentCode.PROFILE);
                         break;
                 }
             }
@@ -373,15 +373,10 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case IntentCode.PROFILE:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
-                break;
-        }
+    @OnActivityResult(IntentCode.PROFILE)
+    void resultLogout() {
+        LoginActivity_.intent(MainActivity.this).start();
+        finish();
     }
 
     /**

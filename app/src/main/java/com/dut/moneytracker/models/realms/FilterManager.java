@@ -1,11 +1,9 @@
-package com.dut.moneytracker.models;
+package com.dut.moneytracker.models.realms;
 
 import android.text.TextUtils;
 
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.currency.CurrencyUtils;
-import com.dut.moneytracker.models.realms.AccountManager;
-import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -19,7 +17,6 @@ import java.util.Locale;
  * Created by ly.ho on 15/03/2017.
  */
 public class FilterManager {
-    private static final String TAG = FilterManager.class.getSimpleName();
     private static FilterManager ourInstance;
 
     public static FilterManager getInstance() {

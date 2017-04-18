@@ -31,7 +31,10 @@ public class Exchange extends RealmObject implements Parcelable {
     private String amount;
     private String description;
     private Date created;
-    private Place place;
+    // This for place
+    private String address;
+    private double latitude;
+    private double longitude;
 
     public Exchange() {
     }
@@ -54,7 +57,9 @@ public class Exchange extends RealmObject implements Parcelable {
         dest.writeString(this.amount);
         dest.writeString(this.description);
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
-        dest.writeParcelable(this.place, flags);
+        dest.writeString(this.address);
+        dest.writeDouble(this.latitude);
+        dest.writeDouble(this.longitude);
     }
 
     protected Exchange(Parcel in) {
@@ -70,7 +75,9 @@ public class Exchange extends RealmObject implements Parcelable {
         this.description = in.readString();
         long tmpCreated = in.readLong();
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
-        this.place = in.readParcelable(Place.class.getClassLoader());
+        this.address = in.readString();
+        this.latitude = in.readDouble();
+        this.longitude = in.readDouble();
     }
 
     public static final Creator<Exchange> CREATOR = new Creator<Exchange>() {

@@ -28,13 +28,18 @@ public class ExchangeLoopManager extends RealmHelper {
         }
         return exchangeLoopManager;
     }
+
+    private ExchangeLoopManager(Context context) {
+        mGenerateManager = new GenerateManager(context);
+    }
+
+    /**
+     * Sync frirebase
+     */
     public void insertOrUpdate(ExchangeLooper object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
-    }
-    private ExchangeLoopManager(Context context) {
-        mGenerateManager = new GenerateManager(context);
     }
 
     public void deleteExchangeLoopByAccount(String idAccount) {
@@ -47,52 +52,12 @@ public class ExchangeLoopManager extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public RealmResults<ExchangeLooper> getListLoopExchange() {
-        realm.beginTransaction();
-        RealmResults<ExchangeLooper> realmResults = realm.where(ExchangeLooper.class).findAllSorted("created", Sort.ASCENDING);
-        realm.commitTransaction();
-        return realmResults;
-    }
-
     public void deleteExchangeLoopById(int id) {
         realm.beginTransaction();
         ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
         exchangeLooper.deleteFromRealm();
         realm.commitTransaction();
         mGenerateManager.removePendingLoopExchange(id);
-    }
-
-    public ExchangeLooper getExchangeLooperById(int id) {
-        realm.beginTransaction();
-        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
-        realm.commitTransaction();
-        return exchangeLooper;
-    }
-
-    public void generateNewExchange(int idExchangeLooper) {
-        ExchangeLooper exchangeLooper = getExchangeLooperById(idExchangeLooper);
-        if (exchangeLooper == null || !exchangeLooper.isLoop()) {
-            return;
-        }
-        ExchangeManger.getInstance().insertOrUpdate(copyExchange(exchangeLooper));
-    }
-
-    public Exchange copyExchange(ExchangeLooper exchangeLooper) {
-        Exchange exchange = new Exchange();
-        exchange.setId(UUID.randomUUID().toString());
-        exchange.setAmount(exchangeLooper.getAmount());
-        exchange.setDescription(exchangeLooper.getDescription());
-        exchange.setPlace(exchangeLooper.getPlace());
-        exchange.setCurrencyCode(exchangeLooper.getCurrencyCode());
-        exchange.setCreated(new Date());
-        if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
-            exchange.setTypeExchange(exchangeLooper.getTypeExchange());
-            exchange.setIdAccount(exchangeLooper.getIdAccount());
-            exchange.setIdCategory(exchangeLooper.getIdCategory());
-        } else {
-            //TODO
-        }
-        return exchange;
     }
 
     public void upDatePendingExchange(ExchangeLooper exchangeLooper) {
@@ -111,5 +76,48 @@ public class ExchangeLoopManager extends RealmHelper {
         exchangeLooper.setId(nextId);
         insertOrUpdate(exchangeLooper);
         mGenerateManager.pendingGenerateExchange(exchangeLooper);
+    }
+
+    /*********************************************/
+    public ExchangeLooper getExchangeLooperById(int id) {
+        realm.beginTransaction();
+        ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
+        realm.commitTransaction();
+        return exchangeLooper;
+    }
+
+    public RealmResults<ExchangeLooper> getListLoopExchange() {
+        realm.beginTransaction();
+        RealmResults<ExchangeLooper> realmResults = realm.where(ExchangeLooper.class).findAllSorted("created", Sort.ASCENDING);
+        realm.commitTransaction();
+        return realmResults;
+    }
+
+    public void generateNewExchange(int idExchangeLooper) {
+        ExchangeLooper exchangeLooper = getExchangeLooperById(idExchangeLooper);
+        if (exchangeLooper == null || !exchangeLooper.isLoop()) {
+            return;
+        }
+        ExchangeManger.getInstance().insertOrUpdate(copyExchange(exchangeLooper));
+    }
+
+    public Exchange copyExchange(ExchangeLooper exchangeLooper) {
+        Exchange exchange = new Exchange();
+        exchange.setId(UUID.randomUUID().toString());
+        exchange.setAmount(exchangeLooper.getAmount());
+        exchange.setDescription(exchangeLooper.getDescription());
+        exchange.setAddress(exchange.getAddress());
+        exchange.setLatitude(exchange.getLatitude());
+        exchange.setLongitude(exchange.getLongitude());
+        exchange.setCurrencyCode(exchangeLooper.getCurrencyCode());
+        exchange.setCreated(new Date());
+        if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
+            exchange.setTypeExchange(exchangeLooper.getTypeExchange());
+            exchange.setIdAccount(exchangeLooper.getIdAccount());
+            exchange.setIdCategory(exchangeLooper.getIdCategory());
+        } else {
+            //TODO
+        }
+        return exchange;
     }
 }

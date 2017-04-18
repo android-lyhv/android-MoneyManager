@@ -98,8 +98,8 @@
                     android:text="@string/fragment_account.textview.chart" />
 
                 <com.github.mikephil.charting.charts.LineChart
-                    android:paddingBottom="10dp"
-                    android:id="@+id/pieChart"
+                    android:layout_margin="5dp"
+                    android:id="@+id/lineChart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/tvTitleChart" />

@@ -28,10 +28,9 @@ public class DebitManager extends RealmHelper {
     private DebitManager() {
     }
 
-    public RealmResults<Debit> onLoadDebitAsync() {
-        return realm.where(Debit.class).findAllAsync();
-    }
-
+    /**
+     * Sync with firebase
+     */
     public void deleteDebitByAccount(String idAccount) {
         int idDebit = -1;
         realm.beginTransaction();
@@ -73,19 +72,24 @@ public class DebitManager extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public String getAccountNameByDebitId(int id) {
-        realm.beginTransaction();
-        String accountId = realm.where(Debit.class).equalTo("id", id).findFirst().getIdAccount();
-        realm.commitTransaction();
-        return AccountManager.getInstance().getAccountNameById(accountId);
-    }
-
     public void setStatusDebit(int id, boolean isClose) {
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
         debit.setClose(isClose);
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
+    }
+
+    /***************************************************************/
+    public RealmResults<Debit> onLoadDebitAsync() {
+        return realm.where(Debit.class).findAllAsync();
+    }
+
+    public String getAccountNameByDebitId(int id) {
+        realm.beginTransaction();
+        String accountId = realm.where(Debit.class).equalTo("id", id).findFirst().getIdAccount();
+        realm.commitTransaction();
+        return AccountManager.getInstance().getAccountNameById(accountId);
     }
 
     public String getRemindAmountDebit(Debit debit) {

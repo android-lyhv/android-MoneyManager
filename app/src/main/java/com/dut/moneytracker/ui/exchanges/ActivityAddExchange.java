@@ -1,12 +1,12 @@
 package com.dut.moneytracker.ui.exchanges;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,11 +24,8 @@ import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
 import com.dut.moneytracker.ui.interfaces.AddListener;
-import com.dut.moneytracker.utils.DialogUtils;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -38,7 +35,9 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -48,7 +47,7 @@ import java.util.UUID;
  */
 @EActivity(R.layout.activity_add_exchange)
 @OptionsMenu(R.menu.menu_add_exchange)
-public class ActivityAddExchange extends AppCompatActivity implements AddListener, GoogleApiClient.ConnectionCallbacks {
+public class ActivityAddExchange extends AppCompatActivity implements AddListener {
     private static final String TAG = ActivityAddExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
@@ -77,11 +76,18 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     private String mIdCategory;
     private String mNameCategory;
     private String mNameAccountTransfer;
+    private GoogleLocation mGoogleLocation;
 
     @AfterViews
     void init() {
         initDataExchange();
         initView();
+        initGoogleLocation();
+    }
+
+    private void initGoogleLocation() {
+        mGoogleLocation = new GoogleLocation(getApplicationContext());
+        mGoogleLocation.connectApiGoogle();
     }
 
     private void initView() {
@@ -364,35 +370,12 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     }
 
     private void onRequestExchangePlace() {
-        Log.d(TAG, "onRequestExchangePlace: ");
-        if (!mAccount.isSaveLocation()) {
-            onSaveDataBase();
-            return;
-        }
-        final GoogleLocation googleLocation = new GoogleLocation(getApplicationContext());
-        googleLocation.registerCurrentPlaceListener(new GoogleLocation.CurrentPlaceListener() {
-            @Override
-            public void onResultPlace(Place place) {
-                Log.d(TAG, "onResultPlace: " + place.getLatitude());
-                mExchange.setPlace(place);
-                onSaveDataBase();
-                googleLocation.stopLocationUpDate();
-                googleLocation.disConnectApiGoogle();
-                DialogUtils.getInstance().dismissProgressDialog();
+        if (mAccount.isSaveLocation()) {
+            if ((mExchange.getLatitude() == 0 && mExchange.getLongitude() == 0) || TextUtils.isEmpty(mExchange.getAddress())) {
+                onSetPlaceExchange();
             }
-        });
-        googleLocation.connectApiGoogle();
-        DialogUtils.getInstance().showProgressDialog(this, "Loading");
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
+        }
+        onSaveDataBase();
     }
 
     public boolean isAvailableTransfer() {
@@ -419,5 +402,21 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             return false;
         }
         return true;
+    }
+
+    private void onSetPlaceExchange() {
+        Geocoder mGeocoder = new Geocoder(this, Locale.getDefault());
+        Location location = mGoogleLocation.getCurrentLocation();
+        try {
+            List<Address> addresses = mGeocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            String address = addresses.get(0).getAddressLine(0);
+            mExchange.setAddress(address);
+            mExchange.setLatitude(location.getLatitude());
+            mExchange.setLongitude(location.getLongitude());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mGoogleLocation.stopLocationUpDate();
+        mGoogleLocation.disConnectApiGoogle();
     }
 }

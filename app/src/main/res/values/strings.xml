@@ -18,8 +18,6 @@
     <string name="toast.text.connection_internet">Vui lòng kết nối internet!</string>
     <string name="name_default_account">Tiền Mặt</string>
     <string name="id_default_account">moneytracker</string>
-    <!--Currency-->
-    <string name="current_api_id">bd8e8fc3b2bd4af58a7617bc9ce3651f</string>
     <!--FIREBASE-->
     <string name="base_url_firebase">https://moneytracker-159307.firebaseio.com/</string>
     <string name="group_category">group_category</string>

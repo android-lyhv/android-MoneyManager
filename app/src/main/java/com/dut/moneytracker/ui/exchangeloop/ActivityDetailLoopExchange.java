@@ -35,7 +35,6 @@ import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
-import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.service.GenerateManager;
 import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
@@ -94,11 +93,12 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     AppCompatSpinner mAppCompatSpinner;
     @ViewById(R.id.switchLoop)
     SwitchCompat switchCompat;
+    @ViewById(R.id.tvAddress)
+    TextView tvAddress;
     @Extra
     ExchangeLooper mExchangeLoop;
     private GenerateManager mGenerateManager;
     private GoogleMap mGoogleMap;
-    private Place mPlace;
     private int mTypeExchange;
     private int lastTypeLoop = -1;
     private Date lastDate;
@@ -120,7 +120,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         lastTypeLoop = mExchangeLoop.getTypeLoop();
         lastDate = mExchangeLoop.getCreated();
         lastStatus = mExchangeLoop.isLoop();
-        mPlace = mExchangeLoop.getPlace();
         mTypeExchange = mExchangeLoop.getTypeExchange();
         switchCompat.setChecked(mExchangeLoop.isLoop());
         mSpinnerTypeLoopManger.setSelectItem(mExchangeLoop.getTypeLoop());
@@ -190,7 +189,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             Toast.makeText(this, getString(R.string.input_category), Toast.LENGTH_SHORT).show();
             return;
         }
-        mExchangeLoop.setPlace(mPlace);
         mExchangeLoop.setTypeExchange(mTypeExchange);
         onSaveDataBase();
         finish();
@@ -419,25 +417,20 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void onTargetLocationExchange() {
-        if (mPlace == null) {
-            return;
-        }
-        LatLng sydney = new LatLng(mPlace.getLatitude(), mPlace.getLongitude());
-        String title = String.format(Locale.US, "%s\n%s", mPlace.getName(), mPlace.getName());
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title(title));
+        LatLng sydney = new LatLng(mExchangeLoop.getLatitude(), mExchangeLoop.getLongitude());
+        mGoogleMap.addMarker(new MarkerOptions().position(sydney));
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, getResources().getInteger(R.integer.zoom_map)));
+        tvAddress.setText(mExchangeLoop.getAddress());
     }
 
     private void onSetExchangePlace(com.google.android.gms.location.places.Place place) {
-        mPlace = new Place();
-        if (place.getName() != null) {
-            mPlace.setName(place.getName().toString());
+        if (place == null) {
+            return;
         }
-        if (place.getAddress() != null) {
-            mPlace.setAddress(place.getAddress().toString());
-        }
-        mPlace.setLatitude(place.getLatLng().latitude);
-        mPlace.setLongitude(place.getLatLng().longitude);
+        String address = String.format(Locale.US, "%s\n%s", place.getName() != null ? place.getName() : "", place.getAddress() != null ? place.getAddress() : "");
+        mExchangeLoop.setAddress(address);
+        mExchangeLoop.setLatitude(place.getLatLng().latitude);
+        mExchangeLoop.setLongitude(place.getLatLng().longitude);
     }
 
     @Override

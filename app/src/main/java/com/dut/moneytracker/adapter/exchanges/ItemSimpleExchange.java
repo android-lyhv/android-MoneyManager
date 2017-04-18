@@ -17,7 +17,6 @@ import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.objects.Place;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.ResourceUtils;
 
@@ -65,8 +64,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             tvAmount.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light));
         }
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
-        Place place = exchange.getPlace();
-        if (place == null || (place.getLatitude() == 0 && place.getLongitude() == 0)) {
+        if ((exchange.getLatitude() == 0 && exchange.getLongitude() == 0)|| TextUtils.isEmpty(exchange.getAddress())) {
             imgLocation.setVisibility(View.GONE);
         } else {
             imgLocation.setVisibility(View.VISIBLE);
