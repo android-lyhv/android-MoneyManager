@@ -55,7 +55,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     TextView mTvAmount;
     @ViewById(R.id.cardViewCardAccount)
     CardView mCardView;
-    @ViewById(R.id.pieChart)
+    @ViewById(R.id.lineChart)
     LineChart mLineChart;
     @FragmentArg
     Account mAccount;

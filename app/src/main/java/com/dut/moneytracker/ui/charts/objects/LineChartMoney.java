@@ -31,7 +31,7 @@ public class LineChartMoney {
     public LineChartMoney(Context context, LineChart chart) {
         mChart = chart;
         mContext = context;
-        onSetupChart();
+        configChart();
     }
 
     public void setColorChart(String mColorChart) {
@@ -49,7 +49,6 @@ public class LineChartMoney {
             entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(size - i - 1).getAmount()));
             entries.add(entry);
         }
-
         mLineDataSet = new LineDataSet(entries, mContext.getString(R.string.label_linechart));
         mLineDataSet.setCircleColor(Color.parseColor(mColorChart));
         mLineDataSet.setColor(Color.parseColor(mColorChart));
@@ -58,7 +57,7 @@ public class LineChartMoney {
         mChart.setData(mLineData);
     }
 
-    private void onSetupChart() {
+    private void configChart() {
         mChart.getAxisLeft().setDrawGridLines(true);
         mChart.getAxisRight().setEnabled(false);
         mChart.setDragEnabled(false);

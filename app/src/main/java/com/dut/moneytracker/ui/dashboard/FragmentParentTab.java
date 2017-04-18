@@ -66,7 +66,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     RecyclerView mRecyclerExchange;
     @ViewById(R.id.tvAmount)
     TextView mTvAmount;
-    @ViewById(R.id.pieChart)
+    @ViewById(R.id.lineChart)
     LineChart mLineChart;
     @ViewById(R.id.recyclerViewCardAccount)
     RecyclerView mRecyclerViewCardAccount;
