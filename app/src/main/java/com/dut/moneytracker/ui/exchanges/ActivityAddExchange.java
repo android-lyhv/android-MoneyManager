@@ -370,11 +370,11 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     }
 
     private void onRequestExchangePlace() {
-        if (!mAccount.isSaveLocation()) {
-            onSaveDataBase();
-            return;
+        if (mAccount.isSaveLocation()) {
+            if ((mExchange.getLatitude() == 0 && mExchange.getLongitude() == 0) || TextUtils.isEmpty(mExchange.getAddress())) {
+                onSetPlaceExchange();
+            }
         }
-        onSetPlaceExchange();
         onSaveDataBase();
     }
 

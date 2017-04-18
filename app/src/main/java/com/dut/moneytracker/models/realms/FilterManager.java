@@ -17,7 +17,6 @@ import java.util.Locale;
  * Created by ly.ho on 15/03/2017.
  */
 public class FilterManager {
-    private static final String TAG = FilterManager.class.getSimpleName();
     private static FilterManager ourInstance;
 
     public static FilterManager getInstance() {

@@ -23,11 +23,13 @@ public class CategoryManager extends RealmHelper {
     private CategoryManager() {
 
     }
+
     public void insertOrUpdate(Category object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
     }
+
     public void insertOrUpdate(GroupCategory object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
@@ -40,15 +42,6 @@ public class CategoryManager extends RealmHelper {
         RealmResults<GroupCategory> realmResults = realm.where(GroupCategory.class).findAll();
         realm.commitTransaction();
         return realmResults;
-    }
-
-    public byte[] getImageByte(String id) {
-        byte[] bytes;
-        realm.beginTransaction();
-        Category category = realm.where(Category.class).equalTo("id", id).findFirst();
-        bytes = category.getByteImage();
-        realm.commitTransaction();
-        return bytes;
     }
 
     public Category getCategoryById(String id) {
@@ -64,6 +57,7 @@ public class CategoryManager extends RealmHelper {
         realm.commitTransaction();
         return realmResults;
     }
+
     public RealmResults<Category> getCategories() {
         realm.beginTransaction();
         RealmResults<Category> realmResults = realm.where(Category.class).findAll();

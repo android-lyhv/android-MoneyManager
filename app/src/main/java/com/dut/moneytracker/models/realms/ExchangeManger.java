@@ -42,6 +42,9 @@ public class ExchangeManger extends RealmHelper {
     private ExchangeManger() {
     }
 
+    /**
+     * Sync with firebase
+     */
     public void insertOrUpdate(Exchange object) {
         realm.beginTransaction();
         realm.insertOrUpdate(object);
@@ -80,6 +83,8 @@ public class ExchangeManger extends RealmHelper {
         }
         realm.commitTransaction();
     }
+
+    /*****************************************/
 
     public String getAmountExchangeByDebit(int idDebit) {
         BigDecimal bigDecimal = new BigDecimal("0");

@@ -36,12 +36,29 @@ public class AccountManager extends RealmHelper {
 
     }
 
+    /**
+     * Sync Firebase
+     */
     public void insertOrUpdate(Account object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
     }
 
+    public void onDeleteAccount(Context context, String idAccount) {
+        // Delete FormServer
+        ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
+        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
+        DebitManager.getInstance().deleteDebitByAccount(idAccount);
+        realm.beginTransaction();
+        final Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
+        if (account != null) {
+            account.deleteFromRealm();
+        }
+        realm.commitTransaction();
+    }
+
+    /*********************************************/
     public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
         RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAll();
@@ -205,19 +222,6 @@ public class AccountManager extends RealmHelper {
         account.setCreated(new Date(Long.MAX_VALUE));
         account.setInitAmount("0");
         insertOrUpdate(account);
-    }
-
-    public void onDeleteAccount(Context context, String idAccount) {
-        // Delete FormServer
-        ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
-        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
-        DebitManager.getInstance().deleteDebitByAccount(idAccount);
-        realm.beginTransaction();
-        final Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
-        if (account != null) {
-            account.deleteFromRealm();
-        }
-        realm.commitTransaction();
     }
 
     public boolean isNameAccountAvailable(String newName, String nowIdAccount) {
