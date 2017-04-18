@@ -69,7 +69,7 @@ public class FireBaseSync {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot messageSnapshot: dataSnapshot.child(CHILD_DEBIT).getChildren()) {
+                for (DataSnapshot messageSnapshot: dataSnapshot.child(CHILD_ACCOUNT).getChildren()) {
                     Log.d(TAG, "onDataChange: "+messageSnapshot.getValue());
                 }
             }

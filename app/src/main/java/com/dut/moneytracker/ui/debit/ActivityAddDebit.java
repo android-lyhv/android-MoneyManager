@@ -157,7 +157,7 @@ public class ActivityAddDebit extends AppCompatActivity {
                 } else {
                     mNewDebit.setAmount(String.format(Locale.US, "-%s", amount));
                 }
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mNewDebit.getAmount(), mNewDebit.getCurrencyCode()));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mNewDebit.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
             }
         });
     }
@@ -177,7 +177,7 @@ public class ActivityAddDebit extends AppCompatActivity {
             mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
             mNewDebit.setAmount(String.format(Locale.US, "-%s", amount));
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mNewDebit.getAmount(), mNewDebit.getCurrencyCode()));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mNewDebit.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
     }
 
     @Click(R.id.rlDescription)

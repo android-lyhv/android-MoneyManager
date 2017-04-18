@@ -20,6 +20,10 @@ public class Category extends RealmObject implements Parcelable {
     private String idGroup;
     private String name;
     private byte[] byteImage;
+
+    public Category() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -31,9 +35,6 @@ public class Category extends RealmObject implements Parcelable {
         dest.writeString(this.idGroup);
         dest.writeString(this.name);
         dest.writeByteArray(this.byteImage);
-    }
-
-    public Category() {
     }
 
     protected Category(Parcel in) {

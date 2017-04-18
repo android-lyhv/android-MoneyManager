@@ -54,8 +54,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
     TextView mTvAmount;
     @ViewById(R.id.tvAccountName)
     EditText mEdtNameAccount;
-    @ViewById(R.id.tvCurrency)
-    TextView mTvCurrencyCode;
     @ViewById(R.id.imgColor)
     ImageView imgColor;
     @ViewById(R.id.switchLocation)
@@ -87,7 +85,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     private void onLoadData() {
         mEdtNameAccount.setText(mAccount.getName());
-        mTvCurrencyCode.setText(mAccount.getCurrencyCode());
         mSwitchLocation.setChecked(mAccount.isSaveLocation());
         GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
         shapeDrawable.setColor(Color.parseColor(mAccount.getColorHex()));
@@ -140,7 +137,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
             @Override
             public void onResult(String amount) {
                 mAccount.setInitAmount(amount);
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, mAccount.getCurrencyCode()));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, CurrencyUtils.DEFAULT_CURRENCY_CODE));
             }
         });
     }

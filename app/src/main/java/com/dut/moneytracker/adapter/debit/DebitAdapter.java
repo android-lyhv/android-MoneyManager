@@ -122,7 +122,7 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             String amount = ExchangeManger.getInstance().getAmountExchangeByDebit(debit.getId());
             BigDecimal bigDecimal = new BigDecimal(debit.getAmount());
             bigDecimal = bigDecimal.add(new BigDecimal(amount));
-            String value = CurrencyUtils.getInstance().getStringMoneyFormat(bigDecimal.toString(), debit.getCurrencyCode());
+            String value = CurrencyUtils.getInstance().getStringMoneyFormat(bigDecimal.toString(), CurrencyUtils.DEFAULT_CURRENCY_CODE);
             if (value.startsWith("-")) {
                 value = value.substring(1);
             }

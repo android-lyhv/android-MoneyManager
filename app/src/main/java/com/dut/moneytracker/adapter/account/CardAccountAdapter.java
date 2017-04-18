@@ -65,7 +65,7 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
         public void setView(Account account) {
             String value = AccountManager.getInstance().getAmountAvailableByAccount(account.getId());
             llCard.setBackgroundColor(Color.parseColor(account.getColorHex()));
-            String money = CurrencyUtils.getInstance().getStringMoneyFormat(value, account.getCurrencyCode());
+            String money = CurrencyUtils.getInstance().getStringMoneyFormat(value, CurrencyUtils.DEFAULT_CURRENCY_CODE);
             tvAmount.setText(money);
             tvAccountName.setText(account.getName());
         }

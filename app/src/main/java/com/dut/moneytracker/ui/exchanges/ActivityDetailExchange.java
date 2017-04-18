@@ -179,7 +179,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
                 } else {
                     mExchange.setAmount(amount);
                 }
-                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
+                tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
             }
         });
     }
@@ -353,7 +353,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     private void showDetailExchangeDebit() {
         rlCategory.setVisibility(View.GONE);
         tvCategoryName.setText(getString(R.string.debit_name));
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         mTvDescription.setText(mExchange.getDescription());
         tvAccount.setText(DebitManager.getInstance().getAccountNameByDebitId(mExchange.getIdDebit()));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
@@ -367,7 +367,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     private void showDetailTypeIncomeAndExpenses() {
         Category category = CategoryManager.getInstance().getCategoryById(mExchange.getIdCategory());
         tvCategoryName.setText(category.getName());
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         mTvDescription.setText(mExchange.getDescription());
         String nameAccount = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
         tvAccount.setText(String.valueOf(nameAccount));
@@ -402,7 +402,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             String accountReceiver = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
             tvAccount.setText(accountReceiver);
         }
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), mExchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {

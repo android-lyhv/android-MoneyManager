@@ -127,7 +127,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
             tvCategoryName.setText(category.getName());
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), mExchangeLoop.getCurrencyCode()));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         switch (mExchangeLoop.getTypeExchange()) {
             case ExchangeType.INCOME:
                 onClickTabIncome();

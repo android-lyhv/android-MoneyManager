@@ -68,7 +68,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
         }
 
         public void onBind(Exchange exchange) {
-            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
+            tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
             if (exchange.getAmount().startsWith("-")) {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_light));
             } else {

@@ -107,7 +107,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         mExchange.setId(UUID.randomUUID().toString());
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
         mExchange.setIdAccount(mAccount.getId());
-        mExchange.setCurrencyCode(mAccount.getCurrencyCode());
     }
 
     @OptionsItem(android.R.id.home)

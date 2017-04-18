@@ -92,7 +92,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
         mTvEndDate.setText(DateTimeUtils.getInstance().getStringDateUs(mDebit.getEndDate()));
         mTvName.setText(mDebit.getName());
         tvDescriptionDebit.setText(mDebit.getDescription());
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(), mDebit.getCurrencyCode()));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         onChangeAmount(mDebit.getTypeDebit());
         if (mDebit.getTypeDebit() == DebitType.LEND) {
             mTvTypeDebit.setText(R.string.debit_lend);
@@ -188,7 +188,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
                 } else {
                     mDebit.setAmount(String.format(Locale.US, "-%s", amount));
                 }
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(), mDebit.getCurrencyCode()));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(),CurrencyUtils.DEFAULT_CURRENCY_CODE));
             }
         });
     }
@@ -208,7 +208,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
             mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
             mDebit.setAmount(String.format(Locale.US, "-%s", amount));
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(), mDebit.getCurrencyCode()));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
     }
 
     @Click(R.id.rlDescription)

@@ -109,7 +109,6 @@ public class ExchangeLoopManager extends RealmHelper {
         exchange.setAddress(exchange.getAddress());
         exchange.setLatitude(exchange.getLatitude());
         exchange.setLongitude(exchange.getLongitude());
-        exchange.setCurrencyCode(exchangeLooper.getCurrencyCode());
         exchange.setCreated(new Date());
         if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
             exchange.setTypeExchange(exchangeLooper.getTypeExchange());
