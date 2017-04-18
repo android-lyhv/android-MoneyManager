@@ -82,7 +82,7 @@ public class ActivityExchangeDebits extends AppCompatActivity {
         Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
             case IntentCode.EDIT_EXCHANGE:
-                ExchangeManger.getInstance().insertOrUpdate(exchange);
+                ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(),exchange);
                 break;
             case IntentCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mAdapter.getItem(positionItem)).getId());

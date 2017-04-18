@@ -36,11 +36,16 @@ public class DateTimeUtils {
     }
 
 
-    public String getStringFullDate(Date date) {
+    public String getStringFullDateVn(Date date) {
         DateFormat formatFullDate = new SimpleDateFormat("'ngày' dd 'tháng' M 'năm' yyyy", mLocale);
         if (isSameDate(date, new Date())) {
             return DEFAULT_DATE;
         }
+        return formatFullDate.format(date);
+    }
+
+    public String getStringFullDateUs(Date date) {
+        DateFormat formatFullDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         return formatFullDate.format(date);
     }
 

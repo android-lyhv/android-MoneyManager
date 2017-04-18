@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                 return;
             }
             Account account = data.getParcelableExtra(getString(R.string.extra_account));
-            AccountManager.getInstance().insertOrUpdate(account);
+            AccountManager.getInstance().insertOrUpdate(getApplicationContext(),account);
             // Send broadcast;
             Intent intent = new Intent(RECEIVER_EDIT_ACCOUNT);
             intent.putExtra(getString(R.string.position_account_edit), positionAccount);

@@ -202,7 +202,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultDate(Date date) {
-                tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+                tvDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mExchange.getCreated()));
                 mExchange.setCreated(date);
             }
         });
@@ -356,7 +356,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         mTvDescription.setText(mExchange.getDescription());
         tvAccount.setText(DebitManager.getInstance().getAccountNameByDebitId(mExchange.getIdDebit()));
-        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+        tvDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mExchange.getCreated()));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
@@ -371,7 +371,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         mTvDescription.setText(mExchange.getDescription());
         String nameAccount = AccountManager.getInstance().getAccountNameById(mExchange.getIdAccount());
         tvAccount.setText(String.valueOf(nameAccount));
-        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+        tvDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mExchange.getCreated()));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
@@ -403,7 +403,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             tvAccount.setText(accountReceiver);
         }
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
-        tvDate.setText(DateTimeUtils.getInstance().getStringFullDate(mExchange.getCreated()));
+        tvDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mExchange.getCreated()));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mExchange.getCreated()));
         if (!mExchange.getAmount().startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));

@@ -28,7 +28,6 @@ public class Exchange extends RealmObject implements Parcelable {
     private String amount;
     private String description;
     private Date created;
-    // This for place
     private String address;
     private double latitude;
     private double longitude;

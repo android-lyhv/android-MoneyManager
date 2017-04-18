@@ -56,7 +56,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             llNote.setVisibility(View.VISIBLE);
         }
         tvDescription.setText(exchange.getDescription());
-        tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
+        tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDateVn(exchange.getCreated()));
         String amount = exchange.getAmount();
         if (!amount.startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));

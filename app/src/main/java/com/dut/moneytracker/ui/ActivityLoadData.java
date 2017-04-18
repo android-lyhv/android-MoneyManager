@@ -33,18 +33,21 @@ public class ActivityLoadData extends AppCompatActivity {
 
     @AfterViews
     void init() {
-        mAccountManager = AccountManager.getInstance();
+        configData();
         // The first load data from server
         onLoadDataServer();
         // After then
         onLoadCategory();
         onCreateDefaultAccount();
         // The end start main
-        AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         MainActivity_.intent(this).start();
         finish();
     }
 
+    private void configData() {
+        mAccountManager = AccountManager.getInstance();
+        AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
+    }
 
     private void onLoadDataServer() {
         //TODO

@@ -74,7 +74,7 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
             } else {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             }
-            tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
+            tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDateVn(exchange.getCreated()));
             // if debit exchange
             if (exchange.getIdDebit() > 0) {
                 tvCategoryName.setText(R.string.debit_name);

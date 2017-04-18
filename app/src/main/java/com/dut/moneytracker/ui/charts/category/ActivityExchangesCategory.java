@@ -65,7 +65,7 @@ public class ActivityExchangesCategory extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 positionItem = position;
-               // ActivityDetailExchange_.intent(ActivityExchangesCategory.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(IntentCode.DETAIL_EXCHANGE);
+                // ActivityDetailExchange_.intent(ActivityExchangesCategory.this).mExchange((Exchange) mAdapter.getItem(position)).startForResult(IntentCode.DETAIL_EXCHANGE);
             }
         }));
         mExchanges.addChangeListener(new RealmChangeListener<RealmResults<Exchange>>() {
@@ -84,7 +84,7 @@ public class ActivityExchangesCategory extends AppCompatActivity {
         Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
             case IntentCode.EDIT_EXCHANGE:
-                ExchangeManger.getInstance().insertOrUpdate(exchange);
+                ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(), exchange);
                 break;
             case IntentCode.DELETE_EXCHANGE:
                 ExchangeManger.getInstance().deleteExchangeById(((Exchange) mAdapter.getItem(positionItem)).getId());

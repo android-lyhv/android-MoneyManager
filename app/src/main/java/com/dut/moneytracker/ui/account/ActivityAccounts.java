@@ -84,7 +84,7 @@ public class ActivityAccounts extends AppCompatActivity {
                 return;
             }
             Account account = data.getParcelableExtra(getString(R.string.extra_account));
-            AccountManager.getInstance().insertOrUpdate(account);
+            AccountManager.getInstance().insertOrUpdate(getApplicationContext(), account);
             //Send broadcast
             Intent intent = new Intent(MainActivity.RECEIVER_EDIT_ACCOUNT);
             intent.putExtra(getString(R.string.position_account_edit), positionAccount);
@@ -98,7 +98,7 @@ public class ActivityAccounts extends AppCompatActivity {
             return;
         }
         Account account = data.getParcelableExtra(getString(R.string.extra_account));
-        AccountManager.getInstance().insertOrUpdate(account);
+        AccountManager.getInstance().insertOrUpdate(getApplicationContext(),account);
         // send broadcast
         Intent intent = new Intent(MainActivity.RECEIVER_ADD_ACCOUNT);
         intent.putExtra(getString(R.string.extra_account), account);

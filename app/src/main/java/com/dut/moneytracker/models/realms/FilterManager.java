@@ -71,7 +71,7 @@ public class FilterManager {
                 }
                 break;
             case FilterType.DAY:
-                dateFormat = DateTimeUtils.getInstance().getStringFullDate(filter.getDateFilter());
+                dateFormat = DateTimeUtils.getInstance().getStringFullDateVn(filter.getDateFilter());
                 break;
             case FilterType.MONTH:
                 dateFormat = DateTimeUtils.getInstance().getStringMonthYear(filter.getDateFilter());

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -39,10 +40,11 @@ public class AccountManager extends RealmHelper {
     /**
      * Sync Firebase
      */
-    public void insertOrUpdate(Account object) {
+    public void insertOrUpdate(Context context, Account object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
+        FireBaseSync.getInstance().upDateAccount(context, object);
     }
 
     public void onDeleteAccount(Context context, String idAccount) {
@@ -212,7 +214,7 @@ public class AccountManager extends RealmHelper {
         account.setColorHex(context.getString(R.string.color_account_default));
         account.setCreated(new Date());
         account.setInitAmount("0");
-        insertOrUpdate(account);
+        insertOrUpdate(context, account);
     }
 
     public void createOutSideAccount(Context context) {
@@ -221,7 +223,7 @@ public class AccountManager extends RealmHelper {
         account.setName(context.getString(R.string.out_side_account));
         account.setCreated(new Date(Long.MAX_VALUE));
         account.setInitAmount("0");
-        insertOrUpdate(account);
+        insertOrUpdate(context, account);
     }
 
     public boolean isNameAccountAvailable(String newName, String nowIdAccount) {

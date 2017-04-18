@@ -145,9 +145,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
         }
         //Debit
         if (idLastDebit != mDebit.getId()) {
-            DebitManager.getInstance().updateDebitIfAccountChange(mDebit);
+            DebitManager.getInstance().updateDebitIfAccountChange(getApplicationContext(),mDebit);
         } else {
-            DebitManager.getInstance().insertOrUpdateDebit(mDebit);
+            DebitManager.getInstance().insertOrUpdateDebit(getApplicationContext(),mDebit);
             AlarmDebit.getInstance().pendingAlarmDebit(this, mDebit);
         }
         finish();

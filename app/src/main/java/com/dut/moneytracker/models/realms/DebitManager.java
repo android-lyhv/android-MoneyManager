@@ -1,6 +1,9 @@
 package com.dut.moneytracker.models.realms;
 
+import android.content.Context;
+
 import com.dut.moneytracker.constant.DebitType;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
 
@@ -50,18 +53,20 @@ public class DebitManager extends RealmHelper {
         return debit;
     }
 
-    public void insertOrUpdateDebit(Debit debit) {
+    public void insertOrUpdateDebit(Context context, Debit debit) {
         realm.beginTransaction();
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
-        genExchangeFromDebit(debit, null);
+        genExchangeFromDebit(context, debit, null);
+        FireBaseSync.getInstance().upDateDebit(context, debit);
     }
 
-    public void updateDebitIfAccountChange(Debit debit) {
+    public void updateDebitIfAccountChange(Context context, Debit debit) {
         realm.beginTransaction();
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
-        ExchangeManger.getInstance().updateExchangeByDebit(debit.getId(), debit.getIdAccount());
+        FireBaseSync.getInstance().upDateDebit(context, debit);
+        ExchangeManger.getInstance().updateExchangeByDebit(context, debit.getId(), debit.getIdAccount());
     }
 
     public void deleteDebitById(int id) {
@@ -72,12 +77,13 @@ public class DebitManager extends RealmHelper {
         realm.commitTransaction();
     }
 
-    public void setStatusDebit(int id, boolean isClose) {
+    public void setStatusDebit(Context context, int id, boolean isClose) {
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
         debit.setClose(isClose);
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
+        FireBaseSync.getInstance().upDateDebit(context, debit);
     }
 
     /***************************************************************/
@@ -99,7 +105,7 @@ public class DebitManager extends RealmHelper {
         return bigDecimal.toString();
     }
 
-    public void genExchangeFromDebit(Debit debit, String amount) {
+    public void genExchangeFromDebit(Context context, Debit debit, String amount) {
         Exchange exchange = new Exchange();
         if (null == amount) {
             exchange.setId(String.valueOf(debit.getId()));
@@ -124,7 +130,7 @@ public class DebitManager extends RealmHelper {
         exchange.setIdAccount(debit.getIdAccount());
         exchange.setCreated(new Date());
         exchange.setIdDebit(debit.getId());
-        ExchangeManger.getInstance().insertOrUpdate(exchange);
+        ExchangeManger.getInstance().insertOrUpdate(context, exchange);
     }
 
     public int getNewIdDebit() {
