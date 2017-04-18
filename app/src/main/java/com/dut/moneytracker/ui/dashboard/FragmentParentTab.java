@@ -183,7 +183,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
                 ExchangeManger.getInstance().insertOrUpdate(getContext(),exchange);
                 break;
             case IntentCode.DELETE_EXCHANGE:
-                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
+                ExchangeManger.getInstance().deleteExchangeById(getContext(),((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
         //Reload tab account
         mHandler.postDelayed(new Runnable() {

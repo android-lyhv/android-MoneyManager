@@ -48,16 +48,16 @@ public class AccountManager extends RealmHelper {
     }
 
     public void onDeleteAccount(Context context, String idAccount) {
-        // Delete FormServer
-        ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
-        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
-        DebitManager.getInstance().deleteDebitByAccount(idAccount);
+        ExchangeManger.getInstance().deleteExchangeByAccount(context, idAccount);
+        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(context, idAccount);
+        DebitManager.getInstance().deleteDebitByAccount(context, idAccount);
         realm.beginTransaction();
         final Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
         if (account != null) {
             account.deleteFromRealm();
         }
         realm.commitTransaction();
+        FireBaseSync.getInstance().deleteAccount(context, idAccount);
     }
 
     /*********************************************/

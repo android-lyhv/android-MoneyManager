@@ -88,7 +88,7 @@ public class FragmentExchanges extends BaseFragment {
                 ExchangeManger.getInstance().insertOrUpdate(getContext(),exchange);
                 break;
             case IntentCode.DELETE_EXCHANGE:
-                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mAdapter.getItem(positionItem)).getId());
+                ExchangeManger.getInstance().deleteExchangeById(getContext(),((Exchange) mAdapter.getItem(positionItem)).getId());
         }
     }
 

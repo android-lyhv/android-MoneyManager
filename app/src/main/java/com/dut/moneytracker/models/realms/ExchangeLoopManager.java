@@ -44,22 +44,24 @@ public class ExchangeLoopManager extends RealmHelper {
         FireBaseSync.getInstance().upDateExchangeLoop(context, object);
     }
 
-    public void deleteExchangeLoopByAccount(String idAccount) {
+    public void deleteExchangeLoopByAccount(Context context, String idAccount) {
         realm.beginTransaction();
         ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("idAccount", idAccount).findFirst();
         if (exchangeLooper != null) {
             mGenerateManager.removePendingLoopExchange(exchangeLooper.getId());
+            FireBaseSync.getInstance().deleteExchangeLoop(context, exchangeLooper.getId());
             exchangeLooper.deleteFromRealm();
         }
         realm.commitTransaction();
     }
 
-    public void deleteExchangeLoopById(int id) {
+    public void deleteExchangeLoopById(Context context,int id) {
         realm.beginTransaction();
         ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
         exchangeLooper.deleteFromRealm();
         realm.commitTransaction();
         mGenerateManager.removePendingLoopExchange(id);
+        FireBaseSync.getInstance().deleteExchangeLoop(context, id);
     }
 
     public void upDatePendingExchange(Context context, ExchangeLooper exchangeLooper) {

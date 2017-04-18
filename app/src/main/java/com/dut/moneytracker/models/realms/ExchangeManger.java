@@ -51,7 +51,7 @@ public class ExchangeManger extends RealmHelper {
         realm.beginTransaction();
         realm.insertOrUpdate(object);
         realm.commitTransaction();
-        FireBaseSync.getInstance().upDateExchange(context,object);
+        FireBaseSync.getInstance().upDateExchange(context, object);
     }
 
     void updateExchangeByDebit(Context context, int idDebit, String newIdAccount) {
@@ -64,24 +64,29 @@ public class ExchangeManger extends RealmHelper {
         }
     }
 
-    public void deleteExchangeById(String id) {
+    public void deleteExchangeById(Context context, String id) {
         realm.beginTransaction();
         Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();
         exchange.deleteFromRealm();
         realm.commitTransaction();
+        FireBaseSync.getInstance().deleteExchange(context, id);
     }
 
-    void deleteExchangeByDebit(int idDebit) {
+    void deleteExchangeByDebit(Context context, int idDebit) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
+        for (Exchange exchange : realmResults) {
+            FireBaseSync.getInstance().deleteExchange(context, exchange.getId());
+        }
         realmResults.deleteAllFromRealm();
         realm.commitTransaction();
     }
 
-    void deleteExchangeByAccount(String idAccount) {
+    void deleteExchangeByAccount(Context context, String idAccount) {
         realm.beginTransaction();
         Exchange exchange = realm.where(Exchange.class).equalTo("idAccount", idAccount).findFirst();
         if (exchange != null) {
+            FireBaseSync.getInstance().deleteExchange(context, exchange.getId());
             exchange.deleteFromRealm();
         }
         realm.commitTransaction();

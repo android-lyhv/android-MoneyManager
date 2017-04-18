@@ -87,7 +87,7 @@ public class ActivityExchangesCategory extends AppCompatActivity {
                 ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(), exchange);
                 break;
             case IntentCode.DELETE_EXCHANGE:
-                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mAdapter.getItem(positionItem)).getId());
+                ExchangeManger.getInstance().deleteExchangeById(getApplicationContext(), ((Exchange) mAdapter.getItem(positionItem)).getId());
         }
     }
 

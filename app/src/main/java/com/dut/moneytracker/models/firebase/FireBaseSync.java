@@ -80,6 +80,30 @@ public class FireBaseSync {
         mDatabase.updateChildren(childUpdates);
     }
 
+    public void deleteAccount(Context context, String id) {
+        String reference = AppConfig.getInstance().getReferenceDatabase(context);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        mDatabase.child(CHILD_ACCOUNT).child(id).removeValue();
+    }
+
+    public void deleteExchange(Context context, String id) {
+        String reference = AppConfig.getInstance().getReferenceDatabase(context);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        mDatabase.child(CHILD_EXCHANGE).child(id).removeValue();
+    }
+
+    public void deleteExchangeLoop(Context context, int id) {
+        String reference = AppConfig.getInstance().getReferenceDatabase(context);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        mDatabase.child(CHILD_EXCHANGE_LOOP).child(String.valueOf(id)).removeValue();
+    }
+
+    public void deleteDebit(Context context, int id) {
+        String reference = AppConfig.getInstance().getReferenceDatabase(context);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        mDatabase.child(CHILD_DEBIT).child(String.valueOf(id)).removeValue();
+    }
+
     public void onLoadDataServer(Context context) {
         String reference = AppConfig.getInstance().getReferenceDatabase(context);
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);

@@ -116,7 +116,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
             public void onClickResult(boolean value) {
                 if (value) {
                     AlarmDebit.getInstance().removePendingAlarm(ActivityDetailDebit.this, mDebit.getId());
-                    DebitManager.getInstance().deleteDebitById(mDebit.getId());
+                    DebitManager.getInstance().deleteDebitById(getApplicationContext(), mDebit.getId());
                     finish();
                 }
             }
@@ -145,9 +145,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
         }
         //Debit
         if (idLastDebit != mDebit.getId()) {
-            DebitManager.getInstance().updateDebitIfAccountChange(getApplicationContext(),mDebit);
+            DebitManager.getInstance().updateDebitIfAccountChange(getApplicationContext(), mDebit);
         } else {
-            DebitManager.getInstance().insertOrUpdateDebit(getApplicationContext(),mDebit);
+            DebitManager.getInstance().insertOrUpdateDebit(getApplicationContext(), mDebit);
             AlarmDebit.getInstance().pendingAlarmDebit(this, mDebit);
         }
         finish();
@@ -188,7 +188,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
                 } else {
                     mDebit.setAmount(String.format(Locale.US, "-%s", amount));
                 }
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(),CurrencyUtils.DEFAULT_CURRENCY_CODE));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mDebit.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
             }
         });
     }

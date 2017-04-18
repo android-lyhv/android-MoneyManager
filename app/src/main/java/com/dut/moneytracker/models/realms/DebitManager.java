@@ -34,7 +34,7 @@ public class DebitManager extends RealmHelper {
     /**
      * Sync with firebase
      */
-    public void deleteDebitByAccount(String idAccount) {
+    public void deleteDebitByAccount(Context context, String idAccount) {
         int idDebit = -1;
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("idAccount", idAccount).findFirst();
@@ -43,7 +43,7 @@ public class DebitManager extends RealmHelper {
             debit.deleteFromRealm();
         }
         realm.commitTransaction();
-        ExchangeManger.getInstance().deleteExchangeByDebit(idDebit);
+        ExchangeManger.getInstance().deleteExchangeByDebit(context, idDebit);
     }
 
     public Debit getDebitById(int id) {
@@ -69,12 +69,13 @@ public class DebitManager extends RealmHelper {
         ExchangeManger.getInstance().updateExchangeByDebit(context, debit.getId(), debit.getIdAccount());
     }
 
-    public void deleteDebitById(int id) {
-        ExchangeManger.getInstance().deleteExchangeByDebit(id);
+    public void deleteDebitById(Context context, int id) {
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
         debit.deleteFromRealm();
         realm.commitTransaction();
+        ExchangeManger.getInstance().deleteExchangeByDebit(context, id);
+        FireBaseSync.getInstance().deleteDebit(context, id);
     }
 
     public void setStatusDebit(Context context, int id, boolean isClose) {
