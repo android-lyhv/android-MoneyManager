@@ -1,13 +1,14 @@
 package com.dut.moneytracker.ui;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.GroupTag;
 import com.dut.moneytracker.models.AppConfig;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
+import com.dut.moneytracker.models.firebase.LoadDataListener;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.objects.Category;
@@ -24,41 +25,40 @@ import org.androidannotations.annotations.ViewById;
  * Created by ly.ho on 04/03/2017.
  */
 @EActivity(R.layout.acitivity_splash)
-public class ActivityLoadData extends AppCompatActivity {
-    private static final String TAG = ActivityLoadData.class.getSimpleName();
+public class ActivityLoadData extends AppCompatActivity implements LoadDataListener {
     @ViewById(R.id.progressBar)
     ProgressBar mProgressBar;
-    private AccountManager mAccountManager;
-    private int idCategory = -1;
+    private int idCategory;
+    private Handler mHandler = new Handler();
+    private static final long DELAY = 1000L;
 
     @AfterViews
     void init() {
-        mAccountManager = AccountManager.getInstance();
-        // The first load data from server
-        onLoadDataServer();
-        // After then
-        onLoadCategory();
-        onCreateDefaultAccount();
-        // The end start main
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FireBaseSync.getInstance().onLoadDataServer(getApplicationContext(), ActivityLoadData.this);
+            }
+        }, DELAY);
+    }
+
+    @Override
+    public void onFinishLoadDataServer() {
         AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
+        onCreateCategories();
+        onCreateDefaultAccount();
         MainActivity_.intent(this).start();
         finish();
     }
 
-
-    private void onLoadDataServer() {
-        //TODO
-    }
-
     private void onCreateDefaultAccount() {
-        if (mAccountManager.getAccounts().isEmpty()) {
-            mAccountManager.createDefaultAccount(this);
-            mAccountManager.createOutSideAccount(this);
+        if (AccountManager.getInstance().getAccounts().isEmpty()) {
+            AccountManager.getInstance().createDefaultAccount(this);
+            AccountManager.getInstance().createOutSideAccount(this);
         }
-        Log.d(TAG, "onCreateDefaultAccount: " + mAccountManager.getAccounts().size());
     }
 
-    private void onLoadCategory() {
+    private void onCreateCategories() {
         if (!AppConfig.getInstance().isInitCategory(this)) {
             createGroupCategory();
             AppConfig.getInstance().setInitCategory(this, true);
@@ -144,21 +144,9 @@ public class ActivityLoadData extends AppCompatActivity {
         return ResourceUtils.getInstance().convertBitmap(getResources(), this, path);
     }
 
-    class AsyncTaskLoadData extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
     }
-
 }

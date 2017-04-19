@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseViewPagerAdapter;
 import com.dut.moneytracker.constant.IntentCode;
-import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.ui.MainActivity_;
@@ -100,7 +99,6 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @Click(R.id.fab)
     void onClickAddExchange() {
-        FireBaseSync.getInstance(getContext()).onLoadDataServer();
         ActivityAddExchange_.intent(this).mAccount(mAccounts.get(targetAccount)).startForResult(IntentCode.ADD_NEW_EXCHANGE);
     }
 

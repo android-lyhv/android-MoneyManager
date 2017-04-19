@@ -55,8 +55,6 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
     TextView mTvAmount;
     @ViewById(R.id.tvAccountName)
     EditText mEdtNameAccount;
-    @ViewById(R.id.tvCurrency)
-    TextView mTvCurrencyCode;
     @ViewById(R.id.imgColor)
     ImageView imgColor;
     @ViewById(R.id.switchLocation)
@@ -93,10 +91,9 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
 
     private void onLoadData() {
         if (!TextUtils.isEmpty(mAccount.getInitAmount())) {
-            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mAccount.getInitAmount(), mAccount.getCurrencyCode()));
+            mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mAccount.getInitAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         }
         mEdtNameAccount.setText(mAccount.getName());
-        mTvCurrencyCode.setText(mAccount.getCurrencyCode());
         mSwitchLocation.setChecked(mAccount.isSaveLocation());
         mSwitchLocation.setOnCheckedChangeListener(this);
         GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
@@ -165,7 +162,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
             @Override
             public void onResult(String amount) {
                 mAccount.setInitAmount(amount);
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, mAccount.getCurrencyCode()));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, CurrencyUtils.DEFAULT_CURRENCY_CODE));
             }
         });
     }

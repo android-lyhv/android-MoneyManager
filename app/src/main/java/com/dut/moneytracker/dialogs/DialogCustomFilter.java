@@ -38,8 +38,8 @@ public class DialogCustomFilter extends DialogFragment {
             mFromDate = DateTimeUtils.getInstance().getStartTimeOfDay(new Date());
             mToDate = DateTimeUtils.getInstance().getEndTimeOfDay(mFromDate);
         }
-        mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(mFromDate));
-        mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(mToDate));
+        mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mFromDate));
+        mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mToDate));
     }
 
     public interface FilterListener {
@@ -60,7 +60,7 @@ public class DialogCustomFilter extends DialogFragment {
             @Override
             public void onResultDate(Date date) {
                 mFromDate = DateTimeUtils.getInstance().getStartTimeOfDay(date);
-                mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDate(mFromDate));
+                mTvFromDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mFromDate));
             }
         });
 
@@ -74,7 +74,7 @@ public class DialogCustomFilter extends DialogFragment {
             @Override
             public void onResultDate(Date date) {
                 mToDate = DateTimeUtils.getInstance().getEndTimeOfDay(date);
-                mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDate(mToDate));
+                mTvToDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mToDate));
             }
         });
     }

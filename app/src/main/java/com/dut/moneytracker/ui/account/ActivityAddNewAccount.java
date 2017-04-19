@@ -54,8 +54,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
     TextView mTvAmount;
     @ViewById(R.id.tvAccountName)
     EditText mEdtNameAccount;
-    @ViewById(R.id.tvCurrency)
-    TextView mTvCurrencyCode;
     @ViewById(R.id.imgColor)
     ImageView imgColor;
     @ViewById(R.id.switchLocation)
@@ -87,7 +85,6 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     private void onLoadData() {
         mEdtNameAccount.setText(mAccount.getName());
-        mTvCurrencyCode.setText(mAccount.getCurrencyCode());
         mSwitchLocation.setChecked(mAccount.isSaveLocation());
         GradientDrawable shapeDrawable = (GradientDrawable) imgColor.getBackground();
         shapeDrawable.setColor(Color.parseColor(mAccount.getColorHex()));
@@ -106,13 +103,12 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
             Toast.makeText(this, "Nhập tên tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(mAccount.getInitAmount())) {
-            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (!AccountManager.getInstance().isNameAccountAvailable(accountName, null)) {
             Toast.makeText(this, "Tên tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
             return;
+        }
+        if (TextUtils.isEmpty(mAccount.getInitAmount())) {
+            mAccount.setInitAmount("0");
         }
         mAccount.setName(accountName);
         mAccount.setCreated(new Date());
@@ -140,7 +136,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
             @Override
             public void onResult(String amount) {
                 mAccount.setInitAmount(amount);
-                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, mAccount.getCurrencyCode()));
+                mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(amount, CurrencyUtils.DEFAULT_CURRENCY_CODE));
             }
         });
     }

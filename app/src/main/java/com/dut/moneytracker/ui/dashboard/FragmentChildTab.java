@@ -105,7 +105,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @Override
     public void onShowAmount() {
         mTvAmount.setTextColor(Color.parseColor(mAccount.getColorHex()));
-        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), mAccount.getCurrencyCode());
+        String money = CurrencyUtils.getInstance().getStringMoneyFormat(AccountManager.getInstance().getAmountAvailableByAccount(mAccount.getId()), CurrencyUtils.DEFAULT_CURRENCY_CODE);
         mTvAmount.setText(money);
     }
 
@@ -146,10 +146,10 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
             case IntentCode.EDIT_EXCHANGE:
-                ExchangeManger.getInstance().insertOrUpdate(exchange);
+                ExchangeManger.getInstance().insertOrUpdate(getContext(),exchange);
                 break;
             case IntentCode.DELETE_EXCHANGE:
-                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
+                ExchangeManger.getInstance().deleteExchangeById(getContext(),((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
         //Reload tab account
         mHandler.postDelayed(new Runnable() {

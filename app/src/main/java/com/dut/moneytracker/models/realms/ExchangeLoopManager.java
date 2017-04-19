@@ -3,6 +3,7 @@ package com.dut.moneytracker.models.realms;
 import android.content.Context;
 
 import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.service.GenerateManager;
@@ -36,36 +37,39 @@ public class ExchangeLoopManager extends RealmHelper {
     /**
      * Sync frirebase
      */
-    public void insertOrUpdate(ExchangeLooper object) {
+    public void insertOrUpdate(Context context, ExchangeLooper object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
+        FireBaseSync.getInstance().upDateExchangeLoop(context, object);
     }
 
-    public void deleteExchangeLoopByAccount(String idAccount) {
+    public void deleteExchangeLoopByAccount(Context context, String idAccount) {
         realm.beginTransaction();
         ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("idAccount", idAccount).findFirst();
         if (exchangeLooper != null) {
             mGenerateManager.removePendingLoopExchange(exchangeLooper.getId());
+            FireBaseSync.getInstance().deleteExchangeLoop(context, exchangeLooper.getId());
             exchangeLooper.deleteFromRealm();
         }
         realm.commitTransaction();
     }
 
-    public void deleteExchangeLoopById(int id) {
+    public void deleteExchangeLoopById(Context context,int id) {
         realm.beginTransaction();
         ExchangeLooper exchangeLooper = realm.where(ExchangeLooper.class).equalTo("id", id).findFirst();
         exchangeLooper.deleteFromRealm();
         realm.commitTransaction();
         mGenerateManager.removePendingLoopExchange(id);
+        FireBaseSync.getInstance().deleteExchangeLoop(context, id);
     }
 
-    public void upDatePendingExchange(ExchangeLooper exchangeLooper) {
-        insertOrUpdate(exchangeLooper);
+    public void upDatePendingExchange(Context context, ExchangeLooper exchangeLooper) {
+        insertOrUpdate(context, exchangeLooper);
         mGenerateManager.pendingGenerateExchange(exchangeLooper);
     }
 
-    public void insertNewExchangeLoop(ExchangeLooper exchangeLooper) {
+    public void insertNewExchangeLoop(Context context, ExchangeLooper exchangeLooper) {
         Number number = realm.where(ExchangeLooper.class).max("id");
         int nextId;
         if (number == null) {
@@ -74,7 +78,7 @@ public class ExchangeLoopManager extends RealmHelper {
             nextId = number.intValue() + 1;
         }
         exchangeLooper.setId(nextId);
-        insertOrUpdate(exchangeLooper);
+        insertOrUpdate(context, exchangeLooper);
         mGenerateManager.pendingGenerateExchange(exchangeLooper);
     }
 
@@ -93,12 +97,12 @@ public class ExchangeLoopManager extends RealmHelper {
         return realmResults;
     }
 
-    public void generateNewExchange(int idExchangeLooper) {
+    public void generateNewExchange(Context context, int idExchangeLooper) {
         ExchangeLooper exchangeLooper = getExchangeLooperById(idExchangeLooper);
         if (exchangeLooper == null || !exchangeLooper.isLoop()) {
             return;
         }
-        ExchangeManger.getInstance().insertOrUpdate(copyExchange(exchangeLooper));
+        ExchangeManger.getInstance().insertOrUpdate(context, copyExchange(exchangeLooper));
     }
 
     public Exchange copyExchange(ExchangeLooper exchangeLooper) {
@@ -109,7 +113,6 @@ public class ExchangeLoopManager extends RealmHelper {
         exchange.setAddress(exchange.getAddress());
         exchange.setLatitude(exchange.getLatitude());
         exchange.setLongitude(exchange.getLongitude());
-        exchange.setCurrencyCode(exchangeLooper.getCurrencyCode());
         exchange.setCreated(new Date());
         if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
             exchange.setTypeExchange(exchangeLooper.getTypeExchange());

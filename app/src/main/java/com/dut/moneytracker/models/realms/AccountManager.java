@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -23,7 +24,8 @@ import io.realm.Sort;
 
 public class AccountManager extends RealmHelper {
     private static AccountManager accountManager;
-    public static final String OUT_SIDE = "out_side";
+    public static final String ID_OUSIDE = "outside";
+    private static final String ID_DEFAULT = "default";
 
     public static AccountManager getInstance() {
         if (accountManager == null) {
@@ -39,29 +41,30 @@ public class AccountManager extends RealmHelper {
     /**
      * Sync Firebase
      */
-    public void insertOrUpdate(Account object) {
+    public void insertOrUpdate(Context context, Account object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
+        FireBaseSync.getInstance().upDateAccount(context, object);
     }
 
     public void onDeleteAccount(Context context, String idAccount) {
-        // Delete FormServer
-        ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
-        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
-        DebitManager.getInstance().deleteDebitByAccount(idAccount);
+        ExchangeManger.getInstance().deleteExchangeByAccount(context, idAccount);
+        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(context, idAccount);
+        DebitManager.getInstance().deleteDebitByAccount(context, idAccount);
         realm.beginTransaction();
         final Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
         if (account != null) {
             account.deleteFromRealm();
         }
         realm.commitTransaction();
+        FireBaseSync.getInstance().deleteAccount(context, idAccount);
     }
 
     /*********************************************/
     public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAll();
+        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -74,7 +77,7 @@ public class AccountManager extends RealmHelper {
     }
 
     public RealmResults<Account> loadAccountsAsync() {
-        return realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAllAsync();
+        return realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSortedAsync("created", Sort.ASCENDING);
     }
 
     public String getAmountAvailableByAccount(String idAccount) {
@@ -139,7 +142,7 @@ public class AccountManager extends RealmHelper {
         realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
         String amountOneAccount;
-        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAll();
+        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
         for (Account account : resultsAccount) {
             if (DateTimeUtils.getInstance().isSameDate(currentDate, account.getCreated())
                     || account.getCreated().before(currentDate)) {
@@ -156,7 +159,7 @@ public class AccountManager extends RealmHelper {
     public String getTotalInitAmount() {
         realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
-        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAll();
+        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
         for (Account account : resultsAccount) {
             bigDecimal = bigDecimal.add(new BigDecimal(account.getInitAmount()));
         }
@@ -206,22 +209,23 @@ public class AccountManager extends RealmHelper {
 
     public void createDefaultAccount(Context context) {
         Account account = new Account();
-        account.setId(context.getString(R.string.id_default_account));
+        account.setId(ID_DEFAULT);
         account.setName(context.getString(R.string.name_default_account));
         account.setDefault(true);
         account.setColorHex(context.getString(R.string.color_account_default));
         account.setCreated(new Date());
         account.setInitAmount("0");
-        insertOrUpdate(account);
+        insertOrUpdate(context, account);
     }
 
     public void createOutSideAccount(Context context) {
         Account account = new Account();
-        account.setId(OUT_SIDE);
+        account.setId(ID_OUSIDE);
         account.setName(context.getString(R.string.out_side_account));
         account.setCreated(new Date(Long.MAX_VALUE));
+        account.setColorHex(context.getString(R.string.color_account_default));
         account.setInitAmount("0");
-        insertOrUpdate(account);
+        insertOrUpdate(context, account);
     }
 
     public boolean isNameAccountAvailable(String newName, String nowIdAccount) {

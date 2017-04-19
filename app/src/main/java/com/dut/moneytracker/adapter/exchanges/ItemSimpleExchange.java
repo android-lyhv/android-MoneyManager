@@ -56,14 +56,14 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             llNote.setVisibility(View.VISIBLE);
         }
         tvDescription.setText(exchange.getDescription());
-        tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDate(exchange.getCreated()));
+        tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDateVn(exchange.getCreated()));
         String amount = exchange.getAmount();
         if (!amount.startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         } else {
             tvAmount.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light));
         }
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), exchange.getCurrencyCode()));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         if ((exchange.getLatitude() == 0 && exchange.getLongitude() == 0)|| TextUtils.isEmpty(exchange.getAddress())) {
             imgLocation.setVisibility(View.GONE);
         } else {

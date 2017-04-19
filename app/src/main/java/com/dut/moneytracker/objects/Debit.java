@@ -3,8 +3,6 @@ package com.dut.moneytracker.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.dut.moneytracker.currency.CurrencyUtils;
-
 import java.util.Date;
 
 import io.realm.RealmObject;
@@ -23,7 +21,6 @@ public class Debit extends RealmObject implements Parcelable {
     private int id;
     private String amount;
     private String idAccount;
-    private String currencyCode = CurrencyUtils.DEFAULT_CURRENCY_CODE;
     private int typeDebit;
     private boolean isClose;
     private Date startDate;
@@ -44,7 +41,6 @@ public class Debit extends RealmObject implements Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.amount);
         dest.writeString(this.idAccount);
-        dest.writeString(this.currencyCode);
         dest.writeInt(this.typeDebit);
         dest.writeByte(this.isClose ? (byte) 1 : (byte) 0);
         dest.writeLong(this.startDate != null ? this.startDate.getTime() : -1);
@@ -57,7 +53,6 @@ public class Debit extends RealmObject implements Parcelable {
         this.id = in.readInt();
         this.amount = in.readString();
         this.idAccount = in.readString();
-        this.currencyCode = in.readString();
         this.typeDebit = in.readInt();
         this.isClose = in.readByte() != 0;
         long tmpCreate = in.readLong();

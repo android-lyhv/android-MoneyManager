@@ -127,7 +127,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
             tvCategoryName.setText(category.getName());
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), mExchangeLoop.getCurrencyCode()));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         switch (mExchangeLoop.getTypeExchange()) {
             case ExchangeType.INCOME:
                 onClickTabIncome();
@@ -202,7 +202,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    ExchangeLoopManager.getInstance(getApplicationContext()).deleteExchangeLoopById(mExchangeLoop.getId());
+                    ExchangeLoopManager.getInstance(getApplicationContext()).deleteExchangeLoopById(getApplicationContext(), mExchangeLoop.getId());
                     finish();
                 }
             }
@@ -215,19 +215,19 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
      */
     private void onSaveDataBase() {
         if ((lastTypeLoop != mExchangeLoop.getTypeLoop() || !DateTimeUtils.getInstance().isSameDate(lastDate, mExchangeLoop.getCreated()))) {
-            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
+            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(getApplicationContext(), mExchangeLoop);
             return;
         }
         if (!lastStatus && mExchangeLoop.isLoop()) {
             Log.d(TAG, "onSaveDataBase: 1");
-            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
+            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(getApplicationContext(), mExchangeLoop);
             return;
         }
         if (lastStatus && !mExchangeLoop.isLoop()) {
             Log.d(TAG, "onSaveDataBase: 2");
             mGenerateManager.removePendingLoopExchange(mExchangeLoop.getId());
         }
-        ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(mExchangeLoop);
+        ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(getApplicationContext(), mExchangeLoop);
     }
 
     @Click(R.id.tvTabIncome)

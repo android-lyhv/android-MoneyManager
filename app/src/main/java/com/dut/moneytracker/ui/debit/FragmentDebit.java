@@ -94,7 +94,7 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
                             Toast.makeText(getContext(), R.string.messger_remind_amount, Toast.LENGTH_LONG).show();
                             return;
                         }
-                        DebitManager.getInstance().genExchangeFromDebit(debit, amount);
+                        DebitManager.getInstance().genExchangeFromDebit(getContext(), debit, amount);
                         mDebitAdapter.notifyDataSetChanged();
                     }
                 });
@@ -102,12 +102,12 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
 
             @Override
             public void onClickFinishDebit() {
-                DebitManager.getInstance().setStatusDebit(debit.getId(), true);
+                DebitManager.getInstance().setStatusDebit(getContext(), debit.getId(), true);
                 String remindAmount = DebitManager.getInstance().getRemindAmountDebit(debit);
                 if (remindAmount.startsWith("-")) {
                     remindAmount = remindAmount.substring(1);
                 }
-                DebitManager.getInstance().genExchangeFromDebit(debit, remindAmount);
+                DebitManager.getInstance().genExchangeFromDebit(getContext(),debit, remindAmount);
                 mDebitAdapter.notifyDataSetChanged();
             }
         });

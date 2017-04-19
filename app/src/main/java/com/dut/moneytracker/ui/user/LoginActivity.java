@@ -184,11 +184,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            logOutGoogle();
             AppConfig.getInstance().setReferenceDatabase(this, user.getUid());
             syncDataFromServer(user);
-        } else {
-            Log.d(TAG, "onAuthStateChanged:signed_out");
+            logOutGoogle();
         }
     }
 

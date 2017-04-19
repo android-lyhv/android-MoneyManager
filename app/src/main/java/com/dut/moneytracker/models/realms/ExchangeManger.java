@@ -1,11 +1,13 @@
 package com.dut.moneytracker.models.realms;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.PieChartType;
 import com.dut.moneytracker.currency.CurrencyUtils;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.Filter;
@@ -45,40 +47,46 @@ public class ExchangeManger extends RealmHelper {
     /**
      * Sync with firebase
      */
-    public void insertOrUpdate(Exchange object) {
+    public void insertOrUpdate(Context context, Exchange object) {
         realm.beginTransaction();
         realm.insertOrUpdate(object);
         realm.commitTransaction();
+        FireBaseSync.getInstance().upDateExchange(context, object);
     }
 
-    void updateExchangeByDebit(int idDebit, String newIdAccount) {
+    void updateExchangeByDebit(Context context, int idDebit, String newIdAccount) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
         realm.commitTransaction();
         for (Exchange exchange : realmResults) {
             exchange.setIdAccount(newIdAccount);
-            insertOrUpdate(exchange);
+            insertOrUpdate(context, exchange);
         }
     }
 
-    public void deleteExchangeById(String id) {
+    public void deleteExchangeById(Context context, String id) {
         realm.beginTransaction();
         Exchange exchange = realm.where(Exchange.class).equalTo("id", id).findFirst();
         exchange.deleteFromRealm();
         realm.commitTransaction();
+        FireBaseSync.getInstance().deleteExchange(context, id);
     }
 
-    void deleteExchangeByDebit(int idDebit) {
+    void deleteExchangeByDebit(Context context, int idDebit) {
         realm.beginTransaction();
         RealmResults<Exchange> realmResults = realm.where(Exchange.class).equalTo("idDebit", idDebit).findAll();
+        for (Exchange exchange : realmResults) {
+            FireBaseSync.getInstance().deleteExchange(context, exchange.getId());
+        }
         realmResults.deleteAllFromRealm();
         realm.commitTransaction();
     }
 
-    void deleteExchangeByAccount(String idAccount) {
+    void deleteExchangeByAccount(Context context, String idAccount) {
         realm.beginTransaction();
         Exchange exchange = realm.where(Exchange.class).equalTo("idAccount", idAccount).findFirst();
         if (exchange != null) {
+            FireBaseSync.getInstance().deleteExchange(context, exchange.getId());
             exchange.deleteFromRealm();
         }
         realm.commitTransaction();

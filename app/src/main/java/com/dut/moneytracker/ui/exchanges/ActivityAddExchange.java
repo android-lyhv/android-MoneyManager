@@ -107,7 +107,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         mExchange.setId(UUID.randomUUID().toString());
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
         mExchange.setIdAccount(mAccount.getId());
-        mExchange.setCurrencyCode(mAccount.getCurrencyCode());
     }
 
     @OptionsItem(android.R.id.home)
@@ -300,20 +299,20 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             String amount = String.format(Locale.US, "-%s", tvAmount.getText().toString());
             mExchange.setAmount(amount);
             mExchange.setCodeTransfer(codeTransfer);
-            ExchangeManger.getInstance().insertOrUpdate(mExchange);
+            ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(),mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
-            if (!TextUtils.equals(idTransfer, AccountManager.OUT_SIDE)) {
+            if (!TextUtils.equals(idTransfer, AccountManager.ID_OUSIDE)) {
                 String idAccount = mExchange.getIdAccount();
                 mExchange.setId(UUID.randomUUID().toString());
                 mExchange.setAmount(tvAmount.getText().toString());
                 mExchange.setIdAccount(idTransfer);
                 mExchange.setIdAccountTransfer(idAccount);
                 mExchange.setCodeTransfer(codeTransfer);
-                ExchangeManger.getInstance().insertOrUpdate(mExchange);
+                ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(),mExchange);
             }
         } else {
-            ExchangeManger.getInstance().insertOrUpdate(mExchange);
+            ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(),mExchange);
         }
         setResult(IntentCode.ADD_NEW_EXCHANGE, new Intent());
         finish();
