@@ -64,7 +64,7 @@ public class AccountManager extends RealmHelper {
     /*********************************************/
     public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
+        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -77,7 +77,7 @@ public class AccountManager extends RealmHelper {
     }
 
     public RealmResults<Account> loadAccountsAsync() {
-        return realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllAsync();
+        return realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSortedAsync("created", Sort.ASCENDING);
     }
 
     public String getAmountAvailableByAccount(String idAccount) {
