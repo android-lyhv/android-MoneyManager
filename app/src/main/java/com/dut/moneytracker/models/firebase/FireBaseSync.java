@@ -118,7 +118,7 @@ public class FireBaseSync {
                 onLoadDebit(context, dataSnapshot.child(CHILD_DEBIT));
                 onLoadExchangeLoop(context, dataSnapshot.child(CHILD_EXCHANGE_LOOP));
                 mDatabase.removeEventListener(this);
-                loadDataListener.onFinish();
+                loadDataListener.onFinishLoadDataServer();
             }
 
             @Override

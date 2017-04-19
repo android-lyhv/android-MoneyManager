@@ -6,5 +6,5 @@ package com.dut.moneytracker.models.firebase;
  */
 
 public interface LoadDataListener {
-    void onFinish();
+    void onFinishLoadDataServer();
 }

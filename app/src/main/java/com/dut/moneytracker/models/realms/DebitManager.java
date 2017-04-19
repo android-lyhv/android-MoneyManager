@@ -46,13 +46,6 @@ public class DebitManager extends RealmHelper {
         ExchangeManger.getInstance().deleteExchangeByDebit(context, idDebit);
     }
 
-    public Debit getDebitById(int id) {
-        realm.beginTransaction();
-        Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
-        realm.commitTransaction();
-        return debit;
-    }
-
     public void insertOrUpdateDebit(Context context, Debit debit) {
         realm.beginTransaction();
         realm.insertOrUpdate(debit);
@@ -90,6 +83,13 @@ public class DebitManager extends RealmHelper {
     /***************************************************************/
     public RealmResults<Debit> onLoadDebitAsync() {
         return realm.where(Debit.class).findAllAsync();
+    }
+
+    public Debit getDebitById(int id) {
+        realm.beginTransaction();
+        Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
+        realm.commitTransaction();
+        return debit;
     }
 
     public String getAccountNameByDebitId(int id) {

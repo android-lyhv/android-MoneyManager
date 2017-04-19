@@ -1,8 +1,7 @@
 package com.dut.moneytracker.ui;
 
-import android.os.SystemClock;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.dut.moneytracker.R;
@@ -16,7 +15,6 @@ import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -28,24 +26,27 @@ import org.androidannotations.annotations.ViewById;
  */
 @EActivity(R.layout.acitivity_splash)
 public class ActivityLoadData extends AppCompatActivity implements LoadDataListener {
-    private static final String TAG = ActivityLoadData.class.getSimpleName();
     @ViewById(R.id.progressBar)
     ProgressBar mProgressBar;
-    private int idCategory = -1;
+    private int idCategory;
+    private Handler mHandler = new Handler();
+    private static final long DELAY = 1000L;
 
     @AfterViews
     void init() {
-        SystemClock.sleep(1000L);
-        FireBaseSync.getInstance().onLoadDataServer(getApplicationContext(), this);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FireBaseSync.getInstance().onLoadDataServer(getApplicationContext(), ActivityLoadData.this);
+            }
+        }, DELAY);
     }
 
     @Override
-    public void onFinish() {
+    public void onFinishLoadDataServer() {
         AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
-        // After then
-        onLoadCategory();
+        onCreateCategories();
         onCreateDefaultAccount();
-        // The end start main
         MainActivity_.intent(this).start();
         finish();
     }
@@ -57,7 +58,7 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
         }
     }
 
-    private void onLoadCategory() {
+    private void onCreateCategories() {
         if (!AppConfig.getInstance().isInitCategory(this)) {
             createGroupCategory();
             AppConfig.getInstance().setInitCategory(this, true);
@@ -141,5 +142,11 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
 
     private byte[] loadByteBitmap(String path) {
         return ResourceUtils.getInstance().convertBitmap(getResources(), this, path);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
     }
 }
