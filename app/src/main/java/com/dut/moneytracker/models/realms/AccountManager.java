@@ -24,7 +24,8 @@ import io.realm.Sort;
 
 public class AccountManager extends RealmHelper {
     private static AccountManager accountManager;
-    public static final String OUT_SIDE = "out_side";
+    public static final String ID_OUSIDE = "outside";
+    private static final String ID_DEFAULT = "default";
 
     public static AccountManager getInstance() {
         if (accountManager == null) {
@@ -63,7 +64,7 @@ public class AccountManager extends RealmHelper {
     /*********************************************/
     public RealmResults<Account> getAccounts() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAll();
+        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
         realm.commitTransaction();
         return realmResults;
     }
@@ -76,7 +77,7 @@ public class AccountManager extends RealmHelper {
     }
 
     public RealmResults<Account> loadAccountsAsync() {
-        return realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAllAsync();
+        return realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllAsync();
     }
 
     public String getAmountAvailableByAccount(String idAccount) {
@@ -141,7 +142,7 @@ public class AccountManager extends RealmHelper {
         realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
         String amountOneAccount;
-        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAll();
+        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
         for (Account account : resultsAccount) {
             if (DateTimeUtils.getInstance().isSameDate(currentDate, account.getCreated())
                     || account.getCreated().before(currentDate)) {
@@ -158,7 +159,7 @@ public class AccountManager extends RealmHelper {
     public String getTotalInitAmount() {
         realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
-        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", OUT_SIDE).findAll();
+        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
         for (Account account : resultsAccount) {
             bigDecimal = bigDecimal.add(new BigDecimal(account.getInitAmount()));
         }
@@ -208,7 +209,7 @@ public class AccountManager extends RealmHelper {
 
     public void createDefaultAccount(Context context) {
         Account account = new Account();
-        account.setId(context.getString(R.string.id_default_account));
+        account.setId(ID_DEFAULT);
         account.setName(context.getString(R.string.name_default_account));
         account.setDefault(true);
         account.setColorHex(context.getString(R.string.color_account_default));
@@ -219,9 +220,10 @@ public class AccountManager extends RealmHelper {
 
     public void createOutSideAccount(Context context) {
         Account account = new Account();
-        account.setId(OUT_SIDE);
+        account.setId(ID_OUSIDE);
         account.setName(context.getString(R.string.out_side_account));
         account.setCreated(new Date(Long.MAX_VALUE));
+        account.setColorHex(context.getString(R.string.color_account_default));
         account.setInitAmount("0");
         insertOrUpdate(context, account);
     }
