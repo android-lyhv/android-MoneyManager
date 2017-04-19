@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mFireBaseAuth = FirebaseAuth.getInstance();
     }
 
-    @Click(R.id.btnLoginWithGoogle)
+    @Click(R.id.tvLoginWithGoogle)
     void onClickLoginWithGoogle() {
         if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
             Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         requestLoginWithGoogle();
     }
 
-    @Click(R.id.btnLoginWithFacebook)
+    @Click(R.id.tvLoginWithFacebook)
     void onClickLoginWithFacebook() {
         if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
             Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
