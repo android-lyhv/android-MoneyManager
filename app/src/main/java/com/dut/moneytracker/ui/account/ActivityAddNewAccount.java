@@ -103,13 +103,12 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
             Toast.makeText(this, "Nhập tên tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(mAccount.getInitAmount())) {
-            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (!AccountManager.getInstance().isNameAccountAvailable(accountName, null)) {
             Toast.makeText(this, "Tên tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
             return;
+        }
+        if (TextUtils.isEmpty(mAccount.getInitAmount())) {
+            mAccount.setInitAmount("0");
         }
         mAccount.setName(accountName);
         mAccount.setCreated(new Date());
