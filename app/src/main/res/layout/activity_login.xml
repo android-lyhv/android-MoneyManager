@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/img_log" />
+            android:src="@drawable/img_wallet" />
 
         <TextView
             android:id="@+id/tvTitle"
