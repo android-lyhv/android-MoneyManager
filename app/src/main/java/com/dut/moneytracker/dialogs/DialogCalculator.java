@@ -19,6 +19,15 @@ import org.androidannotations.annotations.ViewById;
  */
 @EFragment(R.layout.dialog_calculator)
 public class DialogCalculator extends DialogFragment {
+    private static DialogCalculator dialogCalculator;
+
+    public static DialogCalculator getInstance() {
+        if (dialogCalculator == null) {
+            dialogCalculator = DialogCalculator_.builder().build();
+        }
+        return dialogCalculator;
+    }
+
     public static final int MAX = 12;
 
     public interface ResultListener {

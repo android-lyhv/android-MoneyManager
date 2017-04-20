@@ -13,7 +13,6 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -73,11 +72,15 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @AfterViews
     void init() {
-        mDialogPickAccount = DialogPickAccount_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
         idLastDebit = mDebit.getId();
+        innitDialog();
         initToolbar();
         loadView();
+    }
+
+    private void innitDialog() {
+        mDialogCalculator = DialogCalculator.getInstance();
+        mDialogPickAccount = DialogPickAccount_.builder().build();
     }
 
     private void initToolbar() {

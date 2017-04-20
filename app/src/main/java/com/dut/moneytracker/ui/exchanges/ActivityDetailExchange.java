@@ -19,7 +19,6 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -111,15 +110,19 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @AfterViews
     void init() {
-        mTimePicker = TimePicker_.builder().build();
-        mDayPicker = DayPicker_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
-        mDialogPickAccount = DialogPickAccount_.builder().build();
+        initDialog();
         setSupportActionBar(toolbar);
         setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
         onShowDetailExchange();
         initMap();
+    }
+
+    private void initDialog() {
+        mTimePicker = TimePicker_.builder().build();
+        mDayPicker = DayPicker_.builder().build();
+        mDialogCalculator = DialogCalculator.getInstance();
+        mDialogPickAccount = DialogPickAccount_.builder().build();
     }
 
     private void initMap() {

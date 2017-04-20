@@ -25,7 +25,6 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogPickColor;
@@ -77,7 +76,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
 
     private void initDialog() {
         mDialogPickColor = DialogPickColor_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
+        mDialogCalculator =  DialogCalculator.getInstance();
     }
 
     private void initDialogPickColor() {

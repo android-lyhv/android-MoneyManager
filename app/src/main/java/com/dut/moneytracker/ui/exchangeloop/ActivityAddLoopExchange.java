@@ -22,7 +22,6 @@ import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
@@ -98,14 +97,18 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @AfterViews
     void init() {
-        mDialogPickAccount = DialogPickAccount_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
-        initBaseExchangeLoop();
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
+        initDialog();
+        initBaseExchangeLoop();
         onClickTabExpense();
         initToolbar();
         initSpinner();
         initMap();
+    }
+
+    private void initDialog() {
+        mDialogPickAccount = DialogPickAccount_.builder().build();
+        mDialogCalculator = DialogCalculator.getInstance();
     }
 
     void initBaseExchangeLoop() {

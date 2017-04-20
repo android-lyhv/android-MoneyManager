@@ -12,7 +12,6 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
@@ -62,16 +61,20 @@ public class ActivityAddDebit extends AppCompatActivity {
     AppCompatSpinner mSpinnerDebit;
     private SpinnerTypeDebitManager mSpinnerTypeDebitManager;
     private Debit mNewDebit;
-    private DialogCalculator mCalculator;
+    private DialogCalculator mDialogCalculator;
     DialogPickAccount mDialogPickAccount;
 
     @AfterViews
     void init() {
-        mDialogPickAccount = DialogPickAccount_.builder().build();
-        mCalculator = DialogCalculator_.builder().build();
         mSpinnerTypeDebitManager = new SpinnerTypeDebitManager(this, mSpinnerDebit);
+        initDialog();
         initBaseDebit();
         initView();
+    }
+
+    private void initDialog() {
+        mDialogCalculator = DialogCalculator.getInstance();
+        mDialogPickAccount = DialogPickAccount_.builder().build();
     }
 
     private void initView() {
@@ -149,9 +152,9 @@ public class ActivityAddDebit extends AppCompatActivity {
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
         }
-        mCalculator.show(getFragmentManager(), null);
-        mCalculator.setAmount(amount);
-        mCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), null);
+        mDialogCalculator.setAmount(amount);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 if (mNewDebit.getTypeDebit() == DebitType.BORROWED) {

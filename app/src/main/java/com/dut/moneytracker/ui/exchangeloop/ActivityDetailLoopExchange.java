@@ -22,7 +22,6 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
@@ -109,12 +108,16 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
 
     @AfterViews
     void init() {
-        mDialogPickAccount = DialogPickAccount_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
+        initDialog();
         initToolbar();
         initSpinner();
         onShowData();
         initMap();
+    }
+
+    private void initDialog() {
+        mDialogPickAccount = DialogPickAccount_.builder().build();
+        mDialogCalculator = DialogCalculator.getInstance();
     }
 
     private void onShowData() {

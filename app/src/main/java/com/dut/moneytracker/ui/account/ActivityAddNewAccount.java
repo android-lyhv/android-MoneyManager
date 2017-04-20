@@ -24,7 +24,6 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -72,7 +71,7 @@ public class ActivityAddNewAccount extends AppCompatActivity implements Compound
 
     private void initDialog() {
         mDialogPickColor = DialogPickColor_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
+        mDialogCalculator =  DialogCalculator.getInstance();
     }
 
     private void initBaseAccount() {

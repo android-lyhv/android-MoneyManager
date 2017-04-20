@@ -8,7 +8,6 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.debit.DebitAdapter;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogPayDebit;
 import com.dut.moneytracker.dialogs.DialogPayDebit_;
 import com.dut.moneytracker.models.realms.DebitManager;
@@ -39,9 +38,13 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
 
     @AfterViews
     void init() {
-        mDialogPayDebit = DialogPayDebit_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
+        initDialog();
         initRecyclerDebit();
+    }
+
+    private void initDialog() {
+        mDialogPayDebit = DialogPayDebit_.builder().build();
+        mDialogCalculator = DialogCalculator.getInstance();
     }
 
     @Click(R.id.fab)
@@ -94,7 +97,7 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
                             Toast.makeText(getContext(), R.string.messger_remind_amount, Toast.LENGTH_LONG).show();
                             return;
                         }
-                        DebitManager.getInstance().genExchangeFromDebit( debit, amount);
+                        DebitManager.getInstance().genExchangeFromDebit(debit, amount);
                         mDebitAdapter.notifyDataSetChanged();
                     }
                 });
@@ -102,7 +105,7 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
 
             @Override
             public void onClickFinishDebit() {
-                DebitManager.getInstance().setStatusDebit( debit.getId(), true);
+                DebitManager.getInstance().setStatusDebit(debit.getId(), true);
                 String remindAmount = DebitManager.getInstance().getRemindAmountDebit(debit);
                 if (remindAmount.startsWith("-")) {
                     remindAmount = remindAmount.substring(1);
