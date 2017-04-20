@@ -36,7 +36,6 @@ public class ActivityExchangesCategory extends AppCompatActivity {
     @Extra
     Category mCategory;
     private ExchangeRecodesAdapter mAdapter;
-    private int positionItem;
 
     @AfterViews
     void init() {
