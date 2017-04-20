@@ -62,16 +62,40 @@ public class AccountManager extends RealmHelper {
     }
 
     /*********************************************/
-    public RealmResults<Account> getAccounts() {
+    public RealmResults<Account> getAccountsNotOutside() {
         realm.beginTransaction();
         RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
 
-    public RealmResults<Account> getAccountsWithOutSide() {
+    /**
+     * get list with out this
+     *
+     * @param withoutId
+     * @return
+     */
+    public RealmResults<Account> getAccounts(String withoutId) {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).findAllSorted("created", Sort.ASCENDING);
+        RealmResults<Account> realmResults = realm.where(Account.class)
+                .notEqualTo("id", withoutId)
+                .findAllSorted("created", Sort.ASCENDING);
+        realm.commitTransaction();
+        return realmResults;
+    }
+
+    /**
+     * get list with out this
+     *
+     * @param withoutId
+     * @return
+     */
+    public RealmResults<Account> getAccountsNotOutside(String withoutId) {
+        realm.beginTransaction();
+        RealmResults<Account> realmResults = realm.where(Account.class)
+                .notEqualTo("id", withoutId)
+                .notEqualTo("id", ID_OUSIDE)
+                .findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }

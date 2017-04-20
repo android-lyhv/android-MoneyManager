@@ -105,9 +105,11 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private boolean lastStatus;
     private SpinnerTypeLoopManger mSpinnerTypeLoopManger;
     private DialogCalculator mDialogCalculator;
+    private DialogPickAccount mDialogPickAccount;
 
     @AfterViews
     void init() {
+        mDialogPickAccount = DialogPickAccount_.builder().build();
         mDialogCalculator = DialogCalculator_.builder().build();
         initToolbar();
         initSpinner();
@@ -321,15 +323,14 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mExchangeLoop.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlDate)

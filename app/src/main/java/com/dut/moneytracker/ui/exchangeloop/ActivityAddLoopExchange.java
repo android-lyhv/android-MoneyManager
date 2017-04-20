@@ -93,10 +93,12 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     private DialogCalculator mDialogCalculator;
     private GoogleMap mGoogleMap;
     private ExchangeLooper mExchangeLoop;
+    DialogPickAccount mDialogPickAccount;
     private int mType;
 
     @AfterViews
     void init() {
+        mDialogPickAccount = DialogPickAccount_.builder().build();
         mDialogCalculator = DialogCalculator_.builder().build();
         initBaseExchangeLoop();
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
@@ -260,15 +262,14 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mExchangeLoop.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlDate)

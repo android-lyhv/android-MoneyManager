@@ -42,7 +42,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     @AfterViews
     void init() {
-        mAccounts = AccountManager.getInstance().getAccounts();
+        mAccounts = AccountManager.getInstance().getAccountsNotOutside();
         initViewpager();
         initLoadListFragmentAccounts();
     }

@@ -63,9 +63,11 @@ public class ActivityAddDebit extends AppCompatActivity {
     private SpinnerTypeDebitManager mSpinnerTypeDebitManager;
     private Debit mNewDebit;
     private DialogCalculator mCalculator;
+    DialogPickAccount mDialogPickAccount;
 
     @AfterViews
     void init() {
+        mDialogPickAccount = DialogPickAccount_.builder().build();
         mCalculator = DialogCalculator_.builder().build();
         mSpinnerTypeDebitManager = new SpinnerTypeDebitManager(this, mSpinnerDebit);
         initBaseDebit();
@@ -195,15 +197,14 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mNewDebit.setIdAccount(account.getId());
                 mTvAccountName.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mNewDebit.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlStartDate)

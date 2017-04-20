@@ -24,9 +24,12 @@ import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
+import com.dut.moneytracker.dialogs.DialogPickAccount;
+import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.DebitManager;
+import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
@@ -101,6 +104,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     private TimePicker mTimePicker;
     private DayPicker mDayPicker;
     private DialogCalculator mDialogCalculator;
+    private DialogPickAccount mDialogPickAccount;
     //GoogleMap
     private GoogleMap mGoogleMap;
 
@@ -110,6 +114,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         mTimePicker = TimePicker_.builder().build();
         mDayPicker = DayPicker_.builder().build();
         mDialogCalculator = DialogCalculator_.builder().build();
+        mDialogPickAccount = DialogPickAccount_.builder().build();
         setSupportActionBar(toolbar);
         setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
@@ -237,9 +242,17 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     @Click(R.id.rlAccount)
     void onCLickAccount() {
         if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            //TODO change account for exchange debit
             return;
         }
-        //TODO
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+            @Override
+            public void onResultAccount(Account account) {
+                mExchange.setIdAccount(account.getId());
+                tvAccount.setText(account.getName());
+            }
+        }, false, mExchange.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     void showDialogPickPlace() {

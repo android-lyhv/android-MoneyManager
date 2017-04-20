@@ -72,6 +72,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     //Model
     @Extra
     Account mAccount;
+    private DialogPickAccount mDialogPickAccount;
     private Exchange mExchange;
     private String mIdCategory;
     private String mNameCategory;
@@ -80,6 +81,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @AfterViews
     void init() {
+        mDialogPickAccount = new DialogPickAccount();
         initDataExchange();
         initView();
         initGoogleLocation();
@@ -192,15 +194,14 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @Click(R.id.llAccount)
     void onClickPickAccount() {
-        DialogPickAccount dialogPickAccount = new DialogPickAccount();
-        dialogPickAccount.show(getFragmentManager(), TAG);
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.show(getFragmentManager(), TAG);
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mExchange.setIdAccount(account.getId());
                 tvAccountName.setText(account.getName());
             }
-        }, false);
+        }, false, mExchange.getIdAccount());
     }
 
     @Click(R.id.llCategory)
@@ -319,9 +320,8 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     }
 
     private void showDialogPickAccountReceive() {
-        DialogPickAccount dialogPickAccount = new DialogPickAccount();
-        dialogPickAccount.show(getFragmentManager(), TAG);
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.show(getFragmentManager(), TAG);
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 if (TextUtils.equals(mExchange.getIdAccount(), account.getId())) {
@@ -332,7 +332,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
                 tvCategoryName.setText(mNameAccountTransfer);
                 mExchange.setIdAccountTransfer(account.getId());
             }
-        }, true);
+        }, true, mExchange.getIdAccount());
     }
 
 

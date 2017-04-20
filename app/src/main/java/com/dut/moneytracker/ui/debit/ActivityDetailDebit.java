@@ -67,11 +67,13 @@ public class ActivityDetailDebit extends AppCompatActivity {
     TextView mTvTypeDebit;
     @Extra
     Debit mDebit;
+    private DialogPickAccount mDialogPickAccount;
     private int idLastDebit;
     private DialogCalculator mDialogCalculator;
 
     @AfterViews
     void init() {
+        mDialogPickAccount = DialogPickAccount_.builder().build();
         mDialogCalculator = DialogCalculator_.builder().build();
         idLastDebit = mDebit.getId();
         initToolbar();
@@ -232,15 +234,14 @@ public class ActivityDetailDebit extends AppCompatActivity {
         if (mDebit.isClose()) {
             return;
         }
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mDebit.setIdAccount(account.getId());
                 mTvAccountName.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mDebit.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlStartDate)

@@ -31,12 +31,13 @@ public class DialogPickAccount extends DialogFragment {
      * @param accountListener
      * @param status          = false - list not about account out side
      *                        true - list with account out side
+     *                        list without currentIdAccount
      */
-    public void registerPickAccount(AccountListener accountListener, boolean status) {
-        if (status){
-            mAccounts = AccountManager.getInstance().getAccountsWithOutSide();
-        }else {
-            mAccounts = AccountManager.getInstance().getAccounts();
+    public void registerPickAccount(AccountListener accountListener, boolean status, String currentIdAccount) {
+        if (status) {
+            mAccounts = AccountManager.getInstance().getAccounts(currentIdAccount);
+        } else {
+            mAccounts = AccountManager.getInstance().getAccountsNotOutside(currentIdAccount);
         }
         mAccountListener = accountListener;
     }
