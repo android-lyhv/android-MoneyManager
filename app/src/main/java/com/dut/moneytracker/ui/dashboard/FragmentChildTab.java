@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -140,17 +142,24 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @OnActivityResult(IntentCode.DETAIL_EXCHANGE)
     void onResult(int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
             case IntentCode.EDIT_EXCHANGE:
-                ExchangeManger.getInstance().insertOrUpdate(exchange);
+                Exchange exchangeEdit = data.getParcelableExtra(getString(R.string.extra_detail_exchange));
+                if (exchangeEdit.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeEdit.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
+                    ExchangeManger.getInstance().updateExchangeTransfer(exchangeEdit, exchangeEdit.getCodeTransfer());
+                } else {
+                    ExchangeManger.getInstance().insertOrUpdate(exchangeEdit);
+                }
                 break;
             case IntentCode.DELETE_EXCHANGE:
-                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
+                Exchange exchangeDelete = (Exchange) mExchangeAdapter.getItem(positionItem);
+                if (exchangeDelete.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeDelete.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
+                    ExchangeManger.getInstance().deleteExchangeTransfer(exchangeDelete.getCodeTransfer());
+                } else {
+                    ExchangeManger.getInstance().deleteExchangeById(exchangeDelete.getId());
+                }
         }
+
         //Reload tab account
         mHandler.postDelayed(new Runnable() {
             @Override

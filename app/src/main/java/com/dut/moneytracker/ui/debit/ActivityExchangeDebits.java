@@ -5,13 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.exchanges.ExchangeRecodesAdapter;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
+import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
@@ -76,16 +79,22 @@ public class ActivityExchangeDebits extends AppCompatActivity {
 
     @OnActivityResult(IntentCode.DETAIL_EXCHANGE)
     void onResult(int resultCode, Intent data) {
-        if (data == null) {
-            return;
-        }
-        Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
             case IntentCode.EDIT_EXCHANGE:
-                ExchangeManger.getInstance().insertOrUpdate(exchange);
+                Exchange exchangeEdit = data.getParcelableExtra(getString(R.string.extra_detail_exchange));
+                if (exchangeEdit.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeEdit.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
+                    ExchangeManger.getInstance().updateExchangeTransfer(exchangeEdit, exchangeEdit.getCodeTransfer());
+                } else {
+                    ExchangeManger.getInstance().insertOrUpdate(exchangeEdit);
+                }
                 break;
             case IntentCode.DELETE_EXCHANGE:
-                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mAdapter.getItem(positionItem)).getId());
+                Exchange exchangeDelete = (Exchange) mAdapter.getItem(positionItem);
+                if (exchangeDelete.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeDelete.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
+                    ExchangeManger.getInstance().deleteExchangeTransfer(exchangeDelete.getCodeTransfer());
+                } else {
+                    ExchangeManger.getInstance().deleteExchangeById(exchangeDelete.getId());
+                }
         }
     }
 
