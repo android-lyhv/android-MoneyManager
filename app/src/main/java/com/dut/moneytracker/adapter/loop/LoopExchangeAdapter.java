@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.constant.ExchangeType;
@@ -20,7 +21,6 @@ import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.utils.DateTimeUtils;
-import com.dut.moneytracker.utils.ResourceUtils;
 
 import io.realm.RealmResults;
 
@@ -80,7 +80,7 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
 
         public void onBind(ExchangeLooper exchangeLooper) {
             Category category = CategoryManager.getInstance().getCategoryById(exchangeLooper.getIdCategory());
-            imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
+            Glide.with(getContext()).load(category.getByteImage()).into(imgCategory);
             tvCategoryName.setText(category.getName());
             String description = exchangeLooper.getDescription();
             tvDescription.setText(description);

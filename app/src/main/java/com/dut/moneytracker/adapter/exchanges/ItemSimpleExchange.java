@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -18,7 +19,6 @@ import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
-import com.dut.moneytracker.utils.ResourceUtils;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -72,7 +72,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
         // if debit exchange
         if (exchange.getIdDebit() > 0) {
             tvCategoryName.setText(R.string.debit_name);
-            imgCategory.setImageResource(R.drawable.ic_debit);
+            Glide.with(context).load(R.drawable.ic_debit).into(imgCategory);
             tvAccountName.setText(DebitManager.getInstance().getAccountNameByDebitId(exchange.getIdDebit()));
             return;
         }
@@ -80,11 +80,11 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
         tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
         if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
             Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
-            imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
+            Glide.with(context).load(category.getByteImage()).into(imgCategory);
             tvCategoryName.setText(category.getName());
         }
         if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
-            imgCategory.setImageResource(R.drawable.ic_transfer);
+            Glide.with(context).load(R.drawable.ic_transfer).into(imgCategory);
             tvCategoryName.setText(context.getResources().getString(R.string.transfer));
         }
     }
