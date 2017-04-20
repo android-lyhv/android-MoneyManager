@@ -176,7 +176,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        if (mExchange.getIdDebit() > 0 || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
+        if (mExchange.getIdDebit() > 0 || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
             return;
         }
         if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {

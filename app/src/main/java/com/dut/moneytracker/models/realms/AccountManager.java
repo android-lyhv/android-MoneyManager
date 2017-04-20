@@ -24,7 +24,7 @@ import io.realm.Sort;
 
 public class AccountManager extends RealmHelper {
     private static AccountManager accountManager;
-    public static final String ID_OUSIDE = "outside";
+    public static final String ID_OUTSIDE = "outside";
     private static final String ID_DEFAULT = "default";
 
     public static AccountManager getInstance() {
@@ -64,7 +64,7 @@ public class AccountManager extends RealmHelper {
     /*********************************************/
     public RealmResults<Account> getAccountsNotOutside() {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSorted("created", Sort.ASCENDING);
+        RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUTSIDE).findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -94,14 +94,14 @@ public class AccountManager extends RealmHelper {
         realm.beginTransaction();
         RealmResults<Account> realmResults = realm.where(Account.class)
                 .notEqualTo("id", withoutId)
-                .notEqualTo("id", ID_OUSIDE)
+                .notEqualTo("id", ID_OUTSIDE)
                 .findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
 
     public RealmResults<Account> loadAccountsAsync() {
-        return realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSortedAsync("created", Sort.ASCENDING);
+        return realm.where(Account.class).notEqualTo("id", ID_OUTSIDE).findAllSortedAsync("created", Sort.ASCENDING);
     }
 
     public String getAmountAvailableByAccount(String idAccount) {
@@ -166,7 +166,7 @@ public class AccountManager extends RealmHelper {
         realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
         String amountOneAccount;
-        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
+        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUTSIDE).findAll();
         for (Account account : resultsAccount) {
             if (DateTimeUtils.getInstance().isSameDate(currentDate, account.getCreated())
                     || account.getCreated().before(currentDate)) {
@@ -183,7 +183,7 @@ public class AccountManager extends RealmHelper {
     public String getTotalInitAmount() {
         realm.beginTransaction();
         BigDecimal bigDecimal = new BigDecimal("0");
-        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAll();
+        RealmResults<Account> resultsAccount = realm.where(Account.class).notEqualTo("id", ID_OUTSIDE).findAll();
         for (Account account : resultsAccount) {
             bigDecimal = bigDecimal.add(new BigDecimal(account.getInitAmount()));
         }
@@ -244,7 +244,7 @@ public class AccountManager extends RealmHelper {
 
     public void createOutSideAccount(Context context) {
         Account account = new Account();
-        account.setId(ID_OUSIDE);
+        account.setId(ID_OUTSIDE);
         account.setName(context.getString(R.string.out_side_account));
         account.setCreated(new Date(Long.MAX_VALUE));
         account.setColorHex(context.getString(R.string.color_account_default));

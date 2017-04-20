@@ -145,7 +145,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         switch (resultCode) {
             case IntentCode.EDIT_EXCHANGE:
                 Exchange exchangeEdit = data.getParcelableExtra(getString(R.string.extra_detail_exchange));
-                if (exchangeEdit.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeEdit.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
+                if (exchangeEdit.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeEdit.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
                     ExchangeManger.getInstance().updateExchangeTransfer(exchangeEdit);
                 } else {
                     ExchangeManger.getInstance().insertOrUpdate(exchangeEdit);
@@ -153,7 +153,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
                 break;
             case IntentCode.DELETE_EXCHANGE:
                 Exchange exchangeDelete = (Exchange) mExchangeAdapter.getItem(positionItem);
-                if (exchangeDelete.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeDelete.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
+                if (exchangeDelete.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeDelete.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
                     ExchangeManger.getInstance().deleteExchangeTransfer(exchangeDelete.getCodeTransfer());
                 } else {
                     ExchangeManger.getInstance().deleteExchangeById(exchangeDelete.getId());

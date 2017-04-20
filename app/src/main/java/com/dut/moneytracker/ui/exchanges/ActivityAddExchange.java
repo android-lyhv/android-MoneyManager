@@ -303,7 +303,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             ExchangeManger.getInstance().insertOrUpdate(mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
-            if (!TextUtils.equals(idTransfer, AccountManager.ID_OUSIDE)) {
+            if (!TextUtils.equals(idTransfer, AccountManager.ID_OUTSIDE)) {
                 String idAccount = mExchange.getIdAccount();
                 mExchange.setId(UUID.randomUUID().toString());
                 mExchange.setAmount(tvAmount.getText().toString());
