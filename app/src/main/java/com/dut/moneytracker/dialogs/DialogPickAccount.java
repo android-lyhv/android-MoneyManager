@@ -20,6 +20,13 @@ import java.util.List;
  */
 @EFragment
 public class DialogPickAccount extends DialogFragment {
+    private static  DialogPickAccount sInstance;
+    public static DialogPickAccount getInstance(){
+        if (sInstance==null){
+            sInstance = DialogPickAccount_.builder().build();
+        }
+        return sInstance;
+    }
     private List<Account> mAccounts;
     private AccountListener mAccountListener;
 

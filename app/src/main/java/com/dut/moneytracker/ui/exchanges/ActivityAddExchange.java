@@ -81,7 +81,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @AfterViews
     void init() {
-        mDialogPickAccount = new DialogPickAccount();
+        mDialogPickAccount = DialogPickAccount.getInstance();
         initDataExchange();
         initView();
         initGoogleLocation();

@@ -25,7 +25,6 @@ import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
@@ -114,7 +113,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void initDialog() {
-        mDialogPickAccount = DialogPickAccount_.builder().build();
+        mDialogPickAccount =DialogPickAccount.getInstance();
         mDialogCalculator = DialogCalculator.getInstance();
     }
 

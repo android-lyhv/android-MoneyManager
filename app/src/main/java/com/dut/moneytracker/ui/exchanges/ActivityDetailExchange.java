@@ -22,7 +22,6 @@ import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.DebitManager;
@@ -120,7 +119,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         mTimePicker = TimePicker_.builder().build();
         mDayPicker = DayPicker_.builder().build();
         mDialogCalculator = DialogCalculator.getInstance();
-        mDialogPickAccount = DialogPickAccount_.builder().build();
+        mDialogPickAccount = DialogPickAccount.getInstance();
     }
 
     private void initMap() {

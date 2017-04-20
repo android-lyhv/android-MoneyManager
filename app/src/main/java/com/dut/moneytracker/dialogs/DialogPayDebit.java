@@ -26,15 +26,10 @@ public class DialogPayDebit extends DialogFragment {
     void init() {
     }
 
-    public interface DescriptionListener {
-        void onResult(String content);
-    }
-
     public void register(ClickListener clickListener) {
         mClickListener = clickListener;
     }
 
-    DescriptionListener descriptionListener;
 
     @Click(R.id.tvConfirm)
     void onClickConfirm() {
@@ -47,6 +42,7 @@ public class DialogPayDebit extends DialogFragment {
 
         dismiss();
     }
+
     @Click(R.id.tvPay)
     void onClickPay() {
         mClickListener.onClickPartial();

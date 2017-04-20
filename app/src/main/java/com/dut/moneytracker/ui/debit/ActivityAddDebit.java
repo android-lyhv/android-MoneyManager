@@ -15,7 +15,6 @@ import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
@@ -74,7 +73,7 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     private void initDialog() {
         mDialogCalculator = DialogCalculator.getInstance();
-        mDialogPickAccount = DialogPickAccount_.builder().build();
+        mDialogPickAccount = DialogPickAccount.getInstance();
     }
 
     private void initView() {
