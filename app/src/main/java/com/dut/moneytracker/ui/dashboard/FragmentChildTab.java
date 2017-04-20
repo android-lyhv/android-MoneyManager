@@ -146,7 +146,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
             case IntentCode.EDIT_EXCHANGE:
                 Exchange exchangeEdit = data.getParcelableExtra(getString(R.string.extra_detail_exchange));
                 if (exchangeEdit.getTypeExchange() == ExchangeType.TRANSFER && !TextUtils.equals(exchangeEdit.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
-                    ExchangeManger.getInstance().updateExchangeTransfer(exchangeEdit, exchangeEdit.getCodeTransfer());
+                    ExchangeManger.getInstance().updateExchangeTransfer(exchangeEdit);
                 } else {
                     ExchangeManger.getInstance().insertOrUpdate(exchangeEdit);
                 }

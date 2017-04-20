@@ -54,9 +54,9 @@ public class ExchangeManger extends RealmHelper {
         FireBaseSync.getInstance().upDateExchange(object);
     }
 
-    public void updateExchangeTransfer(Exchange exchangeUpdate, String codeTransfer) {
+    public void updateExchangeTransfer(Exchange exchangeUpdate) {
         realm.beginTransaction();
-        Exchange exchange = realm.where(Exchange.class).equalTo("codeTransfer", codeTransfer).notEqualTo("id", exchangeUpdate.getId()).findFirst();
+        Exchange exchange = realm.where(Exchange.class).equalTo("codeTransfer", exchangeUpdate.getCodeTransfer()).notEqualTo("id", exchangeUpdate.getId()).findFirst();
         if (exchangeUpdate.getAmount().startsWith("-")) {
             exchange.setAmount(exchangeUpdate.getAmount().substring(1));
         } else {
