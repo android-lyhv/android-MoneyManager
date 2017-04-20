@@ -21,7 +21,6 @@ import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
 import com.dut.moneytracker.dialogs.DialogInput;
-import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -192,15 +191,14 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlDescription)
     void onClickDescription() {
-        DialogInput dialogInput = DialogInput_.builder().build();
-        dialogInput.register(new DialogInput.DescriptionListener() {
+        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mTvDescription.setText(content);
                 mExchange.setDescription(content);
             }
         });
-        dialogInput.show(getSupportFragmentManager(), null);
+        DialogInput.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlDate)

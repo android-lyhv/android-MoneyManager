@@ -20,7 +20,7 @@ public class DialogConfirm extends DialogFragment {
 
     public static DialogConfirm getInstance() {
         if (sInstance == null) {
-            sInstance = new DialogConfirm();
+            sInstance = DialogConfirm_.builder().build();
         }
         return sInstance;
     }

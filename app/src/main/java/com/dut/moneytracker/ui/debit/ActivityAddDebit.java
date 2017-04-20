@@ -132,15 +132,14 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     @Click(R.id.rlName)
     void onClickName() {
-        DialogInput dialogInput = DialogInput_.builder().build();
-        dialogInput.register(new DialogInput.DescriptionListener() {
+        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mNewDebit.setName(content);
                 mTvName.setText(content);
             }
         });
-        dialogInput.show(getSupportFragmentManager(), null);
+        DialogInput.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAmount)

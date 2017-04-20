@@ -161,15 +161,14 @@ public class ActivityDetailDebit extends AppCompatActivity {
         if (mDebit.isClose()) {
             return;
         }
-        DialogInput dialogInput = DialogInput_.builder().build();
-        dialogInput.register(new DialogInput.DescriptionListener() {
+        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mDebit.setName(content);
                 mTvName.setText(content);
             }
         });
-        dialogInput.show(getSupportFragmentManager(), null);
+        DialogInput.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAmount)
