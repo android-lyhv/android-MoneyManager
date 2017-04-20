@@ -120,7 +120,7 @@ public class ActivityAddDebit extends AppCompatActivity {
             }
         }
         //Debit
-        DebitManager.getInstance().insertOrUpdateDebit(getApplicationContext(),mNewDebit);
+        DebitManager.getInstance().insertOrUpdateDebit(mNewDebit);
         AlarmDebit.getInstance().pendingAlarmDebit(this, mNewDebit);
         finish();
     }

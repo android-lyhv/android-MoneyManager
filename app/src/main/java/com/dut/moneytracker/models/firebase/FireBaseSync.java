@@ -34,6 +34,7 @@ public class FireBaseSync {
     private static final String CHILD_EXCHANGE = "exchange";
     private static final String CHILD_EXCHANGE_LOOP = "exchange_loop";
     private static final String CHILD_DEBIT = "debit";
+    private DatabaseReference mDatabase;
 
     public static FireBaseSync getInstance() {
         if (fireBaseSync == null) {
@@ -42,74 +43,61 @@ public class FireBaseSync {
         return fireBaseSync;
     }
 
+    public void initDataReference(Context context) {
+        String reference = AppConfig.getInstance().getReferenceDatabase(context);
+        mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    }
+
     private FireBaseSync() {
 
     }
 
 
-    public void upDateAccount(Context context, Account account) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void upDateAccount(Account account) {
         String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_ACCOUNT).getKey(), account.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapAccount(account));
         mDatabase.updateChildren(childUpdates);
     }
 
-    public void upDateExchange(Context context, Exchange exchange) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void upDateExchange(Exchange exchange) {
         String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_EXCHANGE).getKey(), exchange.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapExchange(exchange));
         mDatabase.updateChildren(childUpdates);
     }
 
-    public void upDateExchangeLoop(Context context, ExchangeLooper exchangeLooper) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void upDateExchangeLoop(ExchangeLooper exchangeLooper) {
         String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_EXCHANGE_LOOP).getKey(), exchangeLooper.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapExchangeLoop(exchangeLooper));
         mDatabase.updateChildren(childUpdates);
     }
 
-    public void upDateDebit(Context context, Debit debit) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void upDateDebit(Debit debit) {
         String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_DEBIT).getKey(), debit.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapDebit(debit));
         mDatabase.updateChildren(childUpdates);
     }
 
-    public void deleteAccount(Context context, String id) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void deleteAccount(String id) {
         mDatabase.child(CHILD_ACCOUNT).child(id).removeValue();
     }
 
-    public void deleteExchange(Context context, String id) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void deleteExchange(String id) {
         mDatabase.child(CHILD_EXCHANGE).child(id).removeValue();
     }
 
-    public void deleteExchangeLoop(Context context, int id) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void deleteExchangeLoop(int id) {
         mDatabase.child(CHILD_EXCHANGE_LOOP).child(String.valueOf(id)).removeValue();
     }
 
-    public void deleteDebit(Context context, int id) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+    public void deleteDebit(int id) {
         mDatabase.child(CHILD_DEBIT).child(String.valueOf(id)).removeValue();
     }
 
     public void onLoadDataServer(final Context context, final LoadDataListener loadDataListener) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(reference);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -132,7 +120,7 @@ public class FireBaseSync {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
-            onSaveAccount(context, id, data);
+            onSaveAccount(id, data);
         }
     }
 
@@ -140,7 +128,7 @@ public class FireBaseSync {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
-            onSaveExchange(context, id, data);
+            onSaveExchange(id, data);
         }
     }
 
@@ -148,7 +136,7 @@ public class FireBaseSync {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
-            onSaveDebit(context, id, data);
+            onSaveDebit(id, data);
         }
     }
 
@@ -219,7 +207,7 @@ public class FireBaseSync {
         return result;
     }
 
-    private void onSaveAccount(Context context, String id, HashMap<String, Object> data) {
+    private void onSaveAccount(String id, HashMap<String, Object> data) {
         Account account = new Account();
         account.setId(id);
         account.setName((String) data.get("name"));
@@ -228,10 +216,10 @@ public class FireBaseSync {
         account.setColorHex((String) data.get("colorHex"));
         account.setSaveLocation((Boolean) data.get("saveLocation"));
         account.setDefault((Boolean) data.get("isDefault"));
-        AccountManager.getInstance().insertOrUpdate(context, account);
+        AccountManager.getInstance().insertOrUpdate(account);
     }
 
-    private void onSaveExchange(Context context, String id, HashMap<String, Object> data) {
+    private void onSaveExchange(String id, HashMap<String, Object> data) {
         Exchange exchange = new Exchange();
         exchange.setId(id);
         exchange.setTypeExchange(Integer.parseInt(String.valueOf(data.get("typeExchange"))));
@@ -246,7 +234,7 @@ public class FireBaseSync {
         exchange.setAddress((String) data.get("address"));
         exchange.setLatitude(Double.parseDouble(String.valueOf(data.get("latitude"))));
         exchange.setLongitude(Double.parseDouble(String.valueOf(data.get("longitude"))));
-        ExchangeManger.getInstance().insertOrUpdate(context, exchange);
+        ExchangeManger.getInstance().insertOrUpdate(exchange);
     }
 
     private void onSaveExchangeLoop(Context context, String id, HashMap<String, Object> data) {
@@ -265,10 +253,10 @@ public class FireBaseSync {
         exchangeLooper.setLongitude(Double.parseDouble(String.valueOf(data.get("longitude"))));
         exchangeLooper.setLoop((Boolean) data.get("isLoop"));
         exchangeLooper.setTypeLoop(Integer.parseInt(String.valueOf(data.get("typeLoop"))));
-        ExchangeLoopManager.getInstance(context).insertOrUpdate(context, exchangeLooper);
+        ExchangeLoopManager.getInstance(context).insertOrUpdate(exchangeLooper);
     }
 
-    private void onSaveDebit(Context context, String id, HashMap<String, Object> data) {
+    private void onSaveDebit(String id, HashMap<String, Object> data) {
         Debit debit = new Debit();
         debit.setId(Integer.parseInt(id));
         debit.setName((String) data.get("name"));
@@ -279,6 +267,6 @@ public class FireBaseSync {
         debit.setStartDate(DateTimeUtils.getInstance().getDateFormat((String) data.get("startDate")));
         debit.setEndDate(DateTimeUtils.getInstance().getDateFormat((String) data.get("endDate")));
         debit.setDescription((String) data.get("description"));
-        DebitManager.getInstance().insertOrUpdateDebit(context, debit);
+        DebitManager.getInstance().insertOrUpdateDebit(debit);
     }
 }

@@ -1,7 +1,5 @@
 package com.dut.moneytracker.models.realms;
 
-import android.content.Context;
-
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Debit;
@@ -34,7 +32,7 @@ public class DebitManager extends RealmHelper {
     /**
      * Sync with firebase
      */
-    public void deleteDebitByAccount(Context context, String idAccount) {
+    public void deleteDebitByAccount(String idAccount) {
         int idDebit = -1;
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("idAccount", idAccount).findFirst();
@@ -43,41 +41,41 @@ public class DebitManager extends RealmHelper {
             debit.deleteFromRealm();
         }
         realm.commitTransaction();
-        ExchangeManger.getInstance().deleteExchangeByDebit(context, idDebit);
+        ExchangeManger.getInstance().deleteExchangeByDebit(idDebit);
     }
 
-    public void insertOrUpdateDebit(Context context, Debit debit) {
+    public void insertOrUpdateDebit(Debit debit) {
         realm.beginTransaction();
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
-        genExchangeFromDebit(context, debit, null);
-        FireBaseSync.getInstance().upDateDebit(context, debit);
+        genExchangeFromDebit(debit, null);
+        FireBaseSync.getInstance().upDateDebit(debit);
     }
 
-    public void updateDebitIfAccountChange(Context context, Debit debit) {
+    public void updateDebitIfAccountChange(Debit debit) {
         realm.beginTransaction();
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
-        FireBaseSync.getInstance().upDateDebit(context, debit);
-        ExchangeManger.getInstance().updateExchangeByDebit(context, debit.getId(), debit.getIdAccount());
+        FireBaseSync.getInstance().upDateDebit(debit);
+        ExchangeManger.getInstance().updateExchangeByDebit(debit.getId(), debit.getIdAccount());
     }
 
-    public void deleteDebitById(Context context, int id) {
+    public void deleteDebitById(int id) {
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
         debit.deleteFromRealm();
         realm.commitTransaction();
-        ExchangeManger.getInstance().deleteExchangeByDebit(context, id);
-        FireBaseSync.getInstance().deleteDebit(context, id);
+        ExchangeManger.getInstance().deleteExchangeByDebit(id);
+        FireBaseSync.getInstance().deleteDebit(id);
     }
 
-    public void setStatusDebit(Context context, int id, boolean isClose) {
+    public void setStatusDebit(int id, boolean isClose) {
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
         debit.setClose(isClose);
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
-        FireBaseSync.getInstance().upDateDebit(context, debit);
+        FireBaseSync.getInstance().upDateDebit(debit);
     }
 
     /***************************************************************/
@@ -106,7 +104,7 @@ public class DebitManager extends RealmHelper {
         return bigDecimal.toString();
     }
 
-    public void genExchangeFromDebit(Context context, Debit debit, String amount) {
+    public void genExchangeFromDebit(Debit debit, String amount) {
         Exchange exchange = new Exchange();
         if (null == amount) {
             exchange.setId(String.valueOf(debit.getId()));
@@ -131,7 +129,7 @@ public class DebitManager extends RealmHelper {
         exchange.setIdAccount(debit.getIdAccount());
         exchange.setCreated(new Date());
         exchange.setIdDebit(debit.getId());
-        ExchangeManger.getInstance().insertOrUpdate(context, exchange);
+        ExchangeManger.getInstance().insertOrUpdate(exchange);
     }
 
     public int getNewIdDebit() {

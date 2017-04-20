@@ -19,7 +19,7 @@ public class ReceiveGenerateExchange extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         int idExchangeLooper = intent.getIntExtra(context.getString(R.string.id_exchange_looper), DEFAULT_VALUE);
         if (idExchangeLooper != DEFAULT_VALUE) {
-            ExchangeLoopManager.getInstance(context).generateNewExchange(context, idExchangeLooper);
+            ExchangeLoopManager.getInstance(context).generateNewExchange(idExchangeLooper);
         }
     }
 }

@@ -116,7 +116,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
             public void onClickResult(boolean value) {
                 if (value) {
                     AlarmDebit.getInstance().removePendingAlarm(ActivityDetailDebit.this, mDebit.getId());
-                    DebitManager.getInstance().deleteDebitById(getApplicationContext(), mDebit.getId());
+                    DebitManager.getInstance().deleteDebitById(mDebit.getId());
                     finish();
                 }
             }
@@ -145,9 +145,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
         }
         //Debit
         if (idLastDebit != mDebit.getId()) {
-            DebitManager.getInstance().updateDebitIfAccountChange(getApplicationContext(), mDebit);
+            DebitManager.getInstance().updateDebitIfAccountChange(mDebit);
         } else {
-            DebitManager.getInstance().insertOrUpdateDebit(getApplicationContext(), mDebit);
+            DebitManager.getInstance().insertOrUpdateDebit(mDebit);
             AlarmDebit.getInstance().pendingAlarmDebit(this, mDebit);
         }
         finish();

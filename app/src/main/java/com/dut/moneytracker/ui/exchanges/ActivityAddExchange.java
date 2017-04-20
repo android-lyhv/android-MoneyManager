@@ -299,7 +299,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             String amount = String.format(Locale.US, "-%s", tvAmount.getText().toString());
             mExchange.setAmount(amount);
             mExchange.setCodeTransfer(codeTransfer);
-            ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(),mExchange);
+            ExchangeManger.getInstance().insertOrUpdate(mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
             if (!TextUtils.equals(idTransfer, AccountManager.ID_OUSIDE)) {
@@ -309,10 +309,10 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
                 mExchange.setIdAccount(idTransfer);
                 mExchange.setIdAccountTransfer(idAccount);
                 mExchange.setCodeTransfer(codeTransfer);
-                ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(),mExchange);
+                ExchangeManger.getInstance().insertOrUpdate(mExchange);
             }
         } else {
-            ExchangeManger.getInstance().insertOrUpdate(getApplicationContext(),mExchange);
+            ExchangeManger.getInstance().insertOrUpdate(mExchange);
         }
         setResult(IntentCode.ADD_NEW_EXCHANGE, new Intent());
         finish();

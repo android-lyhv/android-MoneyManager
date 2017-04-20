@@ -2,12 +2,14 @@ package com.dut.moneytracker.models.realms;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
+import com.dut.moneytracker.utils.NetworkUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -41,24 +43,28 @@ public class AccountManager extends RealmHelper {
     /**
      * Sync Firebase
      */
-    public void insertOrUpdate(Context context, Account object) {
+    public void insertOrUpdate(Account object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
-        FireBaseSync.getInstance().upDateAccount(context, object);
+        FireBaseSync.getInstance().upDateAccount(object);
     }
 
     public void onDeleteAccount(Context context, String idAccount) {
-        ExchangeManger.getInstance().deleteExchangeByAccount(context, idAccount);
-        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(context, idAccount);
-        DebitManager.getInstance().deleteDebitByAccount(context, idAccount);
+        if (!NetworkUtils.getInstance().isConnectNetwork(context)) {
+            Toast.makeText(context, "Mất kết nối internet!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
+        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
+        DebitManager.getInstance().deleteDebitByAccount(idAccount);
         realm.beginTransaction();
         final Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
         if (account != null) {
             account.deleteFromRealm();
         }
         realm.commitTransaction();
-        FireBaseSync.getInstance().deleteAccount(context, idAccount);
+        FireBaseSync.getInstance().deleteAccount(idAccount);
     }
 
     /*********************************************/
@@ -215,7 +221,7 @@ public class AccountManager extends RealmHelper {
         account.setColorHex(context.getString(R.string.color_account_default));
         account.setCreated(new Date());
         account.setInitAmount("0");
-        insertOrUpdate(context, account);
+        insertOrUpdate(account);
     }
 
     public void createOutSideAccount(Context context) {
@@ -225,7 +231,7 @@ public class AccountManager extends RealmHelper {
         account.setCreated(new Date(Long.MAX_VALUE));
         account.setColorHex(context.getString(R.string.color_account_default));
         account.setInitAmount("0");
-        insertOrUpdate(context, account);
+        insertOrUpdate(account);
     }
 
     public boolean isNameAccountAvailable(String newName, String nowIdAccount) {

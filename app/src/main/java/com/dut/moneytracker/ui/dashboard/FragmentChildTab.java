@@ -146,10 +146,10 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         Exchange exchange = data.getParcelableExtra(getString(R.string.extra_edit_exchange));
         switch (resultCode) {
             case IntentCode.EDIT_EXCHANGE:
-                ExchangeManger.getInstance().insertOrUpdate(getContext(),exchange);
+                ExchangeManger.getInstance().insertOrUpdate(exchange);
                 break;
             case IntentCode.DELETE_EXCHANGE:
-                ExchangeManger.getInstance().deleteExchangeById(getContext(),((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
+                ExchangeManger.getInstance().deleteExchangeById(((Exchange) mExchangeAdapter.getItem(positionItem)).getId());
         }
         //Reload tab account
         mHandler.postDelayed(new Runnable() {
