@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
@@ -135,7 +136,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     @OptionsItem(R.id.actionSave)
     void onClickSave() {
         onSaveChangeExchange();
-        finish();
     }
 
     @OptionsItem(R.id.actionDelete)
@@ -167,7 +167,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
                     mExchange.setIdAccount(account.getId());
                     tvCategoryName.setText(account.getName());
                 }
-            }, false, mExchange.getIdAccountTransfer());
+            }, false, null);
             mDialogPickAccount.show(getFragmentManager(), null);
         } else {
             startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
@@ -186,7 +186,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
                     mExchange.setIdAccountTransfer(account.getId());
                     tvAccount.setText(account.getName());
                 }
-            }, true, mExchange.getIdAccount());
+            }, false, null);
             mDialogPickAccount.show(getFragmentManager(), null);
         } else {
             mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
@@ -356,9 +356,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onShowDetailExchange() {
-        if (mExchange.getIdDebit() > 0 || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUSIDE)) {
-            return;
-        }
         if (mExchange.getIdDebit() > 0) {
             showDetailExchangeDebit();
             return;
@@ -376,9 +373,14 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onSaveChangeExchange() {
+        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER && TextUtils.equals(mExchange.getIdAccountTransfer(), mExchange.getIdAccount())) {
+            Toast.makeText(this, "Tài khoản gửi và tài khoản nhận phải khác nhau", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.extra_detail_exchange), mExchange);
         setResult(IntentCode.EDIT_EXCHANGE, intent);
+        finish();
     }
 
     private void showDetailExchangeDebit() {
@@ -440,7 +442,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             tvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         }
     }
-
 
     private void onTargetLocationExchange() {
         LatLng sydney = new LatLng(mExchange.getLatitude(), mExchange.getLongitude());
