@@ -89,6 +89,7 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
             @Override
             public void onClickPartial() {
                 mDialogCalculator.show(getActivity().getFragmentManager(), null);
+                mDialogCalculator.setAmount("0");
                 mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
                     @Override
                     public void onResult(String amount) {

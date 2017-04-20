@@ -201,7 +201,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
                 mExchange.setIdAccount(account.getId());
                 tvAccountName.setText(account.getName());
             }
-        }, false, mExchange.getIdAccount());
+        }, false, mExchange.getIdAccountTransfer());
     }
 
     @Click(R.id.llCategory)
@@ -303,7 +303,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             ExchangeManger.getInstance().insertOrUpdate(mExchange);
             // Them giao dich account nhan
             String idTransfer = mExchange.getIdAccountTransfer();
-            if (!TextUtils.equals(idTransfer, AccountManager.ID_OUSIDE)) {
+            if (!TextUtils.equals(idTransfer, AccountManager.ID_OUTSIDE)) {
                 String idAccount = mExchange.getIdAccount();
                 mExchange.setId(UUID.randomUUID().toString());
                 mExchange.setAmount(tvAmount.getText().toString());
@@ -315,7 +315,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         } else {
             ExchangeManger.getInstance().insertOrUpdate(mExchange);
         }
-        setResult(IntentCode.ADD_NEW_EXCHANGE, new Intent());
+        setResult(IntentCode.ADD_NEW_EXCHANGE);
         finish();
     }
 
@@ -324,10 +324,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
-                if (TextUtils.equals(mExchange.getIdAccount(), account.getId())) {
-                    Toast.makeText(ActivityAddExchange.this, "Vui lòng chọn một tài khoản khác", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 mNameAccountTransfer = account.getName();
                 tvCategoryName.setText(mNameAccountTransfer);
                 mExchange.setIdAccountTransfer(account.getId());

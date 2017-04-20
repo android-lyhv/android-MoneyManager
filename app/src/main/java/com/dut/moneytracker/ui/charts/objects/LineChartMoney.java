@@ -66,6 +66,7 @@ public class LineChartMoney {
         mChart.setDescription(null);
         mChart.getXAxis().setValueFormatter(new MyXAxisValueFormatter());
         mChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        mChart.getXAxis().setLabelCount(6);
     }
 
     public void notifyDataSetChanged() {

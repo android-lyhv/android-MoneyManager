@@ -9,10 +9,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
@@ -89,12 +91,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     RelativeLayout rlAccount;
     @ViewById(R.id.tvTitleAccount)
     TextView tvTitleAccount;
-    @ViewById(R.id.imgEditCategory)
-    ImageView imgEditCategory;
-    @ViewById(R.id.imgEditAccount)
-    ImageView imgEditAccount;
     @ViewById(R.id.tvAddress)
     TextView tvAddress;
+    @ViewById(R.id.imgEditAccount)
+    ImageView imgEditAccount;
     @Extra
     Exchange mExchange;
     private TimePicker mTimePicker;
@@ -107,10 +107,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @AfterViews
     void init() {
-        initDialog();
-        setSupportActionBar(toolbar);
         setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
+        initDialog();
+        setSupportActionBar(toolbar);
         onShowDetailExchange();
         initMap();
     }
@@ -136,7 +136,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     @OptionsItem(R.id.actionSave)
     void onClickSave() {
         onSaveChangeExchange();
-        finish();
     }
 
     @OptionsItem(R.id.actionDelete)
@@ -147,7 +146,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    setResult(IntentCode.DELETE_EXCHANGE, new Intent());
+                    setResult(IntentCode.DELETE_EXCHANGE);
                     finish();
                 }
             }
@@ -162,9 +161,43 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     @Click(R.id.rlCategory)
     void onClickPickCategory() {
         if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+                @Override
+                public void onResultAccount(Account account) {
+                    mExchange.setIdAccount(account.getId());
+                    tvCategoryName.setText(account.getName());
+                }
+            }, false, null);
+            mDialogPickAccount.show(getFragmentManager(), null);
+        } else {
+            startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
+        }
+    }
+
+    @Click(R.id.rlAccount)
+    void onCLickAccount() {
+        if (mExchange.getIdDebit() > 0 || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
             return;
         }
-        startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
+        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
+            mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+                @Override
+                public void onResultAccount(Account account) {
+                    mExchange.setIdAccountTransfer(account.getId());
+                    tvAccount.setText(account.getName());
+                }
+            }, false, null);
+            mDialogPickAccount.show(getFragmentManager(), null);
+        } else {
+            mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+                @Override
+                public void onResultAccount(Account account) {
+                    mExchange.setIdAccount(account.getId());
+                    tvAccount.setText(account.getName());
+                }
+            }, false, mExchange.getIdAccount());
+            mDialogPickAccount.show(getFragmentManager(), null);
+        }
     }
 
     @Click(R.id.rlAmount)
@@ -237,23 +270,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         mTimePicker.show(getSupportFragmentManager(), null);
     }
 
-    @Click(R.id.rlAccount)
-    void onCLickAccount() {
-        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
-            //TODO change account for exchange debit
-            return;
-        }
-        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
-            @Override
-            public void onResultAccount(Account account) {
-                mExchange.setIdAccount(account.getId());
-                tvAccount.setText(account.getName());
-            }
-        }, false, mExchange.getIdAccount());
-        mDialogPickAccount.show(getFragmentManager(), null);
-    }
-
-    void showDialogPickPlace() {
+    private void showDialogPickPlace() {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
             startActivityForResult(builder.build(this), IntentCode.PICK_PLACE);
@@ -356,9 +373,14 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onSaveChangeExchange() {
+        if (mExchange.getTypeExchange() == ExchangeType.TRANSFER && TextUtils.equals(mExchange.getIdAccountTransfer(), mExchange.getIdAccount())) {
+            Toast.makeText(this, "Tài khoản gửi và tài khoản nhận phải khác nhau", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent();
-        intent.putExtra(getString(R.string.extra_edit_exchange), mExchange);
+        intent.putExtra(getString(R.string.extra_detail_exchange), mExchange);
         setResult(IntentCode.EDIT_EXCHANGE, intent);
+        finish();
     }
 
     private void showDetailExchangeDebit() {
@@ -395,8 +417,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     }
 
     private void showDetailTypeTransfer() {
-        imgEditAccount.setVisibility(View.GONE);
-        imgEditCategory.setVisibility(View.GONE);
         tvExchangeName.setText(R.string.exchange_name_transfer);
         mTvTitleCategory.setText(R.string.account_send);
         tvTitleAccount.setText(R.string.account_receive);
@@ -422,7 +442,6 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             tvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         }
     }
-
 
     private void onTargetLocationExchange() {
         LatLng sydney = new LatLng(mExchange.getLatitude(), mExchange.getLongitude());

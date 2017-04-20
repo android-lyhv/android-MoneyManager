@@ -67,7 +67,7 @@
     <string name="id_exchange_looper">extra_id_looper</string>
     <string name="unknown">Chưa biết</string>
     <integer name="zoom_map">10</integer>
-    <string name="extra_edit_exchange">extra_edit_exchange</string>
+    <string name="extra_detail_exchange">extra_detail_exchange</string>
     <string name="color_account_default">#03a879</string>
     <string name="manger_accounts">Quản lý tài khoản</string>
     <string name="loop_status_ok">Mở</string>

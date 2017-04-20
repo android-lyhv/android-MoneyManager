@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.objects.Category;
-import com.dut.moneytracker.utils.ResourceUtils;
 
 import io.realm.RealmResults;
 
@@ -53,7 +53,7 @@ public class ChildCategoryAdapter extends BaseRecyclerAdapter {
 
         public void onBind(Category category) {
             mTvCategoryName.setText(category.getName());
-            imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
+            Glide.with(getContext()).load(category.getByteImage()).into(imgCategory);
         }
     }
 }
