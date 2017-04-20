@@ -46,6 +46,7 @@ public class FireBaseSync {
     public void initDataReference(Context context) {
         String reference = AppConfig.getInstance().getReferenceDatabase(context);
         mDatabase = FirebaseDatabase.getInstance().getReference(reference);
+        mDatabase.keepSynced(true);
     }
 
     private FireBaseSync() {
@@ -101,9 +102,9 @@ public class FireBaseSync {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                onLoadAccount(context, dataSnapshot.child(CHILD_ACCOUNT));
-                onLoadExchange(context, dataSnapshot.child(CHILD_EXCHANGE));
-                onLoadDebit(context, dataSnapshot.child(CHILD_DEBIT));
+                onLoadAccount(dataSnapshot.child(CHILD_ACCOUNT));
+                onLoadExchange(dataSnapshot.child(CHILD_EXCHANGE));
+                onLoadDebit(dataSnapshot.child(CHILD_DEBIT));
                 onLoadExchangeLoop(context, dataSnapshot.child(CHILD_EXCHANGE_LOOP));
                 mDatabase.removeEventListener(this);
                 loadDataListener.onFinishLoadDataServer();
@@ -116,7 +117,7 @@ public class FireBaseSync {
         });
     }
 
-    private void onLoadAccount(Context context, DataSnapshot dataSnapshot) {
+    private void onLoadAccount(DataSnapshot dataSnapshot) {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
@@ -124,7 +125,7 @@ public class FireBaseSync {
         }
     }
 
-    private void onLoadExchange(Context context, DataSnapshot dataSnapshot) {
+    private void onLoadExchange(DataSnapshot dataSnapshot) {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
@@ -132,7 +133,7 @@ public class FireBaseSync {
         }
     }
 
-    private void onLoadDebit(Context context, DataSnapshot dataSnapshot) {
+    private void onLoadDebit(DataSnapshot dataSnapshot) {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();

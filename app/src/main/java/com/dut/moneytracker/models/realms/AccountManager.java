@@ -2,14 +2,12 @@ package com.dut.moneytracker.models.realms;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
-import com.dut.moneytracker.utils.NetworkUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -51,10 +49,6 @@ public class AccountManager extends RealmHelper {
     }
 
     public void onDeleteAccount(Context context, String idAccount) {
-        if (!NetworkUtils.getInstance().isConnectNetwork(context)) {
-            Toast.makeText(context, "Mất kết nối internet!", Toast.LENGTH_SHORT).show();
-            return;
-        }
         ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
         ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
         DebitManager.getInstance().deleteDebitByAccount(idAccount);

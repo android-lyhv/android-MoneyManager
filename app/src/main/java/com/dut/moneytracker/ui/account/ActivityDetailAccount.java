@@ -32,6 +32,7 @@ import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
+import com.dut.moneytracker.utils.NetworkUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -126,6 +127,10 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
 
     @OptionsItem(R.id.actionDelete)
     void onDeleteAccount() {
+        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
+            Toast.makeText(this, "Mất kết nối internet!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (mAccount.isDefault()) {
             Toast.makeText(this, R.string.account_default, Toast.LENGTH_SHORT).show();
             return;
