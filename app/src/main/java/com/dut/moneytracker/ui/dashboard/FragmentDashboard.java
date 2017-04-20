@@ -103,17 +103,17 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
     }
 
     @OnActivityResult(IntentCode.ADD_NEW_EXCHANGE)
-    void onResultAddNewExchange(final Intent intent) {
-        if (intent == null) {
-            return;
+    void onResultAddNewExchange(int resultCode) {
+        if (resultCode == IntentCode.ADD_NEW_EXCHANGE) {
+            final Intent intent = new Intent();
+            intent.setAction(getString(R.string.receiver_add_new_exchange));
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getContext().sendBroadcast(intent);
+                }
+            }, DELAY);
         }
-        intent.setAction(getString(R.string.receiver_add_new_exchange));
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getContext().sendBroadcast(intent);
-            }
-        }, DELAY);
     }
 
     public void deleteFragmentAccount(int position) {

@@ -315,7 +315,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         } else {
             ExchangeManger.getInstance().insertOrUpdate(mExchange);
         }
-        setResult(IntentCode.ADD_NEW_EXCHANGE, new Intent());
+        setResult(IntentCode.ADD_NEW_EXCHANGE);
         finish();
     }
 
