@@ -58,18 +58,6 @@ public class SpinnerTypeDebitManager implements Spinner.OnItemSelectedListener {
 
     }
 
-    public void setSelectItem(int typeDebit) {
-        int index = 0;
-        int length = listId.length;
-        for (int i = 0; i < length; i++) {
-            if (typeDebit == listId[i]) {
-                index = i;
-                break;
-            }
-        }
-        mSpinner.setSelection(index);
-    }
-
     public int getTypeItemSelected() {
         return listId[itemSelected];
     }
