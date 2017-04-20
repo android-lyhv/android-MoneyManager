@@ -167,12 +167,16 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @AfterViews
     void init() {
-        mDialogPickFilterTime = DialogPickFilter_.builder().build();
-        mDialogCustomFilter = DialogCustomFilter_.builder().build();
+        initDialog();
         initView();
         initHeaderView();
         onLoadProfile();
         onLoadFragmentDashboard();
+    }
+
+    private void initDialog() {
+        mDialogPickFilterTime = DialogPickFilter_.builder().build();
+        mDialogCustomFilter = DialogCustomFilter_.builder().build();
     }
 
     private void initHeaderView() {
