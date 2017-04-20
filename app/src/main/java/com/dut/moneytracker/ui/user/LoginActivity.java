@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.AppConfig;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.ui.ActivityLoadData_;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.utils.DialogUtils;
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mFireBaseAuth = FirebaseAuth.getInstance();
     }
 
-    @Click(R.id.btnLoginWithGoogle)
+    @Click(R.id.tvLoginWithGoogle)
     void onClickLoginWithGoogle() {
         if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
             Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         requestLoginWithGoogle();
     }
 
-    @Click(R.id.btnLoginWithFacebook)
+    @Click(R.id.tvLoginWithFacebook)
     void onClickLoginWithFacebook() {
         if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
             Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
@@ -182,17 +182,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            AppConfig.getInstance().setReferenceDatabase(this, user.getUid());
-            syncDataFromServer(user);
-            logOutGoogle();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            AppConfig.getInstance().setReferenceDatabase(this, firebaseUser.getUid());
+            FireBaseSync.getInstance().initDataReference(getApplicationContext());
+            onCheckSyncDataFromServer(firebaseUser);
+            requestLogOutGoogle();
         }
     }
 
-    private void syncDataFromServer(FirebaseUser firebaseUser) {
+    private void onCheckSyncDataFromServer(FirebaseUser firebaseUser) {
         String currentUserId = AppConfig.getInstance().getCurrentUserId(this);
-        Log.d(TAG, "syncDataFromServer: " + currentUserId + "   " + firebaseUser.getUid());
         if (!TextUtils.equals(currentUserId, firebaseUser.getUid())) {
             ActivityLoadData_.intent(this).start();
         } else {
@@ -201,7 +201,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         finish();
     }
 
-    private void logOutGoogle() {
+    private void requestLogOutGoogle() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }

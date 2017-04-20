@@ -7,6 +7,10 @@
     <color name="colorBackgroundLine">#d9d8d8</color>
     <color name="colorBackgroundMain">#ededed</color>
     <color name="defaultAccountColor">#FF028761</color>
+    <color name="color_google">#4284f3</color>
+    <color name="color_google_gray">#3367d5</color>
+    <color name="color_facebook">#3b5998</color>
+    <color name="color_facebook_gray">#2e4678</color>
     <color name="white_select">#05000000</color>
     <color name="grey_500">#9E9E9E</color>
     <color name="color_main_select">#c4baa8</color>

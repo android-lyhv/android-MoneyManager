@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.ui.charts.objects.ValueCategoryChart;
-import com.dut.moneytracker.utils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +78,7 @@ public class RecyclerCategoryChartAdapter extends RecyclerView.Adapter<RecyclerC
         }
 
         public void onBind(ValueCategoryChart valueChartCategory) {
-            imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(valueChartCategory.getCategory().getByteImage()));
+            Glide.with(mContext).load(valueChartCategory.getCategory().getByteImage()).into(imgCategory);
             tvCategoryName.setText(valueChartCategory.getCategory().getName());
             String amount = valueChartCategory.getAmount();
             if (amount.startsWith("-")) {

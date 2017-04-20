@@ -17,6 +17,15 @@ import org.androidannotations.annotations.ViewById;
  */
 @EFragment(R.layout.dialog_input_text)
 public class DialogInput extends DialogFragment {
+    private static DialogInput sInstance;
+
+    public static DialogInput getInstance() {
+        if (sInstance == null) {
+            sInstance = DialogInput_.builder().build();
+        }
+        return sInstance;
+    }
+
     @ViewById(R.id.edtDescription)
     EditText editText;
 

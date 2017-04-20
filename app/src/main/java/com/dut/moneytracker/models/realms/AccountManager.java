@@ -41,37 +41,61 @@ public class AccountManager extends RealmHelper {
     /**
      * Sync Firebase
      */
-    public void insertOrUpdate(Context context, Account object) {
+    public void insertOrUpdate(Account object) {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(object);
         realm.commitTransaction();
-        FireBaseSync.getInstance().upDateAccount(context, object);
+        FireBaseSync.getInstance().upDateAccount(object);
     }
 
     public void onDeleteAccount(Context context, String idAccount) {
-        ExchangeManger.getInstance().deleteExchangeByAccount(context, idAccount);
-        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(context, idAccount);
-        DebitManager.getInstance().deleteDebitByAccount(context, idAccount);
+        ExchangeManger.getInstance().deleteExchangeByAccount(idAccount);
+        ExchangeLoopManager.getInstance(context).deleteExchangeLoopByAccount(idAccount);
+        DebitManager.getInstance().deleteDebitByAccount(idAccount);
         realm.beginTransaction();
         final Account account = realm.where(Account.class).equalTo("id", idAccount).findFirst();
         if (account != null) {
             account.deleteFromRealm();
         }
         realm.commitTransaction();
-        FireBaseSync.getInstance().deleteAccount(context, idAccount);
+        FireBaseSync.getInstance().deleteAccount(idAccount);
     }
 
     /*********************************************/
-    public RealmResults<Account> getAccounts() {
+    public RealmResults<Account> getAccountsNotOutside() {
         realm.beginTransaction();
         RealmResults<Account> realmResults = realm.where(Account.class).notEqualTo("id", ID_OUSIDE).findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
 
-    public RealmResults<Account> getAccountsWithOutSide() {
+    /**
+     * get list with out this
+     *
+     * @param withoutId
+     * @return
+     */
+    public RealmResults<Account> getAccounts(String withoutId) {
         realm.beginTransaction();
-        RealmResults<Account> realmResults = realm.where(Account.class).findAllSorted("created", Sort.ASCENDING);
+        RealmResults<Account> realmResults = realm.where(Account.class)
+                .notEqualTo("id", withoutId)
+                .findAllSorted("created", Sort.ASCENDING);
+        realm.commitTransaction();
+        return realmResults;
+    }
+
+    /**
+     * get list with out this
+     *
+     * @param withoutId
+     * @return
+     */
+    public RealmResults<Account> getAccountsNotOutside(String withoutId) {
+        realm.beginTransaction();
+        RealmResults<Account> realmResults = realm.where(Account.class)
+                .notEqualTo("id", withoutId)
+                .notEqualTo("id", ID_OUSIDE)
+                .findAllSorted("created", Sort.ASCENDING);
         realm.commitTransaction();
         return realmResults;
     }
@@ -215,7 +239,7 @@ public class AccountManager extends RealmHelper {
         account.setColorHex(context.getString(R.string.color_account_default));
         account.setCreated(new Date());
         account.setInitAmount("0");
-        insertOrUpdate(context, account);
+        insertOrUpdate(account);
     }
 
     public void createOutSideAccount(Context context) {
@@ -225,7 +249,7 @@ public class AccountManager extends RealmHelper {
         account.setCreated(new Date(Long.MAX_VALUE));
         account.setColorHex(context.getString(R.string.color_account_default));
         account.setInitAmount("0");
-        insertOrUpdate(context, account);
+        insertOrUpdate(account);
     }
 
     public boolean isNameAccountAvailable(String newName, String nowIdAccount) {

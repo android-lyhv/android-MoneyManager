@@ -22,13 +22,9 @@ import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
-import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
-import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
@@ -105,14 +101,20 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private boolean lastStatus;
     private SpinnerTypeLoopManger mSpinnerTypeLoopManger;
     private DialogCalculator mDialogCalculator;
+    private DialogPickAccount mDialogPickAccount;
 
     @AfterViews
     void init() {
-        mDialogCalculator = DialogCalculator_.builder().build();
+        initDialog();
         initToolbar();
         initSpinner();
         onShowData();
         initMap();
+    }
+
+    private void initDialog() {
+        mDialogPickAccount =DialogPickAccount.getInstance();
+        mDialogCalculator = DialogCalculator.getInstance();
     }
 
     private void onShowData() {
@@ -196,18 +198,17 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
 
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
-        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
-        dialogConfirm.setMessage(getString(R.string.delete_exchange));
-        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+        DialogConfirm.getInstance().setMessage(getString(R.string.delete_exchange));
+        DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    ExchangeLoopManager.getInstance(getApplicationContext()).deleteExchangeLoopById(getApplicationContext(), mExchangeLoop.getId());
+                    ExchangeLoopManager.getInstance(getApplicationContext()).deleteExchangeLoopById(mExchangeLoop.getId());
                     finish();
                 }
             }
         });
-        dialogConfirm.show(getSupportFragmentManager(), null);
+        DialogConfirm.getInstance().show(getSupportFragmentManager(), null);
     }
 
     /**
@@ -215,19 +216,19 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
      */
     private void onSaveDataBase() {
         if ((lastTypeLoop != mExchangeLoop.getTypeLoop() || !DateTimeUtils.getInstance().isSameDate(lastDate, mExchangeLoop.getCreated()))) {
-            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(getApplicationContext(), mExchangeLoop);
+            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
             return;
         }
         if (!lastStatus && mExchangeLoop.isLoop()) {
             Log.d(TAG, "onSaveDataBase: 1");
-            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(getApplicationContext(), mExchangeLoop);
+            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
             return;
         }
         if (lastStatus && !mExchangeLoop.isLoop()) {
             Log.d(TAG, "onSaveDataBase: 2");
             mGenerateManager.removePendingLoopExchange(mExchangeLoop.getId());
         }
-        ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(getApplicationContext(), mExchangeLoop);
+        ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(mExchangeLoop);
     }
 
     @Click(R.id.tvTabIncome)
@@ -308,28 +309,26 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
 
     @Click(R.id.rlDescription)
     void onCLickDescription() {
-        DialogInput dialogInput = DialogInput_.builder().build();
-        dialogInput.register(new DialogInput.DescriptionListener() {
+        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mExchangeLoop.setDescription(content);
                 tvDescription.setText(content);
             }
         });
-        dialogInput.show(getSupportFragmentManager(), null);
+        DialogInput.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mExchangeLoop.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlDate)

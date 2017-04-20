@@ -22,11 +22,8 @@ import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogInput;
-import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
@@ -93,17 +90,23 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     private DialogCalculator mDialogCalculator;
     private GoogleMap mGoogleMap;
     private ExchangeLooper mExchangeLoop;
+    DialogPickAccount mDialogPickAccount;
     private int mType;
 
     @AfterViews
     void init() {
-        mDialogCalculator = DialogCalculator_.builder().build();
-        initBaseExchangeLoop();
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
+        initDialog();
+        initBaseExchangeLoop();
         onClickTabExpense();
         initToolbar();
         initSpinner();
         initMap();
+    }
+
+    private void initDialog() {
+        mDialogPickAccount =DialogPickAccount.getInstance();
+        mDialogCalculator = DialogCalculator.getInstance();
     }
 
     void initBaseExchangeLoop() {
@@ -159,7 +162,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
             return;
         }
         mExchangeLoop.setTypeExchange(mType);
-        ExchangeLoopManager.getInstance(getApplicationContext()).insertNewExchangeLoop(getApplicationContext(),mExchangeLoop);
+        ExchangeLoopManager.getInstance(getApplicationContext()).insertNewExchangeLoop(mExchangeLoop);
         finish();
     }
 
@@ -247,28 +250,26 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @Click(R.id.rlDescription)
     void onCLickDescription() {
-        DialogInput dialogInput = DialogInput_.builder().build();
-        dialogInput.register(new DialogInput.DescriptionListener() {
+        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mExchangeLoop.setDescription(content);
                 tvDescription.setText(content);
             }
         });
-        dialogInput.show(getSupportFragmentManager(), null);
+        DialogInput.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mExchangeLoop.setIdAccount(account.getId());
                 tvAccount.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mExchangeLoop.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlDate)

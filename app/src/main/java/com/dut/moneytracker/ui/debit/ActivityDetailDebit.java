@@ -13,13 +13,10 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
-import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
@@ -67,15 +64,21 @@ public class ActivityDetailDebit extends AppCompatActivity {
     TextView mTvTypeDebit;
     @Extra
     Debit mDebit;
+    private DialogPickAccount mDialogPickAccount;
     private int idLastDebit;
     private DialogCalculator mDialogCalculator;
 
     @AfterViews
     void init() {
-        mDialogCalculator = DialogCalculator_.builder().build();
         idLastDebit = mDebit.getId();
+        innitDialog();
         initToolbar();
         loadView();
+    }
+
+    private void innitDialog() {
+        mDialogCalculator = DialogCalculator.getInstance();
+        mDialogPickAccount =DialogPickAccount.getInstance();
     }
 
     private void initToolbar() {
@@ -109,19 +112,18 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
-        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
-        dialogConfirm.setMessage(getString(R.string.dialog_delete_debit));
-        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+        DialogConfirm.getInstance().setMessage(getString(R.string.dialog_delete_debit));
+        DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
                     AlarmDebit.getInstance().removePendingAlarm(ActivityDetailDebit.this, mDebit.getId());
-                    DebitManager.getInstance().deleteDebitById(getApplicationContext(), mDebit.getId());
+                    DebitManager.getInstance().deleteDebitById(mDebit.getId());
                     finish();
                 }
             }
         });
-        dialogConfirm.show(getSupportFragmentManager(), null);
+        DialogConfirm.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @OptionsItem(R.id.actionSave)
@@ -145,9 +147,9 @@ public class ActivityDetailDebit extends AppCompatActivity {
         }
         //Debit
         if (idLastDebit != mDebit.getId()) {
-            DebitManager.getInstance().updateDebitIfAccountChange(getApplicationContext(), mDebit);
+            DebitManager.getInstance().updateDebitIfAccountChange(mDebit);
         } else {
-            DebitManager.getInstance().insertOrUpdateDebit(getApplicationContext(), mDebit);
+            DebitManager.getInstance().insertOrUpdateDebit(mDebit);
             AlarmDebit.getInstance().pendingAlarmDebit(this, mDebit);
         }
         finish();
@@ -158,15 +160,14 @@ public class ActivityDetailDebit extends AppCompatActivity {
         if (mDebit.isClose()) {
             return;
         }
-        DialogInput dialogInput = DialogInput_.builder().build();
-        dialogInput.register(new DialogInput.DescriptionListener() {
+        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mDebit.setName(content);
                 mTvName.setText(content);
             }
         });
-        dialogInput.show(getSupportFragmentManager(), null);
+        DialogInput.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAmount)
@@ -232,15 +233,14 @@ public class ActivityDetailDebit extends AppCompatActivity {
         if (mDebit.isClose()) {
             return;
         }
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mDebit.setIdAccount(account.getId());
                 mTvAccountName.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mDebit.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlStartDate)

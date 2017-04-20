@@ -12,11 +12,9 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
-import com.dut.moneytracker.dialogs.DialogPickAccount_;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
@@ -62,14 +60,20 @@ public class ActivityAddDebit extends AppCompatActivity {
     AppCompatSpinner mSpinnerDebit;
     private SpinnerTypeDebitManager mSpinnerTypeDebitManager;
     private Debit mNewDebit;
-    private DialogCalculator mCalculator;
+    private DialogCalculator mDialogCalculator;
+    DialogPickAccount mDialogPickAccount;
 
     @AfterViews
     void init() {
-        mCalculator = DialogCalculator_.builder().build();
         mSpinnerTypeDebitManager = new SpinnerTypeDebitManager(this, mSpinnerDebit);
+        initDialog();
         initBaseDebit();
         initView();
+    }
+
+    private void initDialog() {
+        mDialogCalculator = DialogCalculator.getInstance();
+        mDialogPickAccount = DialogPickAccount.getInstance();
     }
 
     private void initView() {
@@ -120,22 +124,21 @@ public class ActivityAddDebit extends AppCompatActivity {
             }
         }
         //Debit
-        DebitManager.getInstance().insertOrUpdateDebit(getApplicationContext(),mNewDebit);
+        DebitManager.getInstance().insertOrUpdateDebit(mNewDebit);
         AlarmDebit.getInstance().pendingAlarmDebit(this, mNewDebit);
         finish();
     }
 
     @Click(R.id.rlName)
     void onClickName() {
-        DialogInput dialogInput = DialogInput_.builder().build();
-        dialogInput.register(new DialogInput.DescriptionListener() {
+        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mNewDebit.setName(content);
                 mTvName.setText(content);
             }
         });
-        dialogInput.show(getSupportFragmentManager(), null);
+        DialogInput.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAmount)
@@ -147,9 +150,9 @@ public class ActivityAddDebit extends AppCompatActivity {
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
         }
-        mCalculator.show(getFragmentManager(), null);
-        mCalculator.setAmount(amount);
-        mCalculator.registerResultListener(new DialogCalculator.ResultListener() {
+        mDialogCalculator.show(getFragmentManager(), null);
+        mDialogCalculator.setAmount(amount);
+        mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {
                 if (mNewDebit.getTypeDebit() == DebitType.BORROWED) {
@@ -195,15 +198,14 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        DialogPickAccount dialogPickAccount = DialogPickAccount_.builder().build();
-        dialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
+        mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
                 mNewDebit.setIdAccount(account.getId());
                 mTvAccountName.setText(account.getName());
             }
-        }, false);
-        dialogPickAccount.show(getFragmentManager(), null);
+        }, false, mNewDebit.getIdAccount());
+        mDialogPickAccount.show(getFragmentManager(), null);
     }
 
     @Click(R.id.rlStartDate)

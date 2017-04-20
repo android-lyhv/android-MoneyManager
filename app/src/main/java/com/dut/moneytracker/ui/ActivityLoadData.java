@@ -52,7 +52,7 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
     }
 
     private void onCreateDefaultAccount() {
-        if (AccountManager.getInstance().getAccounts().isEmpty()) {
+        if (AccountManager.getInstance().getAccountsNotOutside().isEmpty()) {
             AccountManager.getInstance().createDefaultAccount(this);
             AccountManager.getInstance().createOutSideAccount(this);
         }

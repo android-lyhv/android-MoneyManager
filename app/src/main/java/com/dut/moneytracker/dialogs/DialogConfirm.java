@@ -16,6 +16,14 @@ import org.androidannotations.annotations.EFragment;
 @EFragment
 public class DialogConfirm extends DialogFragment {
     String message;
+    private static DialogConfirm sInstance;
+
+    public static DialogConfirm getInstance() {
+        if (sInstance == null) {
+            sInstance = DialogConfirm_.builder().build();
+        }
+        return sInstance;
+    }
 
     public interface ClickListener {
         void onClickResult(boolean value);

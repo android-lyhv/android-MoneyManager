@@ -25,13 +25,12 @@ import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
-import com.dut.moneytracker.dialogs.DialogCalculator_;
 import com.dut.moneytracker.dialogs.DialogConfirm;
-import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.objects.Account;
+import com.dut.moneytracker.utils.NetworkUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -76,7 +75,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
 
     private void initDialog() {
         mDialogPickColor = DialogPickColor_.builder().build();
-        mDialogCalculator = DialogCalculator_.builder().build();
+        mDialogCalculator = DialogCalculator.getInstance();
     }
 
     private void initDialogPickColor() {
@@ -126,12 +125,15 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
 
     @OptionsItem(R.id.actionDelete)
     void onDeleteAccount() {
+        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
+            Toast.makeText(this, "Mất kết nối internet!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (mAccount.isDefault()) {
             Toast.makeText(this, R.string.account_default, Toast.LENGTH_SHORT).show();
             return;
         }
-        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
-        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+        DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
@@ -141,8 +143,8 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
                 }
             }
         });
-        dialogConfirm.setMessage(getString(R.string.message_delete_account));
-        dialogConfirm.show(getSupportFragmentManager(), null);
+        DialogConfirm.getInstance().setMessage(getString(R.string.message_delete_account));
+        DialogConfirm.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @OptionsItem(android.R.id.home)

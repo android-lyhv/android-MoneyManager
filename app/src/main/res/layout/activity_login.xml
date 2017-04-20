@@ -7,15 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp">
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp">
 
         <ImageView
             android:id="@+id/imgLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/img_log" />
+            android:src="@drawable/img_wallet" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -24,7 +24,9 @@
             android:layout_below="@id/imgLogo"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="MoneyTracker" />
+            android:text="Love your money"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp" />
 
         <LinearLayout
             android:id="@+id/llButtonLogin"
@@ -34,27 +36,65 @@
             android:layout_marginTop="50dp"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnLoginWithGoogle"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgGoogle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_google_gray"
+                    android:padding="5dp"
+                    android:src="@drawable/img_google" />
+
+                <TextView
+                    android:id="@+id/tvLoginWithGoogle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/imgGoogle"
+                    android:layout_alignTop="@+id/imgGoogle"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/imgGoogle"
+                    android:background="@drawable/selector_bg_google"
+                    android:gravity="center"
+                    android:text="@string/activity_login.button.text.google"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16dp" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_login_google"
-                android:text="@string/activity_login.button.text.google"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white" />
+                android:layout_marginTop="10dp">
 
-            <Button
-                android:id="@+id/btnLoginWithFacebook"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_login_facebook"
-                android:text="@string/activity_login.button.text.facebook"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white" />
+                <ImageView
+                    android:id="@+id/imgFacebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_facebook_gray"
+                    android:padding="5dp"
+                    android:src="@drawable/img_facebook" />
 
+                <TextView
+                    android:id="@+id/tvLoginWithFacebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/imgFacebook"
+                    android:layout_alignTop="@+id/imgFacebook"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/imgFacebook"
+                    android:background="@drawable/selector_bg_facebook"
+                    android:gravity="center"
+                    android:text="@string/activity_login.button.text.facebook"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16dp" />
 
+            </RelativeLayout>
         </LinearLayout>
 
     </RelativeLayout>

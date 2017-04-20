@@ -32,6 +32,7 @@ import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
 import com.dut.moneytracker.dialogs.DialogPickFilter_;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.FilterManager;
 import com.dut.moneytracker.objects.Account;
@@ -165,14 +166,24 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         registerReceiver(mReceiverAccountsChange, intentFilter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FireBaseSync.getInstance().initDataReference(getApplicationContext());
+    }
+
     @AfterViews
     void init() {
-        mDialogPickFilterTime = DialogPickFilter_.builder().build();
-        mDialogCustomFilter = DialogCustomFilter_.builder().build();
+        initDialog();
         initView();
         initHeaderView();
         onLoadProfile();
         onLoadFragmentDashboard();
+    }
+
+    private void initDialog() {
+        mDialogPickFilterTime = DialogPickFilter_.builder().build();
+        mDialogCustomFilter = DialogCustomFilter_.builder().build();
     }
 
     private void initHeaderView() {
@@ -325,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                 return;
             }
             Account account = data.getParcelableExtra(getString(R.string.extra_account));
-            AccountManager.getInstance().insertOrUpdate(getApplicationContext(),account);
+            AccountManager.getInstance().insertOrUpdate(account);
             // Send broadcast;
             Intent intent = new Intent(RECEIVER_EDIT_ACCOUNT);
             intent.putExtra(getString(R.string.position_account_edit), positionAccount);
