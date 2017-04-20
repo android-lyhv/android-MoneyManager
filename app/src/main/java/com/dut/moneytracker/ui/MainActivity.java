@@ -32,6 +32,7 @@ import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
 import com.dut.moneytracker.dialogs.DialogPickFilter_;
+import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.FilterManager;
 import com.dut.moneytracker.objects.Account;
@@ -163,6 +164,12 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         intentFilter.addAction(RECEIVER_DELETE_ACCOUNT);
         intentFilter.addAction(RECEIVER_EDIT_ACCOUNT);
         registerReceiver(mReceiverAccountsChange, intentFilter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FireBaseSync.getInstance().initDataReference(getApplicationContext());
     }
 
     @AfterViews
