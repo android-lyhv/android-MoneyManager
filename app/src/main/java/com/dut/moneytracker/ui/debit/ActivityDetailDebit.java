@@ -14,7 +14,6 @@ import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
-import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
@@ -114,9 +113,8 @@ public class ActivityDetailDebit extends AppCompatActivity {
 
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
-        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
-        dialogConfirm.setMessage(getString(R.string.dialog_delete_debit));
-        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+        DialogConfirm.getInstance().setMessage(getString(R.string.dialog_delete_debit));
+        DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
@@ -126,7 +124,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
                 }
             }
         });
-        dialogConfirm.show(getSupportFragmentManager(), null);
+        DialogConfirm.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @OptionsItem(R.id.actionSave)

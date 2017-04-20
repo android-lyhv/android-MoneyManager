@@ -26,7 +26,6 @@ import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
-import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogPickColor;
 import com.dut.moneytracker.dialogs.DialogPickColor_;
 import com.dut.moneytracker.models.realms.AccountManager;
@@ -76,7 +75,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
 
     private void initDialog() {
         mDialogPickColor = DialogPickColor_.builder().build();
-        mDialogCalculator =  DialogCalculator.getInstance();
+        mDialogCalculator = DialogCalculator.getInstance();
     }
 
     private void initDialogPickColor() {
@@ -134,8 +133,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
             Toast.makeText(this, R.string.account_default, Toast.LENGTH_SHORT).show();
             return;
         }
-        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
-        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+        DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
@@ -145,8 +143,8 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
                 }
             }
         });
-        dialogConfirm.setMessage(getString(R.string.message_delete_account));
-        dialogConfirm.show(getSupportFragmentManager(), null);
+        DialogConfirm.getInstance().setMessage(getString(R.string.message_delete_account));
+        DialogConfirm.getInstance().show(getSupportFragmentManager(), null);
     }
 
     @OptionsItem(android.R.id.home)

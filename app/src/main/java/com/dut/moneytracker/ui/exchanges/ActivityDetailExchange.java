@@ -20,7 +20,6 @@ import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.dialogs.DialogCalculator;
 import com.dut.moneytracker.dialogs.DialogConfirm;
-import com.dut.moneytracker.dialogs.DialogConfirm_;
 import com.dut.moneytracker.dialogs.DialogInput;
 import com.dut.moneytracker.dialogs.DialogInput_;
 import com.dut.moneytracker.dialogs.DialogPickAccount;
@@ -144,10 +143,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
-        DialogConfirm dialogConfirm = DialogConfirm_.builder().build();
-        dialogConfirm.setMessage(getString(R.string.dialog_confirm_delete_title));
-        dialogConfirm.show(getSupportFragmentManager(), TAG);
-        dialogConfirm.registerClickListener(new DialogConfirm.ClickListener() {
+        DialogConfirm.getInstance().setMessage(getString(R.string.dialog_confirm_delete_title));
+        DialogConfirm.getInstance().show(getSupportFragmentManager(), TAG);
+        DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
