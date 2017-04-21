@@ -206,6 +206,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mFireBaseAuth.removeAuthStateListener(this);
+        if (mFireBaseAuth != null) {
+            mFireBaseAuth.removeAuthStateListener(this);
+        }
     }
 }
