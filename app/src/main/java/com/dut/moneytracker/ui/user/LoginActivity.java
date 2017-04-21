@@ -3,7 +3,6 @@ package com.dut.moneytracker.ui.user;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
@@ -57,10 +56,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @AfterViews
     void init() {
-        configFireBase();
-        configLoginGoogle();
-        configLoginFacebook();
         initMap();
+        if (AppConfig.getInstance().isLogin(this)) {
+            MainActivity_.intent(this).start();
+        } else {
+            configFireBase();
+            configLoginGoogle();
+            configLoginFacebook();
+        }
     }
 
     private void configFireBase() {
@@ -80,7 +83,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void configLoginFacebook() {
-        onLoginFacebook();
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                fireBaseAuthWthFacebook(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
     }
 
     private void initMap() {
@@ -113,27 +132,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             return;
         }
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(PERMISSION_FB));
-    }
-
-    private void onLoginFacebook() {
-        mCallbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                fireBaseAuthWthFacebook(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
-
     }
 
     @Override
@@ -192,24 +190,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (firebaseUser != null) {
             AppConfig.getInstance().setReferenceDatabase(this, firebaseUser.getUid());
             FireBaseSync.getInstance().initDataReference(getApplicationContext());
-            onCheckSyncDataFromServer(firebaseUser);
             requestLogOutGoogle();
-        }
-    }
-
-    private void onCheckSyncDataFromServer(FirebaseUser firebaseUser) {
-        String currentUserId = AppConfig.getInstance().getCurrentUserId(this);
-        if (!TextUtils.equals(currentUserId, firebaseUser.getUid())) {
             ActivityLoadData_.intent(this).start();
-        } else {
-            MainActivity_.intent(this).start();
+            finish();
         }
-        finish();
     }
 
     private void requestLogOutGoogle() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFireBaseAuth.removeAuthStateListener(this);
     }
 }
