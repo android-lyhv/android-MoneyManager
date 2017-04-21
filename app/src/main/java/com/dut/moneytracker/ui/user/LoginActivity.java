@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         initMap();
         if (AppConfig.getInstance().isLogin(this)) {
             MainActivity_.intent(this).start();
+            finish();
         } else {
             configFireBase();
             configLoginGoogle();
