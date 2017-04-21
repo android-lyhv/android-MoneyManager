@@ -51,7 +51,6 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
     private static final String[] PERMISSION_FB = {"email", "public_profile", "user_posts"};
     private static final int RC_SIGN_IN = 1;
-    private static final String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager mCallbackManager;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFireBaseAuth;
@@ -59,23 +58,41 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @AfterViews
     void init() {
         configFireBase();
-        configGoogleApi();
+        configLoginGoogle();
+        configLoginFacebook();
         initMap();
+    }
+
+    private void configFireBase() {
+        mFireBaseAuth = FirebaseAuth.getInstance();
+        mFireBaseAuth.addAuthStateListener(this);
+    }
+
+    private void configLoginGoogle() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+    }
+
+    private void configLoginFacebook() {
+        onLoginFacebook();
     }
 
     private void initMap() {
         SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.mapInit);
         mMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 //no-op
             }
         });
-    }
 
-    private void configFireBase() {
-        mFireBaseAuth = FirebaseAuth.getInstance();
     }
 
     @Click(R.id.tvLoginWithGoogle)
@@ -84,8 +101,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
             return;
         }
-        requestLoginWithGoogle();
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
 
     @Click(R.id.tvLoginWithFacebook)
     void onClickLoginWithFacebook() {
@@ -93,16 +112,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
             return;
         }
-        requestLoginFacebook();
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(PERMISSION_FB));
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        onLoginFacebook();
-        mFireBaseAuth.addAuthStateListener(this);
-    }
-
 
     private void onLoginFacebook() {
         mCallbackManager = CallbackManager.Factory.create();
@@ -123,26 +134,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-    }
-
-    private void requestLoginFacebook() {
-        LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(PERMISSION_FB));
-    }
-
-    private void configGoogleApi() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
-
-    private void requestLoginWithGoogle() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
