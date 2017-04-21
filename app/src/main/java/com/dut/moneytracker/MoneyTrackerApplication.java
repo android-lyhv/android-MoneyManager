@@ -33,8 +33,7 @@ public class MoneyTrackerApplication extends Application {
 
     private void configRealm(Context context) {
         Realm.init(context);
-        RealmConfiguration config = new RealmConfiguration.Builder().build();
-        Realm.setDefaultConfiguration(config);
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder().build());
     }
 
     private void configFireBase() {
