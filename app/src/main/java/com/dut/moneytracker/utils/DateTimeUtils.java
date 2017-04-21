@@ -49,6 +49,7 @@ public class DateTimeUtils {
         DateFormat formatFullDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         return formatFullDate.format(date);
     }
+
     public Date getDateFormat(String resource) {
         DateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         try {
@@ -80,9 +81,6 @@ public class DateTimeUtils {
     }
 
     public String getStringDateUs(Date date) {
-        if (date == null) {
-            return "";
-        }
         DateFormat formatFullDate = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         return formatFullDate.format(date);
     }

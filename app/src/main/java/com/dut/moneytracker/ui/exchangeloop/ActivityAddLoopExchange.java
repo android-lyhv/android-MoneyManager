@@ -88,9 +88,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     @ViewById(R.id.tvAddress)
     TextView tvAddress;
     private DialogCalculator mDialogCalculator;
+    private DialogPickAccount mDialogPickAccount;
     private GoogleMap mGoogleMap;
     private ExchangeLooper mExchangeLoop;
-    DialogPickAccount mDialogPickAccount;
     private int mType;
 
     @AfterViews
@@ -105,8 +105,9 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     }
 
     private void initDialog() {
-        mDialogPickAccount =DialogPickAccount.getInstance();
+        mDialogPickAccount = DialogPickAccount.getInstance();
         mDialogCalculator = DialogCalculator.getInstance();
+        mDialogCalculator.setAmount("0");
     }
 
     void initBaseExchangeLoop() {

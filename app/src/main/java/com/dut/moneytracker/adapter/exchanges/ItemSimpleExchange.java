@@ -20,6 +20,8 @@ import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
 
+import java.util.Date;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 14/03/2017.
@@ -56,7 +58,11 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             llNote.setVisibility(View.VISIBLE);
         }
         tvDescription.setText(exchange.getDescription());
-        tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDateVn(exchange.getCreated()));
+        if (DateTimeUtils.getInstance().isSameDate(exchange.getCreated(), new Date())) {
+            tvDateCreated.setText(R.string.name_today);
+        } else {
+            tvDateCreated.setText(DateTimeUtils.getInstance().getStringDateUs(exchange.getCreated()));
+        }
         String amount = exchange.getAmount();
         if (!amount.startsWith("-")) {
             tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
@@ -64,7 +70,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             tvAmount.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light));
         }
         tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(exchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
-        if ((exchange.getLatitude() == 0 && exchange.getLongitude() == 0)|| TextUtils.isEmpty(exchange.getAddress())) {
+        if ((exchange.getLatitude() == 0 && exchange.getLongitude() == 0) || TextUtils.isEmpty(exchange.getAddress())) {
             imgLocation.setVisibility(View.GONE);
         } else {
             imgLocation.setVisibility(View.VISIBLE);

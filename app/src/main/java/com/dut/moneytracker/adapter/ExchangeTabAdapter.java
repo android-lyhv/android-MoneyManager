@@ -21,6 +21,8 @@ import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.ResourceUtils;
 
+import java.util.Date;
+
 import io.realm.RealmResults;
 
 /**
@@ -28,9 +30,9 @@ import io.realm.RealmResults;
  * Created by ly.ho on 09/03/2017.
  */
 
-public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
+public class ExchangeTabAdapter extends BaseRecyclerAdapter {
 
-    public ExchangeRecyclerViewTabAdapter(Context context, RealmResults objects) {
+    public ExchangeTabAdapter(Context context, RealmResults objects) {
         super(context, objects);
     }
 
@@ -74,7 +76,11 @@ public class ExchangeRecyclerViewTabAdapter extends BaseRecyclerAdapter {
             } else {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             }
-            tvDateCreated.setText(DateTimeUtils.getInstance().getStringFullDateVn(exchange.getCreated()));
+            if (DateTimeUtils.getInstance().isSameDate(exchange.getCreated(), new Date())) {
+                tvDateCreated.setText(R.string.name_today);
+            } else {
+                tvDateCreated.setText(DateTimeUtils.getInstance().getStringDateUs(exchange.getCreated()));
+            }
             // if debit exchange
             if (exchange.getIdDebit() > 0) {
                 tvCategoryName.setText(R.string.debit_name);

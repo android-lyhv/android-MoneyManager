@@ -17,6 +17,7 @@ public class AppConfig {
     private static final String SHARED_PREF_NAME = "MoneyTracker";
     private static final String KEY_REFERENCE_DATABASE = "KEY_REFERENCE_DATABASE";
     private static final String KEY_USER_ID = "KEY_USER_ID";
+    private static final String KEY_IS_LOGIN = "KEY_IS_LOGIN";
     private static Realm mRealm;
 
     public static AppConfig getInstance() {
@@ -42,6 +43,17 @@ public class AppConfig {
         editor.apply();
     }
 
+    public boolean isLogin(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return pref.getBoolean(KEY_IS_LOGIN, false);
+    }
+
+    public void setLogin(Context context, boolean value) {
+        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean(KEY_IS_LOGIN, value);
+        editor.apply();
+    }
 
     public String getReferenceDatabase(Context context) {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -54,18 +66,6 @@ public class AppConfig {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(KEY_REFERENCE_DATABASE, reference);
         editor.apply();
-    }
-
-    public void setCurrentUserId(Context context, String userId) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString(KEY_USER_ID, userId);
-        editor.apply();
-    }
-
-    public String getCurrentUserId(Context context) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return pref.getString(KEY_USER_ID, "");
     }
 
     public void clearAllData(Context context) {

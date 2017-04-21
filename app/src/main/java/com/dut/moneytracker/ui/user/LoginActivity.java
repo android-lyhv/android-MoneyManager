@@ -3,7 +3,6 @@ package com.dut.moneytracker.ui.user;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
@@ -51,60 +50,39 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
     private static final String[] PERMISSION_FB = {"email", "public_profile", "user_posts"};
     private static final int RC_SIGN_IN = 1;
-    private static final String TAG = LoginActivity.class.getSimpleName();
     private CallbackManager mCallbackManager;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFireBaseAuth;
 
     @AfterViews
     void init() {
-        configFireBase();
-        configGoogleApi();
         initMap();
-    }
-
-    private void initMap() {
-        SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mMapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                //no-op
-            }
-        });
+        if (AppConfig.getInstance().isLogin(this)) {
+            MainActivity_.intent(this).start();
+        } else {
+            configFireBase();
+            configLoginGoogle();
+            configLoginFacebook();
+        }
     }
 
     private void configFireBase() {
         mFireBaseAuth = FirebaseAuth.getInstance();
-    }
-
-    @Click(R.id.tvLoginWithGoogle)
-    void onClickLoginWithGoogle() {
-        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
-            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        requestLoginWithGoogle();
-    }
-
-    @Click(R.id.tvLoginWithFacebook)
-    void onClickLoginWithFacebook() {
-        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
-            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        requestLoginFacebook();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        onLoginFacebook();
         mFireBaseAuth.addAuthStateListener(this);
     }
 
+    private void configLoginGoogle() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+    }
 
-    private void onLoginFacebook() {
+    private void configLoginFacebook() {
         mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -122,27 +100,38 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             }
         });
+    }
+
+    private void initMap() {
+        SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapInit);
+        mMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                //no-op
+            }
+        });
 
     }
 
-    private void requestLoginFacebook() {
-        LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(PERMISSION_FB));
-    }
-
-    private void configGoogleApi() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
-
-    private void requestLoginWithGoogle() {
+    @Click(R.id.tvLoginWithGoogle)
+    void onClickLoginWithGoogle() {
+        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
+            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+
+    @Click(R.id.tvLoginWithFacebook)
+    void onClickLoginWithFacebook() {
+        if (!NetworkUtils.getInstance().isConnectNetwork(this)) {
+            Toast.makeText(this, R.string.toast_text_connection_internet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(PERMISSION_FB));
     }
 
     @Override
@@ -201,24 +190,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (firebaseUser != null) {
             AppConfig.getInstance().setReferenceDatabase(this, firebaseUser.getUid());
             FireBaseSync.getInstance().initDataReference(getApplicationContext());
-            onCheckSyncDataFromServer(firebaseUser);
             requestLogOutGoogle();
-        }
-    }
-
-    private void onCheckSyncDataFromServer(FirebaseUser firebaseUser) {
-        String currentUserId = AppConfig.getInstance().getCurrentUserId(this);
-        if (!TextUtils.equals(currentUserId, firebaseUser.getUid())) {
             ActivityLoadData_.intent(this).start();
-        } else {
-            MainActivity_.intent(this).start();
+            finish();
         }
-        finish();
     }
 
     private void requestLogOutGoogle() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFireBaseAuth.removeAuthStateListener(this);
     }
 }

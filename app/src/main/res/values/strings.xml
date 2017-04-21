@@ -99,6 +99,7 @@
     <string name="toolbar_titile_exchange_loop">Giao dịch mặc định</string>
     <string name="toobar_title_exchange_debit">Giao dịch sổ nợ</string>
     <string name="toobar_title_exchange_cagegory">Giao dịch thể loại</string>
+    <string name="name_today">Hôm nay</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>

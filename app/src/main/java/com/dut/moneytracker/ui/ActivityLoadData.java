@@ -14,7 +14,6 @@ import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 import com.dut.moneytracker.utils.ResourceUtils;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -44,10 +43,10 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
 
     @Override
     public void onFinishLoadDataServer() {
-        AppConfig.getInstance().setCurrentUserId(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
         onCreateCategories();
         onCreateDefaultAccount();
         MainActivity_.intent(this).start();
+        AppConfig.getInstance().setLogin(this, true);
         finish();
     }
 
