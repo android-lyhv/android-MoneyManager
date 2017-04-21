@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
-import com.dut.moneytracker.adapter.ExchangeRecyclerViewTabAdapter;
+import com.dut.moneytracker.adapter.ExchangeTabAdapter;
 import com.dut.moneytracker.adapter.account.CardAccountAdapter;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
@@ -77,7 +77,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @ViewById(R.id.recyclerViewCardAccount)
     RecyclerView mRecyclerViewCardAccount;
     private CardAccountAdapter mCardAccountAdapter;
-    private ExchangeRecyclerViewTabAdapter mExchangeAdapter;
+    private ExchangeTabAdapter mExchangeAdapter;
     private LineChartMoney mLineChartMoney;
     private RealmResults<Exchange> mExchanges;
     private Handler mHandler = new Handler();
@@ -155,7 +155,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
     @Override
     public void onLoadExchanges() {
         mExchanges = ExchangeManger.getInstance().onLoadExchangeAsync(FragmentDashboard.LIMIT_ITEM);
-        mExchangeAdapter = new ExchangeRecyclerViewTabAdapter(getContext(), mExchanges);
+        mExchangeAdapter = new ExchangeTabAdapter(getContext(), mExchanges);
         mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerExchange.setNestedScrollingEnabled(false);
         mRecyclerExchange.setAdapter(mExchangeAdapter);
