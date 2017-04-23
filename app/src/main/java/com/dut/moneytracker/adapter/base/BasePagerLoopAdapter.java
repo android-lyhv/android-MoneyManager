@@ -18,6 +18,7 @@ public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements V
     private int positionSelected;
     private ViewPager mViewPager;
     private Filter mFilter;
+    private Filter mLastFilter;
 
     public BasePagerLoopAdapter(FragmentManager fm) {
         super(fm);
@@ -25,6 +26,7 @@ public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements V
 
     public void init(ViewPager viewPager, Filter filter) {
         mFilter = filter;
+        mLastFilter = filter;
         mViewPager = viewPager;
         mViewPager.setAdapter(this);
         mViewPager.addOnPageChangeListener(this);
@@ -78,5 +80,17 @@ public class BasePagerLoopAdapter extends FragmentStatePagerAdapter implements V
 
     public Filter getFilter() {
         return mFilter;
+    }
+
+    public void setFilter(Filter mFilter) {
+        this.mFilter = mFilter;
+    }
+
+    public Filter getLastFilter() {
+        return mLastFilter;
+    }
+
+    public void setLastFilter(Filter mLastFilter) {
+        this.mLastFilter = mLastFilter;
     }
 }

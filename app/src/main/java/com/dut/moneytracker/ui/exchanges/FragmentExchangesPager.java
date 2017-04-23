@@ -27,7 +27,6 @@ import java.util.Date;
  */
 @EFragment(R.layout.fragment_pager)
 public class FragmentExchangesPager extends BaseFragment implements PagerFragmentListener {
-    private static final String TAG = FragmentExchangesPager.class.getSimpleName();
     @ViewById(R.id.viewpager)
     ViewPager viewPager;
     @FragmentArg
@@ -88,5 +87,12 @@ public class FragmentExchangesPager extends BaseFragment implements PagerFragmen
             mPagerAdapter.targetCenterPager();
         }
         mPagerAdapter.notifyDataSetChanged();
+    }
+
+    public void setLastFilter() {
+        mFilter = mPagerAdapter.getLastFilter();
+    }
+    public void resetFilter(Filter filter) {
+        mFilter = filter;
     }
 }

@@ -23,6 +23,8 @@ public class ChartCategoryPagerAdapter extends BasePagerLoopAdapter {
     @Override
     public Fragment getItem(int position) {
         Filter filter = FilterManager.getInstance().changeFilter(getFilter(), position - getCenter());
+        setLastFilter(filter);
         return FragmentChartCategory_.builder().mFilter(filter).build();
     }
+
 }
