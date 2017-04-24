@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.LoopType;
@@ -20,6 +21,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 
 public class GenerateManager {
+    private static final String TAG = GenerateManager.class.getSimpleName();
     private static final long PENDING_DAY = 24 * 60 * 60 * 1000L;
     private static final long PENDING_WEEK = 7 * PENDING_DAY;
     private static final long PENDING_MONTH = 30 * PENDING_DAY;
@@ -48,15 +50,19 @@ public class GenerateManager {
         long step = getStepTime(mExchangeLooper.getCreated());
         switch (mExchangeLooper.getTypeLoop()) {
             case LoopType.DAY:
+                Log.d(TAG, "pendingGenerateExchange: Day" );
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_DAY + step, PENDING_DAY, pendingIntent);
                 break;
             case LoopType.WEAK:
+                Log.d(TAG, "pendingGenerateExchange: Weak");
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_WEEK + step, PENDING_WEEK, pendingIntent);
                 break;
             case LoopType.MONTH:
+                Log.d(TAG, "pendingGenerateExchange: Month");
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_MONTH + step, PENDING_MONTH, pendingIntent);
                 break;
             case LoopType.YEAR:
+                Log.d(TAG, "pendingGenerateExchange: Year");
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_YEAH + step, PENDING_YEAH, pendingIntent);
                 break;
         }
