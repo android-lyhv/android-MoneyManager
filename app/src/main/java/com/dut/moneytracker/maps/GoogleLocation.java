@@ -24,7 +24,6 @@ import com.google.android.gms.location.LocationServices;
 
 
 public class GoogleLocation implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
-    private static final String TAG = GoogleLocation.class.getName();
     private static final long UPDATE_INTERVAL = 10000;
     private static final long FASTEST_INTERVAL = 5000;
     private static final float DISPLACEMENT = 10;
