@@ -38,31 +38,31 @@ public class GenerateManager {
     /**
      * sent request pending for create exchange
      *
-     * @param mExchangeLooper
+     * @param exchangeLooper
      */
-    public void pendingGenerateExchange(ExchangeLooper mExchangeLooper) {
-        if (!mExchangeLooper.isLoop()) {
+    public void pendingGenerateExchange(ExchangeLooper exchangeLooper) {
+        if (!exchangeLooper.isLoop()) {
             return;
         }
         Intent intent = new Intent(mContext, ReceiveGenerateExchange.class);
-        intent.putExtra(mContext.getString(R.string.id_exchange_looper), mExchangeLooper.getId());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, mExchangeLooper.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long step = getStepTime(mExchangeLooper.getCreated());
-        switch (mExchangeLooper.getTypeLoop()) {
+        intent.putExtra(mContext.getString(R.string.id_exchange_looper), exchangeLooper.getId());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, exchangeLooper.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long step = getStepTime(exchangeLooper.getCreated());
+        switch (exchangeLooper.getTypeLoop()) {
             case LoopType.DAY:
-                Log.d(TAG, "pendingGenerateExchange: Day" );
+                Log.d(TAG, "pendingGenerateExchange: Day " + exchangeLooper.getCreated());
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_DAY + step, PENDING_DAY, pendingIntent);
                 break;
             case LoopType.WEAK:
-                Log.d(TAG, "pendingGenerateExchange: Weak");
+                Log.d(TAG, "pendingGenerateExchange: Weak " + exchangeLooper.getCreated());
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_WEEK + step, PENDING_WEEK, pendingIntent);
                 break;
             case LoopType.MONTH:
-                Log.d(TAG, "pendingGenerateExchange: Month");
+                Log.d(TAG, "pendingGenerateExchange: Month " + exchangeLooper.getCreated());
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_MONTH + step, PENDING_MONTH, pendingIntent);
                 break;
             case LoopType.YEAR:
-                Log.d(TAG, "pendingGenerateExchange: Year");
+                Log.d(TAG, "pendingGenerateExchange: Year " + exchangeLooper.getCreated());
                 mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, PENDING_YEAH + step, PENDING_YEAH, pendingIntent);
                 break;
         }
