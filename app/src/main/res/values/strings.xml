@@ -109,7 +109,7 @@
         <item>Gia Đình</item>
         <item>Mua Sắm</item>
         <item>Giáo Dục</item>
-        <item>Tình yêu - Tình bạn</item>
+        <item>Tình yêu</item>
         <item>Thu Nhập</item>
         <item>Khác</item>
     </string-array>
@@ -237,7 +237,7 @@
         <item>ic_income_other</item>
     </string-array>
     <string-array name="other_name">
-        <item>Chi tiêu khác</item>
+        <item>Khác</item>
     </string-array>
     <string-array name="other_path">
         <item>ic_other</item>
