@@ -176,7 +176,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        if (mExchange.getIdDebit() > 0 || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
+        if (mExchange.getTypeExchange() == ExchangeType.DEBIT || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
             return;
         }
         if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
@@ -356,14 +356,13 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onShowDetailExchange() {
-        if (mExchange.getIdDebit() > 0) {
-            showDetailExchangeDebit();
-            return;
-        }
         switch (mExchange.getTypeExchange()) {
             case ExchangeType.INCOME:
             case ExchangeType.EXPENSES:
                 showDetailTypeIncomeAndExpenses();
+                break;
+            case ExchangeType.DEBIT:
+                showDetailExchangeDebit();
                 break;
             case ExchangeType.TRANSFER:
                 showDetailTypeTransfer();

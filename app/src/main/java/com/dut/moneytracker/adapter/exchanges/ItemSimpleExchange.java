@@ -76,7 +76,7 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
             imgLocation.setVisibility(View.VISIBLE);
         }
         // if debit exchange
-        if (exchange.getIdDebit() > 0) {
+        if (exchange.getTypeExchange() == ExchangeType.DEBIT) {
             tvCategoryName.setText(R.string.debit_name);
             Glide.with(context).load(R.drawable.ic_debit).into(imgCategory);
             tvAccountName.setText(DebitManager.getInstance().getAccountNameByDebitId(exchange.getIdDebit()));
