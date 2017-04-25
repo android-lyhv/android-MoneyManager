@@ -140,6 +140,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
+        if (mExchange.getTypeExchange() == ExchangeType.DEBIT && TextUtils.equals(mExchange.getId(), String.valueOf(mExchange.getIdDebit()))) {
+            Toast.makeText(this, "Không thể xóa giao dịch khởi tạo sổ nợ!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DialogConfirm.getInstance().setMessage(getString(R.string.dialog_confirm_delete_title));
         DialogConfirm.getInstance().show(getSupportFragmentManager(), TAG);
         DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
