@@ -31,7 +31,6 @@ import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
-import com.dut.moneytracker.service.GenerateManager;
 import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
 import com.dut.moneytracker.ui.category.ActivityPickCategory;
 import com.dut.moneytracker.utils.DateTimeUtils;
@@ -93,12 +92,8 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     TextView tvAddress;
     @Extra
     ExchangeLooper mExchangeLoop;
-    private GenerateManager mGenerateManager;
     private GoogleMap mGoogleMap;
     private int mTypeExchange;
-    private int lastTypeLoop = -1;
-    private Date lastDate;
-    private boolean lastStatus;
     private SpinnerTypeLoopManger mSpinnerTypeLoopManger;
     private DialogCalculator mDialogCalculator;
     private DialogPickAccount mDialogPickAccount;
@@ -113,15 +108,11 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void initDialog() {
-        mDialogPickAccount =DialogPickAccount.getInstance();
+        mDialogPickAccount = DialogPickAccount.getInstance();
         mDialogCalculator = DialogCalculator.getInstance();
     }
 
     private void onShowData() {
-        mGenerateManager = new GenerateManager(this);
-        lastTypeLoop = mExchangeLoop.getTypeLoop();
-        lastDate = mExchangeLoop.getCreated();
-        lastStatus = mExchangeLoop.isLoop();
         mTypeExchange = mExchangeLoop.getTypeExchange();
         switchCompat.setChecked(mExchangeLoop.isLoop());
         mSpinnerTypeLoopManger.setSelectItem(mExchangeLoop.getTypeLoop());
@@ -192,7 +183,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             return;
         }
         mExchangeLoop.setTypeExchange(mTypeExchange);
-        onSaveDataBase();
+        ExchangeLoopManager.getInstance().insertOrUpdate(mExchangeLoop);
         finish();
     }
 
@@ -203,32 +194,12 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    ExchangeLoopManager.getInstance(getApplicationContext()).deleteExchangeLoopById(mExchangeLoop.getId());
+                    ExchangeLoopManager.getInstance().deleteExchangeLoopById(mExchangeLoop.getId());
                     finish();
                 }
             }
         });
         DialogConfirm.getInstance().show(getSupportFragmentManager(), null);
-    }
-
-    /**
-     * Handler pending loop exchange and save database
-     */
-    private void onSaveDataBase() {
-        if ((lastTypeLoop != mExchangeLoop.getTypeLoop() || !DateTimeUtils.getInstance().isSameDate(lastDate, mExchangeLoop.getCreated()))) {
-            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
-            return;
-        }
-        if (!lastStatus && mExchangeLoop.isLoop()) {
-            Log.d(TAG, "onSaveDataBase: 1");
-            ExchangeLoopManager.getInstance(getApplicationContext()).upDatePendingExchange(mExchangeLoop);
-            return;
-        }
-        if (lastStatus && !mExchangeLoop.isLoop()) {
-            Log.d(TAG, "onSaveDataBase: 2");
-            mGenerateManager.removePendingLoopExchange(mExchangeLoop.getId());
-        }
-        ExchangeLoopManager.getInstance(getApplicationContext()).insertOrUpdate(mExchangeLoop);
     }
 
     @Click(R.id.tvTabIncome)

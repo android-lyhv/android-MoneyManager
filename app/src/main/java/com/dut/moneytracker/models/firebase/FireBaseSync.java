@@ -144,7 +144,7 @@ public class FireBaseSync {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();
-            onSaveExchangeLoop(context, id, data);
+            onSaveExchangeLoop(id, data);
         }
     }
 
@@ -237,7 +237,7 @@ public class FireBaseSync {
         ExchangeManger.getInstance().insertOrUpdate(exchange);
     }
 
-    private void onSaveExchangeLoop(Context context, String id, HashMap<String, Object> data) {
+    private void onSaveExchangeLoop(String id, HashMap<String, Object> data) {
         ExchangeLooper exchangeLooper = new ExchangeLooper();
         exchangeLooper.setId(Integer.parseInt(id));
         exchangeLooper.setTypeExchange(Integer.parseInt(String.valueOf(data.get("typeExchange"))));
@@ -253,7 +253,7 @@ public class FireBaseSync {
         exchangeLooper.setLongitude(Double.parseDouble(String.valueOf(data.get("longitude"))));
         exchangeLooper.setLoop((Boolean) data.get("isLoop"));
         exchangeLooper.setTypeLoop(Integer.parseInt(String.valueOf(data.get("typeLoop"))));
-        ExchangeLoopManager.getInstance(context).insertOrUpdate(exchangeLooper);
+        ExchangeLoopManager.getInstance().insertOrUpdate(exchangeLooper);
     }
 
     private void onSaveDebit(String id, HashMap<String, Object> data) {

@@ -163,7 +163,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
             return;
         }
         mExchangeLoop.setTypeExchange(mType);
-        ExchangeLoopManager.getInstance(getApplicationContext()).insertNewExchangeLoop(mExchangeLoop);
+        ExchangeLoopManager.getInstance().insertNewExchangeLoop(mExchangeLoop);
         finish();
     }
 

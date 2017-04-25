@@ -137,7 +137,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    AccountManager.getInstance().onDeleteAccount(getApplicationContext(), mAccount.getId());
+                    AccountManager.getInstance().onDeleteAccount(mAccount.getId());
                     setResult(IntentCode.DELETE_ACCOUNT);
                     finish();
                 }
