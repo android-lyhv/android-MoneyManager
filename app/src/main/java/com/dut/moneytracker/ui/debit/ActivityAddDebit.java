@@ -18,7 +18,6 @@ import com.dut.moneytracker.dialogs.DialogPickAccount;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
-import com.dut.moneytracker.service.AlarmDebit;
 import com.dut.moneytracker.ui.base.SpinnerTypeDebitManager;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.view.DayPicker;
@@ -125,7 +124,6 @@ public class ActivityAddDebit extends AppCompatActivity {
         }
         //Debit
         DebitManager.getInstance().insertOrUpdateDebit(mNewDebit);
-        AlarmDebit.getInstance().pendingAlarmDebit(this, mNewDebit);
         finish();
     }
 

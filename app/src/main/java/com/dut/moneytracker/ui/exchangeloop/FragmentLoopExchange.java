@@ -36,7 +36,7 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     }
 
     private void initLoopAdapter() {
-        mExchangeLoops = ExchangeLoopManager.getInstance(getContext()).getListLoopExchange();
+        mExchangeLoops = ExchangeLoopManager.getInstance().getExchangeLoops();
         mAdapter = new LoopExchangeAdapter(getContext(), mExchangeLoops);
         mAdapter.registerItemClick(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

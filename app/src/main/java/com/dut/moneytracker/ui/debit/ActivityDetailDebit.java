@@ -21,7 +21,6 @@ import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Debit;
-import com.dut.moneytracker.service.AlarmDebit;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.view.DayPicker;
 import com.dut.moneytracker.view.DayPicker_;
@@ -117,7 +116,6 @@ public class ActivityDetailDebit extends AppCompatActivity {
             @Override
             public void onClickResult(boolean value) {
                 if (value) {
-                    AlarmDebit.getInstance().removePendingAlarm(ActivityDetailDebit.this, mDebit.getId());
                     DebitManager.getInstance().deleteDebitById(mDebit.getId());
                     finish();
                 }
@@ -150,7 +148,6 @@ public class ActivityDetailDebit extends AppCompatActivity {
             DebitManager.getInstance().updateDebitIfAccountChange(mDebit);
         } else {
             DebitManager.getInstance().insertOrUpdateDebit(mDebit);
-            AlarmDebit.getInstance().pendingAlarmDebit(this, mDebit);
         }
         finish();
     }

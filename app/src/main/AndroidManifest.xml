@@ -20,16 +20,17 @@
         <!-- List activity -->
         <activity
             android:name=".ui.user.LoginActivity_"
-            android:theme="@style/AppTheme.FullScreen"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.charts.category.ActivityExchangesCategory_"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.charts.category.ActivityExchangesCategory_"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.debit.ActivityExchangeDebits_"
             android:screenOrientation="portrait" />
@@ -101,9 +102,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".service.ReceiveGenerateExchange" />
-        <receiver android:name=".service.ReceiveAlarmDebit" />
-
+        <receiver android:name=".service.ReceivePending" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
