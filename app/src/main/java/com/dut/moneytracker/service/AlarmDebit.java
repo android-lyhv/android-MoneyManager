@@ -18,7 +18,6 @@ import static android.content.Context.ALARM_SERVICE;
 
 public class AlarmDebit {
     private static AlarmDebit alarmDebit;
-    private final long REPEAT_TIME = 10 * 60 * 1000;
 
 
     public static AlarmDebit getInstance() {

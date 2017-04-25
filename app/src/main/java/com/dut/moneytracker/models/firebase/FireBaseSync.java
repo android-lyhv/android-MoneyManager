@@ -28,7 +28,6 @@ import java.util.Map;
  */
 
 public class FireBaseSync {
-    private static final String TAG = FireBaseSync.class.getSimpleName();
     private static FireBaseSync fireBaseSync;
     private static final String CHILD_ACCOUNT = "account";
     private static final String CHILD_EXCHANGE = "exchange";

@@ -97,11 +97,12 @@ public class ExchangeLoopManager extends RealmHelper {
         return realmResults;
     }
 
-    public void generateNewExchange(int idExchangeLooper) {
+    public void generateNewExchange(Context context, int idExchangeLooper) {
         ExchangeLooper exchangeLooper = getExchangeLooperById(idExchangeLooper);
         if (exchangeLooper == null || !exchangeLooper.isLoop()) {
             return;
         }
+        FireBaseSync.getInstance().initDataReference(context);
         ExchangeManger.getInstance().insertOrUpdate(copyExchange(exchangeLooper));
     }
 

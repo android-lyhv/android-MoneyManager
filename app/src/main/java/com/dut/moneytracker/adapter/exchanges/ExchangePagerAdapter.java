@@ -21,6 +21,7 @@ public class ExchangePagerAdapter extends BasePagerLoopAdapter {
     @Override
     public Fragment getItem(int position) {
         Filter filter = FilterManager.getInstance().changeFilter(getFilter(), position - getCenter());
+        setLastFilter(filter);
         return FragmentExchanges_.builder().mFilter(filter).build();
     }
 }

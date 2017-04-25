@@ -400,18 +400,33 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     }
 
     private void onSetPlaceExchange() {
-        Geocoder mGeocoder = new Geocoder(this, Locale.getDefault());
         Location location = mGoogleLocation.getCurrentLocation();
+        mGoogleLocation.stopLocationUpDate();
+        mGoogleLocation.disConnectApiGoogle();
+        if (null == location) {
+            return;
+        }
+        Geocoder mGeocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = mGeocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            String address = addresses.get(0).getAddressLine(0);
-            mExchange.setAddress(address);
+            StringBuilder builder = new StringBuilder();
+            if (addresses != null && addresses.size() > 0) {
+                Address address = addresses.get(0);
+                int max = address.getMaxAddressLineIndex();
+                for (int i = 0; i < max; i++) {
+                    if (i == max - 1) {
+                        builder.append(address.getAddressLine(i)).append("\n");
+                    } else {
+                        builder.append(address.getAddressLine(i)).append(", ");
+                    }
+                }
+                builder.append(address.getCountryName());
+            }
+            mExchange.setAddress(builder.toString());
             mExchange.setLatitude(location.getLatitude());
             mExchange.setLongitude(location.getLongitude());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mGoogleLocation.stopLocationUpDate();
-        mGoogleLocation.disConnectApiGoogle();
     }
 }

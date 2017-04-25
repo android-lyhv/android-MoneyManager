@@ -28,6 +28,7 @@ public class ChartExchangePagerAdapter extends BasePagerLoopAdapter {
     @Override
     public Fragment getItem(int position) {
         Filter filter = FilterManager.getInstance().changeFilter(getFilter(), position - getCenter());
+        setLastFilter(filter);
         return FragmentChartMoney_.builder().mFilter(filter).mChartType(typePieChart).build();
     }
 }

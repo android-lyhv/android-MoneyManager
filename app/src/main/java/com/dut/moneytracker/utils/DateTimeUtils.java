@@ -157,6 +157,13 @@ public class DateTimeUtils {
         return calendar.getTime();
     }
 
+    public Date getDateRemindLoop(Date currentDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.set(Calendar.HOUR_OF_DAY, 6);
+        return calendar.getTime();
+    }
+
     public boolean isValidateFromDateToDate(Date fromDate, Date toDate) {
         return fromDate.before(toDate);
     }

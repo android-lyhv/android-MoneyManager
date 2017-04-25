@@ -86,10 +86,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:theme" />
         <activity
-            android:name=".ui.MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.exchanges.ActivityAddExchange_"
             android:screenOrientation="portrait" />
         <activity

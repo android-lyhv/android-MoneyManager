@@ -251,28 +251,10 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     }
 
 
-    // Change filter account
-    private void initSpinnerAccount() {
-        mSpinnerAccount = new SpinnerAccountManger(this, spinner);
-        mSpinnerAccount.registerSelectedItem(new SpinnerAccountManger.ItemSelectedListener() {
-            @Override
-            public void onItemSelected(String accountId) {
-                if (TextUtils.isEmpty(accountId)) {
-                    mFilter.setRequestByAccount(false);
-                } else {
-                    mFilter.setRequestByAccount(true);
-                    mFilter.setAccountId(accountId);
-                }
-                reloadFragmentFilter();
-            }
-        });
-    }
-
     public void registerAccount(Account account, int position) {
         mAccount = account;
         positionAccount = position;
     }
-
 
     private void onLoadProfile() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -283,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         mTvUserName.setText(String.valueOf(firebaseAuth.getCurrentUser().getDisplayName()));
         mTvEmail.setText(String.valueOf(firebaseAuth.getCurrentUser().getEmail()));
     }
+
 
     @Override
     public void onBackPressed() {
@@ -308,10 +291,70 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                     onShowDialogFilterCustom();
                 } else {
                     mFilter.setDateFilter(new Date());
+                    if (isFragmentChart()) {
+                        mFragmentChartExchangePager.resetFilter(mFilter);
+                    }
+                    if (isFragmentExchangeRecord()) {
+                        mFragmentExchangesPager.resetFilter(mFilter);
+                    }
+                    if (isFragmentChartCategory()) {
+                        mFragmentChartCategoryPager.resetFilter(mFilter);
+                    }
                     reloadFragmentFilter();
                 }
             }
         });
+    }
+
+    // Change filter account
+    private void initSpinnerAccount() {
+        mSpinnerAccount = new SpinnerAccountManger(this, spinner);
+        mSpinnerAccount.registerSelectedItem(new SpinnerAccountManger.ItemSelectedListener() {
+            @Override
+            public void onItemSelected(String accountId) {
+                if (TextUtils.isEmpty(accountId)) {
+                    mFilter.setRequestByAccount(false);
+                } else {
+                    mFilter.setRequestByAccount(true);
+                    mFilter.setAccountId(accountId);
+                }
+                if (isFragmentChart()) {
+                    mFragmentChartExchangePager.setLastFilter();
+                }
+                if (isFragmentExchangeRecord()) {
+                    mFragmentExchangesPager.setLastFilter();
+                }
+                if (isFragmentChartCategory()) {
+                    mFragmentChartCategoryPager.setLastFilter();
+                }
+                reloadFragmentFilter();
+            }
+        });
+    }
+
+    public void onShowDialogFilterCustom() {
+        mDialogCustomFilter.show(mFragmentManager, TAG);
+        mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
+            @Override
+            public void onResultDate(Date fromDate, Date toDate) {
+                mFilter.setFormDate(fromDate);
+                mFilter.setToDate(toDate);
+                mFilter.setTypeFilter(FilterType.CUSTOM);
+                reloadFragmentFilter();
+            }
+        }, mFilter.getFormDate(), mFilter.getToDate());
+    }
+
+    private void reloadFragmentFilter() {
+        if (isFragmentChart()) {
+            mFragmentChartExchangePager.onReloadFragmentPager();
+        }
+        if (isFragmentExchangeRecord()) {
+            mFragmentExchangesPager.onReloadFragmentPager();
+        }
+        if (isFragmentChartCategory()) {
+            mFragmentChartCategoryPager.onReloadFragmentPager();
+        }
     }
 
     @Click(R.id.imgSettingAccount)
@@ -523,31 +566,6 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         imgDateFilter.setVisibility(View.GONE);
         imgSettingAccount.setVisibility(View.GONE);
         imgSorDebit.setVisibility(View.VISIBLE);
-    }
-
-    public void onShowDialogFilterCustom() {
-        mDialogCustomFilter.show(mFragmentManager, TAG);
-        mDialogCustomFilter.registerFilterListener(new DialogCustomFilter.FilterListener() {
-            @Override
-            public void onResultDate(Date fromDate, Date toDate) {
-                mFilter.setFormDate(fromDate);
-                mFilter.setToDate(toDate);
-                mFilter.setTypeFilter(FilterType.CUSTOM);
-                reloadFragmentFilter();
-            }
-        }, mFilter.getFormDate(), mFilter.getToDate());
-    }
-
-    private void reloadFragmentFilter() {
-        if (isFragmentChart()) {
-            mFragmentChartExchangePager.onReloadFragmentPager();
-        }
-        if (isFragmentExchangeRecord()) {
-            mFragmentExchangesPager.onReloadFragmentPager();
-        }
-        if (isFragmentChartCategory()) {
-            mFragmentChartCategoryPager.onReloadFragmentPager();
-        }
     }
 
     @Override
