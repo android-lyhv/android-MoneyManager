@@ -22,7 +22,7 @@ public class ReceivePending extends BroadcastReceiver {
     }
 
     private void onCheckAlarm(Context context) {
-
+        //TODO alarm
     }
 
     private void onCheckGenerateExchange(Context context) {

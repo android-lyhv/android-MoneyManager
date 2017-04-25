@@ -15,7 +15,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 public class PendingService {
     private static PendingService ourInstance;
-    private static final long TIME_REPEAT = 24 * 60 * 60 * 1000L;
+    private static final long TIME_REPEAT = 60 * 1000L;
     private static final int ID = 1;
 
     public static PendingService getInstance() {
@@ -33,7 +33,7 @@ public class PendingService {
      *
      * @param context
      */
-    public void acctionLoopPending(Context context) {
+    public void actionLoopPending(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, ReceivePending.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);

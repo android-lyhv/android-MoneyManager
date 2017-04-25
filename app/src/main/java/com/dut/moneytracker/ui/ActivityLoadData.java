@@ -13,6 +13,7 @@ import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.CategoryManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
+import com.dut.moneytracker.service.PendingService;
 import com.dut.moneytracker.utils.ResourceUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -47,6 +48,7 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
         onCreateDefaultAccount();
         MainActivity_.intent(this).start();
         AppConfig.getInstance().setLogin(this, true);
+        PendingService.getInstance().actionLoopPending(getApplicationContext());
         finish();
     }
 

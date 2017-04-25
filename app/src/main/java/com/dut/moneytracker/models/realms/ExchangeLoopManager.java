@@ -1,6 +1,7 @@
 package com.dut.moneytracker.models.realms;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.LoopType;
@@ -21,7 +22,8 @@ import io.realm.Sort;
  */
 
 public class ExchangeLoopManager extends RealmHelper {
-    private static final long PENDING_DAY = 24 * 60 * 60 * 1000L;
+    private static final String TAG = ExchangeLoopManager.class.getSimpleName();
+    private static final long PENDING_DAY = 24 * 60 *60 * 1000L;
     private static final long PENDING_WEEK = 7 * PENDING_DAY;
     private static final long PENDING_MONTH = 30 * PENDING_DAY;
     private static final long PENDING_YEAH = 365 * PENDING_DAY;
@@ -90,10 +92,10 @@ public class ExchangeLoopManager extends RealmHelper {
         exchange.setId(UUID.randomUUID().toString());
         exchange.setAmount(exchangeLooper.getAmount());
         exchange.setDescription(exchangeLooper.getDescription());
-        exchange.setAddress(exchange.getAddress());
-        exchange.setLatitude(exchange.getLatitude());
-        exchange.setLongitude(exchange.getLongitude());
-        exchange.setCreated(new Date());
+        exchange.setAddress(exchangeLooper.getAddress());
+        exchange.setLatitude(exchangeLooper.getLatitude());
+        exchange.setLongitude(exchangeLooper.getLongitude());
+        exchange.setCreated(exchangeLooper.getCreated());
         if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
             exchange.setTypeExchange(exchangeLooper.getTypeExchange());
             exchange.setIdAccount(exchangeLooper.getIdAccount());
@@ -105,36 +107,39 @@ public class ExchangeLoopManager extends RealmHelper {
     }
 
     public void onGenerateExchange(Context context) {
+        Log.d(TAG, "onGenerateExchange: aaaaaaaaaaaa");
         FireBaseSync.getInstance().initDataReference(context);
         RealmResults<ExchangeLooper> exchangeLoops = getExchangeLoopAvailable();
         for (ExchangeLooper exchangeLooper : exchangeLoops) {
             switch (exchangeLooper.getTypeLoop()) {
                 case LoopType.DAY:
                     if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_DAY) {
-                        createExchange(exchangeLooper);
+                        createNewExchange(exchangeLooper);
                     }
                     break;
                 case LoopType.WEAK:
                     if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_WEEK) {
-                        createExchange(exchangeLooper);
+                        createNewExchange(exchangeLooper);
                     }
                     break;
                 case LoopType.MONTH:
                     if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_MONTH) {
-                        createExchange(exchangeLooper);
+                        createNewExchange(exchangeLooper);
                     }
                     break;
                 case LoopType.YEAR:
                     if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_YEAH) {
-                        createExchange(exchangeLooper);
+                        createNewExchange(exchangeLooper);
                     }
                     break;
             }
         }
     }
 
-    private void createExchange(ExchangeLooper exchangeLooper) {
+    private void createNewExchange(ExchangeLooper exchangeLooper) {
+        realm.beginTransaction();
         exchangeLooper.setCreated(new Date());
+        realm.commitTransaction();
         insertOrUpdate(exchangeLooper);
         ExchangeManger.getInstance().insertOrUpdate(copyExchange(exchangeLooper));
     }
