@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
 
 /**
@@ -22,7 +23,7 @@ public class ReceivePending extends BroadcastReceiver {
     }
 
     private void onCheckAlarm(Context context) {
-        //TODO alarm
+        DebitManager.getInstance().onCheckEndDateDebit(context);
     }
 
     private void onCheckGenerateExchange(Context context) {

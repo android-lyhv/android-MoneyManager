@@ -23,7 +23,7 @@ import io.realm.Sort;
 
 public class ExchangeLoopManager extends RealmHelper {
     private static final String TAG = ExchangeLoopManager.class.getSimpleName();
-    private static final long PENDING_DAY = 24 * 60 *60 * 1000L;
+    private static final long PENDING_DAY = 24 * 60 * 60 * 1000L;
     private static final long PENDING_WEEK = 7 * PENDING_DAY;
     private static final long PENDING_MONTH = 30 * PENDING_DAY;
     private static final long PENDING_YEAH = 365 * PENDING_DAY;

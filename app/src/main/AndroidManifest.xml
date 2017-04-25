@@ -102,10 +102,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".service.ReceiveAlarmDebit" />
-
         <receiver android:name=".service.ReceivePending" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
