@@ -86,8 +86,10 @@ public class ItemSimpleExchange extends RecyclerView.ViewHolder {
         tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
         if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
             Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
-            Glide.with(context).load(category.getByteImage()).into(imgCategory);
-            tvCategoryName.setText(category.getName());
+            if (category != null) {
+                Glide.with(context).load(category.getByteImage()).into(imgCategory);
+                tvCategoryName.setText(category.getName());
+            }
         }
         if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
             Glide.with(context).load(R.drawable.ic_transfer).into(imgCategory);
