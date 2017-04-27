@@ -29,7 +29,6 @@ import com.dut.moneytracker.ui.base.BaseFragment;
 import com.dut.moneytracker.ui.charts.objects.LineChartMoney;
 import com.dut.moneytracker.ui.charts.objects.ValueLineChart;
 import com.dut.moneytracker.ui.exchanges.ActivityDetailExchange_;
-import com.dut.moneytracker.utils.DateTimeUtils;
 import com.github.mikephil.charting.charts.LineChart;
 
 import org.androidannotations.annotations.AfterViews;
@@ -39,7 +38,6 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.Date;
 import java.util.List;
 
 import io.realm.RealmChangeListener;
@@ -53,8 +51,6 @@ import io.realm.RealmResults;
 @EFragment(R.layout.fragment_tab_account)
 public class FragmentChildTab extends BaseFragment implements TabAccountListener, RealmChangeListener<RealmResults<Exchange>> {
     //View
-    @ViewById(R.id.tvEndDate)
-    TextView tvEndDate;
     @ViewById(R.id.recyclerExchange)
     RecyclerView mRecyclerExchange;
     @ViewById(R.id.tvAmount)
@@ -82,7 +78,6 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @AfterViews
     void init() {
-        tvEndDate.setText(DateTimeUtils.getInstance().getStringDayMonthUs(new Date()));
         mLineChartMoney = new LineChartMoney(getContext(), mLineChart);
         mCardView.setVisibility(View.GONE);
         onShowAmount();
@@ -99,14 +94,14 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @Override
     public void onLoadChart() {
         mLineChartMoney.setColorChart(mAccount.getColorHex());
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), FragmentDashboard.MAX_DAY);
                 mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
                 mLineChartMoney.notifyDataSetChanged();
             }
-        }, FragmentDashboard.DELAY);
+        });
     }
 
     @Override
@@ -118,7 +113,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadExchanges() {
-        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsyncByAccount(mAccount.getId(), FragmentDashboard.LIMIT_ITEM);
+        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsyncByAccount(mAccount.getId());
         mExchangeAdapter = new ExchangeTabAdapter(getContext(), mExchanges);
         mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerExchange.setNestedScrollingEnabled(false);
@@ -166,13 +161,13 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         }
 
         //Reload tab account
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 onLoadChart();
                 onShowAmount();
             }
-        }, FragmentDashboard.DELAY);
+        });
     }
 
     @Click(R.id.tvMoreExchange)

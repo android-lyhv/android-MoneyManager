@@ -13,12 +13,11 @@ import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.chart.RecyclerCategoryChartAdapter;
 import com.dut.moneytracker.constant.FilterType;
-import com.dut.moneytracker.models.realms.FilterManager;
 import com.dut.moneytracker.models.realms.ExchangeManger;
+import com.dut.moneytracker.models.realms.FilterManager;
 import com.dut.moneytracker.objects.Filter;
 import com.dut.moneytracker.ui.base.BaseFragment;
 import com.dut.moneytracker.ui.charts.objects.ValueCategoryChart;
-import com.dut.moneytracker.ui.dashboard.FragmentDashboard;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -59,7 +58,7 @@ public class FragmentChartCategory extends BaseFragment {
         mAdapter = new RecyclerCategoryChartAdapter(getContext(), mValueCategoryCharts);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 mValueCategoryCharts = ExchangeManger.getInstance().getValueCategoryCharts(mFilter);
@@ -67,7 +66,7 @@ public class FragmentChartCategory extends BaseFragment {
                 mAdapter.addAll(mValueCategoryCharts);
                 mAdapter.notifyDataSetChanged();
             }
-        }, FragmentDashboard.DELAY);
+        });
         mRecyclerView.addOnItemTouchListener(new ClickItemRecyclerView(getContext(), new ClickItemListener() {
             @Override
             public void onClick(View view, int position) {

@@ -115,8 +115,8 @@ public class DateTimeUtils {
         return dates;
     }
 
-    public Date getNextDate(Date currentDate, int step) {
-        Calendar calendar = new GregorianCalendar();
+    public Date getSkipDate(Date currentDate, int step) {
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
         calendar.add(Calendar.DAY_OF_MONTH, step);
         return calendar.getTime();

@@ -148,13 +148,15 @@ public class ExchangeManger extends RealmHelper {
         return realmResults;
     }
 
-    public RealmResults<Exchange> onLoadExchangeAsync(int limit) {
-        return realm.where(Exchange.class).findAllSortedAsync("created", Sort.DESCENDING);
+    public RealmResults<Exchange> onLoadExchangeAsync() {
+        Date lastDate = DateTimeUtils.getInstance().getSkipDate(new Date(), -7);
+        return realm.where(Exchange.class).between("created", lastDate, new Date()).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
 
-    public RealmResults<Exchange> onLoadExchangeAsyncByAccount(String accountID, int limit) {
-        return realm.where(Exchange.class).equalTo("idAccount", accountID).findAllSortedAsync("created", Sort.DESCENDING);
+    public RealmResults<Exchange> onLoadExchangeAsyncByAccount(String accountID) {
+        Date lastDate = DateTimeUtils.getInstance().getSkipDate(new Date(), -7);
+        return realm.where(Exchange.class).equalTo("idAccount", accountID).between("created", lastDate, new Date()).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
     public List<ValueLineChart> getValueChartByDailyDay(int limitDay) {

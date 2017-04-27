@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
@@ -140,6 +141,7 @@ public class DebitManager extends RealmHelper {
         exchange.setIdAccount(debit.getIdAccount());
         exchange.setCreated(new Date());
         exchange.setIdDebit(debit.getId());
+        exchange.setTypeExchange(ExchangeType.DEBIT);
         ExchangeManger.getInstance().insertOrUpdate(exchange);
     }
 

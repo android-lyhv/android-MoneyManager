@@ -82,7 +82,7 @@ public class ExchangeTabAdapter extends BaseRecyclerAdapter {
                 tvDateCreated.setText(DateTimeUtils.getInstance().getStringDateUs(exchange.getCreated()));
             }
             // if debit exchange
-            if (exchange.getIdDebit() > 0) {
+            if (exchange.getTypeExchange() == ExchangeType.DEBIT) {
                 tvCategoryName.setText(R.string.debit_name);
                 imgCategory.setImageResource(R.drawable.ic_debit);
                 tvAccountName.setText(DebitManager.getInstance().getAccountNameByDebitId(exchange.getIdDebit()));

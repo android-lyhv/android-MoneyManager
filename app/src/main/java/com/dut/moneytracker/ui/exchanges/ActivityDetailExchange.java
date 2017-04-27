@@ -140,6 +140,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
+        if (mExchange.getTypeExchange() == ExchangeType.DEBIT && TextUtils.equals(mExchange.getId(), String.valueOf(mExchange.getIdDebit()))) {
+            Toast.makeText(this, "Không thể xóa giao dịch khởi tạo sổ nợ!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DialogConfirm.getInstance().setMessage(getString(R.string.dialog_confirm_delete_title));
         DialogConfirm.getInstance().show(getSupportFragmentManager(), TAG);
         DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
@@ -176,7 +180,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlAccount)
     void onCLickAccount() {
-        if (mExchange.getIdDebit() > 0 || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
+        if (mExchange.getTypeExchange() == ExchangeType.DEBIT || TextUtils.equals(mExchange.getIdAccountTransfer(), AccountManager.ID_OUTSIDE)) {
             return;
         }
         if (mExchange.getTypeExchange() == ExchangeType.TRANSFER) {
@@ -356,14 +360,13 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Override
     public void onShowDetailExchange() {
-        if (mExchange.getIdDebit() > 0) {
-            showDetailExchangeDebit();
-            return;
-        }
         switch (mExchange.getTypeExchange()) {
             case ExchangeType.INCOME:
             case ExchangeType.EXPENSES:
                 showDetailTypeIncomeAndExpenses();
+                break;
+            case ExchangeType.DEBIT:
+                showDetailExchangeDebit();
                 break;
             case ExchangeType.TRANSFER:
                 showDetailTypeTransfer();
