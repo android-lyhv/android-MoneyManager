@@ -47,7 +47,6 @@ public class PieChartMoney implements OnChartValueSelectedListener {
         mChart.setHoleColor(Color.WHITE);
         mChart.setDrawEntryLabels(false);
         mChart.getLegend().setWordWrapEnabled(true);
-        mChart.setTransparentCircleAlpha(110);
         mChart.setHoleRadius(58f);
         mChart.setTransparentCircleRadius(61f);
         mChart.setDrawCenterText(true);
@@ -56,10 +55,6 @@ public class PieChartMoney implements OnChartValueSelectedListener {
         mChart.setHighlightPerTapEnabled(true);
         mPieDataSet = new PieDataSet(mPieEntries, null);
         mPieDataSet.setLabel(null);
-        mPieDataSet.setSliceSpace(1);
-        mPieDataSet.setValueLinePart1OffsetPercentage(80.f);
-        mPieDataSet.setValueLinePart1Length(0.2f);
-        mPieDataSet.setValueLinePart2Length(0.4f);
         mPieData = new PieData(mPieDataSet);
         mPieData.setValueFormatter(new PercentFormatter());
         mPieData.setValueTextSize(12f);
