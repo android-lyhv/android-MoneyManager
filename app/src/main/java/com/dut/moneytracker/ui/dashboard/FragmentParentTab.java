@@ -149,7 +149,7 @@ public class FragmentParentTab extends BaseFragment implements TabAccountListene
 
     @Override
     public void onLoadExchanges() {
-        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsync(FragmentDashboard.LIMIT_ITEM);
+        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsync();
         mExchangeAdapter = new ExchangeTabAdapter(getContext(), mExchanges);
         mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerExchange.setNestedScrollingEnabled(false);

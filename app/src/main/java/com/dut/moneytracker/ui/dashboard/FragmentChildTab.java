@@ -113,7 +113,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadExchanges() {
-        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsyncByAccount(mAccount.getId(), FragmentDashboard.LIMIT_ITEM);
+        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsyncByAccount(mAccount.getId());
         mExchangeAdapter = new ExchangeTabAdapter(getContext(), mExchanges);
         mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerExchange.setNestedScrollingEnabled(false);
