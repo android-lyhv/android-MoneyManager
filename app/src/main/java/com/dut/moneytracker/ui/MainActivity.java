@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
             if (intent == null || !isFragmentDashboard() || mFragmentDashboard == null) {
                 return;
             }
-            mHandler.postDelayed(new Runnable() {
+            mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     if (TextUtils.equals(intent.getAction(), RECEIVER_DELETE_ACCOUNT)) {
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
                         reloadEditTabAccount(positionEdit);
                     }
                 }
-            }, FragmentDashboard.DELAY);
+            });
         }
 
         private void reloadDeleteTabAccount(int positionDelete) {

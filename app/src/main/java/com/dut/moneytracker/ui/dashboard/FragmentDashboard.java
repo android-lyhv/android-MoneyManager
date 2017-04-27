@@ -28,7 +28,6 @@ import io.realm.RealmResults;
  */
 @EFragment(R.layout.fragment_dashboard)
 public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener {
-    public static final long DELAY = 0L;
     public static final int LIMIT_ITEM = 5;
     public static final int MAX_DAY = 30;
     @ViewById(R.id.tabLayout)
@@ -107,12 +106,12 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
         if (resultCode == IntentCode.ADD_NEW_EXCHANGE) {
             final Intent intent = new Intent();
             intent.setAction(getString(R.string.receiver_add_new_exchange));
-            mHandler.postDelayed(new Runnable() {
+            mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     getContext().sendBroadcast(intent);
                 }
-            }, DELAY);
+            });
         }
     }
 

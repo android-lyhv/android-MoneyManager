@@ -94,14 +94,14 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
     @Override
     public void onLoadChart() {
         mLineChartMoney.setColorChart(mAccount.getColorHex());
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), FragmentDashboard.MAX_DAY);
                 mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
                 mLineChartMoney.notifyDataSetChanged();
             }
-        }, FragmentDashboard.DELAY);
+        });
     }
 
     @Override
@@ -161,13 +161,13 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         }
 
         //Reload tab account
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 onLoadChart();
                 onShowAmount();
             }
-        }, FragmentDashboard.DELAY);
+        });
     }
 
     @Click(R.id.tvMoreExchange)
