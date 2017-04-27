@@ -109,8 +109,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     void init() {
         setTitle(R.string.toolbar_detail_exchange);
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
-        initDialog();
         setSupportActionBar(toolbar);
+        initDialog();
         onShowDetailExchange();
         initMap();
     }
