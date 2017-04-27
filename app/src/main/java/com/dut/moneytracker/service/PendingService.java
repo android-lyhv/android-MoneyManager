@@ -15,7 +15,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 public class PendingService {
     private static PendingService ourInstance;
-    private static final long TIME_REPEAT = 24 * 60 * 60 * 1000L;
+    private static final long TIME_REPEAT = /*24 * 60 * */60 * 1000L;
     private static final int ID = 1;
 
     public static PendingService getInstance() {
