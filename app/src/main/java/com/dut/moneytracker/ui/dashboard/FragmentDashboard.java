@@ -49,7 +49,7 @@ public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSe
 
     private void initViewpager() {
         mTabAdapter = new BaseViewPagerAdapter(getChildFragmentManager());
-        mViewPager.setOffscreenPageLimit(10);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(mTabAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.addOnTabSelectedListener(this);

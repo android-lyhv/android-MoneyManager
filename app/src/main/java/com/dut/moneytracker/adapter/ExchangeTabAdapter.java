@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.constant.ExchangeType;
@@ -20,6 +19,7 @@ import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
+import com.dut.moneytracker.utils.ResourceUtils;
 
 import java.util.Date;
 
@@ -92,13 +92,13 @@ public class ExchangeTabAdapter extends BaseRecyclerAdapter {
             if (exchange.getTypeExchange() == ExchangeType.INCOME || exchange.getTypeExchange() == ExchangeType.EXPENSES) {
                 Category category = CategoryManager.getInstance().getCategoryById(exchange.getIdCategory());
                 if (category != null) {
-                    Glide.with(getContext()).load(category.getByteImage()).into(imgCategory);
+                    imgCategory.setImageBitmap(ResourceUtils.getInstance().getBitmap(category.getByteImage()));
                     tvCategoryName.setText(category.getName());
                 }
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
             }
             if (exchange.getTypeExchange() == ExchangeType.TRANSFER) {
-                Glide.with(getContext()).load(R.drawable.ic_transfer).into(imgCategory);
+                imgCategory.setImageResource(R.drawable.ic_transfer);
                 tvCategoryName.setText(getContext().getResources().getString(R.string.transfer));
                 tvAccountName.setText(AccountManager.getInstance().getAccountNameById(exchange.getIdAccount()));
             }
