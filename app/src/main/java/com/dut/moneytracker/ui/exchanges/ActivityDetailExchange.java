@@ -111,8 +111,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         toolbar.setNavigationIcon(R.drawable.ic_close_white);
         setSupportActionBar(toolbar);
         initDialog();
-        onShowDetailExchange();
         initMap();
+        onShowDetailExchange();
     }
 
     private void initDialog() {
@@ -141,7 +141,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     @OptionsItem(R.id.actionDelete)
     void onClickDelete() {
         if (mExchange.getTypeExchange() == ExchangeType.DEBIT && TextUtils.equals(mExchange.getId(), String.valueOf(mExchange.getIdDebit()))) {
-            Toast.makeText(this, "Không thể xóa giao dịch khởi tạo sổ nợ!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.messger_init_debit_exchange, Toast.LENGTH_SHORT).show();
             return;
         }
         DialogConfirm.getInstance().setMessage(getString(R.string.dialog_confirm_delete_title));
@@ -377,7 +377,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     @Override
     public void onSaveChangeExchange() {
         if (mExchange.getTypeExchange() == ExchangeType.TRANSFER && TextUtils.equals(mExchange.getIdAccountTransfer(), mExchange.getIdAccount())) {
-            Toast.makeText(this, "Tài khoản gửi và tài khoản nhận phải khác nhau", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.different_account, Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent();
