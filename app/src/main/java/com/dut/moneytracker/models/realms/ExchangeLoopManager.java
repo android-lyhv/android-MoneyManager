@@ -1,9 +1,7 @@
 package com.dut.moneytracker.models.realms;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Exchange;
@@ -96,18 +94,13 @@ public class ExchangeLoopManager extends RealmHelper {
         exchange.setLatitude(exchangeLooper.getLatitude());
         exchange.setLongitude(exchangeLooper.getLongitude());
         exchange.setCreated(exchangeLooper.getCreated());
-        if (exchangeLooper.getTypeExchange() != ExchangeType.TRANSFER) {
-            exchange.setTypeExchange(exchangeLooper.getTypeExchange());
-            exchange.setIdAccount(exchangeLooper.getIdAccount());
-            exchange.setIdCategory(exchangeLooper.getIdCategory());
-        } else {
-            //TODO if transfer
-        }
+        exchange.setTypeExchange(exchangeLooper.getTypeExchange());
+        exchange.setIdAccount(exchangeLooper.getIdAccount());
+        exchange.setIdCategory(exchangeLooper.getIdCategory());
         return exchange;
     }
 
     public void onGenerateExchange(Context context) {
-        Log.d(TAG, "onGenerateExchange: aaaaaaaaaaaa");
         FireBaseSync.getInstance().initDataReference(context);
         RealmResults<ExchangeLooper> exchangeLoops = getExchangeLoopAvailable();
         for (ExchangeLooper exchangeLooper : exchangeLoops) {
