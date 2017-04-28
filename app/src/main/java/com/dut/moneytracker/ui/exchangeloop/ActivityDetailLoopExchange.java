@@ -11,7 +11,6 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -72,8 +71,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     TextView tvTabIncome;
     @ViewById(R.id.tvTabExpense)
     TextView tvTabExpense;
-    @ViewById(R.id.tvTabTransfer)
-    TextView tvTabTransfer;
     @ViewById(R.id.tvCategoryName)
     TextView tvCategoryName;
     @ViewById(R.id.tvAmount)
@@ -123,10 +120,12 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         switch (mExchangeLoop.getTypeExchange()) {
             case ExchangeType.INCOME:
-                onClickTabIncome();
+                loadViewTabIncome();
+                isClickTabIncome = true;
                 break;
             case ExchangeType.EXPENSES:
-                onClickTabExpense();
+                loadViewTabExpense();
+                isClickTabExpense = true;
                 break;
         }
         tvDescription.setText(mExchangeLoop.getDescription());
@@ -205,40 +204,47 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         }
         isClickTabIncome = true;
         isClickTabExpense = false;
+        mExchangeLoop.setIdCategory(null);
+        tvCategoryName.setText("");
         mExchangeLoop.setTypeExchange(ExchangeType.INCOME);
+        loadViewTabIncome();
+    }
+
+    private void loadViewTabIncome() {
         mTvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         tvTabIncome.setBackgroundResource(R.color.colorPrimary);
         tvTabExpense.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         if (mExchangeLoop.getAmount().startsWith("-")) {
             mExchangeLoop.setAmount(mExchangeLoop.getAmount().substring(1));
         }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
     }
 
     @Click(R.id.tvTabExpense)
     void onClickTabExpense() {
-        if (isClickTabIncome) {
+        if (isClickTabExpense) {
             return;
         }
-        isClickTabIncome = true;
-        isClickTabExpense = false;
+        isClickTabIncome = false;
+        isClickTabExpense = true;
+        mExchangeLoop.setIdCategory(null);
+        tvCategoryName.setText("");
         mExchangeLoop.setTypeExchange(ExchangeType.EXPENSES);
+        loadViewTabExpense();
+    }
+
+    private void loadViewTabExpense() {
         mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         tvTabExpense.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         tvTabExpense.setBackgroundResource(R.color.colorPrimary);
         tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         if (!mExchangeLoop.getAmount().startsWith("-")) {
             mExchangeLoop.setAmount(String.format(Locale.US, "-%s", mExchangeLoop.getAmount()));
         }
-        Log.d(TAG, "onClickTabExpense: " + mExchangeLoop.getAmount());
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), "VND"));
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
     }
 
     @Click(R.id.rlCategory)

@@ -48,18 +48,6 @@
                     android:gravity="center"
                     android:text="Chi Tiêu"
                     android:textColor="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/tvTabTransfer"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#ededed"
-                    android:gravity="center"
-                    android:text="Chuyển Tiền"
-                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
 
             <RelativeLayout

@@ -30,7 +30,6 @@ import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
 import com.dut.moneytracker.ui.category.ActivityPickCategory_;
-import com.dut.moneytracker.ui.exchanges.ActivityAddMoreExchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
 import com.dut.moneytracker.view.DayPicker;
@@ -62,15 +61,12 @@ import java.util.Locale;
 @EActivity(R.layout.activity_add_loop_exchange)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapReadyCallback {
-    private static final String TAG = ActivityAddMoreExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvTabIncome)
     TextView tvTabIncome;
     @ViewById(R.id.tvTabExpense)
     TextView tvTabExpense;
-    @ViewById(R.id.tvTabTransfer)
-    TextView tvTabTransfer;
     @ViewById(R.id.tvCategoryName)
     TextView tvCategoryName;
     @ViewById(R.id.tvAmount)
@@ -174,14 +170,14 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         }
         isClickTabIncome = true;
         isClickTabExpense = false;
-        mExchangeLoop.setTypeLoop(ExchangeType.INCOME);
+        mExchangeLoop.setIdCategory(null);
+        tvCategoryName.setText("");
+        mExchangeLoop.setTypeExchange(ExchangeType.INCOME);
         mTvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         tvTabIncome.setBackgroundResource(R.color.colorPrimary);
         tvTabExpense.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         onChangeAmount(mExchangeLoop.getAmount());
     }
 
@@ -192,14 +188,14 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         }
         isClickTabIncome = false;
         isClickTabExpense = true;
-        mExchangeLoop.setTypeLoop(ExchangeType.EXPENSES);
+        mExchangeLoop.setIdCategory(null);
+        tvCategoryName.setText("");
+        mExchangeLoop.setTypeExchange(ExchangeType.EXPENSES);
         mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         tvTabExpense.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         tvTabExpense.setBackgroundResource(R.color.colorPrimary);
         tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         onChangeAmount(mExchangeLoop.getAmount());
     }
 
