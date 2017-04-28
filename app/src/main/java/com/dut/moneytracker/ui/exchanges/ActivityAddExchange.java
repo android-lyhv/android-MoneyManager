@@ -74,8 +74,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     Account mAccount;
     private DialogPickAccount mDialogPickAccount;
     private Exchange mExchange;
-    private String mIdCategory;
-    private String mNameCategory;
     private String mNameAccountTransfer;
     private GoogleLocation mGoogleLocation;
 
@@ -100,7 +98,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         btnIncome.setAlpha(0.5f);
         btnTransfer.setAlpha(0.5f);
         tvAccountName.setText(mAccount.getName());
-        mNameCategory = getString(R.string.unknown);
         mNameAccountTransfer = getString(R.string.unknown);
     }
 
@@ -230,9 +227,10 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     @Click(R.id.btnIncome)
     void onClickTabIncome() {
         mExchange.setTypeExchange(ExchangeType.INCOME);
+        mExchange.setIdCategory(null);
         tvTitleFromAccount.setText(getString(R.string.main_account));
         tvTitleToAccount.setText(getString(R.string.category_name));
-        tvCategoryName.setText(mNameCategory);
+        tvCategoryName.setText(getString(R.string.unknown));
         tvStatus.setVisibility(View.VISIBLE);
         tvStatus.setText("+");
         btnExpenses.setAlpha(0.5f);
@@ -243,9 +241,10 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     @Click(R.id.btnExpenses)
     void onClickTabExpenses() {
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
+        mExchange.setIdCategory(null);
         tvTitleFromAccount.setText(getString(R.string.main_account));
         tvTitleToAccount.setText(getString(R.string.category_name));
-        tvCategoryName.setText(mNameCategory);
+        tvCategoryName.setText(getString(R.string.unknown));
         tvStatus.setVisibility(View.VISIBLE);
         tvStatus.setText("-");
         btnExpenses.setAlpha(1f);
@@ -277,7 +276,6 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         } else {
             mExchange.setAmount(textAmount);
         }
-        mExchange.setIdCategory(mIdCategory);
         onRequestExchangePlace();
     }
 
@@ -342,9 +340,8 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         switch (resultCode) {
             case IntentCode.PICK_CATEGORY:
                 Category category = data.getParcelableExtra(getString(R.string.extra_category));
-                mIdCategory = category.getId();
-                mNameCategory = category.getName();
-                tvCategoryName.setText(mNameCategory);
+                tvCategoryName.setText(category.getName());
+                mExchange.setIdCategory(category.getId());
                 break;
             case IntentCode.MORE_ADD:
                 mExchange = data.getParcelableExtra(getString(R.string.extra_more_add));
@@ -392,7 +389,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
             Toast.makeText(this, "Fill the amount!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (TextUtils.isEmpty(mIdCategory)) {
+        if (TextUtils.isEmpty(mExchange.getIdCategory())) {
             Toast.makeText(this, "Please pick category", Toast.LENGTH_SHORT).show();
             return false;
         }
