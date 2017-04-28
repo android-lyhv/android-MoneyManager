@@ -189,7 +189,7 @@ public class ExchangeManger extends RealmHelper {
     public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int chartType) {
         List<Exchange> exchanges = getExchanges(filter);
         List<ValuePieChart> valuePieCharts = new ArrayList<>();
-        List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategory();
+        List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategoryExpense();
         if (chartType == PieChartType.INCOME) {
             for (GroupCategory groupCategory : groupCategories) {
                 ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.INCOME);

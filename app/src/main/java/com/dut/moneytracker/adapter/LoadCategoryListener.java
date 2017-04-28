@@ -12,4 +12,5 @@ import io.realm.RealmResults;
 public interface LoadCategoryListener {
     void onLoadGroupCategory();
     void onLoadChildCategory(RealmResults<Category> categories);
+    void onPickCategory(Category category);
 }

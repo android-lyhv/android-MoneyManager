@@ -1,5 +1,6 @@
 package com.dut.moneytracker.models.realms;
 
+import com.dut.moneytracker.constant.GroupTag;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 
@@ -37,9 +38,9 @@ public class CategoryManager extends RealmHelper {
     }
 
 
-    public RealmResults<GroupCategory> getGroupCategory() {
+    public RealmResults<GroupCategory> getGroupCategoryExpense() {
         realm.beginTransaction();
-        RealmResults<GroupCategory> realmResults = realm.where(GroupCategory.class).findAll();
+        RealmResults<GroupCategory> realmResults = realm.where(GroupCategory.class).notEqualTo("id", String.valueOf(GroupTag.INCOME)).findAll();
         realm.commitTransaction();
         return realmResults;
     }
@@ -61,6 +62,13 @@ public class CategoryManager extends RealmHelper {
     public RealmResults<Category> getCategories() {
         realm.beginTransaction();
         RealmResults<Category> realmResults = realm.where(Category.class).findAll();
+        realm.commitTransaction();
+        return realmResults;
+    }
+
+    public RealmResults<Category> getCategoriesInCome() {
+        realm.beginTransaction();
+        RealmResults<Category> realmResults = realm.where(Category.class).equalTo("idGroup", String.valueOf(GroupTag.INCOME)).findAll();
         realm.commitTransaction();
         return realmResults;
     }

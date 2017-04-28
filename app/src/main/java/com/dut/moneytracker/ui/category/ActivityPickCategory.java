@@ -3,16 +3,18 @@ package com.dut.moneytracker.ui.category;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.LoadCategoryListener;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.objects.Category;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.OptionsItem;
 
 import io.realm.RealmResults;
 
@@ -20,34 +22,29 @@ import io.realm.RealmResults;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 09/03/2017.
  */
-
+@EActivity(R.layout.activity_pick_category)
 public class ActivityPickCategory extends AppCompatActivity implements LoadCategoryListener {
-    private static final String TAG = ActivityPickCategory.class.getSimpleName();
     private Toolbar mToolbar;
     private FragmentTransaction fragmentTransaction;
     private FragmentManager fragmentManager;
     private boolean isViewChildCategory;
+    @Extra
+    int mType;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pick_category);
+    @AfterViews
+    void init() {
         fragmentManager = getFragmentManager();
         initView();
+        onLoadGroupCategory();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (isViewChildCategory) {
-                    onLoadGroupCategory();
-                } else {
-                    this.finish();
-                }
-                break;
+    @OptionsItem(android.R.id.home)
+    void onClickHome() {
+        if (isViewChildCategory) {
+            onLoadGroupCategory();
+        } else {
+            this.finish();
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void initView() {
@@ -57,16 +54,10 @@ public class ActivityPickCategory extends AppCompatActivity implements LoadCateg
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        onLoadGroupCategory();
-    }
-
-    @Override
     public void onLoadGroupCategory() {
         mToolbar.setNavigationIcon(R.drawable.ic_close_white);
         isViewChildCategory = false;
-        FragmentGroupCategory fragmentGroupCategory = new FragmentGroupCategory();
+        FragmentGroupCategory fragmentGroupCategory = FragmentGroupCategory_.builder().mType(mType).build();
         fragmentGroupCategory.registerLoadChildCategory(this);
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.contentCategory, fragmentGroupCategory);
@@ -89,6 +80,12 @@ public class ActivityPickCategory extends AppCompatActivity implements LoadCateg
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onPickCategory(Category category) {
+        sentBackCategory(category);
+        finish();
     }
 
     private void sentBackCategory(Category category) {

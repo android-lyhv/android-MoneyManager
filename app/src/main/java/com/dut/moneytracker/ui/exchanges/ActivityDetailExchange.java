@@ -30,7 +30,7 @@ import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.ui.category.ActivityPickCategory;
+import com.dut.moneytracker.ui.category.ActivityPickCategory_;
 import com.dut.moneytracker.ui.interfaces.DetailExchangeListener;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
@@ -174,8 +174,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             }, false, null);
             mDialogPickAccount.show(getFragmentManager(), null);
         } else {
-            startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
-        }
+            ActivityPickCategory_.intent(this).mType(mExchange.getTypeExchange()).startForResult(IntentCode.PICK_CATEGORY);        }
     }
 
     @Click(R.id.rlAccount)

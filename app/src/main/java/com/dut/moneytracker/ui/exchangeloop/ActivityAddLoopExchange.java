@@ -29,7 +29,7 @@ import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.ui.base.SpinnerTypeLoopManger;
-import com.dut.moneytracker.ui.category.ActivityPickCategory;
+import com.dut.moneytracker.ui.category.ActivityPickCategory_;
 import com.dut.moneytracker.ui.exchanges.ActivityAddMoreExchange;
 import com.dut.moneytracker.utils.DateTimeUtils;
 import com.dut.moneytracker.utils.DialogUtils;
@@ -91,7 +91,8 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     private DialogPickAccount mDialogPickAccount;
     private GoogleMap mGoogleMap;
     private ExchangeLooper mExchangeLoop;
-    private int mType;
+    private boolean isClickTabIncome;
+    private boolean isClickTabExpense;
 
     @AfterViews
     void init() {
@@ -162,14 +163,18 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
             Toast.makeText(this, getString(R.string.input_category), Toast.LENGTH_SHORT).show();
             return;
         }
-        mExchangeLoop.setTypeExchange(mType);
         ExchangeLoopManager.getInstance().insertNewExchangeLoop(mExchangeLoop);
         finish();
     }
 
     @Click(R.id.tvTabIncome)
     void onClickTabIncome() {
-        mType = ExchangeType.INCOME;
+        if (isClickTabIncome) {
+            return;
+        }
+        isClickTabIncome = true;
+        isClickTabExpense = false;
+        mExchangeLoop.setTypeLoop(ExchangeType.INCOME);
         mTvAmount.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabIncome.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         tvTabIncome.setBackgroundResource(R.color.colorPrimary);
@@ -182,7 +187,12 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @Click(R.id.tvTabExpense)
     void onClickTabExpense() {
-        mType = ExchangeType.EXPENSES;
+        if (isClickTabExpense) {
+            return;
+        }
+        isClickTabIncome = false;
+        isClickTabExpense = true;
+        mExchangeLoop.setTypeLoop(ExchangeType.EXPENSES);
         mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
         tvTabExpense.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         tvTabExpense.setBackgroundResource(R.color.colorPrimary);
@@ -190,19 +200,6 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         tvTabTransfer.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         tvTabTransfer.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        onChangeAmount(mExchangeLoop.getAmount());
-    }
-
-    @Click(R.id.tvTabTransfer)
-    void onClickTransfer() {
-        mType = ExchangeType.TRANSFER;
-        mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
-        tvTabTransfer.setTextColor(ContextCompat.getColor(this, android.R.color.white));
-        tvTabTransfer.setBackgroundResource(R.color.colorPrimary);
-        tvTabExpense.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tvTabExpense.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
         onChangeAmount(mExchangeLoop.getAmount());
     }
 
@@ -214,7 +211,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
                 amount = amount.substring(1);
             }
         }
-        if (mType == ExchangeType.INCOME) {
+        if (mExchangeLoop.getTypeExchange() == ExchangeType.INCOME) {
             mExchangeLoop.setAmount(amount);
         } else {
             mExchangeLoop.setAmount(String.format(Locale.US, "-%s", amount));
@@ -224,9 +221,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @Click(R.id.rlCategory)
     void onClickCategory() {
-        if (mType != ExchangeType.TRANSFER) {
-            startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
-        }
+        ActivityPickCategory_.intent(this).mType(mExchangeLoop.getTypeExchange()).startForResult(IntentCode.PICK_CATEGORY);
     }
 
     @Click(R.id.rlAmount)

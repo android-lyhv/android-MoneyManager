@@ -24,7 +24,7 @@ import com.dut.moneytracker.models.realms.ExchangeManger;
 import com.dut.moneytracker.objects.Account;
 import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.ui.category.ActivityPickCategory;
+import com.dut.moneytracker.ui.category.ActivityPickCategory_;
 import com.dut.moneytracker.ui.interfaces.AddListener;
 
 import org.androidannotations.annotations.AfterViews;
@@ -76,6 +76,8 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     private Exchange mExchange;
     private String mNameAccountTransfer;
     private GoogleLocation mGoogleLocation;
+    private boolean isClickTabIncome;
+    private boolean isClickTabExpense;
 
     @AfterViews
     void init() {
@@ -226,6 +228,11 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @Click(R.id.btnIncome)
     void onClickTabIncome() {
+        if (isClickTabIncome) {
+            return;
+        }
+        isClickTabIncome = true;
+        isClickTabExpense = false;
         mExchange.setTypeExchange(ExchangeType.INCOME);
         mExchange.setIdCategory(null);
         tvTitleFromAccount.setText(getString(R.string.main_account));
@@ -240,6 +247,11 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @Click(R.id.btnExpenses)
     void onClickTabExpenses() {
+        if (isClickTabExpense) {
+            return;
+        }
+        isClickTabExpense = true;
+        isClickTabIncome = false;
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
         mExchange.setIdCategory(null);
         tvTitleFromAccount.setText(getString(R.string.main_account));
@@ -254,6 +266,8 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @Click(R.id.btnTransfer)
     void onClickTabTransfer() {
+        isClickTabExpense = false;
+        isClickTabIncome = false;
         mExchange.setTypeExchange(ExchangeType.TRANSFER);
         tvStatus.setVisibility(View.GONE);
         tvTitleFromAccount.setText(getString(R.string.account_send));
@@ -331,7 +345,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
 
     private void showActivityPickCategory() {
-        startActivityForResult(new Intent(this, ActivityPickCategory.class), IntentCode.PICK_CATEGORY);
+        ActivityPickCategory_.intent(this).mType(mExchange.getTypeExchange()).startForResult(IntentCode.PICK_CATEGORY);
     }
 
     @Override
