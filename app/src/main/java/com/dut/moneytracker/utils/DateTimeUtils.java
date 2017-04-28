@@ -94,14 +94,6 @@ public class DateTimeUtils {
         return TextUtils.equals(getStringDateUs(date1), getStringDateUs(date2));
     }
 
-    public boolean isSameMonth(Date date1, Date date2) {
-        return TextUtils.equals(getStringMonthYear(date1), getStringMonthYear(date2));
-    }
-
-    public boolean isSameYear(Date date1, Date date2) {
-        return TextUtils.equals(getStringYear(date1), getStringYear(date2));
-    }
-
     public List<Date> getListLastDay(int numberDate) {
         Date today = new Date();
         Calendar calendar = new GregorianCalendar();
@@ -243,7 +235,7 @@ public class DateTimeUtils {
         return new Date();
     }
 
-    public int getMaxDaysOfMonth(Date date) {
+    private int getMaxDaysOfMonth(Date date) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
