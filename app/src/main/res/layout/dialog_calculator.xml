@@ -3,182 +3,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorNormal"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvAmount"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:padding="4dp"
-        android:textSize="30dp"
-        tools:text="1000000.00" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/imgBack"
+            android:maxLines="1"
+            android:padding="5dp"
+            android:scrollHorizontally="true"
+            android:textSize="25dp"
+            tools:text="1000000.00" />
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tvAmount"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@id/tvAmount"
+            android:layout_marginEnd="5dp"
+            android:alpha="0.5"
+            android:src="@drawable/ic_keyboard_backspace" />
+    </RelativeLayout>
+
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/colorBackgroundLine" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerCalculator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingEnd="5dp"
+        android:paddingStart="10dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3">
-
-            <TextView
-                android:id="@+id/tvCal7"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="7" />
-
-            <TextView
-                android:id="@+id/tvCal8"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="8" />
-
-            <TextView
-                android:id="@+id/tvCal9"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="9" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3">
-
-            <TextView
-                android:id="@+id/tvCal4"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="4" />
-
-            <TextView
-                android:id="@+id/tvCal5"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="5" />
-
-            <TextView
-                android:id="@+id/tvCal6"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="6" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3">
-
-            <TextView
-                android:id="@+id/tvCal1"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="1" />
-
-            <TextView
-                android:id="@+id/tvCal2"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="2" />
-
-            <TextView
-                android:id="@+id/tvCal3"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="3" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3">
-
-            <TextView
-                android:id="@+id/tvCalDot"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="." />
-
-            <TextView
-                android:id="@+id/tvCal0"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="0" />
-
-            <ImageView
-                android:id="@+id/imgCalBack"
-                style="@style/calculator_item"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="10dp"
-                android:src="@drawable/ic_keyboard_backspace" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="10dp">
 
-        <Button
-            android:id="@+id/tvCalClean"
-            style="@style/calculator_item"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvClean"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="C" />
+            android:padding="5dp"
+            android:text="Xóa"
+            android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/tvOk"
-            style="@style/calculator_item"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="=" />
-    </LinearLayout>
-
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:text="Hủy"
+            android:textSize="20dp" />
+    </RelativeLayout>
 </LinearLayout>
