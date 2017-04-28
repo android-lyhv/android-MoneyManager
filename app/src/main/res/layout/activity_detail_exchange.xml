@@ -36,8 +36,7 @@
                     android:layout_width="@dimen/activity_detail_exchange.image.with"
                     android:layout_height="@dimen/activity_detail_exchange.image.height"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_edit"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_edit" />
 
                 <TextView
                     android:id="@+id/tvExchangeName"

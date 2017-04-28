@@ -206,6 +206,9 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlAmount)
     void onClickAmount() {
+        if (mExchange.getTypeExchange() == ExchangeType.DEBIT && TextUtils.equals(mExchange.getId(), String.valueOf(mExchange.getIdDebit()))) {
+            return;
+        }
         String amount = mExchange.getAmount();
         if (amount.startsWith("-")) {
             amount = amount.substring(1);
