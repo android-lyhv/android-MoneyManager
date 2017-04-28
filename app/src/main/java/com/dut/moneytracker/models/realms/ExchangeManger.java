@@ -2,6 +2,7 @@ package com.dut.moneytracker.models.realms;
 
 import android.text.TextUtils;
 
+import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.PieChartType;
@@ -191,12 +192,7 @@ public class ExchangeManger extends RealmHelper {
         List<ValuePieChart> valuePieCharts = new ArrayList<>();
         List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategoryExpense();
         if (chartType == PieChartType.INCOME) {
-            for (GroupCategory groupCategory : groupCategories) {
-                ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.INCOME);
-                if (valuePieChart != null) {
-                    valuePieCharts.add(valuePieChart);
-                }
-            }
+            valuePieCharts = getListValuePieChartInCome(exchanges);
         }
         if (chartType == PieChartType.EXPENSES) {
             for (GroupCategory groupCategory : groupCategories) {
@@ -233,6 +229,30 @@ public class ExchangeManger extends RealmHelper {
         return valuePieChart;
     }
 
+    private List<ValuePieChart> getListValuePieChartInCome(List<Exchange> exchanges) {
+        List<ValuePieChart> valuePieCharts = new ArrayList<>();
+        List<String> idCategories = CategoryManager.getInstance().getListIdCategoryByGroupIdIncome();
+        for (String idCategory : idCategories) {
+            ValuePieChart valuePieChart = new ValuePieChart();
+            BigDecimal bigDecimal = new BigDecimal("0");
+            for (Exchange exchange : exchanges) {
+                if (TextUtils.equals(idCategory, exchange.getIdCategory()) && exchange.getTypeExchange() == ExchangeType.INCOME) {
+                    bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
+                    if (TextUtils.isEmpty(valuePieChart.getNameGroup())) {
+                        valuePieChart.setNameGroup(CategoryManager.getInstance().getCategoryById(idCategory).getName());
+                        valuePieChart.setColorGroup(R.color.colorPrimary);
+                        //TODO change group color
+                    }
+                }
+            }
+            if (bigDecimal.floatValue() != 0f) {
+                valuePieChart.setAmount(bigDecimal.floatValue());
+                valuePieChart.setAmountString(bigDecimal.toString());
+                valuePieCharts.add(valuePieChart);
+            }
+        }
+        return valuePieCharts;
+    }
 /*
     private ValuePieChart getValePieChartTransfer(List<Exchange> exchanges, int type) {
         ValuePieChart valuePieChart = new ValuePieChart();

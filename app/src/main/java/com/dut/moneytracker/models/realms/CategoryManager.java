@@ -83,4 +83,15 @@ public class CategoryManager extends RealmHelper {
         realm.commitTransaction();
         return idCategories;
     }
+
+    public List<String> getListIdCategoryByGroupIdIncome() {
+        List<String> idCategories = new ArrayList<>();
+        realm.beginTransaction();
+        RealmResults<Category> realmResults = realm.where(Category.class).equalTo("idGroup", String.valueOf(GroupTag.INCOME)).findAll();
+        for (Category category : realmResults) {
+            idCategories.add(category.getId());
+        }
+        realm.commitTransaction();
+        return idCategories;
+    }
 }
