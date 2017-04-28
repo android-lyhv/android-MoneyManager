@@ -1,10 +1,13 @@
 package com.dut.moneytracker.dialogs;
 
 import android.app.DialogFragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.dut.moneytracker.R;
+import com.dut.moneytracker.adapter.calculator.CalculatorAdapter;
 import com.dut.moneytracker.currency.CurrencyExpression;
 import com.dut.moneytracker.currency.CurrencyUtils;
 
@@ -18,8 +21,12 @@ import org.androidannotations.annotations.ViewById;
  * Created by ly.ho on 07/03/2017.
  */
 @EFragment(R.layout.dialog_calculator)
-public class DialogCalculator extends DialogFragment {
+public class DialogCalculator extends DialogFragment implements CalculatorAdapter.ItemCalClickListener {
     private static DialogCalculator sInstance;
+    @ViewById(R.id.recyclerCalculator)
+    RecyclerView recyclerView;
+    @ViewById(R.id.tvAmount)
+    TextView tvAmount;
 
     public static DialogCalculator getInstance() {
         if (sInstance == null) {
@@ -35,8 +42,7 @@ public class DialogCalculator extends DialogFragment {
     }
 
     private ResultListener resultListener;
-    @ViewById(R.id.tvAmount)
-    TextView tvAmount;
+
     private String mAmount = "";
 
     public void registerResultListener(ResultListener resultListener) {
@@ -53,74 +59,79 @@ public class DialogCalculator extends DialogFragment {
     @AfterViews
     void init() {
         tvAmount.setText(mAmount);
+        iniRecyclerView();
     }
 
-    @Click(R.id.tvOk)
-    void onClickOk() {
-        String value = tvAmount.getText().toString().trim();
-        if (!CurrencyExpression.getInstance().isValidateMoney(value)) {
+    private void iniRecyclerView() {
+        CalculatorAdapter mCalculatorAdapter = new CalculatorAdapter(getActivity());
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        recyclerView.setAdapter(mCalculatorAdapter);
+        mCalculatorAdapter.registerClickCal(this);
+    }
+
+    @Override
+    public void onCLick(String s) {
+        if (TextUtils.equals(s, "0")) {
+            onSetValueAmount("0");
             return;
         }
-        resultListener.onResult(value);
-        dismiss();
+        if (TextUtils.equals(s, "1")) {
+            onSetValueAmount("1");
+            return;
+        }
+        if (TextUtils.equals(s, "2")) {
+            onSetValueAmount("2");
+            return;
+        }
+        if (TextUtils.equals(s, "3")) {
+            onSetValueAmount("3");
+            return;
+        }
+        if (TextUtils.equals(s, "4")) {
+            onSetValueAmount("4");
+            return;
+        }
+        if (TextUtils.equals(s, "5")) {
+            onSetValueAmount("5");
+            return;
+        }
+        if (TextUtils.equals(s, "6")) {
+            onSetValueAmount("6");
+            return;
+        }
+        if (TextUtils.equals(s, "7")) {
+            onSetValueAmount("7");
+            return;
+        }
+        if (TextUtils.equals(s, "8")) {
+            onSetValueAmount("8");
+            return;
+        }
+        if (TextUtils.equals(s, "9")) {
+            onSetValueAmount("9");
+            return;
+        }
+        if (TextUtils.equals(s, ".")) {
+            onSetValueAmount(".");
+            return;
+        }
+        if (TextUtils.equals(s, "=")) {
+            String value = tvAmount.getText().toString().trim();
+            if (!CurrencyExpression.getInstance().isValidateMoney(value)) {
+                return;
+            }
+            resultListener.onResult(value);
+            dismiss();
+        }
     }
+
 
     @Click(R.id.tvCal0)
     void onClickTvCalZero() {
         onSetValueAmount("0");
     }
 
-    @Click(R.id.tvCal1)
-    void onClickTvCalOne() {
-        onSetValueAmount("1");
-    }
-
-    @Click(R.id.tvCal2)
-    void onClickTvCalTwo() {
-        onSetValueAmount("2");
-    }
-
-    @Click(R.id.tvCal3)
-    void onClickTvCalThree() {
-        onSetValueAmount("3");
-    }
-
-    @Click(R.id.tvCal4)
-    void onClickTvCalFour() {
-        onSetValueAmount("4");
-    }
-
-    @Click(R.id.tvCal5)
-    void onClickTvCalFive() {
-        onSetValueAmount("5");
-    }
-
-    @Click(R.id.tvCal6)
-    void onClickTvCalSix() {
-        onSetValueAmount("6");
-    }
-
-    @Click(R.id.tvCal7)
-    void onClickTvCalSeven() {
-        onSetValueAmount("7");
-    }
-
-    @Click(R.id.tvCal8)
-    void onClickTvCalEight() {
-        onSetValueAmount("8");
-    }
-
-    @Click(R.id.tvCal9)
-    void onClickTvCalNight() {
-        onSetValueAmount("9");
-    }
-
-    @Click(R.id.tvCalDot)
-    void onClickTvCalDot() {
-        onSetValueAmount(".");
-    }
-
-    @Click(R.id.imgCalBack)
+    @Click(R.id.imgBack)
     void onClickBackNumber() {
         String current = tvAmount.getText().toString();
         if (!TextUtils.isEmpty(current)) {
@@ -128,9 +139,14 @@ public class DialogCalculator extends DialogFragment {
         }
     }
 
-    @Click(R.id.tvCalClean)
+    @Click(R.id.tvClean)
     void onClickClean() {
         tvAmount.setText("");
+    }
+
+    @Click(R.id.tvCancel)
+    void onClickCancel() {
+        dismiss();
     }
 
     private void onSetValueAmount(String chart) {
