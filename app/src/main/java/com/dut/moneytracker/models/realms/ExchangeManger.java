@@ -2,7 +2,6 @@ package com.dut.moneytracker.models.realms;
 
 import android.text.TextUtils;
 
-import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.constant.PieChartType;
@@ -239,9 +238,9 @@ public class ExchangeManger extends RealmHelper {
                 if (TextUtils.equals(idCategory, exchange.getIdCategory()) && exchange.getTypeExchange() == ExchangeType.INCOME) {
                     bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
                     if (TextUtils.isEmpty(valuePieChart.getNameGroup())) {
-                        valuePieChart.setNameGroup(CategoryManager.getInstance().getCategoryById(idCategory).getName());
-                        valuePieChart.setColorGroup(R.color.colorPrimary);
-                        //TODO change group color
+                        Category category = CategoryManager.getInstance().getCategoryById(idCategory);
+                        valuePieChart.setNameGroup(category.getName());
+                        valuePieChart.setColorGroup(category.getColorCode());
                     }
                 }
             }

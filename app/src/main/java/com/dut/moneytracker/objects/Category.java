@@ -20,6 +20,7 @@ public class Category extends RealmObject implements Parcelable {
     private String idGroup;
     private String name;
     private byte[] byteImage;
+    private int colorCode;
 
     public Category() {
     }
@@ -35,6 +36,7 @@ public class Category extends RealmObject implements Parcelable {
         dest.writeString(this.idGroup);
         dest.writeString(this.name);
         dest.writeByteArray(this.byteImage);
+        dest.writeInt(this.colorCode);
     }
 
     protected Category(Parcel in) {
@@ -42,9 +44,10 @@ public class Category extends RealmObject implements Parcelable {
         this.idGroup = in.readString();
         this.name = in.readString();
         this.byteImage = in.createByteArray();
+        this.colorCode = in.readInt();
     }
 
-    public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
+    public static final Creator<Category> CREATOR = new Creator<Category>() {
         @Override
         public Category createFromParcel(Parcel source) {
             return new Category(source);
