@@ -55,7 +55,6 @@ public class FragmentExchanges extends BaseFragment {
     @AfterViews
     void init() {
         initRecyclerView();
-        changeDateLabel();
     }
 
 
@@ -74,6 +73,7 @@ public class FragmentExchanges extends BaseFragment {
         mExchanges.addChangeListener(new RealmChangeListener<RealmResults<Exchange>>() {
             @Override
             public void onChange(RealmResults<Exchange> element) {
+                changeDateLabel();
                 mAdapter.notifyDataSetChanged();
             }
         });
