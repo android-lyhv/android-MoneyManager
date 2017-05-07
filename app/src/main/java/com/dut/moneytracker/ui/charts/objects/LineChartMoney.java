@@ -23,8 +23,6 @@ import java.util.Locale;
  */
 public class LineChartMoney {
     private List<ValueLineChart> mValueLineCharts = new ArrayList<>();
-    private LineData mLineData;
-    private LineDataSet mLineDataSet;
     private LineChart mChart;
     private String mColorChart;
     private Context mContext;
@@ -50,11 +48,11 @@ public class LineChartMoney {
             entry.setY(CurrencyUtils.getInstance().getFloatMoney(mValueLineCharts.get(size - i - 1).getAmount()));
             entries.add(entry);
         }
-        mLineDataSet = new LineDataSet(entries, String.format(Locale.US, "%d %s", FragmentDashboard.LIMIT_DAY_CHART, "Ngày gần nhất"));
+        LineDataSet mLineDataSet = new LineDataSet(entries, String.format(Locale.US, "%d %s", FragmentDashboard.LIMIT_DAY_CHART, "Ngày gần nhất"));
         mLineDataSet.setCircleColor(Color.parseColor(mColorChart));
         mLineDataSet.setColor(Color.parseColor(mColorChart));
         mLineDataSet.setDrawValues(false);
-        mLineData = new LineData(mLineDataSet);
+        LineData mLineData = new LineData(mLineDataSet);
         mChart.setData(mLineData);
     }
 
