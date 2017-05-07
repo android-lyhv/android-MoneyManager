@@ -41,10 +41,6 @@ public class CardAccountAdapter extends RecyclerView.Adapter<CardAccountAdapter.
         holder.setView(mAccounts.get(position));
     }
 
-    public void setAccounts(RealmResults<Account> mAccounts) {
-        this.mAccounts = mAccounts;
-    }
-
     @Override
     public int getItemCount() {
         return mAccounts == null ? 0 : mAccounts.size();
