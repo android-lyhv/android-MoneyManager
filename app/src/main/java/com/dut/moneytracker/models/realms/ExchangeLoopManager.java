@@ -1,7 +1,5 @@
 package com.dut.moneytracker.models.realms;
 
-import android.content.Context;
-
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Exchange;
@@ -100,8 +98,7 @@ public class ExchangeLoopManager extends RealmHelper {
         return exchange;
     }
 
-    public void onGenerateExchange(Context context) {
-        FireBaseSync.getInstance().initDataReference(context);
+    public void onGenerateExchange() {
         RealmResults<ExchangeLooper> exchangeLoops = getExchangeLoopAvailable();
         for (ExchangeLooper exchangeLooper : exchangeLoops) {
             switch (exchangeLooper.getTypeLoop()) {

@@ -18,15 +18,11 @@ public class ReceivePending extends BroadcastReceiver {
         if (intent == null) {
             return;
         }
-        onCheckGenerateExchange(context);
+        ExchangeLoopManager.getInstance().onGenerateExchange();
         onCheckAlarm(context);
     }
 
     private void onCheckAlarm(Context context) {
         DebitManager.getInstance().onCheckEndDateDebit(context);
-    }
-
-    private void onCheckGenerateExchange(Context context) {
-        ExchangeLoopManager.getInstance().onGenerateExchange(context);
     }
 }

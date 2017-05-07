@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.models.AppConfig;
-import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.ui.ActivityLoadData_;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.utils.DialogUtils;
@@ -190,7 +189,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
             AppConfig.getInstance().setReferenceDatabase(this, firebaseUser.getUid());
-            FireBaseSync.getInstance().initDataReference(getApplicationContext());
             requestLogOutGoogle();
             ActivityLoadData_.intent(this).start();
             finish();
