@@ -97,7 +97,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), FragmentDashboard.MAX_DAY);
+                List<ValueLineChart> mValueLineCharts = ExchangeManger.getInstance().getValueChartByDailyDay(mAccount.getId(), FragmentDashboard.LIMIT_DAY_CHART);
                 mLineChartMoney.updateNewValueLineChart(mValueLineCharts);
                 mLineChartMoney.notifyDataSetChanged();
             }
@@ -113,7 +113,7 @@ public class FragmentChildTab extends BaseFragment implements TabAccountListener
 
     @Override
     public void onLoadExchanges() {
-        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsyncByAccount(mAccount.getId());
+        mExchanges = ExchangeManger.getInstance().onLoadExchangeAsyncByAccount(mAccount.getId(), FragmentDashboard.LIMIT_DAY_EXCHANGE);
         mExchangeAdapter = new ExchangeTabAdapter(getContext(), mExchanges);
         mRecyclerExchange.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerExchange.setNestedScrollingEnabled(false);
