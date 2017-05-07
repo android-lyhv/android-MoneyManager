@@ -1,7 +1,6 @@
 package com.dut.moneytracker.models.realms;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -61,13 +60,15 @@ public class FilterManager {
         }
         switch (filter.getTypeFilter()) {
             case FilterType.ALL:
-                Log.d("getLabel: ", "aaaaaaaaa");
-                Date minDate = ExchangeManger.getInstance().getMinDate();
-                Date maxDate = ExchangeManger.getInstance().getMaxDate();
+                Date minDate = ExchangeManger.getInstance().getMinDate(filter.getAccountId());
+                Date maxDate = ExchangeManger.getInstance().getMaxDate(filter.getAccountId());
                 String fromDate = DateTimeUtils.getInstance().getStringDateUs(minDate);
                 String toDate = DateTimeUtils.getInstance().getStringDateUs(maxDate);
+                if (DateTimeUtils.getInstance().isSameDate(new Date(), maxDate)) {
+                    toDate = "Hôm nay";
+                }
                 if (DateTimeUtils.getInstance().isSameDate(minDate, maxDate)) {
-                    timeTitle = fromDate;
+                    timeTitle = toDate;
                 } else {
                     timeTitle = String.format(Locale.US, "%s đến %s", fromDate, toDate);
                 }

@@ -521,16 +521,26 @@ public class ExchangeManger extends RealmHelper {
         });
     }
 
-    public Date getMinDate() {
+    Date getMinDate(String idAccount) {
+        long time;
         realm.beginTransaction();
-        long time = realm.where(Exchange.class).minimumDate("created").getTime();
+        if (TextUtils.isEmpty(idAccount)) {
+            time = realm.where(Exchange.class).minimumDate("created").getTime();
+        } else {
+            time = realm.where(Exchange.class).equalTo("idAccount", idAccount).minimumDate("created").getTime();
+        }
         realm.commitTransaction();
         return new Date(time);
     }
 
-    public Date getMaxDate() {
+    Date getMaxDate(String idAccount) {
+        long time;
         realm.beginTransaction();
-        long time = realm.where(Exchange.class).maximumDate("created").getTime();
+        if (TextUtils.isEmpty(idAccount)) {
+            time = realm.where(Exchange.class).maximumDate("created").getTime();
+        } else {
+            time = realm.where(Exchange.class).equalTo("idAccount", idAccount).maximumDate("created").getTime();
+        }
         realm.commitTransaction();
         return new Date(time);
     }
