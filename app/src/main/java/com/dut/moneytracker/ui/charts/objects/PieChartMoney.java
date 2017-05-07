@@ -9,7 +9,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
@@ -56,7 +55,7 @@ public class PieChartMoney implements OnChartValueSelectedListener {
         mPieDataSet = new PieDataSet(mPieEntries, null);
         mPieDataSet.setLabel(null);
         mPieData = new PieData(mPieDataSet);
-        mPieData.setValueFormatter(new PercentFormatter());
+        mPieData.setValueFormatter(new MyPercentFormatter());
         mPieData.setValueTextSize(12f);
         mPieData.setValueTextColor(Color.WHITE);
         mChart.setData(mPieData);

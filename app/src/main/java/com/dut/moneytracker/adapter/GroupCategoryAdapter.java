@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
+import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
 
 import io.realm.RealmResults;
@@ -21,9 +23,11 @@ import io.realm.RealmResults;
  */
 
 public class GroupCategoryAdapter extends BaseRecyclerAdapter {
+    private int mType;
 
-    public GroupCategoryAdapter(Context context, RealmResults objects) {
+    public GroupCategoryAdapter(Context context, RealmResults objects, int type) {
         super(context, objects);
+        mType = type;
     }
 
     @Override
@@ -35,14 +39,18 @@ public class GroupCategoryAdapter extends BaseRecyclerAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CategoryHolder categoryHolder = (CategoryHolder) holder;
-        categoryHolder.onBind((GroupCategory) getItem(position));
+        if (mType == ExchangeType.EXPENSES) {
+            categoryHolder.onBind((GroupCategory) getItem(position));
+        } else {
+            categoryHolder.onBind((Category) getItem(position));
+        }
     }
 
-    class CategoryHolder extends RecyclerView.ViewHolder {
+    private class CategoryHolder extends RecyclerView.ViewHolder {
         private ImageView imgCategory;
         private TextView mTvCategoryName;
 
-        public CategoryHolder(View itemView) {
+        CategoryHolder(View itemView) {
             super(itemView);
             imgCategory = (ImageView) itemView.findViewById(R.id.imgCategory);
             mTvCategoryName = (TextView) itemView.findViewById(R.id.tvCategoryName);
@@ -51,6 +59,11 @@ public class GroupCategoryAdapter extends BaseRecyclerAdapter {
         public void onBind(GroupCategory groupCategory) {
             mTvCategoryName.setText(groupCategory.getName());
             Glide.with(getContext()).load(groupCategory.getByteImage()).into(imgCategory);
+        }
+
+        public void onBind(Category category) {
+            mTvCategoryName.setText(category.getName());
+            Glide.with(getContext()).load(category.getByteImage()).into(imgCategory);
         }
     }
 }

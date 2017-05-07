@@ -2,7 +2,6 @@ package com.dut.moneytracker.models.firebase;
 
 import android.content.Context;
 
-import com.dut.moneytracker.models.AppConfig;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
@@ -12,6 +11,7 @@ import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
 import com.dut.moneytracker.objects.ExchangeLooper;
 import com.dut.moneytracker.utils.DateTimeUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,24 +32,26 @@ public class FireBaseSync {
     private static final String CHILD_ACCOUNT = "account";
     private static final String CHILD_EXCHANGE = "exchange";
     private static final String CHILD_EXCHANGE_LOOP = "exchange_loop";
+    private static DatabaseReference mDatabase;
+
     private static final String CHILD_DEBIT = "debit";
-    private DatabaseReference mDatabase;
+
+    private FireBaseSync() {
+        // no-oop
+    }
 
     public static FireBaseSync getInstance() {
         if (fireBaseSync == null) {
             fireBaseSync = new FireBaseSync();
         }
+        initDataReference();
         return fireBaseSync;
     }
 
-    public void initDataReference(Context context) {
-        String reference = AppConfig.getInstance().getReferenceDatabase(context);
+    private static void initDataReference() {
+        String reference = String.format(Locale.US, "/users/%s/", FirebaseAuth.getInstance().getCurrentUser().getUid());
         mDatabase = FirebaseDatabase.getInstance().getReference(reference);
         mDatabase.keepSynced(true);
-    }
-
-    private FireBaseSync() {
-
     }
 
 

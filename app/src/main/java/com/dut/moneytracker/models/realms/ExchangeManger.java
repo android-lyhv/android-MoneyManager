@@ -148,14 +148,14 @@ public class ExchangeManger extends RealmHelper {
         return realmResults;
     }
 
-    public RealmResults<Exchange> onLoadExchangeAsync() {
-        Date lastDate = DateTimeUtils.getInstance().getSkipDate(new Date(), -7);
+    public RealmResults<Exchange> onLoadExchangeAsync(int limitDate) {
+        Date lastDate = DateTimeUtils.getInstance().getSkipDate(new Date(), -limitDate);
         return realm.where(Exchange.class).greaterThanOrEqualTo("created", lastDate).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
 
-    public RealmResults<Exchange> onLoadExchangeAsyncByAccount(String accountID) {
-        Date lastDate = DateTimeUtils.getInstance().getSkipDate(new Date(), -7);
+    public RealmResults<Exchange> onLoadExchangeAsyncByAccount(String accountID, int limitDate) {
+        Date lastDate = DateTimeUtils.getInstance().getSkipDate(new Date(), -limitDate);
         return realm.where(Exchange.class).equalTo("idAccount", accountID).greaterThanOrEqualTo("created", lastDate).findAllSortedAsync("created", Sort.DESCENDING);
     }
 
@@ -189,14 +189,9 @@ public class ExchangeManger extends RealmHelper {
     public List<ValuePieChart> getFilterValuePieCharts(Filter filter, int chartType) {
         List<Exchange> exchanges = getExchanges(filter);
         List<ValuePieChart> valuePieCharts = new ArrayList<>();
-        List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategory();
+        List<GroupCategory> groupCategories = CategoryManager.getInstance().getGroupCategoryExpense();
         if (chartType == PieChartType.INCOME) {
-            for (GroupCategory groupCategory : groupCategories) {
-                ValuePieChart valuePieChart = getValePieChart(exchanges, groupCategory, ExchangeType.INCOME);
-                if (valuePieChart != null) {
-                    valuePieCharts.add(valuePieChart);
-                }
-            }
+            valuePieCharts = getListValuePieChartInCome(exchanges);
         }
         if (chartType == PieChartType.EXPENSES) {
             for (GroupCategory groupCategory : groupCategories) {
@@ -233,6 +228,30 @@ public class ExchangeManger extends RealmHelper {
         return valuePieChart;
     }
 
+    private List<ValuePieChart> getListValuePieChartInCome(List<Exchange> exchanges) {
+        List<ValuePieChart> valuePieCharts = new ArrayList<>();
+        List<String> idCategories = CategoryManager.getInstance().getListIdCategoryByGroupIdIncome();
+        for (String idCategory : idCategories) {
+            ValuePieChart valuePieChart = new ValuePieChart();
+            BigDecimal bigDecimal = new BigDecimal("0");
+            for (Exchange exchange : exchanges) {
+                if (TextUtils.equals(idCategory, exchange.getIdCategory()) && exchange.getTypeExchange() == ExchangeType.INCOME) {
+                    bigDecimal = bigDecimal.add(new BigDecimal(exchange.getAmount()));
+                    if (TextUtils.isEmpty(valuePieChart.getNameGroup())) {
+                        Category category = CategoryManager.getInstance().getCategoryById(idCategory);
+                        valuePieChart.setNameGroup(category.getName());
+                        valuePieChart.setColorGroup(category.getColorCode());
+                    }
+                }
+            }
+            if (bigDecimal.floatValue() != 0f) {
+                valuePieChart.setAmount(bigDecimal.floatValue());
+                valuePieChart.setAmountString(bigDecimal.toString());
+                valuePieCharts.add(valuePieChart);
+            }
+        }
+        return valuePieCharts;
+    }
 /*
     private ValuePieChart getValePieChartTransfer(List<Exchange> exchanges, int type) {
         ValuePieChart valuePieChart = new ValuePieChart();
@@ -502,16 +521,26 @@ public class ExchangeManger extends RealmHelper {
         });
     }
 
-    public Date getMinDate() {
+    Date getMinDate(String idAccount) {
+        long time;
         realm.beginTransaction();
-        long time = realm.where(Exchange.class).minimumDate("created").getTime();
+        if (TextUtils.isEmpty(idAccount)) {
+            time = realm.where(Exchange.class).minimumDate("created").getTime();
+        } else {
+            time = realm.where(Exchange.class).equalTo("idAccount", idAccount).minimumDate("created").getTime();
+        }
         realm.commitTransaction();
         return new Date(time);
     }
 
-    public Date getMaxDate() {
+    Date getMaxDate(String idAccount) {
+        long time;
         realm.beginTransaction();
-        long time = realm.where(Exchange.class).minimumDate("created").getTime();
+        if (TextUtils.isEmpty(idAccount)) {
+            time = realm.where(Exchange.class).maximumDate("created").getTime();
+        } else {
+            time = realm.where(Exchange.class).equalTo("idAccount", idAccount).maximumDate("created").getTime();
+        }
         realm.commitTransaction();
         return new Date(time);
     }

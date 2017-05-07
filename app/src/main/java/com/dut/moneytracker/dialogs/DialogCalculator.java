@@ -32,6 +32,7 @@ public class DialogCalculator extends DialogFragment implements CalculatorAdapte
         if (sInstance == null) {
             sInstance = DialogCalculator_.builder().build();
         }
+        setAmount("");
         return sInstance;
     }
 
@@ -43,15 +44,15 @@ public class DialogCalculator extends DialogFragment implements CalculatorAdapte
 
     private ResultListener resultListener;
 
-    private String mAmount = "";
+    private static String mAmount = "";
 
     public void registerResultListener(ResultListener resultListener) {
         this.resultListener = resultListener;
     }
 
-    public void setAmount(String amount) {
+    public static void setAmount(String amount) {
         if (TextUtils.isEmpty(amount) || CurrencyUtils.getInstance().getFloatMoney(amount) == 0) {
-            return;
+            mAmount = "";
         }
         mAmount = amount;
     }

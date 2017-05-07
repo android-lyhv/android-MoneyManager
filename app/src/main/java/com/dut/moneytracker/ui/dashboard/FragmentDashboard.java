@@ -28,7 +28,8 @@ import io.realm.RealmResults;
  */
 @EFragment(R.layout.fragment_dashboard)
 public class FragmentDashboard extends BaseFragment implements TabLayout.OnTabSelectedListener, FragmentParentTab.CardAccountListener {
-    public static final int MAX_DAY = 30;
+    public static final int LIMIT_DAY_CHART = 15;
+    public static final int LIMIT_DAY_EXCHANGE = 7;
     @ViewById(R.id.tabLayout)
     TabLayout mTabLayout;
     @ViewById(R.id.viewpager)

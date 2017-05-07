@@ -90,6 +90,7 @@ public class FragmentExchanges extends BaseFragment {
                 } else {
                     ExchangeManger.getInstance().insertOrUpdate(exchangeEdit);
                 }
+                changeDateLabel();
                 break;
             case IntentCode.DELETE_EXCHANGE:
                 Exchange exchangeDelete = (Exchange) mAdapter.getItem(positionItem);
@@ -98,6 +99,8 @@ public class FragmentExchanges extends BaseFragment {
                 } else {
                     ExchangeManger.getInstance().deleteExchangeById(exchangeDelete.getId());
                 }
+                changeDateLabel();
+                break;
         }
     }
 

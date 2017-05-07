@@ -137,6 +137,22 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
             category.setId(String.valueOf(idCategory));
             category.setName(name[i]);
             category.setByteImage(loadByteBitmap(path[i]));
+            switch (i) {
+                case 0:
+                    category.setColorCode(R.color.color_income);
+                    break;
+                case 1:
+                    category.setColorCode(R.color.colorPrimary);
+                    break;
+                case 2:
+                    category.setColorCode(R.color.color_education);
+                    break;
+                case 3:
+                    category.setColorCode(R.color.color_other);
+                    break;
+                case 4:
+                    category.setColorCode(R.color.color_love);
+            }
             CategoryManager.getInstance().insertOrUpdate(category);
         }
     }

@@ -3,8 +3,6 @@ package com.dut.moneytracker.models;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.Locale;
-
 import io.realm.Realm;
 
 /**
@@ -52,19 +50,6 @@ public class AppConfig {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean(KEY_IS_LOGIN, value);
-        editor.apply();
-    }
-
-    public String getReferenceDatabase(Context context) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return pref.getString(KEY_REFERENCE_DATABASE, "");
-    }
-
-    public void setReferenceDatabase(Context context, String userId) {
-        String reference = String.format(Locale.US, "/users/%s/", userId);
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString(KEY_REFERENCE_DATABASE, reference);
         editor.apply();
     }
 

@@ -19,6 +19,7 @@ import com.dut.moneytracker.R;
 public class ColorAccountAdapter extends RecyclerView.Adapter<ColorAccountAdapter.ItemHolder> {
     private Context mContext;
     private String[] mColors;
+
     public ColorAccountAdapter(Context context) {
         mContext = context;
         mColors = mContext.getResources().getStringArray(R.array.colors_account);
@@ -45,10 +46,10 @@ public class ColorAccountAdapter extends RecyclerView.Adapter<ColorAccountAdapte
     }
 
 
-    public class ItemHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+    class ItemHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageView;
 
-        public ItemHolder(View itemView) {
+        ItemHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageColor);
         }

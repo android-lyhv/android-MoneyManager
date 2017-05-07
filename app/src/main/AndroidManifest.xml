@@ -70,7 +70,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen" />
         <activity
-            android:name=".ui.category.ActivityPickCategory"
+            android:name=".ui.category.ActivityPickCategory_"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity_"

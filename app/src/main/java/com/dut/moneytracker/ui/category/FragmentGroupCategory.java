@@ -1,21 +1,24 @@
 package com.dut.moneytracker.ui.category;
 
 import android.app.Fragment;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.ClickItemListener;
 import com.dut.moneytracker.adapter.ClickItemRecyclerView;
 import com.dut.moneytracker.adapter.GroupCategoryAdapter;
 import com.dut.moneytracker.adapter.LoadCategoryListener;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.models.realms.CategoryManager;
+import com.dut.moneytracker.objects.Category;
 import com.dut.moneytracker.objects.GroupCategory;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.ViewById;
 
 import io.realm.RealmResults;
 
@@ -23,37 +26,51 @@ import io.realm.RealmResults;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 09/03/2017.
  */
-
+@EFragment(R.layout.fragament_category)
 public class FragmentGroupCategory extends Fragment implements ClickItemListener {
     private LoadCategoryListener mLoadCategoryListener;
-    private RecyclerView mRecyclerCategory;
-    private GroupCategoryAdapter childCategoryRecyclerAdapter;
-    private RealmResults<GroupCategory> mGroupCategories = CategoryManager.getInstance().getGroupCategory();
+    private RealmResults<GroupCategory> mGroupCategories;
+    private RealmResults<Category> mCategories;
+    GroupCategoryAdapter mAdapter;
+    @ViewById(R.id.recyclerCategory)
+    RecyclerView mRecyclerViewCategory;
+    @FragmentArg
+    int mType;
 
     public void registerLoadChildCategory(LoadCategoryListener loadCategoryListener) {
         mLoadCategoryListener = loadCategoryListener;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragament_category, container, false);
-        initView(view);
-        return view;
+    @AfterViews
+    void init() {
+        initView();
     }
 
-    private void initView(View view) {
-        childCategoryRecyclerAdapter = new GroupCategoryAdapter(getActivity(), mGroupCategories);
-        mRecyclerCategory = (RecyclerView) view.findViewById(R.id.recyclerCategory);
-        mRecyclerCategory.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerCategory.setAdapter(childCategoryRecyclerAdapter);
-        mRecyclerCategory.addOnItemTouchListener(new ClickItemRecyclerView(getActivity(), this));
+    private void initView() {
+        switch (mType) {
+            case ExchangeType.EXPENSES:
+                mGroupCategories = CategoryManager.getInstance().getGroupCategoryExpense();
+                mAdapter = new GroupCategoryAdapter(getActivity(), mGroupCategories, ExchangeType.EXPENSES);
+                break;
+            case ExchangeType.INCOME:
+                mCategories = CategoryManager.getInstance().getCategoriesInCome();
+                mAdapter = new GroupCategoryAdapter(getActivity(), mCategories, ExchangeType.INCOME);
+                break;
+        }
+
+        mRecyclerViewCategory.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerViewCategory.setAdapter(mAdapter);
+        mRecyclerViewCategory.addOnItemTouchListener(new ClickItemRecyclerView(getActivity(), this));
     }
 
     @Override
     public void onClick(View view, int position) {
-        String idGroup = mGroupCategories.get(position).getId();
-        mLoadCategoryListener.onLoadChildCategory(CategoryManager.getInstance().getCategoriesByGroupId(idGroup));
+        if (mType == ExchangeType.EXPENSES) {
+            String idGroup = mGroupCategories.get(position).getId();
+            mLoadCategoryListener.onLoadChildCategory(CategoryManager.getInstance().getCategoriesByGroupId(idGroup));
+        } else {
+            mLoadCategoryListener.onPickCategory((Category) mAdapter.getItem(position));
+        }
     }
 
 }
