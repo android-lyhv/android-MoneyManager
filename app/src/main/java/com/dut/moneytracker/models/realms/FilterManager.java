@@ -1,6 +1,7 @@
 package com.dut.moneytracker.models.realms;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.dut.moneytracker.constant.FilterType;
 import com.dut.moneytracker.currency.CurrencyUtils;
@@ -52,47 +53,48 @@ public class FilterManager {
      * @return if exchanges == null not append amount value
      */
     public String getLabel(Filter filter, List<Exchange> exchanges) {
-        String amountFormat = "";
+        String amountTitle = "";
+        String timeTitle = "";
         if (exchanges != null) {
             String amount = AccountManager.getInstance().getTotalAmountExchanges(exchanges);
-            amountFormat = CurrencyUtils.getInstance().getStringMoneyFormat(amount, CurrencyUtils.DEFAULT_CURRENCY_CODE);
+            amountTitle = CurrencyUtils.getInstance().getStringMoneyFormat(amount, CurrencyUtils.DEFAULT_CURRENCY_CODE);
         }
-        String dateFormat = "";
         switch (filter.getTypeFilter()) {
             case FilterType.ALL:
+                Log.d("getLabel: ", "aaaaaaaaa");
                 Date minDate = ExchangeManger.getInstance().getMinDate();
                 Date maxDate = ExchangeManger.getInstance().getMaxDate();
                 String fromDate = DateTimeUtils.getInstance().getStringDateUs(minDate);
                 String toDate = DateTimeUtils.getInstance().getStringDateUs(maxDate);
                 if (DateTimeUtils.getInstance().isSameDate(minDate, maxDate)) {
-                    dateFormat = fromDate;
+                    timeTitle = fromDate;
                 } else {
-                    dateFormat = String.format(Locale.US, "%s đến %s", fromDate, toDate);
+                    timeTitle = String.format(Locale.US, "%s đến %s", fromDate, toDate);
                 }
                 break;
             case FilterType.DAY:
-                dateFormat = DateTimeUtils.getInstance().getStringFullDateVn(filter.getDateFilter());
+                timeTitle = DateTimeUtils.getInstance().getStringFullDateVn(filter.getDateFilter());
                 break;
             case FilterType.MONTH:
-                dateFormat = DateTimeUtils.getInstance().getStringMonthYear(filter.getDateFilter());
+                timeTitle = DateTimeUtils.getInstance().getStringMonthYear(filter.getDateFilter());
                 break;
             case FilterType.YEAR:
-                dateFormat = DateTimeUtils.getInstance().getStringYear(filter.getDateFilter());
+                timeTitle = DateTimeUtils.getInstance().getStringYear(filter.getDateFilter());
                 break;
             case FilterType.CUSTOM:
                 String fromDateCustom = DateTimeUtils.getInstance().getStringDateUs(filter.getFormDate());
                 String toDateCustom = DateTimeUtils.getInstance().getStringDateUs(filter.getToDate());
                 if (DateTimeUtils.getInstance().isSameDate(filter.getFormDate(), filter.getToDate())) {
-                    dateFormat = fromDateCustom;
+                    timeTitle = fromDateCustom;
                 } else {
-                    dateFormat = String.format(Locale.US, "%s đến %s", fromDateCustom, toDateCustom);
+                    timeTitle = String.format(Locale.US, "%s đến %s", fromDateCustom, toDateCustom);
                 }
                 break;
         }
-        if (TextUtils.isEmpty(amountFormat)) {
-            return dateFormat;
+        if (TextUtils.isEmpty(amountTitle)) {
+            return timeTitle;
         }
-        return String.format(Locale.US, "%s\n%s", dateFormat, amountFormat);
+        return String.format(Locale.US, "%s\n%s", timeTitle, amountTitle);
     }
 
 

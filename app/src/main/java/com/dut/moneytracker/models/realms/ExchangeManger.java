@@ -530,7 +530,7 @@ public class ExchangeManger extends RealmHelper {
 
     public Date getMaxDate() {
         realm.beginTransaction();
-        long time = realm.where(Exchange.class).minimumDate("created").getTime();
+        long time = realm.where(Exchange.class).maximumDate("created").getTime();
         realm.commitTransaction();
         return new Date(time);
     }
