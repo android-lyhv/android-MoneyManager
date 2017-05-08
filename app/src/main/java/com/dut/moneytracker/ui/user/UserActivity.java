@@ -49,8 +49,8 @@ public class UserActivity extends AppCompatActivity {
 
     @Click(R.id.btnLogout)
     void onClickLogout() {
-        AppConfig.getInstance().clearAllData(this);
         if (mFireBaseAuth.getCurrentUser() != null) {
+            AppConfig.getInstance().clearAllData(this);
             PendingService.getInstance().removePending(getApplicationContext());
             mFireBaseAuth.signOut();
             requestLogoutFacebook();
