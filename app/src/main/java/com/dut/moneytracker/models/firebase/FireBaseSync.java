@@ -32,9 +32,9 @@ public class FireBaseSync {
     private static final String CHILD_ACCOUNT = "account";
     private static final String CHILD_EXCHANGE = "exchange";
     private static final String CHILD_EXCHANGE_LOOP = "exchange_loop";
-    private static DatabaseReference mDatabase;
-
     private static final String CHILD_DEBIT = "debit";
+
+    private static DatabaseReference mDatabaseReference;
 
     private FireBaseSync() {
         // no-oop
@@ -50,57 +50,57 @@ public class FireBaseSync {
 
     private static void initDataReference() {
         String reference = String.format(Locale.US, "/users/%s/", FirebaseAuth.getInstance().getCurrentUser().getUid());
-        mDatabase = FirebaseDatabase.getInstance().getReference(reference);
-        mDatabase.keepSynced(true);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference(reference);
+        mDatabaseReference.keepSynced(true);
     }
 
 
     public void upDateAccount(Account account) {
-        String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_ACCOUNT).getKey(), account.getId());
+        String path = String.format(Locale.US, "/%s/%s", mDatabaseReference.child(CHILD_ACCOUNT).getKey(), account.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapAccount(account));
-        mDatabase.updateChildren(childUpdates);
+        mDatabaseReference.updateChildren(childUpdates);
     }
 
     public void upDateExchange(Exchange exchange) {
-        String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_EXCHANGE).getKey(), exchange.getId());
+        String path = String.format(Locale.US, "/%s/%s", mDatabaseReference.child(CHILD_EXCHANGE).getKey(), exchange.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapExchange(exchange));
-        mDatabase.updateChildren(childUpdates);
+        mDatabaseReference.updateChildren(childUpdates);
     }
 
     public void upDateExchangeLoop(ExchangeLooper exchangeLooper) {
-        String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_EXCHANGE_LOOP).getKey(), exchangeLooper.getId());
+        String path = String.format(Locale.US, "/%s/%s", mDatabaseReference.child(CHILD_EXCHANGE_LOOP).getKey(), exchangeLooper.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapExchangeLoop(exchangeLooper));
-        mDatabase.updateChildren(childUpdates);
+        mDatabaseReference.updateChildren(childUpdates);
     }
 
     public void upDateDebit(Debit debit) {
-        String path = String.format(Locale.US, "/%s/%s", mDatabase.child(CHILD_DEBIT).getKey(), debit.getId());
+        String path = String.format(Locale.US, "/%s/%s", mDatabaseReference.child(CHILD_DEBIT).getKey(), debit.getId());
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(path, toMapDebit(debit));
-        mDatabase.updateChildren(childUpdates);
+        mDatabaseReference.updateChildren(childUpdates);
     }
 
     public void deleteAccount(String id) {
-        mDatabase.child(CHILD_ACCOUNT).child(id).removeValue();
+        mDatabaseReference.child(CHILD_ACCOUNT).child(id).removeValue();
     }
 
     public void deleteExchange(String id) {
-        mDatabase.child(CHILD_EXCHANGE).child(id).removeValue();
+        mDatabaseReference.child(CHILD_EXCHANGE).child(id).removeValue();
     }
 
     public void deleteExchangeLoop(int id) {
-        mDatabase.child(CHILD_EXCHANGE_LOOP).child(String.valueOf(id)).removeValue();
+        mDatabaseReference.child(CHILD_EXCHANGE_LOOP).child(String.valueOf(id)).removeValue();
     }
 
     public void deleteDebit(int id) {
-        mDatabase.child(CHILD_DEBIT).child(String.valueOf(id)).removeValue();
+        mDatabaseReference.child(CHILD_DEBIT).child(String.valueOf(id)).removeValue();
     }
 
     public void onLoadDataServer(final Context context, final LoadDataListener loadDataListener) {
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 onLoadAccount(dataSnapshot.child(CHILD_ACCOUNT));
