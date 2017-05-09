@@ -70,10 +70,10 @@ import static com.dut.moneytracker.ui.MainActivity.FragmentTag.DEFAULT;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainListener, NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = MainActivity.class.getSimpleName();
     public static final String RECEIVER_DELETE_ACCOUNT = "RECEIVER_DELETE_ACCOUNT";
     public static final String RECEIVER_ADD_ACCOUNT = "RECEIVER_ADD_ACCOUNT";
     public static final String RECEIVER_EDIT_ACCOUNT = "RECEIVER_EDIT_ACCOUNT";
-    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String DASHBOARD = "DASHBOARD";
     private static final String CHART = "CHART";
     private static final String EXCHANGE_RECORDS = "EXCHANGE";
