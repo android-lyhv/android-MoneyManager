@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.calculator.CalculatorAdapter;
 import com.dut.moneytracker.currency.CurrencyExpression;
-import com.dut.moneytracker.currency.CurrencyUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -51,14 +50,14 @@ public class DialogCalculator extends DialogFragment implements CalculatorAdapte
     }
 
     public static void setAmount(String amount) {
-        if (TextUtils.isEmpty(amount) || CurrencyUtils.getInstance().getFloatMoney(amount) == 0) {
-            mAmount = "";
-        }
         mAmount = amount;
     }
 
     @AfterViews
     void init() {
+        if (TextUtils.equals(mAmount, "0")) {
+            mAmount = "";
+        }
         tvAmount.setText(mAmount);
         iniRecyclerView();
     }

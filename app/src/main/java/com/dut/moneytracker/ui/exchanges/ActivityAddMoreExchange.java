@@ -111,13 +111,12 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), "VND"));
+        tvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchange.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         tvDate.setText(DateTimeUtils.getInstance().getStringFullDateVn(mDate));
         tvTime.setText(DateTimeUtils.getInstance().getStringTime(mDate));
         editDescription.setText(null == mExchange.getDescription() ? "" : mExchange.getDescription());
         mDayPicker = DayPicker_.builder().build();
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
-
             @Override
             public void onResultDate(Date date) {
                 mDate = date;
