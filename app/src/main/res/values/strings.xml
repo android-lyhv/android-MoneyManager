@@ -25,7 +25,6 @@
     <string name="extra.account">Account</string>
     <string name="broadcast_filter">broadcast_filter</string>
     <string name="broadcast_objects_filter">broadcast_objects_filter</string>
-    <string name="extra.account_list">Accounts</string>
     <string name="dialog.title.currency">Chọn tiền tệ</string>
     <string name="dialog.title.account">Danh sách tài khoản</string>
     <string name="extra.category">extra_category</string>
@@ -63,7 +62,7 @@
     <integer name="zoom_map">10</integer>
     <string name="extra_detail_exchange">extra_detail_exchange</string>
     <string name="color_account_default">#03a879</string>
-    <string name="manger_accounts">Quản lý ví</string>
+    <string name="manger_accounts">Quản lý ví tiền</string>
     <string name="loop_status_ok">Mở</string>
     <string name="loop_status_close">Đóng</string>
     <string name="receiver_add_delete_account">receiver_add_or_delete_account</string>
