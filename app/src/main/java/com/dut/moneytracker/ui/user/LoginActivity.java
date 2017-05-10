@@ -177,14 +177,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (mFireBaseAuth != null) {
-            mFireBaseAuth.removeAuthStateListener(this);
-        }
-    }
-
-    @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -197,14 +189,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void requestLogOutGoogle() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mFireBaseAuth != null) {
-            mFireBaseAuth.removeAuthStateListener(this);
         }
     }
 }
