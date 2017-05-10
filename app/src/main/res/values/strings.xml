@@ -96,6 +96,7 @@
     <string name="messger_init_debit_exchange">Không thể xóa giao dịch khởi tạo sổ nợ!</string>
     <string name="different_account">Tài khoản gửi và tài khoản nhận phải khác nhau</string>
     <string name="my_account">Tài khoản của tôi</string>
+    <string name="main_home">Home</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>

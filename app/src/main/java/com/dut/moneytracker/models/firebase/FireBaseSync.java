@@ -1,7 +1,6 @@
 package com.dut.moneytracker.models.firebase;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
@@ -22,8 +21,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.facebook.login.widget.ProfilePictureView.TAG;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -51,9 +48,7 @@ public class FireBaseSync {
 
     private void initDataReference() {
         String reference = String.format(Locale.US, "/users/%s/", FirebaseAuth.getInstance().getCurrentUser().getUid());
-        Log.d(TAG, "initDataReference: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(reference);
-        Log.d(TAG, "initDataReference: " + FirebaseDatabase.getInstance().getReference().toString());
         mDatabaseReference.keepSynced(true);
     }
 
