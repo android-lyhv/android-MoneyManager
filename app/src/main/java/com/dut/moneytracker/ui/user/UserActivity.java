@@ -42,6 +42,7 @@ public class UserActivity extends AppCompatActivity {
 
     @AfterViews
     void init() {
+        setTitle(getString(R.string.my_account));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         loadDataUser();
