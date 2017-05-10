@@ -271,7 +271,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         mExchange.setTypeExchange(ExchangeType.TRANSFER);
         tvStatus.setVisibility(View.GONE);
         tvTitleFromAccount.setText(getString(R.string.account_send));
-        tvTitleToAccount.setText(getString(R.string.expense_name));
+        tvTitleToAccount.setText(getString(R.string.account_receive));
         tvCategoryName.setText(mNameAccountTransfer);
         btnExpenses.setAlpha(0.5f);
         btnIncome.setAlpha(0.5f);

@@ -25,7 +25,7 @@
                     android:id="@+id/tvTitleAccountName"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Tên tài khoản" />
+                    android:text="Tên ví tiền" />
 
 
                 <EditText

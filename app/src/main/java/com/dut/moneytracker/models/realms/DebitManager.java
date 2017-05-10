@@ -180,7 +180,7 @@ public class DebitManager extends RealmHelper {
             content = String.format(Locale.US, "Tôi -> %s", debit.getName());
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_alarm_debit)
+                .setSmallIcon(R.drawable.ic_account)
                 .setContentText(content)
                 .setContentTitle(context.getString(R.string.title_debit_notitication))
                 .setAutoCancel(true);

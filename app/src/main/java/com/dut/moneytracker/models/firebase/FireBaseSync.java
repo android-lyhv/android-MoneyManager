@@ -33,22 +33,20 @@ public class FireBaseSync {
     private static final String CHILD_EXCHANGE = "exchange";
     private static final String CHILD_EXCHANGE_LOOP = "exchange_loop";
     private static final String CHILD_DEBIT = "debit";
-
-    private static DatabaseReference mDatabaseReference;
+    private DatabaseReference mDatabaseReference;
 
     private FireBaseSync() {
-        // no-oop
+        initDataReference();
     }
 
     public static FireBaseSync getInstance() {
         if (fireBaseSync == null) {
             fireBaseSync = new FireBaseSync();
         }
-        initDataReference();
         return fireBaseSync;
     }
 
-    private static void initDataReference() {
+    private void initDataReference() {
         String reference = String.format(Locale.US, "/users/%s/", FirebaseAuth.getInstance().getCurrentUser().getUid());
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(reference);
         mDatabaseReference.keepSynced(true);

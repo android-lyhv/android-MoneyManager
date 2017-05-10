@@ -511,7 +511,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     // Change Menu items
     @Override
     public void loadMenuItemFragmentDashboard() {
-        setTitle(getString(R.string.main_account));
+        setTitle(getString(R.string.main_home));
         spinner.setVisibility(View.GONE);
         imgDateFilter.setVisibility(View.GONE);
         imgSettingAccount.setVisibility(View.VISIBLE);
