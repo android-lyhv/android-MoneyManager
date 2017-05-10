@@ -46,7 +46,7 @@
     <string name="exchange.name.transfer">Chuyển khoản</string>
     <string name="account_send">Tải khoản gửi</string>
     <string name="account_receive">Tài khoản nhận</string>
-    <string name="main_account">Quản lý thu chi</string>
+    <string name="main_account">Ví tiền</string>
     <string name="category_name">Thể loại</string>
     <string name="input_money">Nhập số tiền</string>
     <string name="input_account">Chọn ví</string>
