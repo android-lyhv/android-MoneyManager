@@ -6,6 +6,7 @@ import android.content.Context;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Logger;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -16,8 +17,6 @@ import io.realm.RealmConfiguration;
  */
 
 public class MoneyTrackerApplication extends Application {
-    private static final String TAG = MoneyTrackerApplication.class.getSimpleName();
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -37,7 +36,9 @@ public class MoneyTrackerApplication extends Application {
     }
 
     private void configFireBase() {
+        FirebaseDatabase.getInstance().setLogLevel(Logger.Level.DEBUG);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().goOnline();
     }
 
     private void configMap() {
