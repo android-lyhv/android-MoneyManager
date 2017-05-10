@@ -1,6 +1,7 @@
 package com.dut.moneytracker.models.firebase;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
@@ -22,6 +23,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.facebook.login.widget.ProfilePictureView.TAG;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 03/03/2017.
@@ -33,24 +36,24 @@ public class FireBaseSync {
     private static final String CHILD_EXCHANGE = "exchange";
     private static final String CHILD_EXCHANGE_LOOP = "exchange_loop";
     private static final String CHILD_DEBIT = "debit";
-
-    private static DatabaseReference mDatabaseReference;
+    private DatabaseReference mDatabaseReference;
 
     private FireBaseSync() {
-        // no-oop
+        initDataReference();
     }
 
     public static FireBaseSync getInstance() {
         if (fireBaseSync == null) {
             fireBaseSync = new FireBaseSync();
         }
-        initDataReference();
         return fireBaseSync;
     }
 
-    private static void initDataReference() {
+    private void initDataReference() {
         String reference = String.format(Locale.US, "/users/%s/", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Log.d(TAG, "initDataReference: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(reference);
+        Log.d(TAG, "initDataReference: " + FirebaseDatabase.getInstance().getReference().toString());
         mDatabaseReference.keepSynced(true);
     }
 
