@@ -39,7 +39,6 @@ dependencies {
     // FireBase
     compile 'com.google.firebase:firebase-auth:10.2.0'
     compile 'com.google.firebase:firebase-database:10.2.0'
-    compile 'com.google.firebase:firebase-storage:10.2.0'
     // Facebook Sdk
     compile 'com.facebook.android:facebook-android-sdk:4.17.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
