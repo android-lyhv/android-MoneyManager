@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                fireBaseAuthWthFacebook(loginResult.getAccessToken());
+                fireBaseAuthWithFacebook(loginResult.getAccessToken());
             }
 
             @Override
@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
-    private void fireBaseAuthWthFacebook(AccessToken accessToken) {
+    private void fireBaseAuthWithFacebook(AccessToken accessToken) {
         DialogUtils.getInstance().showProgressDialog(this, getString(R.string.dialog_messenger_connect));
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mFireBaseAuth.signInWithCredential(credential)
@@ -189,6 +189,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void requestLogOutGoogle() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mFireBaseAuth != null) {
+            mFireBaseAuth.removeAuthStateListener(this);
         }
     }
 }
