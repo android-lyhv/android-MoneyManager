@@ -270,9 +270,8 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         dayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultDate(Date date) {
-                Date newDate = DateTimeUtils.getInstance().getDateRemindLoop(date);
-                mExchangeLoop.setCreated(newDate);
-                tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(newDate));
+                mExchangeLoop.setCreated(date);
+                tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(date));
             }
         });
         dayPicker.show(getSupportFragmentManager(), null);
