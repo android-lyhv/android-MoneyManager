@@ -1,5 +1,6 @@
 package com.dut.moneytracker.models.realms;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,10 +12,11 @@ import android.support.v4.app.NotificationCompat;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Debit;
 import com.dut.moneytracker.objects.Exchange;
-import com.dut.moneytracker.ui.MainActivity_;
+import com.dut.moneytracker.ui.MainActivity;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -159,7 +161,7 @@ public class DebitManager extends RealmHelper {
     public void onCheckEndDateDebit(Context context) {
         RealmResults<Debit> realmResults = getDebitsNotClose();
         for (Debit debit : realmResults) {
-            if (Calendar.getInstance().getTimeInMillis() >= debit.getEndDate().getTime()) {
+            if (Calendar.getInstance().getTimeInMillis() >= debit.getEndDate().getTime() && !debit.isClose()) {
                 pushNotification(context, debit);
             }
         }
@@ -175,16 +177,21 @@ public class DebitManager extends RealmHelper {
     private void pushNotification(Context context, Debit debit) {
         String content;
         if (debit.getTypeDebit() == DebitType.LEND) {
-            content = String.format(Locale.US, "%s -> Tôi", debit.getName());
+            content = String.format(Locale.US, "%s -> Tôi \n %s", debit.getName(),
+                    CurrencyUtils.getInstance().getStringMoneyFormat(debit.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         } else {
-            content = String.format(Locale.US, "Tôi -> %s", debit.getName());
+            content = String.format(Locale.US, "Tôi -> %s \n %s", debit.getName(),
+                    CurrencyUtils.getInstance().getStringMoneyFormat(debit.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_account)
+                .setSmallIcon(R.drawable.img_wallet)
                 .setContentText(content)
                 .setContentTitle(context.getString(R.string.title_debit_notitication))
-                .setAutoCancel(true);
-        Intent intent = new Intent(context, MainActivity_.class);
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(Notification.PRIORITY_HIGH);
+        Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, debit.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);

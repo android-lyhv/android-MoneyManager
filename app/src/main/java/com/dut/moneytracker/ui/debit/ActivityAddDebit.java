@@ -120,6 +120,7 @@ public class ActivityAddDebit extends AppCompatActivity {
         if (!DateTimeUtils.getInstance().isSameDate(mNewDebit.getStartDate(), mNewDebit.getEndDate())) {
             if (mNewDebit.getStartDate().after(mNewDebit.getEndDate())) {
                 Toast.makeText(this, "Nhập sai ngày", Toast.LENGTH_SHORT).show();
+                return;
             }
         }
         //Debit
