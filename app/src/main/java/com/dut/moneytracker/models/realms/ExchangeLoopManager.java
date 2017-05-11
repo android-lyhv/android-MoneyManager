@@ -18,7 +18,6 @@ import io.realm.Sort;
  */
 
 public class ExchangeLoopManager extends RealmHelper {
-    private static final String TAG = ExchangeLoopManager.class.getSimpleName();
     private static final long PENDING_DAY = 24 * 60 * 60 * 1000L;
     private static final long PENDING_WEEK = 7 * PENDING_DAY;
     private static final long PENDING_MONTH = 30 * PENDING_DAY;
@@ -98,37 +97,38 @@ public class ExchangeLoopManager extends RealmHelper {
         return exchange;
     }
 
-    public void onGenerateExchange() {
+    public void onGenerateNewExchange() {
         RealmResults<ExchangeLooper> exchangeLoops = getExchangeLoopAvailable();
         for (ExchangeLooper exchangeLooper : exchangeLoops) {
+            long lastDateCreated = exchangeLooper.getCreated().getTime();
             switch (exchangeLooper.getTypeLoop()) {
                 case LoopType.DAY:
-                    if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_DAY) {
-                        createNewExchange(exchangeLooper);
+                    if (Calendar.getInstance().getTimeInMillis() - lastDateCreated >= PENDING_DAY) {
+                        createNewExchange(exchangeLooper, lastDateCreated, LoopType.DAY);
                     }
                     break;
                 case LoopType.WEAK:
-                    if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_WEEK) {
-                        createNewExchange(exchangeLooper);
+                    if (Calendar.getInstance().getTimeInMillis() - lastDateCreated >= PENDING_WEEK) {
+                        createNewExchange(exchangeLooper, lastDateCreated, LoopType.WEAK);
                     }
                     break;
                 case LoopType.MONTH:
-                    if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_MONTH) {
-                        createNewExchange(exchangeLooper);
+                    if (Calendar.getInstance().getTimeInMillis() - lastDateCreated >= PENDING_MONTH) {
+                        createNewExchange(exchangeLooper, lastDateCreated, LoopType.MONTH);
                     }
                     break;
                 case LoopType.YEAR:
-                    if (Calendar.getInstance().getTimeInMillis() - exchangeLooper.getCreated().getTime() >= PENDING_YEAH) {
-                        createNewExchange(exchangeLooper);
+                    if (Calendar.getInstance().getTimeInMillis() - lastDateCreated >= PENDING_YEAH) {
+                        createNewExchange(exchangeLooper, lastDateCreated, LoopType.YEAR);
                     }
                     break;
             }
         }
     }
 
-    private void createNewExchange(ExchangeLooper exchangeLooper) {
+    private void createNewExchange(ExchangeLooper exchangeLooper, long lastDateCreated, int loopType) {
         realm.beginTransaction();
-        exchangeLooper.setCreated(new Date());
+        exchangeLooper.setCreated(getGenNewDateExchange(lastDateCreated, loopType));
         realm.commitTransaction();
         insertOrUpdate(exchangeLooper);
         ExchangeManger.getInstance().insertOrUpdate(copyExchange(exchangeLooper));
@@ -139,5 +139,23 @@ public class ExchangeLoopManager extends RealmHelper {
         RealmResults<ExchangeLooper> exchangeLoops = realm.where(ExchangeLooper.class).equalTo("isLoop", true).findAll();
         realm.commitTransaction();
         return exchangeLoops;
+    }
+
+    private Date getGenNewDateExchange(long lastDateCreated, int typeLoop) {
+        switch (typeLoop) {
+            case LoopType.DAY:
+                lastDateCreated += PENDING_DAY;
+                break;
+            case LoopType.WEAK:
+                lastDateCreated += PENDING_WEEK;
+                break;
+            case LoopType.MONTH:
+                lastDateCreated += PENDING_MONTH;
+                break;
+            case LoopType.YEAR:
+                lastDateCreated += PENDING_YEAH;
+                break;
+        }
+        return new Date(lastDateCreated);
     }
 }

@@ -102,7 +102,11 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".service.ReceivePending" />
+        <receiver android:name=".service.ReceivePending">
+            <intent-filter>
+                <action android:name="android.intent.pending" />
+            </intent-filter>
+        </receiver>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

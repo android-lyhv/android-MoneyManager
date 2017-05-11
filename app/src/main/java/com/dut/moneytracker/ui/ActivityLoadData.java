@@ -2,7 +2,6 @@ package com.dut.moneytracker.ui;
 
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ProgressBar;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.GroupTag;
@@ -18,7 +17,6 @@ import com.dut.moneytracker.utils.ResourceUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -26,8 +24,6 @@ import org.androidannotations.annotations.ViewById;
  */
 @EActivity(R.layout.acitivity_splash)
 public class ActivityLoadData extends AppCompatActivity implements LoadDataListener {
-    @ViewById(R.id.progressBar)
-    ProgressBar mProgressBar;
     private int idCategory;
     private Handler mHandler = new Handler();
     private static final long DELAY = 1000L;
@@ -139,19 +135,19 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
             category.setByteImage(loadByteBitmap(path[i]));
             switch (i) {
                 case 0:
-                    category.setColorCode(R.color.color_income);
+                    category.setColorCode(R.color.color_salary);
                     break;
                 case 1:
-                    category.setColorCode(R.color.colorPrimary);
+                    category.setColorCode(R.color.color_award);
                     break;
                 case 2:
-                    category.setColorCode(R.color.color_education);
+                    category.setColorCode(R.color.color_gift);
                     break;
                 case 3:
-                    category.setColorCode(R.color.color_other);
+                    category.setColorCode(R.color.color_buy);
                     break;
                 case 4:
-                    category.setColorCode(R.color.color_love);
+                    category.setColorCode(R.color.color_income_other);
             }
             CategoryManager.getInstance().insertOrUpdate(category);
         }
