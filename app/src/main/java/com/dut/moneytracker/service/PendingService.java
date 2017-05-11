@@ -5,7 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import java.util.Calendar;
+import com.dut.moneytracker.R;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -15,8 +15,9 @@ import static android.content.Context.ALARM_SERVICE;
  */
 public class PendingService {
     private static PendingService ourInstance;
-    private static final long TIME_REPEAT = /*24 * 60 * */60 * 1000L;
-    private static final int ID = 1;
+    private static final long TIME_REPEAT = 60 * 1000L;
+    private static final long TIME_START = 5000L;
+    private static final int ID = 2722;
 
     public static PendingService getInstance() {
         if (ourInstance == null) {
@@ -36,29 +37,16 @@ public class PendingService {
     public void actionLoopPending(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, ReceivePending.class);
+        intent.setAction(context.getString(R.string.pending));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, getStartTime(), TIME_REPEAT, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, TIME_START, TIME_REPEAT, pendingIntent);
     }
 
     public void removePending(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, ReceivePending.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        pendingIntent.cancel();
+        intent.setAction(context.getString(R.string.pending));
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
-    }
-
-    /**
-     * 6:00 every days
-     *
-     * @return
-     */
-    private long getStartTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 6);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTimeInMillis();
     }
 }

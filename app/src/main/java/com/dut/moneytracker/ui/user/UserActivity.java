@@ -54,7 +54,7 @@ public class UserActivity extends AppCompatActivity {
             AppConfig.getInstance().clearAllData(this);
             PendingService.getInstance().removePending(getApplicationContext());
             mFireBaseAuth.signOut();
-            requestLogoutFacebook();
+            logoutFacebook();
             setResult(IntentCode.PROFILE);
             finish();
         }
@@ -75,7 +75,7 @@ public class UserActivity extends AppCompatActivity {
                 .into(imgUser);
     }
 
-    private void requestLogoutFacebook() {
+    private void logoutFacebook() {
         new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
                 .Callback() {
             @Override

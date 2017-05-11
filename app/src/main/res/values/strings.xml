@@ -97,6 +97,7 @@
     <string name="different_account">Tài khoản gửi và tài khoản nhận phải khác nhau</string>
     <string name="my_account">Tài khoản của tôi</string>
     <string name="main_home">Home</string>
+    <string name="pending">android.intent.pending</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>

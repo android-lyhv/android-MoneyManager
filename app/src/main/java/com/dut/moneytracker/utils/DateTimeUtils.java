@@ -145,13 +145,6 @@ public class DateTimeUtils {
         return calendar.getTime();
     }
 
-    public Date getDateRemindLoop(Date currentDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.set(Calendar.HOUR_OF_DAY, 6);
-        return calendar.getTime();
-    }
-
     public boolean isValidateFromDateToDate(Date fromDate, Date toDate) {
         return fromDate.before(toDate);
     }
@@ -244,7 +237,6 @@ public class DateTimeUtils {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 0);
-        Log.d(TAG, "getEndTimeOfDay: " + calendar.getTime());
         return calendar.getTime();
     }
 
@@ -255,7 +247,6 @@ public class DateTimeUtils {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        Log.d(TAG, "getStartTimeOfDay: " + calendar.getTime());
         return calendar.getTime();
     }
 }
