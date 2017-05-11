@@ -45,25 +45,9 @@ public class CurrencyUtils {
         return -1;
     }
 
-    public String getStringAddMoney(String amount1, String amount2) {
-        BigDecimal bigDecimal = new BigDecimal(amount1);
-        bigDecimal = bigDecimal.add(new BigDecimal(amount2));
-        return bigDecimal.toString();
-    }
-
-    public String convertMoney(String amount, String fromCode, String toCode) {
-        return amount;
-    }
-
     public float getFloatMoney(String amount) {
         BigDecimal bigDecimal = new BigDecimal(amount);
         return bigDecimal.floatValue();
     }
 
-    public String getDecialFortmat(String value) {
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-        numberFormat.setMinimumFractionDigits(0);
-        numberFormat.setMaximumFractionDigits(2);
-        return numberFormat.format(value);
-    }
 }

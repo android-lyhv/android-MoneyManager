@@ -65,11 +65,6 @@ public class DateTimeUtils {
         return formatSortTime.format(date);
     }
 
-    public String getStringDayMonth(Date date) {
-        DateFormat formatDayMonth = new SimpleDateFormat("'Ngày' dd 'tháng' MM", mLocale);
-        return formatDayMonth.format(date);
-    }
-
     public String getStringMonthYear(Date date) {
         DateFormat formatMonthYear = new SimpleDateFormat("'Tháng' MM 'năm' yyyy", mLocale);
         return formatMonthYear.format(date);

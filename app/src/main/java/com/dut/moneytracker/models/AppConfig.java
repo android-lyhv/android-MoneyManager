@@ -11,10 +11,8 @@ import io.realm.Realm;
  */
 public class AppConfig {
     private static AppConfig ourInstance;
-    private static final String FIRST_INIT = "first_init";
     private static final String SHARED_PREF_NAME = "MoneyTracker";
-    private static final String KEY_REFERENCE_DATABASE = "KEY_REFERENCE_DATABASE";
-    private static final String KEY_USER_ID = "KEY_USER_ID";
+    private static final String FIRST_INIT = "first_init";
     private static final String KEY_IS_LOGIN = "KEY_IS_LOGIN";
     private static Realm mRealm;
 
