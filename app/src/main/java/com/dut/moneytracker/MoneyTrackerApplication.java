@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.facebook.FacebookSdk;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 
@@ -37,7 +36,6 @@ public class MoneyTrackerApplication extends Application {
     }
 
     private void configFireBase() {
-        FirebaseApp.initializeApp(this);
         FirebaseDatabase.getInstance().setLogLevel(Logger.Level.DEBUG);
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseDatabase.getInstance().goOnline();
