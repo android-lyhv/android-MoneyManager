@@ -26,16 +26,14 @@ import org.androidannotations.annotations.EActivity;
 public class ActivityLoadData extends AppCompatActivity implements LoadDataListener {
     private int idCategory;
     private Handler mHandler = new Handler();
-    private static final long DELAY = 1000L;
-
     @AfterViews
     void init() {
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
-                FireBaseSync.getInstance().onLoadDataServer(getApplicationContext(), ActivityLoadData.this);
+                FireBaseSync.getInstance().onLoadDataServer(ActivityLoadData.this);
             }
-        }, DELAY);
+        });
     }
 
     @Override

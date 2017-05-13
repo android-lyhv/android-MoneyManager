@@ -33,6 +33,8 @@ import org.androidannotations.annotations.ViewById;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.dut.moneytracker.R.string.debit;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 13/04/2017.
@@ -120,10 +122,12 @@ public class ActivityAddDebit extends AppCompatActivity {
         if (!DateTimeUtils.getInstance().isSameDate(mNewDebit.getStartDate(), mNewDebit.getEndDate())) {
             if (mNewDebit.getStartDate().after(mNewDebit.getEndDate())) {
                 Toast.makeText(this, "Nhập sai ngày", Toast.LENGTH_SHORT).show();
+                return;
             }
         }
         //Debit
         DebitManager.getInstance().insertOrUpdateDebit(mNewDebit);
+        DebitManager.getInstance().genExchangeFromDebit(mNewDebit, null);
         finish();
     }
 

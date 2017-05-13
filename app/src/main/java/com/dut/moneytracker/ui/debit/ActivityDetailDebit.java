@@ -141,6 +141,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
         if (!DateTimeUtils.getInstance().isSameDate(mDebit.getStartDate(), mDebit.getEndDate())) {
             if (mDebit.getStartDate().after(mDebit.getEndDate())) {
                 Toast.makeText(this, "Nhập sai ngày", Toast.LENGTH_SHORT).show();
+                return;
             }
         }
         //Debit
@@ -149,6 +150,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
         } else {
             DebitManager.getInstance().insertOrUpdateDebit(mDebit);
         }
+        DebitManager.getInstance().genExchangeFromDebit(mDebit, null);
         finish();
     }
 

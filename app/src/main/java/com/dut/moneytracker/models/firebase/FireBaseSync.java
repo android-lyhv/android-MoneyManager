@@ -1,7 +1,5 @@
 package com.dut.moneytracker.models.firebase;
 
-import android.content.Context;
-
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.DebitManager;
 import com.dut.moneytracker.models.realms.ExchangeLoopManager;
@@ -33,20 +31,21 @@ public class FireBaseSync {
     private static final String CHILD_EXCHANGE = "exchange";
     private static final String CHILD_EXCHANGE_LOOP = "exchange_loop";
     private static final String CHILD_DEBIT = "debit";
-    private DatabaseReference mDatabaseReference;
+    private static DatabaseReference mDatabaseReference;
 
     private FireBaseSync() {
-        initDataReference();
+        // No-op
     }
 
     public static FireBaseSync getInstance() {
         if (fireBaseSync == null) {
             fireBaseSync = new FireBaseSync();
         }
+        initDataReference();
         return fireBaseSync;
     }
 
-    private void initDataReference() {
+    private static void initDataReference() {
         String reference = String.format(Locale.US, "/users/%s/", FirebaseAuth.getInstance().getCurrentUser().getUid());
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(reference);
         mDatabaseReference.keepSynced(true);
@@ -97,14 +96,14 @@ public class FireBaseSync {
         mDatabaseReference.child(CHILD_DEBIT).child(String.valueOf(id)).removeValue();
     }
 
-    public void onLoadDataServer(final Context context, final LoadDataListener loadDataListener) {
+    public void onLoadDataServer(final LoadDataListener loadDataListener) {
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 onLoadAccount(dataSnapshot.child(CHILD_ACCOUNT));
                 onLoadExchange(dataSnapshot.child(CHILD_EXCHANGE));
                 onLoadDebit(dataSnapshot.child(CHILD_DEBIT));
-                onLoadExchangeLoop(context, dataSnapshot.child(CHILD_EXCHANGE_LOOP));
+                onLoadExchangeLoop(dataSnapshot.child(CHILD_EXCHANGE_LOOP));
                 loadDataListener.onFinishLoadDataServer();
             }
 
@@ -139,7 +138,7 @@ public class FireBaseSync {
         }
     }
 
-    private void onLoadExchangeLoop(Context context, DataSnapshot dataSnapshot) {
+    private void onLoadExchangeLoop(DataSnapshot dataSnapshot) {
         for (DataSnapshot result : dataSnapshot.getChildren()) {
             String id = result.getKey();
             HashMap<String, Object> data = (HashMap<String, Object>) result.getValue();

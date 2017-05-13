@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/tvDate"
             android:layout_toStartOf="@id/tvDate"
-            android:src="@drawable/ic_place_grey_600_18dp" />
+            android:src="@drawable/ic_maker_location" />
 
         <TextView
             android:id="@+id/tvDate"

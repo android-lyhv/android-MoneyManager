@@ -92,12 +92,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             @Override
             public void onCancel() {
-
+                // No-op
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                // No-op
             }
         });
     }

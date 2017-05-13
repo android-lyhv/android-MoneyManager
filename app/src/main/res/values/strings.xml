@@ -245,7 +245,7 @@
         <item>ic_income_other</item>
     </string-array>
     <string-array name="other_name">
-        <item>Khác</item>
+        <item>Chi tiêu khác</item>
     </string-array>
     <string-array name="other_path">
         <item>ic_other</item>
