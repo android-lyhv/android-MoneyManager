@@ -62,7 +62,6 @@ public class DebitManager extends RealmHelper {
         realm.beginTransaction();
         realm.insertOrUpdate(debit);
         realm.commitTransaction();
-        genExchangeFromDebit(debit, null);
         FireBaseSync.getInstance().upDateDebit(debit);
     }
 
@@ -95,13 +94,6 @@ public class DebitManager extends RealmHelper {
     /***************************************************************/
     public RealmResults<Debit> onLoadDebitAsync() {
         return realm.where(Debit.class).findAllAsync();
-    }
-
-    public Debit getDebitById(int id) {
-        realm.beginTransaction();
-        Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
-        realm.commitTransaction();
-        return debit;
     }
 
     public String getAccountNameByDebitId(int id) {

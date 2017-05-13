@@ -150,6 +150,7 @@ public class ActivityDetailDebit extends AppCompatActivity {
         } else {
             DebitManager.getInstance().insertOrUpdateDebit(mDebit);
         }
+        DebitManager.getInstance().genExchangeFromDebit(mDebit, null);
         finish();
     }
 
