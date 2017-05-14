@@ -83,10 +83,10 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
             Glide.with(getContext()).load(category.getByteImage()).into(imgCategory);
             tvCategoryName.setText(category.getName());
             String description = exchangeLooper.getDescription();
-            tvDescription.setText(description);
             if (TextUtils.isEmpty(description)) {
                 tvDescription.setVisibility(View.GONE);
             } else {
+                tvDescription.setVisibility(View.VISIBLE);
                 tvDescription.setText(description);
             }
             switch (exchangeLooper.getTypeLoop()) {
