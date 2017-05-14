@@ -76,10 +76,7 @@ public class ExchangeLoopManager extends RealmHelper {
 
     /*********************************************/
     public RealmResults<ExchangeLooper> onLoadSyncExchangeLooper() {
-        realm.beginTransaction();
-        RealmResults<ExchangeLooper> realmResults = realm.where(ExchangeLooper.class).findAllSortedAsync("created", Sort.ASCENDING);
-        realm.commitTransaction();
-        return realmResults;
+        return realm.where(ExchangeLooper.class).findAllSortedAsync("created", Sort.ASCENDING);
     }
 
     private Exchange copyExchange(ExchangeLooper exchangeLooper) {
