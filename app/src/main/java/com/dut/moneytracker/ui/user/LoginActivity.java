@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.dut.moneytracker.R;
-import com.dut.moneytracker.models.AppConfig;
 import com.dut.moneytracker.ui.ActivityLoadData_;
 import com.dut.moneytracker.ui.MainActivity_;
 import com.dut.moneytracker.utils.DialogUtils;
@@ -56,19 +55,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @AfterViews
     void init() {
         initMap();
-        if (AppConfig.getInstance().isLogin(this)) {
+        mFireBaseAuth = FirebaseAuth.getInstance();
+        if (mFireBaseAuth.getCurrentUser() != null) {
             MainActivity_.intent(this).start();
             finish();
         } else {
-            configFireBase();
+            mFireBaseAuth.addAuthStateListener(this);
             configLoginGoogle();
             configLoginFacebook();
         }
-    }
-
-    private void configFireBase() {
-        mFireBaseAuth = FirebaseAuth.getInstance();
-        mFireBaseAuth.addAuthStateListener(this);
     }
 
     private void configLoginGoogle() {
@@ -180,13 +175,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            requestLogOutGoogle();
+            clearSingInGoogle();
             ActivityLoadData_.intent(this).start();
             finish();
         }
     }
 
-    private void requestLogOutGoogle() {
+    private void clearSingInGoogle() {
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         }

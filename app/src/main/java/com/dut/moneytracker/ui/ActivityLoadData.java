@@ -26,6 +26,7 @@ import org.androidannotations.annotations.EActivity;
 public class ActivityLoadData extends AppCompatActivity implements LoadDataListener {
     private int idCategory;
     private Handler mHandler = new Handler();
+
     @AfterViews
     void init() {
         mHandler.post(new Runnable() {
@@ -41,7 +42,6 @@ public class ActivityLoadData extends AppCompatActivity implements LoadDataListe
         onCreateCategories();
         onCreateDefaultAccount();
         MainActivity_.intent(this).start();
-        AppConfig.getInstance().setLogin(this, true);
         PendingService.getInstance().actionLoopPending(getApplicationContext());
         finish();
     }

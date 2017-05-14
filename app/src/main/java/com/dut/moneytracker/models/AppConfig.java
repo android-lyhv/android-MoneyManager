@@ -38,19 +38,6 @@ public class AppConfig {
         editor.putBoolean(FIRST_INIT, value);
         editor.apply();
     }
-
-    public boolean isLogin(Context context) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return pref.getBoolean(KEY_IS_LOGIN, false);
-    }
-
-    public void setLogin(Context context, boolean value) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(KEY_IS_LOGIN, value);
-        editor.apply();
-    }
-
     public void clearAllData(Context context) {
         clearDataRealm();
         clearSharedPreferences(context);
