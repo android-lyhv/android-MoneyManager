@@ -75,7 +75,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     TextView tvCategoryName;
     @ViewById(R.id.tvAmount)
     TextView mTvAmount;
-    @ViewById(R.id.tvAccountName)
+    @ViewById(R.id.tvDescription)
     TextView tvDescription;
     @ViewById(R.id.tvDate)
     TextView tvDate;
@@ -93,44 +93,28 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     private SpinnerTypeLoopManger mSpinnerTypeLoopManger;
     private DialogCalculator mDialogCalculator;
     private DialogPickAccount mDialogPickAccount;
+    private DialogInput mDialogInput;
     private boolean isClickTabIncome;
     private boolean isClickTabExpense;
 
     @AfterViews
     void init() {
-        initDialog();
         initToolbar();
+        initDialog();
         initSpinner();
         onShowData();
         initMap();
     }
 
+    private void initToolbar() {
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_close_white);
+    }
+
     private void initDialog() {
         mDialogPickAccount = DialogPickAccount.getInstance();
         mDialogCalculator = DialogCalculator.getInstance();
-    }
-
-    private void onShowData() {
-        switchCompat.setChecked(mExchangeLoop.isLoop());
-        mSpinnerTypeLoopManger.setSelectItem(mExchangeLoop.getTypeLoop());
-        if (mExchangeLoop.getTypeExchange() == ExchangeType.INCOME || mExchangeLoop.getTypeExchange() == ExchangeType.EXPENSES) {
-            Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
-            tvCategoryName.setText(category.getName());
-        }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
-        switch (mExchangeLoop.getTypeExchange()) {
-            case ExchangeType.INCOME:
-                loadViewTabIncome();
-                isClickTabIncome = true;
-                break;
-            case ExchangeType.EXPENSES:
-                loadViewTabExpense();
-                isClickTabExpense = true;
-                break;
-        }
-        tvDescription.setText(mExchangeLoop.getDescription());
-        tvAccount.setText(AccountManager.getInstance().getAccountNameById(mExchangeLoop.getIdAccount()));
-        tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(mExchangeLoop.getCreated()));
+        mDialogInput = DialogInput.getInstance();
     }
 
     private void initSpinner() {
@@ -149,14 +133,30 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         });
     }
 
+    private void onShowData() {
+        switchCompat.setChecked(mExchangeLoop.isLoop());
+        mSpinnerTypeLoopManger.setSelectItem(mExchangeLoop.getTypeLoop());
+        Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
+        tvCategoryName.setText(category.getName());
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
+        switch (mExchangeLoop.getTypeExchange()) {
+            case ExchangeType.INCOME:
+                loadViewTabIncome();
+                isClickTabIncome = true;
+                break;
+            case ExchangeType.EXPENSES:
+                loadViewTabExpense();
+                isClickTabExpense = true;
+                break;
+        }
+        tvDescription.setText(mExchangeLoop.getDescription());
+        tvAccount.setText(AccountManager.getInstance().getAccountNameById(mExchangeLoop.getIdAccount()));
+        tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(mExchangeLoop.getCreated()));
+    }
+
     private void initMap() {
         SupportMapFragment mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
-    }
-
-    private void initToolbar() {
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_close_white);
     }
 
     @OptionsItem(android.R.id.home)
@@ -222,6 +222,18 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
     }
 
+    private void loadViewTabExpense() {
+        mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
+        tvTabExpense.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        tvTabExpense.setBackgroundResource(R.color.colorPrimary);
+        tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
+        if (!mExchangeLoop.getAmount().startsWith("-")) {
+            mExchangeLoop.setAmount(String.format(Locale.US, "-%s", mExchangeLoop.getAmount()));
+        }
+        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
+    }
+
     @Click(R.id.tvTabExpense)
     void onClickTabExpense() {
         if (isClickTabExpense) {
@@ -233,18 +245,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
         tvCategoryName.setText("");
         mExchangeLoop.setTypeExchange(ExchangeType.EXPENSES);
         loadViewTabExpense();
-    }
-
-    private void loadViewTabExpense() {
-        mTvAmount.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_light));
-        tvTabExpense.setTextColor(ContextCompat.getColor(this, android.R.color.white));
-        tvTabExpense.setBackgroundResource(R.color.colorPrimary);
-        tvTabIncome.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        tvTabIncome.setBackgroundColor(ContextCompat.getColor(this, R.color.color_background_tab_unselect));
-        if (!mExchangeLoop.getAmount().startsWith("-")) {
-            mExchangeLoop.setAmount(String.format(Locale.US, "-%s", mExchangeLoop.getAmount()));
-        }
-        mTvAmount.setText(CurrencyUtils.getInstance().getStringMoneyFormat(mExchangeLoop.getAmount(), CurrencyUtils.DEFAULT_CURRENCY_CODE));
     }
 
     @Click(R.id.rlCategory)
@@ -275,14 +275,15 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
 
     @Click(R.id.rlDescription)
     void onCLickDescription() {
-        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
+        mDialogInput.register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mExchangeLoop.setDescription(content);
                 tvDescription.setText(content);
             }
         });
-        DialogInput.getInstance().show(getSupportFragmentManager(), null);
+        mDialogInput.initValue(mExchangeLoop.getDescription());
+        mDialogInput.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAccount)

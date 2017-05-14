@@ -33,8 +33,6 @@ import org.androidannotations.annotations.ViewById;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.dut.moneytracker.R.string.debit;
-
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 13/04/2017.
@@ -62,6 +60,7 @@ public class ActivityAddDebit extends AppCompatActivity {
     private SpinnerTypeDebitManager mSpinnerTypeDebitManager;
     private Debit mNewDebit;
     private DialogCalculator mDialogCalculator;
+    private DialogInput mDialogInput;
     DialogPickAccount mDialogPickAccount;
 
     @AfterViews
@@ -75,6 +74,7 @@ public class ActivityAddDebit extends AppCompatActivity {
     private void initDialog() {
         mDialogCalculator = DialogCalculator.getInstance();
         mDialogPickAccount = DialogPickAccount.getInstance();
+        mDialogInput = DialogInput.getInstance();
     }
 
     private void initView() {
@@ -133,14 +133,15 @@ public class ActivityAddDebit extends AppCompatActivity {
 
     @Click(R.id.rlName)
     void onClickName() {
-        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
+        mDialogInput.register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mNewDebit.setName(content);
                 mTvName.setText(content);
             }
         });
-        DialogInput.getInstance().show(getSupportFragmentManager(), null);
+        mDialogInput.initValue(mNewDebit.getName());
+        mDialogInput.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAmount)

@@ -205,7 +205,7 @@
                         android:src="@drawable/ic_edit" />
 
                     <TextView
-                        android:id="@+id/tvAccountName"
+                        android:id="@+id/tvDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignStart="@id/tvTitleDescription"

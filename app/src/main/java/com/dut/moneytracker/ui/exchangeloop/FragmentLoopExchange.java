@@ -28,7 +28,6 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     @ViewById(R.id.recyclerDefaultExchange)
     RecyclerView mRecyclerView;
     private LoopExchangeAdapter mAdapter;
-    RealmResults<ExchangeLooper> mExchangeLoops;
 
     @AfterViews
     void init() {
@@ -36,7 +35,7 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     }
 
     private void initLoopAdapter() {
-        mExchangeLoops = ExchangeLoopManager.getInstance().getExchangeLoops();
+        RealmResults<ExchangeLooper> mExchangeLoops = ExchangeLoopManager.getInstance().onLoadSyncExchangeLooper();
         mAdapter = new LoopExchangeAdapter(getContext(), mExchangeLoops);
         mAdapter.registerItemClick(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

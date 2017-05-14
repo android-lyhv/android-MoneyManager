@@ -71,7 +71,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     TextView tvCategoryName;
     @ViewById(R.id.tvAmount)
     TextView mTvAmount;
-    @ViewById(R.id.tvAccountName)
+    @ViewById(R.id.tvDescription)
     TextView tvDescription;
     @ViewById(R.id.tvDate)
     TextView tvDate;
@@ -85,6 +85,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     TextView tvAddress;
     private DialogCalculator mDialogCalculator;
     private DialogPickAccount mDialogPickAccount;
+    private DialogInput mDialogInput;
     private GoogleMap mGoogleMap;
     private ExchangeLooper mExchangeLoop;
     private boolean isClickTabIncome;
@@ -104,7 +105,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     private void initDialog() {
         mDialogPickAccount = DialogPickAccount.getInstance();
         mDialogCalculator = DialogCalculator.getInstance();
-        mDialogCalculator.setAmount("0");
+        mDialogInput = DialogInput.getInstance();
     }
 
     void initBaseExchangeLoop() {
@@ -242,14 +243,15 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @Click(R.id.rlDescription)
     void onCLickDescription() {
-        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
+        mDialogInput.register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mExchangeLoop.setDescription(content);
                 tvDescription.setText(content);
             }
         });
-        DialogInput.getInstance().show(getSupportFragmentManager(), null);
+        mDialogInput.initValue(mExchangeLoop.getDescription());
+        mDialogInput.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlAccount)
