@@ -19,7 +19,7 @@ public class SpinnerTypeLoopManger implements Spinner.OnItemSelectedListener {
     private AppCompatSpinner mSpinner;
     private Context mContext;
     private String[] items = new String[]{"Ngày", "Tuần", "Tháng", "Năm"};
-    private int[] listId = new int[]{LoopType.DAY, LoopType.DAY, LoopType.MONTH, LoopType.YEAR};
+    private int[] listId = new int[]{LoopType.DAY, LoopType.WEAK, LoopType.MONTH, LoopType.YEAR};
 
     public interface ItemSelectedListener {
         void onResultTypeLoop(int type);

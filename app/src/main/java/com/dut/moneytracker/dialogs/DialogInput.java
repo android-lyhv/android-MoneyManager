@@ -1,6 +1,7 @@
 package com.dut.moneytracker.dialogs;
 
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.WindowManager;
 import android.widget.EditText;
 
@@ -17,21 +18,19 @@ import org.androidannotations.annotations.ViewById;
  */
 @EFragment(R.layout.dialog_input_text)
 public class DialogInput extends DialogFragment {
-    private static DialogInput sInstance;
 
     public static DialogInput getInstance() {
-        if (sInstance == null) {
-            sInstance = DialogInput_.builder().build();
-        }
-        return sInstance;
+        return DialogInput_.builder().build();
     }
 
     @ViewById(R.id.edtDescription)
     EditText editText;
+    private String initContent = "";
 
     @AfterViews
     void init() {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        editText.setText(initContent);
     }
 
     public interface DescriptionListener {
@@ -40,6 +39,13 @@ public class DialogInput extends DialogFragment {
 
     public void register(DescriptionListener descriptionListener) {
         this.descriptionListener = descriptionListener;
+    }
+
+    public void initValue(String content) {
+        if (TextUtils.isEmpty(content)) {
+            return;
+        }
+        initContent = content;
     }
 
     DescriptionListener descriptionListener;

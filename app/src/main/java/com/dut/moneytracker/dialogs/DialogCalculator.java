@@ -21,18 +21,13 @@ import org.androidannotations.annotations.ViewById;
  */
 @EFragment(R.layout.dialog_calculator)
 public class DialogCalculator extends DialogFragment implements CalculatorAdapter.ItemCalClickListener {
-    private static DialogCalculator sInstance;
     @ViewById(R.id.recyclerCalculator)
     RecyclerView recyclerView;
     @ViewById(R.id.tvAmount)
     TextView tvAmount;
 
     public static DialogCalculator getInstance() {
-        if (sInstance == null) {
-            sInstance = DialogCalculator_.builder().build();
-        }
-        setAmount("");
-        return sInstance;
+        return DialogCalculator_.builder().build();
     }
 
     public static final int MAX = 12;
@@ -43,21 +38,22 @@ public class DialogCalculator extends DialogFragment implements CalculatorAdapte
 
     private ResultListener resultListener;
 
-    private static String mAmount = "";
+    private String mAmount = "";
 
     public void registerResultListener(ResultListener resultListener) {
         this.resultListener = resultListener;
     }
 
-    public static void setAmount(String amount) {
-        mAmount = amount;
+    public void setAmount(String amount) {
+        if (TextUtils.equals("0", amount)) {
+            mAmount = "";
+        } else {
+            mAmount = amount;
+        }
     }
 
     @AfterViews
     void init() {
-        if (TextUtils.equals(mAmount, "0")) {
-            mAmount = "";
-        }
         tvAmount.setText(mAmount);
         iniRecyclerView();
     }

@@ -101,6 +101,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
     private DayPicker mDayPicker;
     private DialogCalculator mDialogCalculator;
     private DialogPickAccount mDialogPickAccount;
+    private DialogInput mDialogInput;
     //GoogleMap
     private GoogleMap mGoogleMap;
 
@@ -120,6 +121,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
         mDayPicker = DayPicker_.builder().build();
         mDialogCalculator = DialogCalculator.getInstance();
         mDialogPickAccount = DialogPickAccount.getInstance();
+        mDialogInput = DialogInput.getInstance();
     }
 
     private void initMap() {
@@ -174,7 +176,8 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             }, false, null);
             mDialogPickAccount.show(getFragmentManager(), null);
         } else {
-            ActivityPickCategory_.intent(this).mType(mExchange.getTypeExchange()).startForResult(IntentCode.PICK_CATEGORY);        }
+            ActivityPickCategory_.intent(this).mType(mExchange.getTypeExchange()).startForResult(IntentCode.PICK_CATEGORY);
+        }
     }
 
     @Click(R.id.rlAccount)
@@ -229,14 +232,15 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlDescription)
     void onClickDescription() {
-        DialogInput.getInstance().register(new DialogInput.DescriptionListener() {
+        mDialogInput.register(new DialogInput.DescriptionListener() {
             @Override
             public void onResult(String content) {
                 mTvDescription.setText(content);
                 mExchange.setDescription(content);
             }
         });
-        DialogInput.getInstance().show(getSupportFragmentManager(), null);
+        mDialogInput.initValue(mExchange.getDescription());
+        mDialogInput.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlDate)

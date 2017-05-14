@@ -39,7 +39,6 @@ public class DialogPayDebit extends DialogFragment {
 
     @Click(R.id.tvCancel)
     void onClickCancel() {
-
         dismiss();
     }
 
