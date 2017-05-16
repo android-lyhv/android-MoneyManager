@@ -95,6 +95,11 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             tvDescriptionDebit.setText(debit.getDescription());
             tvStartDebit.setText(DateTimeUtils.getInstance().getStringDateUs(debit.getStartDate()));
             tvEndDate.setText(String.format(Locale.US, "Hết hạn %s", DateTimeUtils.getInstance().getStringDateUs(debit.getEndDate())));
+            if (debit.isClose()) {
+                imgCheckDebit.setEnabled(false);
+            } else {
+                imgCheckDebit.setEnabled(true);
+            }
             onLoadRemindAmount(debit);
         }
 
@@ -140,7 +145,6 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             if (distance == progressBarPartial.getMax()) {
                 tvRemindAmount.setText(R.string.debit_colse);
                 tvRemindAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                imgCheckDebit.setEnabled(false);
             }
             progressBarPartial.setProgress(distance);
         }
