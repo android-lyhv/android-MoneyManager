@@ -13,7 +13,6 @@ public class AppConfig {
     private static AppConfig ourInstance;
     private static final String SHARED_PREF_NAME = "MoneyTracker";
     private static final String FIRST_INIT = "first_init";
-    private static final String KEY_IS_LOGIN = "KEY_IS_LOGIN";
     private static Realm mRealm;
 
     public static AppConfig getInstance() {
