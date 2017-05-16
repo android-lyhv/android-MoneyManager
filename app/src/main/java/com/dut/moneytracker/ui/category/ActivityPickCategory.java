@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.LoadCategoryListener;
+import com.dut.moneytracker.constant.ExchangeType;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.objects.Category;
 
@@ -33,6 +34,11 @@ public class ActivityPickCategory extends AppCompatActivity implements LoadCateg
 
     @AfterViews
     void init() {
+        if (mType== ExchangeType.INCOME){
+            setTitle(getString(R.string.icome_type));
+        }else {
+            setTitle(getString(R.string.expresen_type));
+        }
         fragmentManager = getFragmentManager();
         initView();
         onLoadGroupCategory();
