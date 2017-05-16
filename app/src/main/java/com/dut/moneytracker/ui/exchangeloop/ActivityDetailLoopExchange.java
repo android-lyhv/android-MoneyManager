@@ -64,7 +64,6 @@ import java.util.Locale;
 @EActivity(R.layout.activity_add_loop_exchange)
 @OptionsMenu(R.menu.menu_detail_exchange)
 public class ActivityDetailLoopExchange extends AppCompatActivity implements OnMapReadyCallback {
-    private static final String TAG = ActivityDetailLoopExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvTabIncome)
@@ -107,6 +106,7 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     }
 
     private void initToolbar() {
+        setTitle(getString(R.string.detail_exchange_loop));
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_close_white);
     }

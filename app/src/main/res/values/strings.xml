@@ -98,6 +98,10 @@
     <string name="my_account">Tài khoản của tôi</string>
     <string name="main_home">Home</string>
     <string name="pending">android.intent.pending</string>
+    <string name="new_loop_exchange">Giao dịch mặc định mới</string>
+    <string name="detail_exchange_loop">Chi tiết giao dịch</string>
+    <string name="icome_type">Thể loại thu nhập</string>
+    <string name="expresen_type">Thể loại chi tiêu</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>

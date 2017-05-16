@@ -93,6 +93,7 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
 
     @AfterViews
     void init() {
+        setTitle(getString(R.string.new_loop_exchange));
         tvDate.setText(DateTimeUtils.getInstance().getStringDateUs(new Date()));
         initDialog();
         initBaseExchangeLoop();
