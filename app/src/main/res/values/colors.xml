@@ -4,6 +4,7 @@
     <color name="colorPrimary">#03a879</color>
     <color name="colorPrimaryDark">#FF028761</color>
     <color name="colorAccent">#03a879</color>
+    <color name="color_red">#e70702</color>
     <color name="colorBackgroundLine">#d9d8d8</color>
     <color name="colorBackgroundMain">#ededed</color>
     <color name="defaultAccountColor">#FF028761</color>

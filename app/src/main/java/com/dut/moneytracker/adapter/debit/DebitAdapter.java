@@ -97,8 +97,10 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             tvEndDate.setText(String.format(Locale.US, "Hết hạn %s", DateTimeUtils.getInstance().getStringDateUs(debit.getEndDate())));
             if (debit.isClose()) {
                 imgCheckDebit.setEnabled(false);
+                tvRemindAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.color_red));
             } else {
                 imgCheckDebit.setEnabled(true);
+                tvRemindAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             }
             onLoadRemindAmount(debit);
         }
@@ -125,12 +127,11 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             if (value.startsWith("-")) {
                 value = value.substring(1);
             }
-            tvRemindAmount.setText(String.format(Locale.US, "Còn lại: %s", value));
             if (debit.isClose()) {
                 tvRemindAmount.setText(R.string.debit_colse);
-                tvRemindAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
                 progressBarPartial.setProgress(progressBarPartial.getMax());
             } else {
+                tvRemindAmount.setText(String.format(Locale.US, "Còn lại: %s", value));
                 loadProgressBar(amount, debit.getAmount());
             }
         }
@@ -144,7 +145,6 @@ public class DebitAdapter extends BaseRecyclerAdapter {
             }
             if (distance == progressBarPartial.getMax()) {
                 tvRemindAmount.setText(R.string.debit_colse);
-                tvRemindAmount.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             }
             progressBarPartial.setProgress(distance);
         }
