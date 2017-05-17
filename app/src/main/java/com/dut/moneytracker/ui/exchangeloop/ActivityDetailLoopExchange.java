@@ -8,11 +8,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,8 +80,6 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
     TextView tvAccount;
     @ViewById(R.id.spinnerTypeLoop)
     AppCompatSpinner mAppCompatSpinner;
-    @ViewById(R.id.switchLoop)
-    SwitchCompat switchCompat;
     @ViewById(R.id.tvAddress)
     TextView tvAddress;
     @Extra
@@ -125,16 +121,9 @@ public class ActivityDetailLoopExchange extends AppCompatActivity implements OnM
                 mExchangeLoop.setTypeLoop(type);
             }
         });
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mExchangeLoop.setLoop(isChecked);
-            }
-        });
     }
 
     private void onShowData() {
-        switchCompat.setChecked(mExchangeLoop.isLoop());
         mSpinnerTypeLoopManger.setSelectItem(mExchangeLoop.getTypeLoop());
         Category category = CategoryManager.getInstance().getCategoryById(mExchangeLoop.getIdCategory());
         tvCategoryName.setText(category.getName());

@@ -82,6 +82,13 @@ public class DebitManager extends RealmHelper {
         FireBaseSync.getInstance().deleteDebit(id);
     }
 
+    public boolean checkDebitClose(int id) {
+        realm.beginTransaction();
+        Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
+        realm.commitTransaction();
+        return debit.isClose();
+    }
+
     public void setStatusDebit(int id, boolean isClose) {
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();

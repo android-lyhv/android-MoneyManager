@@ -8,11 +8,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,8 +77,6 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
     TextView tvAccount;
     @ViewById(R.id.spinnerTypeLoop)
     AppCompatSpinner mAppCompatSpinner;
-    @ViewById(R.id.switchLoop)
-    SwitchCompat switchCompat;
     @ViewById(R.id.tvAddress)
     TextView tvAddress;
     private DialogCalculator mDialogCalculator;
@@ -113,7 +109,6 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
         mExchangeLoop = new ExchangeLooper();
         mExchangeLoop.setCreated(new Date());
         mExchangeLoop.setTypeLoop(LoopType.DAY);
-        mExchangeLoop.setLoop(switchCompat.isChecked());
     }
 
     private void initSpinner() {
@@ -122,12 +117,6 @@ public class ActivityAddLoopExchange extends AppCompatActivity implements OnMapR
             @Override
             public void onResultTypeLoop(int type) {
                 mExchangeLoop.setTypeLoop(type);
-            }
-        });
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mExchangeLoop.setLoop(isChecked);
             }
         });
     }
