@@ -48,7 +48,6 @@ import java.util.UUID;
 @EActivity(R.layout.activity_add_exchange)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddExchange extends AppCompatActivity implements AddListener {
-    private static final String TAG = ActivityAddExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvAmount)
@@ -193,7 +192,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @Click(R.id.llAccount)
     void onClickPickAccount() {
-        mDialogPickAccount.show(getFragmentManager(), TAG);
+        mDialogPickAccount.show(getFragmentManager(), null);
         mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
@@ -235,7 +234,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         isClickTabExpense = false;
         mExchange.setTypeExchange(ExchangeType.INCOME);
         mExchange.setIdCategory(null);
-        tvTitleFromAccount.setText(getString(R.string.main_account));
+        tvTitleFromAccount.setText(getString(R.string.name_wallet));
         tvTitleToAccount.setText(getString(R.string.category_name));
         tvCategoryName.setText(getString(R.string.unknown));
         tvStatus.setVisibility(View.VISIBLE);
@@ -254,7 +253,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         isClickTabIncome = false;
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
         mExchange.setIdCategory(null);
-        tvTitleFromAccount.setText(getString(R.string.main_account));
+        tvTitleFromAccount.setText(getString(R.string.name_wallet));
         tvTitleToAccount.setText(getString(R.string.category_name));
         tvCategoryName.setText(getString(R.string.unknown));
         tvStatus.setVisibility(View.VISIBLE);
@@ -332,7 +331,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     }
 
     private void showDialogPickAccountReceive() {
-        mDialogPickAccount.show(getFragmentManager(), TAG);
+        mDialogPickAccount.show(getFragmentManager(), null);
         mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {

@@ -64,6 +64,7 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
         TextView tvAmount;
         TextView tvLastCreated;
         TextView tvStatus;
+        ImageView imgNote;
 
         public ItemLoopExchange(View itemView) {
             super(itemView);
@@ -76,6 +77,7 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
             rlContent = (RelativeLayout) itemView.findViewById(R.id.content);
             rlContent.setOnClickListener(this);
             tvStatus = (TextView) itemView.findViewById(R.id.tvStatus);
+            imgNote = (ImageView) itemView.findViewById(R.id.imgNote);
         }
 
         public void onBind(ExchangeLooper exchangeLooper) {
@@ -85,8 +87,10 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
             String description = exchangeLooper.getDescription();
             if (TextUtils.isEmpty(description)) {
                 tvDescription.setVisibility(View.GONE);
+                imgNote.setVisibility(View.GONE);
             } else {
                 tvDescription.setVisibility(View.VISIBLE);
+                imgNote.setVisibility(View.VISIBLE);
                 tvDescription.setText(description);
             }
             switch (exchangeLooper.getTypeLoop()) {

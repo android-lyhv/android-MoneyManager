@@ -22,7 +22,6 @@ import java.util.Date;
  */
 @EFragment(R.layout.dialog_custom_filter)
 public class DialogCustomFilter extends DialogFragment {
-    private static final String TAG = DialogCustomFilter.class.getSimpleName();
     @ViewById(R.id.tvToDate)
     TextView mTvToDate;
     @ViewById(R.id.tvFromDate)
@@ -55,7 +54,7 @@ public class DialogCustomFilter extends DialogFragment {
     @Click(R.id.tvFromDate)
     void onCLickFromDate() {
         mDayPicker = DayPicker_.builder().build();
-        mDayPicker.show(getChildFragmentManager(), TAG);
+        mDayPicker.show(getChildFragmentManager(), null);
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultDate(Date date) {
@@ -69,7 +68,7 @@ public class DialogCustomFilter extends DialogFragment {
     @Click(R.id.tvToDate)
     void onCLickToDate() {
         mDayPicker = DayPicker_.builder().build();
-        mDayPicker.show(getChildFragmentManager(), TAG);
+        mDayPicker.show(getChildFragmentManager(), null);
         mDayPicker.registerPicker(new DayPicker.DatePickerListener() {
             @Override
             public void onResultDate(Date date) {

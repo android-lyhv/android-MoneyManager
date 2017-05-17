@@ -50,7 +50,6 @@ import java.util.Locale;
 @EActivity(R.layout.activity_add_more_exchange)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapReadyCallback {
-    private static final String TAG = ActivityAddMoreExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
     @ViewById(R.id.edtDescription)
@@ -144,12 +143,12 @@ public class ActivityAddMoreExchange extends AppCompatActivity implements OnMapR
 
     @Click(R.id.tvDate)
     void onClickPickDay() {
-        mDayPicker.show(getSupportFragmentManager(), TAG);
+        mDayPicker.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.tvTime)
     void onClickPickTime() {
-        mTimePicker.show(getSupportFragmentManager(), TAG);
+        mTimePicker.show(getSupportFragmentManager(), null);
     }
 
     @Click(R.id.rlLocation)
