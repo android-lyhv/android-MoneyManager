@@ -146,6 +146,10 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             Toast.makeText(this, R.string.messger_init_debit_exchange, Toast.LENGTH_SHORT).show();
             return;
         }
+        if (DebitManager.getInstance().checkDebitClose(mExchange.getIdDebit())) {
+            Toast.makeText(this, R.string.debit_close, Toast.LENGTH_SHORT).show();
+            return;
+        }
         DialogConfirm.getInstance().setMessage(getString(R.string.dialog_confirm_delete_title));
         DialogConfirm.getInstance().show(getSupportFragmentManager(), TAG);
         DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
