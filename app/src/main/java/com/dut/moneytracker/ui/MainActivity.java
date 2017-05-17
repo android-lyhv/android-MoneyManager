@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @Click(R.id.imgSortingDebit)
     void onClickSortDebit() {
-        if (isFragmentExxchangeLoop()) {
+        if (isFragmentExchangeLoop()) {
             mDialogPickFilterLoop.registerListener(new DialogPickFilterLoop.FilterListener() {
                 @Override
                 public void onResult(int selectedId) {
@@ -615,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         return null != fragment;
     }
 
-    public boolean isFragmentExxchangeLoop() {
+    public boolean isFragmentExchangeLoop() {
         Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGE_LOOP);
         return null != fragment;
     }

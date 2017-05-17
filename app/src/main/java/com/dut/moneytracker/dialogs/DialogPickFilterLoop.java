@@ -40,6 +40,7 @@ public class DialogPickFilterLoop extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         selected = which;
                         filterListener.onResult(idList[selected]);
+                        dismiss();
                     }
                 });
         return builder.create();
