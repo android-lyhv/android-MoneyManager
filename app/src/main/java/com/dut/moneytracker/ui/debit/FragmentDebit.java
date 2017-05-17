@@ -35,6 +35,7 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
     private DebitAdapter mDebitAdapter;
     private DialogPayDebit mDialogPayDebit;
     private DialogCalculator mDialogCalculator;
+    private RealmResults<Debit> mDebits;
 
     @AfterViews
     void init() {
@@ -53,12 +54,8 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
     }
 
     private void initRecyclerDebit() {
-        RealmResults<Debit> mDebits = DebitManager.getInstance().onLoadDebitAsync();
-        mDebitAdapter = new DebitAdapter(getContext(), mDebits);
-        mDebitAdapter.registerClickDebit(this);
-        mRecyclerViewDebit.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerViewDebit.setAdapter(mDebitAdapter);
-        mDebits.addChangeListener(this);
+        mDebits = DebitManager.getInstance().onLoadDebitAsync();
+        setUpAdapterDebit();
     }
 
     @Override
@@ -115,5 +112,18 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
                 mDebitAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void onFilterDebit(int idFilter) {
+        mDebits = DebitManager.getInstance().onLoadDebitAsync(idFilter);
+        setUpAdapterDebit();
+    }
+
+    private void setUpAdapterDebit() {
+        mDebitAdapter = new DebitAdapter(getContext(), mDebits);
+        mDebitAdapter.registerClickDebit(this);
+        mRecyclerViewDebit.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerViewDebit.setAdapter(mDebitAdapter);
+        mDebits.addChangeListener(this);
     }
 }

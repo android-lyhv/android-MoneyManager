@@ -56,7 +56,7 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
         ActivityDetailLoopExchange_.intent(FragmentLoopExchange.this).mExchangeLoop((ExchangeLooper) mAdapter.getItem(position)).start();
     }
 
-    public void onFilter(int idFilter) {
+    public void onFilterLoopExchange(int idFilter) {
         mExchangeLoops = ExchangeLoopManager.getInstance().onLoadSyncExchangeLooper(idFilter);
         setUpAdapter();
     }

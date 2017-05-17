@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,6 +31,8 @@ import com.dut.moneytracker.constant.PieChartType;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
+import com.dut.moneytracker.dialogs.DialogPickFilterDebit;
+import com.dut.moneytracker.dialogs.DialogPickFilterDebit_;
 import com.dut.moneytracker.dialogs.DialogPickFilterLoop;
 import com.dut.moneytracker.dialogs.DialogPickFilterLoop_;
 import com.dut.moneytracker.dialogs.DialogPickFilter_;
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     private DialogPickFilter mDialogPickFilterTime;
     private DialogCustomFilter mDialogCustomFilter;
     private DialogPickFilterLoop mDialogPickFilterLoop;
+    private DialogPickFilterDebit mDialogPickFilterDebit;
     //model
     FragmentManager mFragmentManager = getSupportFragmentManager();
     FragmentDashboard mFragmentDashboard;
@@ -184,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         mDialogPickFilterTime = DialogPickFilter_.builder().build();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
         mDialogPickFilterLoop = DialogPickFilterLoop_.builder().build();
+        mDialogPickFilterDebit = DialogPickFilterDebit_.builder().build();
     }
 
     private void initHeaderView() {
@@ -368,15 +371,20 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
             mDialogPickFilterLoop.registerListener(new DialogPickFilterLoop.FilterListener() {
                 @Override
                 public void onResult(int selectedId) {
-                    Log.d(TAG, "onResult: " + selectedId);
-                    mFragmentLoopExchange.onFilter(selectedId);
+                    mFragmentLoopExchange.onFilterLoopExchange(selectedId);
                 }
             });
             mDialogPickFilterLoop.show(getFragmentManager(), null);
         }
 
         if (isFragmentDebit()) {
-            // TODO sort debit
+            mDialogPickFilterDebit.registerListener(new DialogPickFilterDebit.FilterListener() {
+                @Override
+                public void onResult(int selectedId) {
+                        mFragmentDebit.onFilterDebit(selectedId);
+                }
+            });
+            mDialogPickFilterDebit.show(getFragmentManager(), null);
         }
     }
 
