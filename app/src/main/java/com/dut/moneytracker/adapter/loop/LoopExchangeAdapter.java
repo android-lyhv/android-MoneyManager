@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.adapter.base.BaseRecyclerAdapter;
 import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.constant.FilterLoop;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.realms.CategoryManager;
@@ -24,6 +26,8 @@ import com.dut.moneytracker.utils.DateTimeUtils;
 
 import io.realm.RealmResults;
 
+import static com.facebook.login.widget.ProfilePictureView.TAG;
+
 /**
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 20/03/2017.
@@ -31,6 +35,7 @@ import io.realm.RealmResults;
 
 public class LoopExchangeAdapter extends BaseRecyclerAdapter {
     private ClickItemListener clickItemListener;
+    private int mIdFilter = 0;
 
     public interface ClickItemListener {
         void onClickItem(int position);
@@ -52,7 +57,49 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ItemLoopExchange) holder).onBind((ExchangeLooper) getItem(position));
+        ExchangeLooper exchangeLooper = (ExchangeLooper) getItem(position);
+        ((ItemLoopExchange) holder).onBind(exchangeLooper);
+
+        Log.d(TAG, "onBindViewHolder: " + mIdFilter);
+        switch (mIdFilter) {
+            case FilterLoop.ALL:
+                break;
+            case FilterLoop.DAY:
+                if (exchangeLooper.getTypeLoop() != LoopType.DAY) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+                break;
+            case FilterLoop.WEAK:
+                if (exchangeLooper.getTypeLoop() != LoopType.WEAK) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+                break;
+            case FilterLoop.MONTH:
+                if (exchangeLooper.getTypeLoop() != LoopType.MONTH) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+                break;
+            case FilterLoop.YEAR:
+                if (exchangeLooper.getTypeLoop() != LoopType.YEAR) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+                break;
+            case FilterLoop.INCOME:
+                if (exchangeLooper.getTypeExchange() != ExchangeType.INCOME) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+                break;
+            case FilterLoop.EXPENSES:
+                if (exchangeLooper.getTypeExchange() != ExchangeType.EXPENSES) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+                break;
+        }
+    }
+
+    public void setIdFilter(int idFilter) {
+        mIdFilter = idFilter;
+        notifyDataSetChanged();
     }
 
     public class ItemLoopExchange extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +32,8 @@ import com.dut.moneytracker.constant.PieChartType;
 import com.dut.moneytracker.dialogs.DialogCustomFilter;
 import com.dut.moneytracker.dialogs.DialogCustomFilter_;
 import com.dut.moneytracker.dialogs.DialogPickFilter;
+import com.dut.moneytracker.dialogs.DialogPickFilterLoop;
+import com.dut.moneytracker.dialogs.DialogPickFilterLoop_;
 import com.dut.moneytracker.dialogs.DialogPickFilter_;
 import com.dut.moneytracker.models.realms.AccountManager;
 import com.dut.moneytracker.models.realms.FilterManager;
@@ -77,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     private static final String CHART = "CHART";
     private static final String EXCHANGE_RECORDS = "EXCHANGE";
     private static final String CHART_CATEGORY = "CHART_CATEGORY";
+    private static final String EXCHANGE_LOOP = "EXCHANGE_LOOP";
+    private static final String DEBIT = "DEBIT";
 
     public enum FragmentTag {
         DEFAULT, DASHBOARD, RECORDS, EXCHANGE_LOOPS, PROFILE, CHART_INCOME, CHART_EXPENSES, CHART_CATEGORY, ACCOUNT, DEBIT
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     ImageView imgSorDebit;
     private DialogPickFilter mDialogPickFilterTime;
     private DialogCustomFilter mDialogCustomFilter;
+    private DialogPickFilterLoop mDialogPickFilterLoop;
     //model
     FragmentManager mFragmentManager = getSupportFragmentManager();
     FragmentDashboard mFragmentDashboard;
@@ -177,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     private void initDialog() {
         mDialogPickFilterTime = DialogPickFilter_.builder().build();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
+        mDialogPickFilterLoop = DialogPickFilterLoop_.builder().build();
     }
 
     private void initHeaderView() {
@@ -357,7 +364,20 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     @Click(R.id.imgSortingDebit)
     void onClickSortDebit() {
-        //TODO short
+        if (isFragmentExxchangeLoop()) {
+            mDialogPickFilterLoop.registerListener(new DialogPickFilterLoop.FilterListener() {
+                @Override
+                public void onResult(int selectedId) {
+                    Log.d(TAG, "onResult: " + selectedId);
+                    mFragmentLoopExchange.onFilter(selectedId);
+                }
+            });
+            mDialogPickFilterLoop.show(getFragmentManager(), null);
+        }
+
+        if (isFragmentDebit()) {
+            // TODO sort debit
+        }
     }
 
     @OnActivityResult(IntentCode.DETAIL_ACCOUNT)
@@ -431,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
      */
     private void onLoadFragmentDebit() {
         mFragmentDebit = FragmentDebit_.builder().build();
-        onReplaceFragment(mFragmentDebit, null);
+        onReplaceFragment(mFragmentDebit, DEBIT);
     }
 
     /**
@@ -497,7 +517,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
      */
     public void onLoadFragmentLoopExchange() {
         mFragmentLoopExchange = FragmentLoopExchange_.builder().build();
-        onReplaceFragment(mFragmentLoopExchange, null);
+        onReplaceFragment(mFragmentLoopExchange, EXCHANGE_LOOP);
     }
 
     private void onReplaceFragment(Fragment fragment, String TAG) {
@@ -531,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
         spinner.setVisibility(View.GONE);
         imgDateFilter.setVisibility(View.GONE);
         imgSettingAccount.setVisibility(View.GONE);
-        imgSorDebit.setVisibility(View.GONE);
+        imgSorDebit.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -587,6 +607,16 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
 
     public boolean isFragmentExchangeRecord() {
         Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGE_RECORDS);
+        return null != fragment;
+    }
+
+    public boolean isFragmentDebit() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(DEBIT);
+        return null != fragment;
+    }
+
+    public boolean isFragmentExxchangeLoop() {
+        Fragment fragment = mFragmentManager.findFragmentByTag(EXCHANGE_LOOP);
         return null != fragment;
     }
 }

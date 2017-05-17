@@ -102,6 +102,7 @@
     <string name="detail_exchange_loop">Chi tiết giao dịch</string>
     <string name="icome_type">Thể loại thu nhập</string>
     <string name="expresen_type">Thể loại chi tiêu</string>
+    <string name="dialog_filter_ok">Chọn</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>
