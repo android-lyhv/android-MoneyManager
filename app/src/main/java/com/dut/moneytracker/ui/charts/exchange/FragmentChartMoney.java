@@ -32,7 +32,6 @@ import java.util.List;
  */
 @EFragment(R.layout.fragment_card_chart_exchange)
 public class FragmentChartMoney extends BaseFragment implements ChartMoneyListener {
-    private static final String TAG = FragmentChartMoney.class.getSimpleName();
     @ViewById(R.id.llPrevious)
     LinearLayout llPrevious;
     @ViewById(R.id.llNext)

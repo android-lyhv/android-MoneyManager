@@ -40,7 +40,6 @@ import java.util.Locale;
 @EActivity(R.layout.activity_add_debit)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddDebit extends AppCompatActivity {
-    private static final String TAG = ActivityAddDebit.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvName)

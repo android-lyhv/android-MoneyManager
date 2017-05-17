@@ -66,7 +66,6 @@ import java.util.Locale;
 @EActivity(R.layout.activity_detail_exchange)
 @OptionsMenu(R.menu.menu_detail_exchange)
 public class ActivityDetailExchange extends AppCompatActivity implements DetailExchangeListener, OnMapReadyCallback {
-    static final String TAG = ActivityDetailExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
     @ViewById(R.id.tvExchangeName)
@@ -151,7 +150,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
             return;
         }
         DialogConfirm.getInstance().setMessage(getString(R.string.dialog_confirm_delete_title));
-        DialogConfirm.getInstance().show(getSupportFragmentManager(), TAG);
+        DialogConfirm.getInstance().show(getSupportFragmentManager(), null);
         DialogConfirm.getInstance().registerClickListener(new DialogConfirm.ClickListener() {
             @Override
             public void onClickResult(boolean value) {

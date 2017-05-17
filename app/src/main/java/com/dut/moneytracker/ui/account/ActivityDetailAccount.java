@@ -47,7 +47,6 @@ import org.androidannotations.annotations.ViewById;
 @EActivity(R.layout.activity_detail_account)
 @OptionsMenu(R.menu.menu_edit_account)
 public class ActivityDetailAccount extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DialogPickColor.PickColorListener {
-    private static final java.lang.String TAG = ActivityDetailAccount.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvInitAmount)
@@ -159,7 +158,7 @@ public class ActivityDetailAccount extends AppCompatActivity implements Compound
         } else {
             mDialogCalculator.setAmount("");
         }
-        mDialogCalculator.show(getFragmentManager(), TAG);
+        mDialogCalculator.show(getFragmentManager(), null);
         mDialogCalculator.registerResultListener(new DialogCalculator.ResultListener() {
             @Override
             public void onResult(String amount) {

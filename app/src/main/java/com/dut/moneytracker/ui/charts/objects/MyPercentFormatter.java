@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 public class MyPercentFormatter extends PercentFormatter {
 
     public MyPercentFormatter() {
-        mFormat = new DecimalFormat("###,###,##0.00");
+        mFormat = new DecimalFormat("###,###,##0.0");
     }
 
     public MyPercentFormatter(DecimalFormat format) {

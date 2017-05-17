@@ -24,7 +24,6 @@ import io.realm.RealmResults;
  */
 @EFragment(R.layout.fragment_loop_exchange)
 public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAdapter.ClickItemListener {
-    private static final String TAG = FragmentLoopExchange.class.getSimpleName();
     @ViewById(R.id.recyclerDefaultExchange)
     RecyclerView mRecyclerView;
     private LoopExchangeAdapter mAdapter;

@@ -48,7 +48,6 @@ import java.util.UUID;
 @EActivity(R.layout.activity_add_exchange)
 @OptionsMenu(R.menu.menu_add_exchange)
 public class ActivityAddExchange extends AppCompatActivity implements AddListener {
-    private static final String TAG = ActivityAddExchange.class.getSimpleName();
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
     @ViewById(R.id.tvAmount)
@@ -193,7 +192,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
 
     @Click(R.id.llAccount)
     void onClickPickAccount() {
-        mDialogPickAccount.show(getFragmentManager(), TAG);
+        mDialogPickAccount.show(getFragmentManager(), null);
         mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
@@ -332,7 +331,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
     }
 
     private void showDialogPickAccountReceive() {
-        mDialogPickAccount.show(getFragmentManager(), TAG);
+        mDialogPickAccount.show(getFragmentManager(), null);
         mDialogPickAccount.registerPickAccount(new DialogPickAccount.AccountListener() {
             @Override
             public void onResultAccount(Account account) {
