@@ -3,6 +3,7 @@ package com.dut.moneytracker;
 import android.app.Application;
 import android.content.Context;
 
+import com.dut.moneytracker.service.PendingService;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,6 +25,7 @@ public class MoneyTrackerApplication extends Application {
         configFacebookSdk();
         configFireBase();
         configMap();
+        PendingService.getInstance().actionLoopPending(getApplicationContext());
     }
 
     private void configFacebookSdk() {
