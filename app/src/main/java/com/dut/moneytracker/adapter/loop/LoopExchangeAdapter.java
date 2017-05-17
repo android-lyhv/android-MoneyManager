@@ -109,6 +109,13 @@ public class LoopExchangeAdapter extends BaseRecyclerAdapter {
             } else {
                 tvAmount.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_light));
             }
+            if (exchangeLooper.isLoop()) {
+                tvStatus.setText(R.string.loop_status_ok);
+                tvStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            } else {
+                tvStatus.setText(R.string.loop_status_close);
+                tvStatus.setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_light));
+            }
         }
 
         @Override
