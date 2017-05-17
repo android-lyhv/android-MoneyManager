@@ -88,7 +88,7 @@ public class DebitManager extends RealmHelper {
         realm.beginTransaction();
         Debit debit = realm.where(Debit.class).equalTo("id", id).findFirst();
         realm.commitTransaction();
-        return debit.isClose();
+        return debit != null && debit.isClose();
     }
 
     public void setStatusDebit(int id, boolean isClose) {
