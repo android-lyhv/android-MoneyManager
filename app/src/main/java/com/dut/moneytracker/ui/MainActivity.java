@@ -185,8 +185,6 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
     private void initDialog() {
         mDialogPickFilterTime = DialogPickFilter_.builder().build();
         mDialogCustomFilter = DialogCustomFilter_.builder().build();
-        mDialogPickFilterLoop = DialogPickFilterLoop_.builder().build();
-        mDialogPickFilterDebit = DialogPickFilterDebit_.builder().build();
     }
 
     private void initHeaderView() {
@@ -458,6 +456,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
      * onLoad Fragment Debit
      */
     private void onLoadFragmentDebit() {
+        mDialogPickFilterDebit = DialogPickFilterDebit_.builder().build();
         mFragmentDebit = FragmentDebit_.builder().build();
         onReplaceFragment(mFragmentDebit, DEBIT);
     }
@@ -524,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements MainListener, Nav
      * load fragment list exchanges loop
      */
     public void onLoadFragmentLoopExchange() {
+        mDialogPickFilterLoop = DialogPickFilterLoop_.builder().build();
         mFragmentLoopExchange = FragmentLoopExchange_.builder().build();
         onReplaceFragment(mFragmentLoopExchange, EXCHANGE_LOOP);
     }

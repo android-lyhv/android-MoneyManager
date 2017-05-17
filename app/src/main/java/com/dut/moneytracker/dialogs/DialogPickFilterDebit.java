@@ -17,8 +17,8 @@ import org.androidannotations.annotations.EFragment;
  */
 @EFragment
 public class DialogPickFilterDebit extends DialogFragment {
-    private String[] mTitle = new String[]{"Tất cả", "Đã đóng", "Cho Vay", "Đi Vay",};
-    private int[] idList = new int[]{SortDebit.ALL, SortDebit.CLOSE, SortDebit.LEND, SortDebit.BORROWED};
+    private String[] mTitle = new String[]{"Tất cả", "Đã đóng", "Cho Vay", "Đi Vay", "Hết hạn"};
+    private int[] idList = new int[]{SortDebit.ALL, SortDebit.CLOSE, SortDebit.LEND, SortDebit.BORROWED, SortDebit.EXPIRED};
     private int selected = 0;
     FilterListener filterListener;
 

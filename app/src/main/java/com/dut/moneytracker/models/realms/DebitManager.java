@@ -115,6 +115,9 @@ public class DebitManager extends RealmHelper {
                 return realm.where(Debit.class).equalTo("typeDebit", DebitType.LEND).findAllSortedAsync("id", Sort.DESCENDING);
             case SortDebit.BORROWED:
                 return realm.where(Debit.class).equalTo("typeDebit", DebitType.BORROWED).findAllSortedAsync("id", Sort.DESCENDING);
+            case SortDebit.EXPIRED:
+                return realm.where(Debit.class).lessThanOrEqualTo("endDate", new Date()).equalTo("isClose", false).findAllSortedAsync("id", Sort.DESCENDING);
+
         }
         return onLoadDebitAsync();
     }
