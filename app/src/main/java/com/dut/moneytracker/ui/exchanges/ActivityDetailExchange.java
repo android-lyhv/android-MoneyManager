@@ -208,7 +208,7 @@ public class ActivityDetailExchange extends AppCompatActivity implements DetailE
 
     @Click(R.id.rlAmount)
     void onClickAmount() {
-        if (mExchange.getTypeExchange() == ExchangeType.DEBIT && TextUtils.equals(mExchange.getId(), String.valueOf(mExchange.getIdDebit()))) {
+        if (mExchange.getTypeExchange() == ExchangeType.DEBIT) {
             return;
         }
         String amount = mExchange.getAmount();
