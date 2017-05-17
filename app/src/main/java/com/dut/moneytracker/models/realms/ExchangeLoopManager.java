@@ -155,7 +155,7 @@ public class ExchangeLoopManager extends RealmHelper {
 
     private RealmResults<ExchangeLooper> getExchangeLoopAvailable() {
         realm.beginTransaction();
-        RealmResults<ExchangeLooper> exchangeLoops = realm.where(ExchangeLooper.class).findAll();
+        RealmResults<ExchangeLooper> exchangeLoops = realm.where(ExchangeLooper.class).equalTo("isLoop", true).findAll();
         realm.commitTransaction();
         return exchangeLoops;
     }
