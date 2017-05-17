@@ -95,6 +95,9 @@ FragmentDebit extends BaseFragment implements RealmChangeListener<RealmResults<D
                             Toast.makeText(getContext(), R.string.messger_remind_amount, Toast.LENGTH_LONG).show();
                             return;
                         }
+                        if (CurrencyUtils.getInstance().compareAmount(remindAmount, amount) == 0) {
+                            DebitManager.getInstance().setStatusDebit(debit.getId(), true);
+                        }
                         DebitManager.getInstance().genExchangeFromDebit(debit, amount);
                         mDebitAdapter.notifyDataSetChanged();
                     }

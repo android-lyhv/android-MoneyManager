@@ -35,7 +35,7 @@ public class AccountManager extends RealmHelper {
     }
 
     private AccountManager() {
-
+        // No-op
     }
 
     /**

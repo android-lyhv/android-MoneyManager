@@ -27,7 +27,6 @@ public class ExchangeLooper extends RealmObject implements Parcelable {
     private String amount;
     private String description;
     private Date created;
-    private boolean isLoop;
     private int typeLoop;
     // This for place
     private String address;
@@ -53,7 +52,6 @@ public class ExchangeLooper extends RealmObject implements Parcelable {
         dest.writeString(this.amount);
         dest.writeString(this.description);
         dest.writeLong(this.created != null ? this.created.getTime() : -1);
-        dest.writeByte(this.isLoop ? (byte) 1 : (byte) 0);
         dest.writeInt(this.typeLoop);
         dest.writeString(this.address);
         dest.writeDouble(this.latitude);
@@ -71,7 +69,6 @@ public class ExchangeLooper extends RealmObject implements Parcelable {
         this.description = in.readString();
         long tmpCreated = in.readLong();
         this.created = tmpCreated == -1 ? null : new Date(tmpCreated);
-        this.isLoop = in.readByte() != 0;
         this.typeLoop = in.readInt();
         this.address = in.readString();
         this.latitude = in.readDouble();

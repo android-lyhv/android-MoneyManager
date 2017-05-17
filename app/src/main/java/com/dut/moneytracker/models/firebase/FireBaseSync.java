@@ -200,7 +200,6 @@ public class FireBaseSync {
         result.put("address", exchangeLooper.getAddress());
         result.put("latitude", exchangeLooper.getLatitude());
         result.put("longitude", exchangeLooper.getLongitude());
-        result.put("isLoop", exchangeLooper.isLoop());
         result.put("typeLoop", exchangeLooper.getTypeLoop());
         return result;
     }
@@ -249,7 +248,6 @@ public class FireBaseSync {
         exchangeLooper.setAddress((String) data.get("address"));
         exchangeLooper.setLatitude(Double.parseDouble(String.valueOf(data.get("latitude"))));
         exchangeLooper.setLongitude(Double.parseDouble(String.valueOf(data.get("longitude"))));
-        exchangeLooper.setLoop((Boolean) data.get("isLoop"));
         exchangeLooper.setTypeLoop(Integer.parseInt(String.valueOf(data.get("typeLoop"))));
         ExchangeLoopManager.getInstance().insertOrUpdate(exchangeLooper);
     }
