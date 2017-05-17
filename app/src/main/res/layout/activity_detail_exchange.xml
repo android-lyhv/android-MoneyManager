@@ -193,7 +193,7 @@
                     android:id="@+id/tvTitleAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Tài khoản" />
+                    android:text="@string/name_wallet"/>
 
                 <ImageView
                     android:id="@+id/imgEditAccount"

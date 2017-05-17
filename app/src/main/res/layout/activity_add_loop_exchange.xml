@@ -233,7 +233,7 @@
                         android:id="@+id/tvTitleAccount"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Tài khoản" />
+                        android:text="@string/name_wallet" />
 
                     <ImageView
                         android:layout_width="@dimen/activity_detail_exchange.image.with"

@@ -235,7 +235,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         isClickTabExpense = false;
         mExchange.setTypeExchange(ExchangeType.INCOME);
         mExchange.setIdCategory(null);
-        tvTitleFromAccount.setText(getString(R.string.main_account));
+        tvTitleFromAccount.setText(getString(R.string.name_wallet));
         tvTitleToAccount.setText(getString(R.string.category_name));
         tvCategoryName.setText(getString(R.string.unknown));
         tvStatus.setVisibility(View.VISIBLE);
@@ -254,7 +254,7 @@ public class ActivityAddExchange extends AppCompatActivity implements AddListene
         isClickTabIncome = false;
         mExchange.setTypeExchange(ExchangeType.EXPENSES);
         mExchange.setIdCategory(null);
-        tvTitleFromAccount.setText(getString(R.string.main_account));
+        tvTitleFromAccount.setText(getString(R.string.name_wallet));
         tvTitleToAccount.setText(getString(R.string.category_name));
         tvCategoryName.setText(getString(R.string.unknown));
         tvStatus.setVisibility(View.VISIBLE);
