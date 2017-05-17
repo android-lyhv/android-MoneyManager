@@ -28,6 +28,7 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     @ViewById(R.id.recyclerDefaultExchange)
     RecyclerView mRecyclerView;
     private LoopExchangeAdapter mAdapter;
+    private RealmResults<ExchangeLooper> mExchangeLoops;
 
     @AfterViews
     void init() {
@@ -35,17 +36,8 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     }
 
     private void initLoopAdapter() {
-        RealmResults<ExchangeLooper> mExchangeLoops = ExchangeLoopManager.getInstance().onLoadSyncExchangeLooper();
-        mAdapter = new LoopExchangeAdapter(getContext(), mExchangeLoops);
-        mAdapter.registerItemClick(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter);
-        mExchangeLoops.addChangeListener(new RealmChangeListener<RealmResults<ExchangeLooper>>() {
-            @Override
-            public void onChange(RealmResults<ExchangeLooper> element) {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+        mExchangeLoops = ExchangeLoopManager.getInstance().onLoadSyncExchangeLooper();
+        setUpAdapter();
     }
 
     @Override
@@ -62,5 +54,23 @@ public class FragmentLoopExchange extends BaseFragment implements LoopExchangeAd
     @Override
     public void onClickItem(int position) {
         ActivityDetailLoopExchange_.intent(FragmentLoopExchange.this).mExchangeLoop((ExchangeLooper) mAdapter.getItem(position)).start();
+    }
+
+    public void onFilterLoopExchange(int idFilter) {
+        mExchangeLoops = ExchangeLoopManager.getInstance().onLoadSyncExchangeLooper(idFilter);
+        setUpAdapter();
+    }
+
+    private void setUpAdapter() {
+        mAdapter = new LoopExchangeAdapter(getContext(), mExchangeLoops);
+        mAdapter.registerItemClick(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mAdapter);
+        mExchangeLoops.addChangeListener(new RealmChangeListener<RealmResults<ExchangeLooper>>() {
+            @Override
+            public void onChange(RealmResults<ExchangeLooper> element) {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

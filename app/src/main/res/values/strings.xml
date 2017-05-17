@@ -105,6 +105,7 @@
     <string name="confirm">Đồng ý</string>
     <string name="cancel">Hủy</string>
     <string name="debit_close">Sổ nợ đã đóng, Không thể xóa giao giao!</string>
+    <string name="dialog_filter_ok">Chọn</string>
     <!--GROUP-->
     <string-array name="group_name">
         <item>Ăn Uống</item>

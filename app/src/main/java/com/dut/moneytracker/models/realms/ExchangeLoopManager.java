@@ -1,5 +1,7 @@
 package com.dut.moneytracker.models.realms;
 
+import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.constant.FilterLoop;
 import com.dut.moneytracker.constant.LoopType;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Exchange;
@@ -77,6 +79,26 @@ public class ExchangeLoopManager extends RealmHelper {
     /*********************************************/
     public RealmResults<ExchangeLooper> onLoadSyncExchangeLooper() {
         return realm.where(ExchangeLooper.class).findAllSortedAsync("created", Sort.ASCENDING);
+    }
+
+    public RealmResults<ExchangeLooper> onLoadSyncExchangeLooper(int idFilter) {
+        switch (idFilter) {
+            case FilterLoop.ALL:
+                return onLoadSyncExchangeLooper();
+            case FilterLoop.DAY:
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.DAY).findAllSortedAsync("created", Sort.ASCENDING);
+            case FilterLoop.WEAK:
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.WEAK).findAllSortedAsync("created", Sort.ASCENDING);
+            case FilterLoop.MONTH:
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.MONTH).findAllSortedAsync("created", Sort.ASCENDING);
+            case FilterLoop.YEAR:
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.YEAR).findAllSortedAsync("created", Sort.ASCENDING);
+            case FilterLoop.INCOME:
+                return realm.where(ExchangeLooper.class).equalTo("typeExchange", ExchangeType.INCOME).findAllSortedAsync("created", Sort.ASCENDING);
+            case FilterLoop.EXPENSES:
+                return realm.where(ExchangeLooper.class).equalTo("typeExchange", ExchangeType.EXPENSES).findAllSortedAsync("created", Sort.ASCENDING);
+        }
+        return onLoadSyncExchangeLooper();
     }
 
     private Exchange copyExchange(ExchangeLooper exchangeLooper) {

@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.DebitType;
 import com.dut.moneytracker.constant.ExchangeType;
+import com.dut.moneytracker.constant.SortDebit;
 import com.dut.moneytracker.currency.CurrencyUtils;
 import com.dut.moneytracker.models.firebase.FireBaseSync;
 import com.dut.moneytracker.objects.Debit;
@@ -25,6 +26,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Copyright@ AsianTech.Inc
@@ -100,7 +102,21 @@ public class DebitManager extends RealmHelper {
 
     /***************************************************************/
     public RealmResults<Debit> onLoadDebitAsync() {
-        return realm.where(Debit.class).findAllAsync();
+        return realm.where(Debit.class).findAllSortedAsync("id", Sort.DESCENDING);
+    }
+
+    public RealmResults<Debit> onLoadDebitAsync(int idFilter) {
+        switch (idFilter) {
+            case SortDebit.ALL:
+                return onLoadDebitAsync();
+            case SortDebit.CLOSE:
+                return realm.where(Debit.class).equalTo("isClose", true).findAllSortedAsync("id", Sort.DESCENDING);
+            case SortDebit.LEND:
+                return realm.where(Debit.class).equalTo("typeDebit", DebitType.LEND).findAllSortedAsync("id", Sort.DESCENDING);
+            case SortDebit.BORROWED:
+                return realm.where(Debit.class).equalTo("typeDebit", DebitType.BORROWED).findAllSortedAsync("id", Sort.DESCENDING);
+        }
+        return onLoadDebitAsync();
     }
 
     public String getAccountNameByDebitId(int id) {
