@@ -78,7 +78,7 @@ public class ExchangeLoopManager extends RealmHelper {
 
     /*********************************************/
     public RealmResults<ExchangeLooper> onLoadSyncExchangeLooper() {
-        return realm.where(ExchangeLooper.class).findAllSortedAsync("created", Sort.ASCENDING);
+        return realm.where(ExchangeLooper.class).findAllSortedAsync("id", Sort.DESCENDING);
     }
 
     public RealmResults<ExchangeLooper> onLoadSyncExchangeLooper(int idFilter) {
@@ -86,17 +86,17 @@ public class ExchangeLoopManager extends RealmHelper {
             case FilterLoop.ALL:
                 return onLoadSyncExchangeLooper();
             case FilterLoop.DAY:
-                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.DAY).findAllSortedAsync("created", Sort.ASCENDING);
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.DAY).findAllSortedAsync("id", Sort.DESCENDING);
             case FilterLoop.WEAK:
-                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.WEAK).findAllSortedAsync("created", Sort.ASCENDING);
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.WEAK).findAllSortedAsync("id", Sort.DESCENDING);
             case FilterLoop.MONTH:
-                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.MONTH).findAllSortedAsync("created", Sort.ASCENDING);
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.MONTH).findAllSortedAsync("id", Sort.DESCENDING);
             case FilterLoop.YEAR:
-                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.YEAR).findAllSortedAsync("created", Sort.ASCENDING);
+                return realm.where(ExchangeLooper.class).equalTo("typeLoop", LoopType.YEAR).findAllSortedAsync("id", Sort.DESCENDING);
             case FilterLoop.INCOME:
-                return realm.where(ExchangeLooper.class).equalTo("typeExchange", ExchangeType.INCOME).findAllSortedAsync("created", Sort.ASCENDING);
+                return realm.where(ExchangeLooper.class).equalTo("typeExchange", ExchangeType.INCOME).findAllSortedAsync("id", Sort.DESCENDING);
             case FilterLoop.EXPENSES:
-                return realm.where(ExchangeLooper.class).equalTo("typeExchange", ExchangeType.EXPENSES).findAllSortedAsync("created", Sort.ASCENDING);
+                return realm.where(ExchangeLooper.class).equalTo("typeExchange", ExchangeType.EXPENSES).findAllSortedAsync("id", Sort.DESCENDING);
         }
         return onLoadSyncExchangeLooper();
     }
