@@ -9,7 +9,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dut.moneytracker.R;
 import com.dut.moneytracker.constant.IntentCode;
 import com.dut.moneytracker.models.AppConfig;
-import com.dut.moneytracker.service.PendingService;
+import com.dut.moneytracker.service.AlarmPending;
 import com.dut.moneytracker.view.CircleImageView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -52,7 +52,8 @@ public class UserActivity extends AppCompatActivity {
     void onClickLogout() {
         if (mFireBaseAuth.getCurrentUser() != null) {
             AppConfig.getInstance().clearAllData(this);
-            PendingService.getInstance().removePending(getApplicationContext());
+            AlarmPending.getInstance().removePendingReceive(getApplicationContext());
+            AlarmPending.getInstance().stopPendingService(getApplicationContext());
             mFireBaseAuth.signOut();
             clearSingInFacebook();
             setResult(IntentCode.PROFILE);

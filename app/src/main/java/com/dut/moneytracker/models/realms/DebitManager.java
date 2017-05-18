@@ -176,7 +176,7 @@ public class DebitManager extends RealmHelper {
         return nextId;
     }
 
-    public void onCheckEndDateDebit(Context context) {
+    public synchronized void onCheckEndDateDebit(Context context) {
         RealmResults<Debit> realmResults = getDebitsNotClose();
         for (Debit debit : realmResults) {
             if (Calendar.getInstance().getTimeInMillis() >= debit.getEndDate().getTime() && !debit.isClose()) {
