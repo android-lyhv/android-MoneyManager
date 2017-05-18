@@ -15,8 +15,7 @@ import static android.content.Context.ALARM_SERVICE;
  */
 public class PendingService {
     private static PendingService ourInstance;
-    private static final long TIME_REPEAT = 60 * 1000L;
-    private static final long TIME_START = 5000L;
+    private static final long TIME_REPEAT = 10 * 1000L;
     private static final int ID = 2722;
 
     public static PendingService getInstance() {
@@ -39,7 +38,7 @@ public class PendingService {
         Intent intent = new Intent(context, ReceivePending.class);
         intent.setAction(context.getString(R.string.pending));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, TIME_START, TIME_REPEAT, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), TIME_REPEAT, pendingIntent);
     }
 
     public void removePending(Context context) {
