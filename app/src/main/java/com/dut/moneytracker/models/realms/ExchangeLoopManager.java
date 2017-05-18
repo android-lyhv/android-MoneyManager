@@ -116,7 +116,7 @@ public class ExchangeLoopManager extends RealmHelper {
         return exchange;
     }
 
-    public void onGenerateNewExchange() {
+    public synchronized void onGenerateNewExchange() {
         RealmResults<ExchangeLooper> exchangeLoops = getExchangeLoopAvailable();
         for (ExchangeLooper exchangeLooper : exchangeLoops) {
             long lastDateCreated = exchangeLooper.getCreated().getTime();

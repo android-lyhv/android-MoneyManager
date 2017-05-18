@@ -13,19 +13,19 @@ import static android.content.Context.ALARM_SERVICE;
  * Copyright@ AsianTech.Inc
  * Created by ly.ho on 25/04/2017.
  */
-public class PendingService {
-    private static PendingService ourInstance;
-    private static final long TIME_REPEAT = 10 * 1000L;
+public class AlarmPending {
+    private static AlarmPending ourInstance;
+    private static final long TIME_REPEAT = 60 * 1000L;
     private static final int ID = 2722;
 
-    public static PendingService getInstance() {
+    public static AlarmPending getInstance() {
         if (ourInstance == null) {
-            ourInstance = new PendingService();
+            ourInstance = new AlarmPending();
         }
         return ourInstance;
     }
 
-    private PendingService() {
+    private AlarmPending() {
     }
 
     /**
@@ -33,7 +33,7 @@ public class PendingService {
      *
      * @param context
      */
-    public void actionLoopPending(Context context) {
+    public void startPendingReceive(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, ReceivePending.class);
         intent.setAction(context.getString(R.string.pending));
@@ -41,11 +41,19 @@ public class PendingService {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), TIME_REPEAT, pendingIntent);
     }
 
-    public void removePending(Context context) {
+    public void removePendingReceive(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(context, ReceivePending.class);
         intent.setAction(context.getString(R.string.pending));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
+    }
+
+    public void startPendingService(Context context) {
+        context.startService(new Intent(context, ServicePending.class));
+    }
+
+    public void stopPendingService(Context context) {
+        context.stopService(new Intent(context, ServicePending.class));
     }
 }
